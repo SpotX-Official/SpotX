@@ -11,7 +11,7 @@
 
 ### Features:
 
-* For [Windows Desktop](https://www.spotify.com/download/windows/) only. (Microsoft Store version is not suitable)
+* For [Windows Desktop](https://www.spotify.com/download/windows/) only. (microsoft store version is not suitable)
 * Blocks all banner, video and audio ads in the client
 * Unlocks the skip function of any track
 * Blocks / unblock automatic updates (optional)

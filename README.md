@@ -15,7 +15,7 @@
 * Blocks all banner, video and audio ads in the client
 * Unlocks the skip function of any track
 * Blocks / unblock automatic updates (optional)
-* Automatic cache clearing (optional)
+* [Automatic cache clearing](https://github.com/amd64fox/SpotX/discussions/2) (optional)
 
 
 

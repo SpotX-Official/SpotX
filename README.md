@@ -21,6 +21,7 @@
 
 ### Fast installation / Update:
 * Just download and run [Install.bat](https://github.com/amd64fox/SpotX/releases/download/1.0/Install.bat)
+
 or
 
 * Run The following command in PowerShell:

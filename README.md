@@ -46,7 +46,7 @@ or
  * If you are using Windows 7 - Windows 8.1, there may be errors in the installation process due to an outdated version of NET Framework and PowerShell. 
    Do the following:
    * Upgrade to [NET Framework 4.8](https://go.microsoft.com/fwlink/?linkid=2088631)
-   * Upgrade to [WMF 5.1](https://docs.microsoft.com/en-us/powershell/scripting/windows-powershell/wmf/setup/install-configure?view=powershell-5.1)
+   * Upgrade to [WMF 5.1](https://www.microsoft.com/en-us/download/details.aspx?id=54616)
    * Reboot your PC
    
 

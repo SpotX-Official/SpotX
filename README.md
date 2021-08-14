@@ -14,7 +14,7 @@
 * For [Windows Desktop](https://www.spotify.com/download/windows/) only. (microsoft store version is not suitable)
 * Blocks all banner, video and audio ads in the client
 * Unlocks the skip function of any track
-* Blocks / unblock automatic updates (optional)
+* Blocks automatic updates (optional)
 * [Automatic cache clearing](https://github.com/amd64fox/SpotX/discussions/2) (optional)
 
 
@@ -43,6 +43,15 @@ or
 * Reinstall Spotify    
 
 ### Importantly:
+ * For some PCs, for full Powershell to work, you need to set the permissions at least to the `RemoteSigned` position.
+   * To check your access rights:
+     * Call PowerShell Console `Win + R` write `powershell` and `Ok`
+     * Enter the command `Get-ExecutionPolicy`
+     * If your rights are `Restricted` or `AllSigned` then enter the command 
+     ```ps1
+     Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned –Force
+     ````
+  
  * If you are using Windows 7 - Windows 8.1, there may be errors in the installation process due to an outdated version of NET Framework and PowerShell. 
    Do the following:
    * Upgrade to [NET Framework 4.8](https://go.microsoft.com/fwlink/?linkid=2088631)

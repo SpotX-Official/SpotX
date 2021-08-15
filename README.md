@@ -44,7 +44,7 @@ or
 
 
 
-### Importantly:
+### Possible problems:
 #### High access rights are set for PowerShell
 For some PCs, for full Powershell to work, you need to set the permissions at least to the `RemoteSigned` position.
 To check your access rights:

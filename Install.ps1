@@ -219,82 +219,100 @@ $migrator_bak = Test-Path -Path $env:APPDATA\Spotify\SpotifyMigrator.bak
 $migrator_exe = Test-Path -Path $env:APPDATA\Spotify\SpotifyMigrator.exe
 $Check_folder_file = Get-ItemProperty -Path $env:LOCALAPPDATA\Spotify\Update | SELECT Attributes 
 
-$ch = Read-Host -Prompt "Want to block updates ? (Y/N), Unlock again (U)"
+$ch = Read-Host -Prompt "Want to block updates ? (Y/N), Unlock updates (U)"
 if ($ch -eq 'y') {
 
-    # Создать папку Spotify если ее нет
 
-    If (!($update_directory)) {
+
+    # Если была установка клиенте 
+    if (!($update_directory)) {
+
+        # Создать папку Spotify в Local
         New-Item -Path $env:LOCALAPPDATA -Name "Spotify" -ItemType "directory" | Out-Null
-    } 
 
-    #Удалить папку Update если она есть.
-    if ($Check_folder_file -match '\bDirectory\b') {  
-        Remove-item $env:LOCALAPPDATA\Spotify\Update -Recurse -Force
-    } 
-
-    #Создать файл Update если его нет
-    if (!($Check_folder_file -match '\bSystem\b' -and $Check_folder_file -match '\bReadOnly\b')) {  
+        #Создать файл Update
         New-Item -Path $env:LOCALAPPDATA\Spotify\ -Name "Update" -ItemType "file" -Value "STOPIT" | Out-Null
         $file = Get-ItemProperty -Path $env:LOCALAPPDATA\Spotify\Update
         $file.Attributes = "ReadOnly", "System"
-        Write-Host "Updates blocked successfully" -ForegroundColor Green
-    }
-    If ($migrator_exe -and $migrator_bak) {
-        Remove-item $env:APPDATA\Spotify\SpotifyMigrator.bak -Recurse -Force
-        Rename-Item -path $env:APPDATA\Spotify\SpotifyMigrator.exe -NewName $env:APPDATA\Spotify\SpotifyMigrator.bak
-    }
-
-    elseif ($migrator_exe) {
-        Rename-Item -path $env:APPDATA\Spotify\SpotifyMigrator.exe -NewName $env:APPDATA\Spotify\SpotifyMigrator.bak
-    }
-
-
-
-    if ($Check_folder_file -match '\bSystem\b' -and $Check_folder_file -match '\bReadOnly\b' -and $migrator_bak ) {
-
-        $ch = Read-Host -Prompt 'Wow, your updates are already blocked, Do you want to delete ? (Y/N)'
-
-        if ($ch -eq 'y') {
-            If ($update_directory_file) {
-                Remove-item $env:LOCALAPPDATA\Spotify\Update -Recurse -Force
-            } 
-            If ($migrator_bak -and $migrator_exe ) {
-                Remove-item $env:APPDATA\Spotify\SpotifyMigrator.bak -Recurse -Force
-            }
-            elseif ($migrator_bak) {
-                Rename-Item -path $env:APPDATA\Spotify\SpotifyMigrator.bak -NewName $env:APPDATA\Spotify\SpotifyMigrator.exe
-            }
-            Write-Host "Updates unlocked" -ForegroundColor Green
-
-        }
-        if ($ch -eq 'n') {
-
-            Write-Host "installation completed" -ForegroundColor Green
-
-
-        }
-        else {
-            Write-Host "Oops, unsuccessful" -ForegroundColor Red
-            Write-Host "installation completed" -ForegroundColor Green
+      
+        # Если оба файлав мигратора существуют то .bak удалить, а .exe переименовать в .bak
+        If ($migrator_exe -and $migrator_bak) {
+            Remove-item $env:APPDATA\Spotify\SpotifyMigrator.bak -Recurse -Force
+            Rename-Item -path $env:APPDATA\Spotify\SpotifyMigrator.exe -NewName $env:APPDATA\Spotify\SpotifyMigrator.bak
         }
 
-    } 
+        # Если есть только мигратор .exe то переименовать его в .bak
+        if ($migrator_exe) {
+            Rename-Item -path $env:APPDATA\Spotify\SpotifyMigrator.exe -NewName $env:APPDATA\Spotify\SpotifyMigrator.bak
+        }
+
+    }
+
+
+    # Если клиент уже был 
+    If ($update_directory) {
+
+
+        #Удалить папку Update если она есть.
+        if ($Check_folder_file -match '\bDirectory\b') {  
+            Remove-item $env:LOCALAPPDATA\Spotify\Update -Recurse -Force
+        } 
+
+        #Создать файл Update если его нет
+        if (!($Check_folder_file -match '\bSystem\b' -and $Check_folder_file -match '\bReadOnly\b')) {  
+            New-Item -Path $env:LOCALAPPDATA\Spotify\ -Name "Update" -ItemType "file" -Value "STOPIT" | Out-Null
+            $file = Get-ItemProperty -Path $env:LOCALAPPDATA\Spotify\Update
+            $file.Attributes = "ReadOnly", "System"
+        }
+        # Если оба файлав мигратора существуют то .bak удалить, а .exe переименовать в .bak
+        If ($migrator_exe -and $migrator_bak) {
+            Remove-item $env:APPDATA\Spotify\SpotifyMigrator.bak -Recurse -Force
+            Rename-Item -path $env:APPDATA\Spotify\SpotifyMigrator.exe -NewName $env:APPDATA\Spotify\SpotifyMigrator.bak
+        }
+
+        # Если есть только мигратор .exe то переименовать его в .bak
+        if ($migrator_exe) {
+            Rename-Item -path $env:APPDATA\Spotify\SpotifyMigrator.exe -NewName $env:APPDATA\Spotify\SpotifyMigrator.bak
+        }
+
+    }
+
+  
+    Write-Host "Updates blocked successfully" -ForegroundColor Green
+
 
 }
 
-elseif ($ch -eq 'u') {
+
+if ($ch -eq 'n') {
+    Write-Host "Left unchanged" 
+}
+
+
+
+if ($ch -eq 'u') {
+
+    
     If ($update_directory_file) {
         Remove-item $env:LOCALAPPDATA\Spotify\Update -Recurse -Force
     } 
     If ($migrator_bak -and $migrator_exe ) {
         Remove-item $env:APPDATA\Spotify\SpotifyMigrator.bak -Recurse -Force
     }
-    elseif ($migrator_bak) {
+    if ($migrator_bak) {
         Rename-Item -path $env:APPDATA\Spotify\SpotifyMigrator.bak -NewName $env:APPDATA\Spotify\SpotifyMigrator.exe
     }
     Write-Host "Updates unlocked" -ForegroundColor Green
+    
+
 }
+    
+
+elseif (!($ch -eq 'n' -or $ch -eq 'y' -or $ch -eq 'u')) {
+    Write-Host "Oops, unsuccessful" -ForegroundColor Red
+    
+}
+
 
 
 
@@ -308,34 +326,7 @@ if ($ch -eq 'y') {
     $test_cache_spotify_ps = Test-Path -Path $env:APPDATA\Spotify\cache-spotify.ps1
     $test_spotify_vbs = Test-Path -Path $env:APPDATA\Spotify\Spotify.vbs
 
-    If ($test_cache_spotify_ps -and $test_spotify_vbs) {
-        $ch = Read-Host -Prompt "Clearing the cache is already installed, want to uninstall it? (Y/N)"
-        if ($ch -eq 'y') {
-
-            Remove-item $env:APPDATA\Spotify\cache-spotify.ps1 -Recurse -Force
-            Remove-item $env:APPDATA\Spotify\Spotify.vbs -Recurse -Force
-
-            $source = "$env:APPDATA\Spotify\Spotify.exe"
-            $target = "$env:USERPROFILE\Desktop\Spotify.lnk"
-            $WshShell = New-Object -comObject WScript.Shell
-            $Shortcut = $WshShell.CreateShortcut($target)
-            $Shortcut.IconLocation = "$env:APPDATA\Spotify\Spotify.exe"
-            $Shortcut.TargetPath = $source
-            $Shortcut.Save()
-            Write-Host "Cache cleanup script removed" -ForegroundColor Green
-            Write-Host "Installation completed" -ForegroundColor Green
-            exit
-        }
-        if ($ch -eq 'n') {
-            Write-Host "Installation completed" -ForegroundColor Green
-            exit
-        }
-
-        else {
-            Write-Host "Installation completed" -ForegroundColor Green
-            exit
-        }
-    }
+    
     If ($test_cache_spotify_ps) {
         Remove-item $env:APPDATA\Spotify\cache-spotify.ps1 -Recurse -Force
     }
@@ -409,14 +400,15 @@ if ($ch -eq 'y') {
             Write-Host "installation completed" -ForegroundColor Green
             exit
         }
+        else {
+            Write-Host "Unsuccessful again" -ForegroundColor Red
+            Write-Host 'Please open the cache-spotify.ps1 file in this path "AppData\Roaming\Spotify" and enter your number of days'
+            Write-Host "Installation completed" -ForegroundColor Green
+            exit
+        }
 
     }
-    else {
-        Write-Host "Unsuccessful again" -ForegroundColor Red
-        Write-Host 'Please open the cache-spotify.ps1 file in this path "AppData\Roaming\Spotify" and enter your number of days'
-        Write-Host "Installation completed" -ForegroundColor Green
-        exit
-    }
+    
 
 }
 

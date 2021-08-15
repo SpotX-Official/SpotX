@@ -3,7 +3,7 @@
     <h4 align="center">A multi-purpose adblocker and skip-bypass for the <strong>Windows</strong> Spotify desktop application.</h4>
     <h5 align="center">(The repository is based on BlockTheSpot, many thanks to the contributors)</h5>
     <p align="center">
-        <strong>Last tested version:</strong> 1.1.65.643
+        <strong>Last tested version:</strong> 1.1.66.578
     </p> 
 </center>
 
@@ -42,17 +42,21 @@ or
 
 * Reinstall Spotify    
 
+
+
 ### Importantly:
- * For some PCs, for full Powershell to work, you need to set the permissions at least to the `RemoteSigned` position.
-   * To check your access rights:
-     * Call PowerShell Console `Win + R` write `powershell` and `Ok`
-     * Enter the command `Get-ExecutionPolicy`
-     * If your rights are `Restricted` or `AllSigned` then enter the command 
-     ```ps1
-     Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned –Force
-     ````
+#### High access rights are set for PowerShell
+For some PCs, for full Powershell to work, you need to set the permissions at least to the `RemoteSigned` position.
+To check your access rights:
+  * Call PowerShell Console `Win + R` write `powershell` and `Ok`
+  * Enter the command `Get-ExecutionPolicy`
+  * If your rights are `Restricted` or `AllSigned` then enter the command 
+```ps1
+   Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned –Force
+````
   
- * If you are using Windows 7 - Windows 8.1, there may be errors in the installation process due to an outdated version of NET Framework and PowerShell. 
+  #### Outdated versions of PowerShell  
+  If you are using Windows 7 - Windows 8.1, there may be errors in the installation process due to an outdated version of NET Framework and PowerShell. 
    Do the following:
    * Upgrade to [NET Framework 4.8](https://go.microsoft.com/fwlink/?linkid=2088631)
    * Upgrade to [WMF 5.1](https://www.microsoft.com/en-us/download/details.aspx?id=54616)

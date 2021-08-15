@@ -336,10 +336,10 @@ if ($ch -eq 'y') {
     sleep -Milliseconds 200
 
     # cache-spotify.ps1
-    $webClient.DownloadFile('https://raw.githubusercontent.com/amd64fox/SpotX-Test/main/cache-spotify.ps1', "$env:APPDATA\Spotify\cache-spotify.ps1")
+    $webClient.DownloadFile('https://raw.githubusercontent.com/amd64fox/SpotX/main/cache-spotify.ps1', "$env:APPDATA\Spotify\cache-spotify.ps1")
 
     # Spotify.vbs
-    $webClient.DownloadFile('https://raw.githubusercontent.com/amd64fox/SpotX-Test/main/Spotify.vbs', "$env:APPDATA\Spotify\Spotify.vbs")
+    $webClient.DownloadFile('https://raw.githubusercontent.com/amd64fox/SpotX/main/Spotify.vbs', "$env:APPDATA\Spotify\Spotify.vbs")
 
     # Spotify.lnk
     $source = "$env:APPDATA\Spotify\Spotify.vbs"

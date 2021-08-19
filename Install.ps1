@@ -160,7 +160,7 @@ Remove-Item -Recurse -LiteralPath $tempDirectory
 
 
 
-# Removing an empty block and button
+# Removing an empty block, "Upgrade button", "Upgrade to premium" menu
 
 if (!(test-path $env:APPDATA\Spotify\Apps\xpui.bak)) {
     Copy $env:APPDATA\Spotify\Apps\xpui.spa $env:APPDATA\Spotify\Apps\xpui.bak
@@ -170,7 +170,9 @@ Rename-Item -path $env:APPDATA\Spotify\Apps\xpui.spa -NewName $env:APPDATA\Spoti
 Expand-Archive $env:APPDATA\Spotify\Apps\xpui.zip -DestinationPath $env:APPDATA\Spotify\Apps\temporary
 $file_js = Get-Content $env:APPDATA\Spotify\Apps\temporary\xpui.js -Raw
 If (!($file_js -match 'patched by spotx')) {
-    $new_js = $file_js -replace ".........................................Z.UpgradeButton.......", "" -replace 'e.ads.leaderboard.isEnabled', 'e.ads.leaderboard.isDisabled'
+    $file_js -match 'visible:!e}[)]{1}[,]{1}[A-Za-z]{1}[(]{1}[)]{1}.createElement[(]{1}[A-Za-z]{2}[,]{1}null[)]{1}[,]{1}[A-Za-z]{1}[(]{1}[)]{1}.' | Out-Null
+    $menu_split_js = $Matches[0] -split 'createElement[(]{1}[A-Za-z]{2}[,]{1}null[)]{1}[,]{1}[A-Za-z]{1}[(]{1}[)]{1}.'
+    $new_js = $file_js -replace ".........................................Z.UpgradeButton.......", "" -replace 'e.ads.leaderboard.isEnabled', 'e.ads.leaderboard.isDisabled' -replace 'visible:!e}[)]{1}[,]{1}[A-Za-z]{1}[(]{1}[)]{1}.createElement[(]{1}[A-Za-z]{2}[,]{1}null[)]{1}[,]{1}[A-Za-z]{1}[(]{1}[)]{1}.', $menu_split_js
     Set-Content -Path $env:APPDATA\Spotify\Apps\temporary\xpui.js -Force -Value $new_js
     add-content -Path $env:APPDATA\Spotify\Apps\temporary\xpui.js -Value '// Patched by SpotX' -passthru | Out-Null
     $contentjs = [System.IO.File]::ReadAllText("$env:APPDATA\Spotify\Apps\temporary\xpui.js")
@@ -179,8 +181,8 @@ If (!($file_js -match 'patched by spotx')) {
     Compress-Archive -Path $env:APPDATA\Spotify\Apps\temporary\xpui.js -Update -DestinationPath $env:APPDATA\Spotify\Apps\xpui.zip
 }
 
-
-# Remove "Upgrade to premium" menu
+<#
+# Удаление меню (РЕЗЕРВНЫЙ)
 $file_css = Get-Content $env:APPDATA\Spotify\Apps\temporary\xpui.css -Raw
 If (!($file_css -match 'patched by spotx')) {
     $new_css = $file_css -replace 'table{border-collapse:collapse;border-spacing:0}', 'table{border-collapse:collapse;border-spacing:0}[target="_blank"]{display:none !important;}'
@@ -191,6 +193,8 @@ If (!($file_css -match 'patched by spotx')) {
     [System.IO.File]::WriteAllText("$env:APPDATA\Spotify\Apps\temporary\xpui.css", $contentcss)
     Compress-Archive -Path $env:APPDATA\Spotify\Apps\temporary\xpui.css -Update -DestinationPath $env:APPDATA\Spotify\Apps\xpui.zip
 }
+#>
+
 Rename-Item -path $env:APPDATA\Spotify\Apps\xpui.zip -NewName $env:APPDATA\Spotify\Apps\xpui.spa
 Remove-item $env:APPDATA\Spotify\Apps\temporary -Recurse
 
@@ -315,7 +319,6 @@ elseif (!($ch -eq 'n' -or $ch -eq 'y' -or $ch -eq 'u')) {
 
 
 
-
 # automatic cache clearing
 
 
@@ -335,33 +338,12 @@ if ($ch -eq 'y') {
     }
     sleep -Milliseconds 200
 
+
     # cache-spotify.ps1
-    New-Item -Path $env:APPDATA\Spotify\ -Name "cache-spotify.ps1" -ItemType "file" | Out-Null
-    add-content -Path $env:APPDATA\Spotify\cache-spotify.ps1 -Value '# Launch Spotify.exe and wait for the process to stop' -passthru | Out-Null
-    add-content -Path $env:APPDATA\Spotify\cache-spotify.ps1 -Value 'Start-Process -FilePath $env:APPDATA\Spotify\Spotify.exe; wait-process -name Spotify' -passthru | Out-Null
-    add-content -Path $env:APPDATA\Spotify\cache-spotify.ps1 -Value '' -passthru | Out-Null
-    add-content -Path $env:APPDATA\Spotify\cache-spotify.ps1 -Value '# This block deletes files by the last access time to it, files that have not been changed and have not been opened for more than the number of days you have selected will be deleted. (number of days = seven)' -passthru | Out-Null
-    add-content -Path $env:APPDATA\Spotify\cache-spotify.ps1 -Value 'If(Test-Path -Path $env:LOCALAPPDATA\Spotify\Data){' -passthru | Out-Null
-    add-content -Path $env:APPDATA\Spotify\cache-spotify.ps1 -Value 'dir $env:LOCALAPPDATA\Spotify\Data -File -Recurse |? lastaccesstime -lt (get-date).AddDays(-7) |del' -passthru | Out-Null
-    add-content -Path $env:APPDATA\Spotify\cache-spotify.ps1 -Value '}' -passthru | Out-Null
-    add-content -Path $env:APPDATA\Spotify\cache-spotify.ps1 -Value '' -passthru | Out-Null
-    add-content -Path $env:APPDATA\Spotify\cache-spotify.ps1 -Value '# Delete the file mercury.db if its size exceeds 100 MB.' -passthru | Out-Null
-    add-content -Path $env:APPDATA\Spotify\cache-spotify.ps1 -Value 'If(Test-Path -Path $env:LOCALAPPDATA\Spotify\mercury.db){' -passthru | Out-Null
-    add-content -Path $env:APPDATA\Spotify\cache-spotify.ps1 -Value '$file_mercury = Get-Item "$env:LOCALAPPDATA\Spotify\mercury.db"' -passthru | Out-Null
-    add-content -Path $env:APPDATA\Spotify\cache-spotify.ps1 -Value 'if ($file_mercury.length -gt 100MB) {dir $env:LOCALAPPDATA\Spotify\mercury.db -File -Recurse|del}' -passthru | Out-Null
-    add-content -Path $env:APPDATA\Spotify\cache-spotify.ps1 -Value '}' -passthru | Out-Null
-    $cache_spotify = [System.IO.File]::ReadAllText("$env:APPDATA\Spotify\cache-spotify.ps1")
-    $cache_spotify = $cache_spotify.Trim()
-    [System.IO.File]::WriteAllText("$env:APPDATA\Spotify\cache-spotify.ps1", $cache_spotify)
+    $webClient.DownloadFile('https://raw.githubusercontent.com/amd64fox/SpotX/main/cache-spotify.ps1', "$env:APPDATA\Spotify\cache-spotify.ps1")
 
     # Spotify.vbs
-    New-Item -Path $env:APPDATA\Spotify\ -Name "Spotify.vbs" -ItemType "file" | Out-Null
-    add-content -Path $env:APPDATA\Spotify\Spotify.vbs -Value 'command = "powershell.exe -nologo -noninteractive -command %appdata%\Spotify\cache-spotify.ps1"' -passthru | Out-Null
-    add-content -Path $env:APPDATA\Spotify\Spotify.vbs -Value 'set shell = CreateObject("WScript.Shell")' -passthru | Out-Null
-    add-content -Path $env:APPDATA\Spotify\Spotify.vbs -Value 'shell.Run command,0, false' -passthru | Out-Null
-    $spoti_vbs = [System.IO.File]::ReadAllText("$env:APPDATA\Spotify\Spotify.vbs")
-    $spoti_vbs = $spoti_vbs.Trim()
-    [System.IO.File]::WriteAllText("$env:APPDATA\Spotify\Spotify.vbs", $spoti_vbs)
+    $webClient.DownloadFile('https://raw.githubusercontent.com/amd64fox/SpotX/main/Spotify.vbs', "$env:APPDATA\Spotify\Spotify.vbs")
 
     # Spotify.lnk
     $source = "$env:APPDATA\Spotify\Spotify.vbs"

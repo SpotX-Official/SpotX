@@ -132,10 +132,11 @@ if (-not $spotifyInstalled) {
 
     $ErrorActionPreference = 'SilentlyContinue'  # Команда гасит легкие ошибки
 
-    if ($win7) {
+    # Удалить инсталятор после установки
+    if ($win8 -or $win7) {
         get-childitem -path "$env:LOCALAPPDATA\Microsoft\Windows\Temporary Internet Files\" -Recurse -Force -Filter  "SpotifyFullSetup*" | remove-item  -Force
     }
-    if ($win10) {
+    if ($win11 -or $win10 -or $win8_1) {
         get-childitem -path "$env:LOCALAPPDATA\Microsoft\Windows\INetCache\" -Recurse -Force -Filter  "SpotifyFullSetup*" | remove-item  -Force
     
     }

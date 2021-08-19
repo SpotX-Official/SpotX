@@ -160,7 +160,7 @@ Remove-Item -Recurse -LiteralPath $tempDirectory
 
 
 
-# Removing an empty block and button
+# Removing an empty block, "Upgrade button", "Upgrade to premium" menu
 
 if (!(test-path $env:APPDATA\Spotify\Apps\xpui.bak)) {
     Copy $env:APPDATA\Spotify\Apps\xpui.spa $env:APPDATA\Spotify\Apps\xpui.bak
@@ -170,7 +170,9 @@ Rename-Item -path $env:APPDATA\Spotify\Apps\xpui.spa -NewName $env:APPDATA\Spoti
 Expand-Archive $env:APPDATA\Spotify\Apps\xpui.zip -DestinationPath $env:APPDATA\Spotify\Apps\temporary
 $file_js = Get-Content $env:APPDATA\Spotify\Apps\temporary\xpui.js -Raw
 If (!($file_js -match 'patched by spotx')) {
-    $new_js = $file_js -replace ".........................................Z.UpgradeButton.......", "" -replace 'e.ads.leaderboard.isEnabled', 'e.ads.leaderboard.isDisabled'
+    $file_js -match 'visible:!e}[)]{1}[,]{1}[A-Za-z]{1}[(]{1}[)]{1}.createElement[(]{1}[A-Za-z]{2}[,]{1}null[)]{1}[,]{1}[A-Za-z]{1}[(]{1}[)]{1}.' | Out-Null
+    $menu_split_js = $Matches[0] -split 'createElement[(]{1}[A-Za-z]{2}[,]{1}null[)]{1}[,]{1}[A-Za-z]{1}[(]{1}[)]{1}.'
+    $new_js = $file_js -replace ".........................................Z.UpgradeButton.......", "" -replace 'e.ads.leaderboard.isEnabled', 'e.ads.leaderboard.isDisabled' -replace 'visible:!e}[)]{1}[,]{1}[A-Za-z]{1}[(]{1}[)]{1}.createElement[(]{1}[A-Za-z]{2}[,]{1}null[)]{1}[,]{1}[A-Za-z]{1}[(]{1}[)]{1}.', $menu_split_js
     Set-Content -Path $env:APPDATA\Spotify\Apps\temporary\xpui.js -Force -Value $new_js
     add-content -Path $env:APPDATA\Spotify\Apps\temporary\xpui.js -Value '// Patched by SpotX' -passthru | Out-Null
     $contentjs = [System.IO.File]::ReadAllText("$env:APPDATA\Spotify\Apps\temporary\xpui.js")
@@ -179,8 +181,8 @@ If (!($file_js -match 'patched by spotx')) {
     Compress-Archive -Path $env:APPDATA\Spotify\Apps\temporary\xpui.js -Update -DestinationPath $env:APPDATA\Spotify\Apps\xpui.zip
 }
 
-
-# Remove "Upgrade to premium" menu
+<#
+# Удаление меню (РЕЗЕРВНЫЙ)
 $file_css = Get-Content $env:APPDATA\Spotify\Apps\temporary\xpui.css -Raw
 If (!($file_css -match 'patched by spotx')) {
     $new_css = $file_css -replace 'table{border-collapse:collapse;border-spacing:0}', 'table{border-collapse:collapse;border-spacing:0}[target="_blank"]{display:none !important;}'
@@ -191,6 +193,8 @@ If (!($file_css -match 'patched by spotx')) {
     [System.IO.File]::WriteAllText("$env:APPDATA\Spotify\Apps\temporary\xpui.css", $contentcss)
     Compress-Archive -Path $env:APPDATA\Spotify\Apps\temporary\xpui.css -Update -DestinationPath $env:APPDATA\Spotify\Apps\xpui.zip
 }
+#>
+
 Rename-Item -path $env:APPDATA\Spotify\Apps\xpui.zip -NewName $env:APPDATA\Spotify\Apps\xpui.spa
 Remove-item $env:APPDATA\Spotify\Apps\temporary -Recurse
 

@@ -4,22 +4,24 @@
     <h5 align="center">(The repository is based on BlockTheSpot, many thanks to the contributors)</h5>
     <p align="center">
         <strong>Last tested version:</strong> 1.1.66.578
-    </p> 
+       </p> 
 </center>
 
 
 
-### Features:
 
-* For [Windows Desktop](https://www.spotify.com/download/windows/) only. (microsoft store version is not suitable)
-* Blocks all banner, video and audio ads in the client
-* Unlocks the skip function of any track
-* Blocks automatic updates (optional)
-* [Automatic cache clearing](https://github.com/amd64fox/SpotX/discussions/2) (optional)
+<h1>Features:</h1>
+
+* <strong>For [Windows Desktop](https://www.spotify.com/download/windows/) only. (microsoft store version is not suitable)</strong>
+* <strong>Blocks all banner, video and audio ads in the client</strong>
+* <strong>Unlocks the skip function of any track</strong>
+* <strong>Blocks automatic updates (optional)</strong>
+* <strong>[Automatic cache clearing](https://github.com/amd64fox/SpotX/discussions/2) (optional)</strong>
 
 
 
-### Fast installation / Update:
+<h1>Fast installation / Update:</h1>
+
 * Just download and run [Install.bat](https://github.com/amd64fox/SpotX/releases/download/1.0/Install.bat)
 
 or
@@ -29,13 +31,8 @@ or
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; Invoke-WebRequest -UseBasicParsing 'https://raw.githubusercontent.com/amd64fox/SpotX/main/Install.ps1' | Invoke-Expression
 ```
 
-### Manual installation:
+<h1>Uninstall:</h1>
 
-1. Download `chrome_elf.zip` from [releases](https://github.com/mrpond/BlockTheSpot/releases)
-2. Press Win + R, paste the path `%APPDATA%\Spotify` and go to Spotify folder
-3. Unzip and replace `chrome_elf.dll` and `config.ini` in Spotify folder
-
-### Uninstall:
 * Just run [Uninstall.bat](https://github.com/amd64fox/SpotX/releases/download/1.0/Uninstall.bat)
 
 or
@@ -44,8 +41,10 @@ or
 
 
 
-### Possible problems:
-#### High access rights are set for PowerShell
+<h1>Possible problems:</h1>
+
+<h3>High access rights are set for PowerShell</h3>
+
 For some PCs, for full Powershell to work, you need to set the permissions at least to the `RemoteSigned` position.
 To check your access rights:
   * Call PowerShell Console `Win + R` write `powershell` and `Ok`
@@ -55,16 +54,20 @@ To check your access rights:
    Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned –Force
 ````
   
-  #### Outdated versions of PowerShell  
-  If you are using Windows 7 - Windows 8.1, there may be errors in the installation process due to an outdated version of NET Framework and PowerShell. 
+   <h3>Outdated versions of PowerShell</h3>
+   
+  If you are using Windows 7 or Windows 8.1, there may be errors in the installation process due to an outdated version of NET Framework and PowerShell. 
    Do the following:
    * Upgrade to [NET Framework 4.8](https://go.microsoft.com/fwlink/?linkid=2088631)
    * Upgrade to [WMF 5.1](https://www.microsoft.com/en-us/download/details.aspx?id=54616)
    * Reboot your PC
    
+   <strong>Note:</strong> For Windows 8 it is not possible to upgrade the PoweShell version, please upgrade to Windows 8.1 or 10
+   
 
 
-### Additional Notes:  
+<h1>Additional Notes:</h1>
+
 * BlockTheSpot might only works as expected with the last tested version. Please check it before opening an issue.  
 * "chrome_elf.dll" gets replaced by the Spotify installer each time it updates, hence why you'll probably need to apply the patch again when it happens
 * [Spicetify](https://github.com/khanhas/spicetify-cli) users will need to reapply BlockTheSpot after applying a Spicetify patches.

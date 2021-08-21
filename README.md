@@ -12,7 +12,7 @@
 
 <h1>Features:</h1>
 
-* <strong>For [Windows Desktop](https://www.spotify.com/download/windows/) only. (microsoft store version is not suitable)</strong>
+* <strong>For [Windows Desktop](https://www.spotify.com/download/windows/) only. (Microsoft store version is not suitable)</strong>
 * <strong>Blocks all banner, video and audio ads in the client</strong>
 * <strong>Unlocks the skip function of any track</strong>
 * <strong>Blocks automatic updates (optional)</strong>
@@ -45,7 +45,7 @@ or
 
 <h3>High access rights are set for PowerShell</h3>
 
-For some PCs, for full Powershell to work, you need to set the permissions at least to the `RemoteSigned` position.
+For some PCs, for full PowerShell to work, you need to set the permissions at least to the `RemoteSigned` position.
 To check your access rights:
   * Call PowerShell Console `Win + R` write `powershell` and `Ok`
   * Enter the command `Get-ExecutionPolicy`
@@ -62,7 +62,7 @@ To check your access rights:
    * Upgrade to [WMF 5.1](https://www.microsoft.com/en-us/download/details.aspx?id=54616)
    * Reboot your PC
    
-   <strong>Note:</strong> For Windows 8 it is not possible to upgrade the PoweShell version, please upgrade to Windows 8.1 or 10
+   <strong>Note:</strong> For Windows 8 it is not possible to upgrade the PowerShell version, please upgrade to Windows 8.1 or 10
    
 
 

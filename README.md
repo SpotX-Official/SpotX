@@ -3,7 +3,7 @@
     <h4 align="center">A multi-purpose adblocker and skip-bypass for the <strong>Windows</strong> Spotify desktop application.</h4>
     <h5 align="center">(The repository is based on BlockTheSpot, many thanks to the contributors)</h5>
     <p align="center">
-        <strong>Last tested version:</strong> 1.1.66.578
+        <strong>Last tested version:</strong> 1.1.66.580
        </p> 
 </center>
 

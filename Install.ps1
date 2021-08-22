@@ -132,7 +132,7 @@ if (-not $spotifyInstalled) {
 
     $ErrorActionPreference = 'SilentlyContinue'  # Команда гасит легкие ошибки
 
-  # Удалить инсталятор после установки
+    # Удалить инсталятор после установки
     if ($win8 -or $win7) {
         get-childitem -path "$env:LOCALAPPDATA\Microsoft\Windows\Temporary Internet Files\" -Recurse -Force -Filter  "SpotifyFullSetup*" | remove-item  -Force
     }
@@ -199,15 +199,22 @@ If (!($file_css -match 'patched by spotx')) {
 Rename-Item -path $env:APPDATA\Spotify\Apps\xpui.zip -NewName $env:APPDATA\Spotify\Apps\xpui.spa
 Remove-item $env:APPDATA\Spotify\Apps\temporary -Recurse
 
+
 # Shortcut bug
+$ErrorActionPreference = 'SilentlyContinue' 
+
 If (!(Test-Path $env:USERPROFILE\Desktop\Spotify.lnk)) {
+  
     $source = "$env:APPDATA\Spotify\Spotify.exe"
     $target = "$env:USERPROFILE\Desktop\Spotify.lnk"
+    $WorkingDir = "$env:APPDATA\Spotify"
     $WshShell = New-Object -comObject WScript.Shell
     $Shortcut = $WshShell.CreateShortcut($target)
+    $Shortcut.WorkingDirectory = $WorkingDir
     $Shortcut.TargetPath = $source
-    $Shortcut.Save()
-} 
+    $Shortcut.Save()      
+}
+
 
 
 
@@ -297,19 +304,25 @@ if ($ch -eq 'n') {
 
 if ($ch -eq 'u') {
 
+    If ($migrator_bak -and $Check_folder_file -match '\bSystem\b' -and $Check_folder_file -match '\bReadOnly\b') {
+       
     
-    If ($update_directory_file) {
-        Remove-item $env:LOCALAPPDATA\Spotify\Update -Recurse -Force
-    } 
-    If ($migrator_bak -and $migrator_exe ) {
-        Remove-item $env:APPDATA\Spotify\SpotifyMigrator.bak -Recurse -Force
+        If ($update_directory_file) {
+            Remove-item $env:LOCALAPPDATA\Spotify\Update -Recurse -Force
+        } 
+        If ($migrator_bak -and $migrator_exe ) {
+            Remove-item $env:APPDATA\Spotify\SpotifyMigrator.bak -Recurse -Force
+        }
+        if ($migrator_bak) {
+            Rename-Item -path $env:APPDATA\Spotify\SpotifyMigrator.bak -NewName $env:APPDATA\Spotify\SpotifyMigrator.exe
+        }
+        Write-Host "Updates unlocked" -ForegroundColor Green
     }
-    if ($migrator_bak) {
-        Rename-Item -path $env:APPDATA\Spotify\SpotifyMigrator.bak -NewName $env:APPDATA\Spotify\SpotifyMigrator.exe
-    }
-    Write-Host "Updates unlocked" -ForegroundColor Green
-    
 
+
+    If (!($migrator_bak -and $Check_folder_file -match '\bSystem\b' -and $Check_folder_file -match '\bReadOnly\b')) {
+        Write-Host "Oops, updates are not blocked" 
+    }  
 }
     
 
@@ -329,49 +342,48 @@ if ($ch -eq 'y') {
 
     $test_cache_spotify_ps = Test-Path -Path $env:APPDATA\Spotify\cache-spotify.ps1
     $test_spotify_vbs = Test-Path -Path $env:APPDATA\Spotify\Spotify.vbs
-
+    $desktop_folder = Get-ItemProperty -Path $env:USERPROFILE\Desktop | SELECT Attributes 
     
-    If ($test_cache_spotify_ps) {
-        Remove-item $env:APPDATA\Spotify\cache-spotify.ps1 -Recurse -Force
-    }
-    If ($test_spotify_vbs) {
-        Remove-item $env:APPDATA\Spotify\Spotify.vbs -Recurse -Force
-    }
-    sleep -Milliseconds 200
+
+    # Если папки по умолчанию Dekstop не существует, то установку кэша отменить.
+    if ($desktop_folder -match '\bDirectory\b') {  
 
 
-    # cache-spotify.ps1
-    $webClient.DownloadFile('https://raw.githubusercontent.com/amd64fox/SpotX/main/cache-spotify.ps1', "$env:APPDATA\Spotify\cache-spotify.ps1")
 
-    # Spotify.vbs
-    $webClient.DownloadFile('https://raw.githubusercontent.com/amd64fox/SpotX/main/Spotify.vbs', "$env:APPDATA\Spotify\Spotify.vbs")
+        If ($test_cache_spotify_ps) {
+            Remove-item $env:APPDATA\Spotify\cache-spotify.ps1 -Recurse -Force
+        }
+        If ($test_spotify_vbs) {
+            Remove-item $env:APPDATA\Spotify\Spotify.vbs -Recurse -Force
+        }
+        sleep -Milliseconds 200
 
-    # Spotify.lnk
-    $source = "$env:APPDATA\Spotify\Spotify.vbs"
-    $target = "$env:USERPROFILE\Desktop\Spotify.lnk"
-    $WshShell = New-Object -comObject WScript.Shell
-    $Shortcut = $WshShell.CreateShortcut($target)
-    $Shortcut.IconLocation = "$env:APPDATA\Spotify\Spotify.exe"
-    $Shortcut.TargetPath = $source
-    $Shortcut.Save()
 
-    $ch = Read-Host -Prompt "Cache files that have not been used for more than XX days will be deleted.
+        # cache-spotify.ps1
+        $webClient.DownloadFile('https://raw.githubusercontent.com/amd64fox/SpotX/main/cache-spotify.ps1', "$env:APPDATA\Spotify\cache-spotify.ps1")
+
+        # Spotify.vbs
+        $webClient.DownloadFile('https://raw.githubusercontent.com/amd64fox/SpotX/main/Spotify.vbs', "$env:APPDATA\Spotify\Spotify.vbs")
+
+
+
+        # Spotify.lnk
+        $source2 = "$env:APPDATA\Spotify\Spotify.vbs"
+        $target2 = "$env:USERPROFILE\Desktop\Spotify.lnk"
+        $WorkingDir2 = "$env:APPDATA\Spotify"
+        $WshShell2 = New-Object -comObject WScript.Shell
+        $Shortcut2 = $WshShell2.CreateShortcut($target2)
+        $Shortcut2.WorkingDirectory = $WorkingDir2
+        $Shortcut2.IconLocation = "$env:APPDATA\Spotify\Spotify.exe"
+        $Shortcut2.TargetPath = $source2
+        $Shortcut2.Save()
+
+
+
+
+
+        $ch = Read-Host -Prompt "Cache files that have not been used for more than XX days will be deleted.
     Enter the number of days from 1 to 100"
-    if ($ch -match "^[1-9][0-9]?$|^100$") {
-        $file_cache_spotify_ps1 = Get-Content $env:APPDATA\Spotify\cache-spotify.ps1 -Raw
-        $new_file_cache_spotify_ps1 = $file_cache_spotify_ps1 -replace 'seven', $ch -replace '-7', - $ch
-        Set-Content -Path $env:APPDATA\Spotify\cache-spotify.ps1 -Force -Value $new_file_cache_spotify_ps1
-        $contentcache_spotify_ps1 = [System.IO.File]::ReadAllText("$env:APPDATA\Spotify\cache-spotify.ps1")
-        $contentcache_spotify_ps1 = $contentcache_spotify_ps1.Trim()
-        [System.IO.File]::WriteAllText("$env:APPDATA\Spotify\cache-spotify.ps1", $contentcache_spotify_ps1)
-        Write-Host "Clearing the cache has been successfully installed" -ForegroundColor Green
-        Write-Host "installation completed" -ForegroundColor Green
-        exit
-    }
-    if (!($ch -match "^[1-9][0-9]?$|^100$")) {
-        $ch = Read-Host -Prompt "Oops, bad luck, let's try again
-        Cache files that have not been used for more than XX days will be deleted.
-        Enter the number of days from 1 to 100"
         if ($ch -match "^[1-9][0-9]?$|^100$") {
             $file_cache_spotify_ps1 = Get-Content $env:APPDATA\Spotify\cache-spotify.ps1 -Raw
             $new_file_cache_spotify_ps1 = $file_cache_spotify_ps1 -replace 'seven', $ch -replace '-7', - $ch
@@ -383,16 +395,37 @@ if ($ch -eq 'y') {
             Write-Host "installation completed" -ForegroundColor Green
             exit
         }
-        else {
-            Write-Host "Unsuccessful again" -ForegroundColor Red
-            Write-Host 'Please open the cache-spotify.ps1 file in this path "AppData\Roaming\Spotify" and enter your number of days'
-            Write-Host "Installation completed" -ForegroundColor Green
-            exit
+        if (!($ch -match "^[1-9][0-9]?$|^100$")) {
+            $ch = Read-Host -Prompt "Oops, bad luck, let's try again
+        Cache files that have not been used for more than XX days will be deleted.
+        Enter the number of days from 1 to 100"
+            if ($ch -match "^[1-9][0-9]?$|^100$") {
+                $file_cache_spotify_ps1 = Get-Content $env:APPDATA\Spotify\cache-spotify.ps1 -Raw
+                $new_file_cache_spotify_ps1 = $file_cache_spotify_ps1 -replace 'seven', $ch -replace '-7', - $ch
+                Set-Content -Path $env:APPDATA\Spotify\cache-spotify.ps1 -Force -Value $new_file_cache_spotify_ps1
+                $contentcache_spotify_ps1 = [System.IO.File]::ReadAllText("$env:APPDATA\Spotify\cache-spotify.ps1")
+                $contentcache_spotify_ps1 = $contentcache_spotify_ps1.Trim()
+                [System.IO.File]::WriteAllText("$env:APPDATA\Spotify\cache-spotify.ps1", $contentcache_spotify_ps1)
+                Write-Host "Clearing the cache has been successfully installed" -ForegroundColor Green
+                Write-Host "installation completed" -ForegroundColor Green
+                exit
+            }
+            else {
+                Write-Host "Unsuccessful again" -ForegroundColor Red
+                Write-Host 'Please open the cache-spotify.ps1 file in this path "AppData\Roaming\Spotify" and enter your number of days'
+                Write-Host "Installation completed" -ForegroundColor Green
+                exit
+            }
+
         }
-
-    }
     
-
+    }
+    else {
+        Write-Host "Error, i can't find the 'Desktop' folder" -ForegroundColor Red
+        Write-Host "Installation completed" -ForegroundColor Green
+    
+        Exit
+    }
 }
 
 if ($ch -eq 'n') {
@@ -410,17 +443,25 @@ if ($ch -eq 'u') {
         Remove-item $env:APPDATA\Spotify\cache-spotify.ps1 -Recurse -Force
         Remove-item $env:APPDATA\Spotify\Spotify.vbs -Recurse -Force
 
-        $source = "$env:APPDATA\Spotify\Spotify.exe"
-        $target = "$env:USERPROFILE\Desktop\Spotify.lnk"
-        $WshShell = New-Object -comObject WScript.Shell
-        $Shortcut = $WshShell.CreateShortcut($target)
-        $Shortcut.IconLocation = "$env:APPDATA\Spotify\Spotify.exe"
-        $Shortcut.TargetPath = $source
-        $Shortcut.Save()
+        $source3 = "$env:APPDATA\Spotify\Spotify.exe"
+        $target3 = "$env:USERPROFILE\Desktop\Spotify.lnk"
+        $WorkingDir3 = "$env:APPDATA\Spotify"
+        $WshShell3 = New-Object -comObject WScript.Shell
+        $Shortcut3 = $WshShell3.CreateShortcut($target3)
+        $Shortcut3.WorkingDirectory = $WorkingDir3
+        $Shortcut3.IconLocation = "$env:APPDATA\Spotify\Spotify.exe"
+        $Shortcut3.TargetPath = $source3
+        $Shortcut3.Save()
         Write-Host "Cache cleanup script removed" -ForegroundColor Green
         Write-Host "Installation completed" -ForegroundColor Green
         exit
     }
+
+
+
+
+
+
     If (!($test_cache_spotify_ps -and $test_spotify_vbs)) {
         Write-Host "Oops, no cache clearing script found" 
         Write-Host "Installation completed" -ForegroundColor Green

@@ -29,6 +29,12 @@ if exist "%localappdata%\Spotify\Update" (
 if exist "%appdata%\Spotify\SpotifyMigrator.bak" (
     rename %appdata%\Spotify\SpotifyMigrator.bak SpotifyMigrator.exe > NUL 2>&1
 ) 
+if exist "%appdata%\Spotify\SpotifyMigrator.exe" (
+if exist "%appdata%\Spotify\SpotifyMigrator.bak" (
+	del /f /s /q %appdata%\Spotify\SpotifyMigrator.bak > NUL 2>&1
+) 
+)
+
 
 if exist "%appdata%\Spotify\Spotify.vbs" (
     del /f /s /q %appdata%\Spotify\Spotify.vbs > NUL 2>&1

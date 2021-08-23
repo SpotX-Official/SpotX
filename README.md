@@ -43,6 +43,19 @@ or
 
 <h1>Possible problems:</h1>
 
+
+
+<h3>Outdated versions of PowerShell</h3>
+   
+  If you are using Windows 7 or Windows 8.1, there may be errors in the installation process due to an outdated version of NET Framework and PowerShell. 
+   Do the following:
+   * Upgrade to [NET Framework 4.8](https://go.microsoft.com/fwlink/?linkid=2088631)
+   * Upgrade to [WMF 5.1](https://www.microsoft.com/en-us/download/details.aspx?id=54616)
+   * Reboot your PC
+   
+   <strong>Note:</strong> For Windows 8 it is not possible to upgrade the PowerShell version, please upgrade to Windows 8.1 or 10
+
+
 <h3>High access rights are set for PowerShell</h3>
 
 For some PCs, for full PowerShell to work, you need to set the permissions at least to the `RemoteSigned` position.
@@ -54,17 +67,7 @@ To check your access rights:
    Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned –Force
 ````
   
-   <h3>Outdated versions of PowerShell</h3>
-   
-  If you are using Windows 7 or Windows 8.1, there may be errors in the installation process due to an outdated version of NET Framework and PowerShell. 
-   Do the following:
-   * Upgrade to [NET Framework 4.8](https://go.microsoft.com/fwlink/?linkid=2088631)
-   * Upgrade to [WMF 5.1](https://www.microsoft.com/en-us/download/details.aspx?id=54616)
-   * Reboot your PC
-   
-   <strong>Note:</strong> For Windows 8 it is not possible to upgrade the PowerShell version, please upgrade to Windows 8.1 or 10
-   
-
+  
 
 <h1>Additional Notes:</h1>
 

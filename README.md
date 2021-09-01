@@ -64,7 +64,7 @@ To check your access rights:
   * Enter the command `Get-ExecutionPolicy`
   * If your rights are `Restricted` or `AllSigned` then enter the command 
 ```ps1
-   Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned –Force
+   Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned -Force
 ````
   
   

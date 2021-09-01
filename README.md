@@ -56,7 +56,7 @@ or
    <strong>Note:</strong> For Windows 8 it is not possible to upgrade the PowerShell version, please upgrade to Windows 8.1 or 10
 
 
-<h3>High access rights are set for PowerShell</h3>
+<h3>High access rights are set for PowerShell (Fixed)</h3>
 
 For some PCs, for full PowerShell to work, you need to set the permissions at least to the `RemoteSigned` position.
 To check your access rights:

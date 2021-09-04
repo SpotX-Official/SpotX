@@ -71,7 +71,6 @@ To check your access rights:
 
 <h1>Additional Notes:</h1>
 
-* BlockTheSpot might only works as expected with the last tested version. Please check it before opening an issue.  
+* SpotX will only work correctly on the latest versions of Spotify, please make sure of this before asking a question.  
 * "chrome_elf.dll" gets replaced by the Spotify installer each time it updates, hence why you'll probably need to apply the patch again when it happens
-* [Spicetify](https://github.com/khanhas/spicetify-cli) users will need to reapply BlockTheSpot after applying a Spicetify patches.
 * If you notice an error, please leave your comment in the [discussions](https://github.com/amd64fox/SpotX/discussions/new), be sure to attach screenshots.

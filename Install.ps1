@@ -163,6 +163,9 @@ Remove-Item -Recurse -LiteralPath $tempDirectory
 
 # Removing an empty block, "Upgrade button", "Upgrade to premium" menu
 
+Rename-Item -path $env:APPDATA\Spotify\Apps\xpui.spa -NewName $env:APPDATA\Spotify\Apps\xpui.zip
+Expand-Archive $env:APPDATA\Spotify\Apps\xpui.zip -DestinationPath $env:APPDATA\Spotify\Apps\temporary
+
 # Делает резервную копию xpui.spa, также если бейкап устарел то заменяет старую на новую версию
 $xpui_js_last_write_time = dir $env:APPDATA\Spotify\Apps\temporary\xpui.js -File -Recurse
 $xpui_licenses_last_write_time = dir $env:APPDATA\Spotify\Apps\temporary\licenses.html -File -Recurse

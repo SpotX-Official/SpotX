@@ -72,5 +72,5 @@ To check your access rights:
 <h1>Additional Notes:</h1>
 
 * SpotX will only work correctly on the latest versions of Spotify, please make sure of this before asking a question.  
-* "chrome_elf.dll" gets replaced by the Spotify installer each time it updates, hence why you'll probably need to apply the patch again when it happens
+* The modifiable files are replaced by the Spotify installer every time it is updated, so you will need to apply the patch again when this happens.
 * If you notice an error, please leave your comment in the [discussions](https://github.com/amd64fox/SpotX/discussions/new), be sure to attach screenshots.

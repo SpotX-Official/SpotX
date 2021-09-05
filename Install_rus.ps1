@@ -163,12 +163,20 @@ Remove-Item -Recurse -LiteralPath $tempDirectory
 
 # Removing an empty block, "Upgrade button", "Upgrade to premium" menu
 
-if (!(test-path $env:APPDATA\Spotify\Apps\xpui.bak)) {
-    Copy $env:APPDATA\Spotify\Apps\xpui.spa $env:APPDATA\Spotify\Apps\xpui.bak
-}
-
 Rename-Item -path $env:APPDATA\Spotify\Apps\xpui.spa -NewName $env:APPDATA\Spotify\Apps\xpui.zip
 Expand-Archive $env:APPDATA\Spotify\Apps\xpui.zip -DestinationPath $env:APPDATA\Spotify\Apps\temporary
+
+# Делает резервную копию xpui.spa, также если бейкап устарел то заменяет старую на новую версию
+$xpui_js_last_write_time = dir $env:APPDATA\Spotify\Apps\temporary\xpui.js -File -Recurse
+$xpui_licenses_last_write_time = dir $env:APPDATA\Spotify\Apps\temporary\licenses.html -File -Recurse
+
+if ($xpui_licenses_last_write_time.LastWriteTime -eq $xpui_js_last_write_time.LastWriteTime) {
+
+    if (test-path $env:APPDATA\Spotify\Apps\xpui.bak) {
+        Remove-item $env:APPDATA\Spotify\Apps\xpui.bak -Recurse
+    }
+    Copy $env:APPDATA\Spotify\Apps\xpui.zip $env:APPDATA\Spotify\Apps\xpui.bak
+}
 $file_js = Get-Content $env:APPDATA\Spotify\Apps\temporary\xpui.js -Raw
 If (!($file_js -match 'patched by spotx')) {
     $file_js -match 'visible:!e}[)]{1}[,]{1}[A-Za-z]{1}[(]{1}[)]{1}.createElement[(]{1}[A-Za-z]{2}[,]{1}null[)]{1}[,]{1}[A-Za-z]{1}[(]{1}[)]{1}.' | Out-Null

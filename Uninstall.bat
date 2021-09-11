@@ -1,8 +1,7 @@
 @echo off
 SETLOCAL ENABLEDELAYEDEXPANSION
 echo *****************
-echo Author: @rednek46
-echo Modified: @Amd64fox
+echo Author: @amd64fox
 echo *****************
 echo Removing Patch...
 if exist "%APPDATA%\Spotify\chrome_elf.dll.bak" (
@@ -20,6 +19,10 @@ if exist "%APPDATA%\Spotify\Apps\xpui.bak" (
     del /s /q "%APPDATA%\Spotify\Apps\xpui.spa" > NUL 2>&1
     move "%APPDATA%\Spotify\Apps\xpui.bak" "%APPDATA%\Spotify\Apps\xpui.spa" > NUL 2>&1
 ) 
+
+if exist "%APPDATA%\Spotify\blockthespot_log.txt" (
+    del /s /q "%APPDATA%\Spotify\blockthespot_log.txt" > NUL 2>&1
+)
 
 if exist "%localappdata%\Spotify\Update" (
     del /A:sr %localappdata%\Spotify\Update > NUL 2>&1

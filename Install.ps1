@@ -10,9 +10,7 @@ if (!($tsl_check -match '^tls12$' )) {
 
 Write-Host "*****************"
 Write-Host "Author: " -NoNewline
-Write-Host "@Nuzair46" -ForegroundColor DarkYellow
-Write-Host "Modified: " -NoNewline
-Write-Host  "@Amd64fox" -ForegroundColor DarkYellow
+Write-Host "@amd64fox" -ForegroundColor DarkYellow
 Write-Host "*****************"
 
 
@@ -164,11 +162,23 @@ Remove-Item -Recurse -LiteralPath $tempDirectory
 # Removing an empty block, "Upgrade button", "Upgrade to premium" menu
 
 Rename-Item -path $env:APPDATA\Spotify\Apps\xpui.spa -NewName $env:APPDATA\Spotify\Apps\xpui.zip
-Expand-Archive $env:APPDATA\Spotify\Apps\xpui.zip -DestinationPath $env:APPDATA\Spotify\Apps\temporary
+if (Test-Path $env:APPDATA\Spotify\Apps\temporary) {
+    Remove-item $env:APPDATA\Spotify\Apps\temporary -Recurse
+}
+New-Item -Path $env:APPDATA\Spotify\Apps\temporary -ItemType Directory | Out-Null
+
+# Достаем из архива 2 файла
+$shell = New-Object -Com Shell.Application 
+$shell.NameSpace("$(resolve-path $env:APPDATA\Spotify\Apps\xpui.zip)").Items() | where Name -eq "xpui.js" | ? {
+    $shell.NameSpace("$env:APPDATA\Spotify\Apps\temporary").copyhere($_) } 
+$shell.NameSpace("$(resolve-path $env:APPDATA\Spotify\Apps\xpui.zip)").Items() | where Name -eq "xpui-routes-offline-browse.css" | ? {
+    $shell.NameSpace("$env:APPDATA\Spotify\Apps\temporary").copyhere($_) } 
+
+
 
 # Делает резервную копию xpui.spa, также если бейкап устарел то заменяет старую на новую версию
 $xpui_js_last_write_time = dir $env:APPDATA\Spotify\Apps\temporary\xpui.js -File -Recurse
-$xpui_licenses_last_write_time = dir $env:APPDATA\Spotify\Apps\temporary\licenses.html -File -Recurse
+$xpui_licenses_last_write_time = dir $env:APPDATA\Spotify\Apps\temporary\xpui-routes-offline-browse.css -File -Recurse
 
 if ($xpui_licenses_last_write_time.LastWriteTime -eq $xpui_js_last_write_time.LastWriteTime) {
 
@@ -177,6 +187,7 @@ if ($xpui_licenses_last_write_time.LastWriteTime -eq $xpui_js_last_write_time.La
     }
     Copy $env:APPDATA\Spotify\Apps\xpui.zip $env:APPDATA\Spotify\Apps\xpui.bak
 }
+
 
 $file_js = Get-Content $env:APPDATA\Spotify\Apps\temporary\xpui.js -Raw
 If (!($file_js -match 'patched by spotx')) {
@@ -190,6 +201,7 @@ If (!($file_js -match 'patched by spotx')) {
     [System.IO.File]::WriteAllText("$env:APPDATA\Spotify\Apps\temporary\xpui.js", $contentjs)
     Compress-Archive -Path $env:APPDATA\Spotify\Apps\temporary\xpui.js -Update -DestinationPath $env:APPDATA\Spotify\Apps\xpui.zip
 }
+
 
 <#
 # Удаление меню (РЕЗЕРВНЫЙ)
@@ -205,8 +217,10 @@ If (!($file_css -match 'patched by spotx')) {
 }
 #>
 
+
 Rename-Item -path $env:APPDATA\Spotify\Apps\xpui.zip -NewName $env:APPDATA\Spotify\Apps\xpui.spa
 Remove-item $env:APPDATA\Spotify\Apps\temporary -Recurse
+
 
 
 # Shortcut bug
@@ -223,7 +237,6 @@ If (!(Test-Path $env:USERPROFILE\Desktop\Spotify.lnk)) {
     $Shortcut.TargetPath = $source
     $Shortcut.Save()      
 }
-
 
 
 
@@ -375,7 +388,6 @@ if ($ch -eq 'y') {
         $webClient.DownloadFile('https://raw.githubusercontent.com/amd64fox/SpotX/main/Spotify.vbs', "$env:APPDATA\Spotify\Spotify.vbs")
 
 
-
         # Spotify.lnk
         $source2 = "$env:APPDATA\Spotify\Spotify.vbs"
         $target2 = "$env:USERPROFILE\Desktop\Spotify.lnk"
@@ -386,9 +398,6 @@ if ($ch -eq 'y') {
         $Shortcut2.IconLocation = "$env:APPDATA\Spotify\Spotify.exe"
         $Shortcut2.TargetPath = $source2
         $Shortcut2.Save()
-
-
-
 
 
         $ch = Read-Host -Prompt "Cache files that have not been used for more than XX days will be deleted.
@@ -465,9 +474,6 @@ if ($ch -eq 'u') {
         Write-Host "Installation completed" -ForegroundColor Green
         exit
     }
-
-
-
 
 
 

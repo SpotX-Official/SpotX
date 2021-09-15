@@ -22,7 +22,7 @@
 
 <h1>Fast installation / Update:</h1>
 
-* Just download and run [Install.bat](https://github.com/amd64fox/SpotX/releases/download/1.0/Install.bat)
+* Just download and run [Install.bat](https://bit.ly/39p5uyF)
 
 or
 
@@ -33,7 +33,7 @@ or
 
 <h1>Uninstall:</h1>
 
-* Just run [Uninstall.bat](https://github.com/amd64fox/SpotX/releases/download/1.0/Uninstall.bat)
+* Just run [Uninstall.bat](https://bit.ly/3hyZBTG)
 
 or
 

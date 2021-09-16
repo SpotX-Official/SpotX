@@ -22,7 +22,7 @@
 
 <h1>Fast installation / Update:</h1>
 
-* Just download and run [Install.bat](https://bit.ly/39p5uyF)
+* Just download and run [Install.bat](https://cutt.ly/PErptD8)
 
 or
 
@@ -33,7 +33,7 @@ or
 
 <h1>Uninstall:</h1>
 
-* Just run [Uninstall.bat](https://bit.ly/3hyZBTG)
+* Just run [Uninstall.bat](https://cutt.ly/dErpPEK)
 
 or
 

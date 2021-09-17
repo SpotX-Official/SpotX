@@ -10,7 +10,7 @@ if (!($tsl_check -match '^tls12$' )) {
 
 Write-Host "*****************"
 Write-Host "Автор: " -NoNewline
-Write-Host "@amd64fox" -ForegroundColor DarkYellow
+Write-Host "@Amd64fox" -ForegroundColor DarkYellow
 Write-Host "*****************"
 
 
@@ -87,7 +87,7 @@ try {
 }
 catch {
     Write-Output ''
-    Sleep
+    Start-Sleep
 }
 
 Expand-Archive -Force -LiteralPath "$PWD\chrome_elf.zip" -DestinationPath $PWD
@@ -142,7 +142,7 @@ if (-not $spotifyInstalled) {
 }
 
 if (!(test-path $SpotifyDirectory/chrome_elf.dll.bak)) {
-    move $SpotifyDirectory\chrome_elf.dll $SpotifyDirectory\chrome_elf.dll.bak >$null 2>&1
+    Move-Item $SpotifyDirectory\chrome_elf.dll $SpotifyDirectory\chrome_elf.dll.bak >$null 2>&1
 }
 
 Write-Host 'Модифицирую Spotify...'
@@ -153,7 +153,7 @@ $tempDirectory = $PWD
 Pop-Location
 
 
-sleep -Milliseconds 200
+Start-Sleep -Milliseconds 200
 Remove-Item -Recurse -LiteralPath $tempDirectory 
 
 
@@ -169,23 +169,23 @@ New-Item -Path $env:APPDATA\Spotify\Apps\temporary -ItemType Directory | Out-Nul
 
 # Достаем из архива 2 файла
 $shell = New-Object -Com Shell.Application 
-$shell.NameSpace("$(resolve-path $env:APPDATA\Spotify\Apps\xpui.zip)").Items() | where Name -eq "xpui.js" | ? {
+$shell.NameSpace("$(resolve-path $env:APPDATA\Spotify\Apps\xpui.zip)").Items() | Where-Object Name -eq "xpui.js" | Where-Object {
     $shell.NameSpace("$env:APPDATA\Spotify\Apps\temporary").copyhere($_) } 
-$shell.NameSpace("$(resolve-path $env:APPDATA\Spotify\Apps\xpui.zip)").Items() | where Name -eq "xpui-routes-offline-browse.css" | ? {
+$shell.NameSpace("$(resolve-path $env:APPDATA\Spotify\Apps\xpui.zip)").Items() | Where-Object Name -eq "xpui-routes-offline-browse.css" | Where-Object {
     $shell.NameSpace("$env:APPDATA\Spotify\Apps\temporary").copyhere($_) } 
 
 
 
 # Делает резервную копию xpui.spa, также если бейкап устарел то заменяет старую на новую версию
-$xpui_js_last_write_time = dir $env:APPDATA\Spotify\Apps\temporary\xpui.js -File -Recurse
-$xpui_licenses_last_write_time = dir $env:APPDATA\Spotify\Apps\temporary\xpui-routes-offline-browse.css -File -Recurse
+$xpui_js_last_write_time = Get-ChildItem $env:APPDATA\Spotify\Apps\temporary\xpui.js -File -Recurse
+$xpui_licenses_last_write_time = Get-ChildItem $env:APPDATA\Spotify\Apps\temporary\xpui-routes-offline-browse.css -File -Recurse
 
 if ($xpui_licenses_last_write_time.LastWriteTime -eq $xpui_js_last_write_time.LastWriteTime) {
 
     if (test-path $env:APPDATA\Spotify\Apps\xpui.bak) {
         Remove-item $env:APPDATA\Spotify\Apps\xpui.bak -Recurse
     }
-    Copy $env:APPDATA\Spotify\Apps\xpui.zip $env:APPDATA\Spotify\Apps\xpui.bak
+    Copy-Item $env:APPDATA\Spotify\Apps\xpui.zip $env:APPDATA\Spotify\Apps\xpui.bak
 }
 
 
@@ -204,7 +204,7 @@ If (!($file_js -match 'patched by spotx')) {
 
 
 <#
-# Удаление меню (РЕЗЕРВНЫЙ)
+# Удаление меню через css (РЕЗЕРВНЫЙ)
 $file_css = Get-Content $env:APPDATA\Spotify\Apps\temporary\xpui.css -Raw
 If (!($file_css -match 'patched by spotx')) {
     $new_css = $file_css -replace 'table{border-collapse:collapse;border-spacing:0}', 'table{border-collapse:collapse;border-spacing:0}[target="_blank"]{display:none !important;}'
@@ -379,7 +379,7 @@ if ($ch -eq 'y') {
         If ($test_spotify_vbs) {
             Remove-item $env:APPDATA\Spotify\Spotify.vbs -Recurse -Force
         }
-        sleep -Milliseconds 200
+        Start-Sleep -Milliseconds 200
 
     # cache-spotify.ps1
     $webClient.DownloadFile('https://raw.githubusercontent.com/amd64fox/SpotX/main/cache_spotify_ru.ps1', "$env:APPDATA\Spotify\cache-spotify.ps1")

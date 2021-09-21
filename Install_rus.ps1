@@ -162,23 +162,13 @@ Remove-Item -Recurse -LiteralPath $tempDirectory
 # Removing an empty block, "Upgrade button", "Upgrade to premium" menu
 
 Rename-Item -path $env:APPDATA\Spotify\Apps\xpui.spa -NewName $env:APPDATA\Spotify\Apps\xpui.zip
-if (Test-Path $env:APPDATA\Spotify\Apps\temporary) {
-    Remove-item $env:APPDATA\Spotify\Apps\temporary -Recurse
-}
-New-Item -Path $env:APPDATA\Spotify\Apps\temporary -ItemType Directory | Out-Null
-
-# Достаем из архива 2 файла
-$shell = New-Object -Com Shell.Application 
-$shell.NameSpace("$(resolve-path $env:APPDATA\Spotify\Apps\xpui.zip)").Items() | Where-Object Name -eq "xpui.js" | Where-Object {
-    $shell.NameSpace("$env:APPDATA\Spotify\Apps\temporary").copyhere($_) } 
-$shell.NameSpace("$(resolve-path $env:APPDATA\Spotify\Apps\xpui.zip)").Items() | Where-Object Name -eq "xpui-routes-offline-browse.css" | Where-Object {
-    $shell.NameSpace("$env:APPDATA\Spotify\Apps\temporary").copyhere($_) } 
+Expand-Archive $env:APPDATA\Spotify\Apps\xpui.zip -DestinationPath $env:APPDATA\Spotify\Apps\temporary
 
 
 
 # Делает резервную копию xpui.spa, также если бейкап устарел то заменяет старую на новую версию
-$xpui_js_last_write_time = Get-ChildItem $env:APPDATA\Spotify\Apps\temporary\xpui.js -File -Recurse
-$xpui_licenses_last_write_time = Get-ChildItem $env:APPDATA\Spotify\Apps\temporary\xpui-routes-offline-browse.css -File -Recurse
+$xpui_js_last_write_time = dir $env:APPDATA\Spotify\Apps\temporary\xpui.js -File -Recurse
+$xpui_licenses_last_write_time = dir $env:APPDATA\Spotify\Apps\temporary\licenses.html -File -Recurse
 
 if ($xpui_licenses_last_write_time.LastWriteTime -eq $xpui_js_last_write_time.LastWriteTime) {
 

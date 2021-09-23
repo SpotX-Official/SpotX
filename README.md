@@ -56,19 +56,7 @@ or
    <strong>Note:</strong> For Windows 8 it is not possible to upgrade the PowerShell version, please upgrade to Windows 8.1 or 10
 
 
-<h3>High access rights are set for PowerShell (Fixed)</h3>
-
-For some PCs, for full PowerShell to work, you need to set the permissions at least to the `RemoteSigned` position.
-To check your access rights:
-  * Call PowerShell Console `Win + R` write `powershell` and `Ok`
-  * Enter the command `Get-ExecutionPolicy`
-  * If your rights are `Restricted` or `AllSigned` then enter the command 
-```ps1
-   Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned -Force
-````
   
-  
-
 <h1>Additional Notes:</h1>
 
 * SpotX will only work correctly on the latest versions of Spotify, please make sure of this before asking a question.  

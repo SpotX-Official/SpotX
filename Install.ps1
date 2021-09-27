@@ -239,12 +239,9 @@ If (!(Test-Path $env:USERPROFILE\Desktop\Spotify.lnk)) {
 }
 
 
-
-
 # Block updates
 
 $ErrorActionPreference = 'SilentlyContinue'  # Команда гасит легкие ошибки
-
 
 
 $update_directory = Test-Path -Path $env:LOCALAPPDATA\Spotify 
@@ -252,13 +249,31 @@ $update_directory_file = Test-Path -Path $env:LOCALAPPDATA\Spotify\Update
 $migrator_bak = Test-Path -Path $env:APPDATA\Spotify\SpotifyMigrator.bak  
 $migrator_exe = Test-Path -Path $env:APPDATA\Spotify\SpotifyMigrator.exe
 $Check_folder_file = Get-ItemProperty -Path $env:LOCALAPPDATA\Spotify\Update | Select-Object Attributes 
+$folder_update_access = Get-Acl $env:LOCALAPPDATA\Spotify\Update
 
-$ch = Read-Host -Prompt "Want to block updates ? (Y/N), Unlock updates (U)"
+do {
+    $ch = Read-Host -Prompt "Want to block updates ? (Y/N), Unlock updates (U)"
+
+    if (!($ch -eq 'n' -or $ch -eq 'y' -or $ch -eq 'u')) {
+    
+        Write-Host "Oops, an incorrect value, " -ForegroundColor Red -NoNewline
+        Write-Host "enter again through..." -NoNewline
+        Start-Sleep -Milliseconds 1500
+        Write-Host "3" -NoNewline
+        Start-Sleep -Milliseconds 1000
+        Write-Host ".2" -NoNewline
+        Start-Sleep -Milliseconds 1000
+        Write-Host ".1"
+        Start-Sleep -Milliseconds 1000     
+        Clear-Host
+    }
+}
+while ($ch -notmatch '^y$|^n$|^u$')
+
+
 if ($ch -eq 'y') {
 
-
-
-    # Если была установка клиенте 
+    # Если была установка клиента 
     if (!($update_directory)) {
 
         # Создать папку Spotify в Local
@@ -287,13 +302,22 @@ if ($ch -eq 'y') {
     If ($update_directory) {
 
 
-        #Удалить папку Update если она есть.
+        #Удалить папку Update если она есть
         if ($Check_folder_file -match '\bDirectory\b') {  
+
+            #Если у папки Update заблокированы права то разблокировать 
+            if ($folder_update_access.AccessToString -match 'Deny') {
+
+        ($ACL = Get-Acl $env:LOCALAPPDATA\Spotify\Update).access | ForEach-Object {
+                    $Users = $_.IdentityReference 
+                    $ACL.PurgeAccessRules($Users) }
+                $ACL | Set-Acl $env:LOCALAPPDATA\Spotify\Update
+            }
             Remove-item $env:LOCALAPPDATA\Spotify\Update -Recurse -Force
         } 
 
         #Создать файл Update если его нет
-        if (!($Check_folder_file -match '\bSystem\b' -and $Check_folder_file -match '\bReadOnly\b')) {  
+        if (!($Check_folder_file -match '\bSystem\b|' -and $Check_folder_file -match '\bReadOnly\b')) {  
             New-Item -Path $env:LOCALAPPDATA\Spotify\ -Name "Update" -ItemType "file" -Value "STOPIT" | Out-Null
             $file = Get-ItemProperty -Path $env:LOCALAPPDATA\Spotify\Update
             $file.Attributes = "ReadOnly", "System"
@@ -314,7 +338,6 @@ if ($ch -eq 'y') {
   
     Write-Host "Updates blocked successfully" -ForegroundColor Green
 
-
 }
 
 
@@ -325,8 +348,7 @@ if ($ch -eq 'n') {
 
 
 if ($ch -eq 'u') {
-
-    If ($migrator_bak -and $Check_folder_file -match '\bSystem\b' -and $Check_folder_file -match '\bReadOnly\b') {
+    If ($migrator_bak -or $Check_folder_file -match '\bSystem\b|\bReadOnly\b') {
        
     
         If ($update_directory_file) {
@@ -342,23 +364,36 @@ if ($ch -eq 'u') {
     }
 
 
-    If (!($migrator_bak -and $Check_folder_file -match '\bSystem\b' -and $Check_folder_file -match '\bReadOnly\b')) {
+    If (!($migrator_bak -or $Check_folder_file -match '\bSystem\b|\bReadOnly\b')) {
         Write-Host "Oops, updates are not blocked" 
     }  
-}
-    
-
-elseif (!($ch -eq 'n' -or $ch -eq 'y' -or $ch -eq 'u')) {
-    Write-Host "Oops, unsuccessful" -ForegroundColor Red
-    
 }
 
 
 
 # automatic cache clearing
 
+do {
+    $ch = Read-Host -Prompt "Want to set up automatic cache cleanup? (Y/N) Delete script (U)"
 
-$ch = Read-Host -Prompt "Want to set up automatic cache cleanup? (Y/N) Delete script (U)"
+    if (!($ch -eq 'n' -or $ch -eq 'y' -or $ch -eq 'u')) {
+
+        Write-Host "Oops, an incorrect value, " -ForegroundColor Red -NoNewline
+        Write-Host "enter again through..." -NoNewline
+        Start-Sleep -Milliseconds 1500
+        Write-Host "3" -NoNewline
+        Start-Sleep -Milliseconds 1000
+        Write-Host ".2" -NoNewline
+        Start-Sleep -Milliseconds 1000
+        Write-Host ".1"
+        Start-Sleep -Milliseconds 1000     
+        Clear-Host
+    }
+}
+while ($ch -notmatch '^y$|^n$|^u$')
+
+
+
 if ($ch -eq 'y') {
 
 
@@ -400,8 +435,30 @@ if ($ch -eq 'y') {
         $Shortcut2.Save()
 
 
-        $ch = Read-Host -Prompt "Cache files that have not been used for more than XX days will be deleted.
+
+
+
+        do {
+            $ch = Read-Host -Prompt "Cache files that have not been used for more than XX days will be deleted.
     Enter the number of days from 1 to 100"
+
+            if (!($ch -match "^[1-9][0-9]?$|^100$")) {
+
+                Write-Host "Oops, an incorrect value, " -ForegroundColor Red -NoNewline
+                Write-Host "enter again through..." -NoNewline
+                Start-Sleep -Milliseconds 1500
+                Write-Host "3" -NoNewline
+                Start-Sleep -Milliseconds 1000
+                Write-Host ".2" -NoNewline
+                Start-Sleep -Milliseconds 1000
+                Write-Host ".1"
+                Start-Sleep -Milliseconds 1000     
+                Clear-Host
+            }
+        }
+        while ($ch -notmatch '^[1-9][0-9]?$|^100$')
+
+
         if ($ch -match "^[1-9][0-9]?$|^100$") {
             $file_cache_spotify_ps1 = Get-Content $env:APPDATA\Spotify\cache-spotify.ps1 -Raw
             $new_file_cache_spotify_ps1 = $file_cache_spotify_ps1 -replace 'seven', $ch -replace '-7', - $ch
@@ -413,37 +470,15 @@ if ($ch -eq 'y') {
             Write-Host "installation completed" -ForegroundColor Green
             exit
         }
-        if (!($ch -match "^[1-9][0-9]?$|^100$")) {
-            $ch = Read-Host -Prompt "Oops, bad luck, let's try again
-        Cache files that have not been used for more than XX days will be deleted.
-        Enter the number of days from 1 to 100"
-            if ($ch -match "^[1-9][0-9]?$|^100$") {
-                $file_cache_spotify_ps1 = Get-Content $env:APPDATA\Spotify\cache-spotify.ps1 -Raw
-                $new_file_cache_spotify_ps1 = $file_cache_spotify_ps1 -replace 'seven', $ch -replace '-7', - $ch
-                Set-Content -Path $env:APPDATA\Spotify\cache-spotify.ps1 -Force -Value $new_file_cache_spotify_ps1
-                $contentcache_spotify_ps1 = [System.IO.File]::ReadAllText("$env:APPDATA\Spotify\cache-spotify.ps1")
-                $contentcache_spotify_ps1 = $contentcache_spotify_ps1.Trim()
-                [System.IO.File]::WriteAllText("$env:APPDATA\Spotify\cache-spotify.ps1", $contentcache_spotify_ps1)
-                Write-Host "Clearing the cache has been successfully installed" -ForegroundColor Green
-                Write-Host "installation completed" -ForegroundColor Green
-                exit
-            }
-            else {
-                Write-Host "Unsuccessful again" -ForegroundColor Red
-                Write-Host 'Please open the cache-spotify.ps1 file in this path "AppData\Roaming\Spotify" and enter your number of days'
-                Write-Host "Installation completed" -ForegroundColor Green
-                exit
-            }
+       
+    }
 
-        }
-    
-    }
     else {
-        Write-Host "Error, i can't find the 'Desktop' folder" -ForegroundColor Red
-        Write-Host "Installation completed" -ForegroundColor Green
-    
-        Exit
+        Write-Host "Oops, default desktop folder not found, cache clearing installation stopped"
+        exit
     }
+
+
 }
 
 if ($ch -eq 'n') {
@@ -482,11 +517,6 @@ if ($ch -eq 'u') {
         Write-Host "Installation completed" -ForegroundColor Green
         exit
     }
-}
-
-else {
-    Write-Host "Oops, unsuccessful" -ForegroundColor Red
-    Write-Host "installation completed" -ForegroundColor Green
 }
 
 exit

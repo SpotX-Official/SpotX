@@ -170,37 +170,36 @@ if (Test-Path $env:APPDATA\Spotify\Apps\temporary) {
 }
 New-Item -Path $env:APPDATA\Spotify\Apps\temporary -ItemType Directory | Out-Null
 
-# Достаем из архива xpui.zip 2 файла
+# Достаем из архива xpui.zip файл xpui.js
 Add-Type -Assembly 'System.IO.Compression.FileSystem'
 $zip = [System.IO.Compression.ZipFile]::Open($zipFilePath, 'read')
 $zip.Entries | Where-Object Name -eq xpui.js | ForEach-Object { [System.IO.Compression.ZipFileExtensions]::ExtractToFile($_, "$extractPath\$($_.Name)", $true) }
-$zip.Entries | Where-Object Name -eq xpui-routes-offline-browse.css | ForEach-Object { [System.IO.Compression.ZipFileExtensions]::ExtractToFile($_, "$extractPath\$($_.Name)", $true) }
 $zip.Dispose()
 
-# Делает резервную копию xpui.spa, также если бейкап устарел то заменяет старую на новую версию
-$xpui_js_last_write_time = Get-ChildItem $env:APPDATA\Spotify\Apps\temporary\xpui.js -File -Recurse
-$xpui_routes_offline_browse_last_write_time = Get-ChildItem $env:APPDATA\Spotify\Apps\temporary\xpui-routes-offline-browse.css -File -Recurse
+# Делает резервную копию xpui.spa
 
-if ($xpui_routes_offline_browse_last_write_time.LastWriteTime -eq $xpui_js_last_write_time.LastWriteTime) {
-
-    if (test-path $env:APPDATA\Spotify\Apps\xpui.bak) {
-        Remove-item $env:APPDATA\Spotify\Apps\xpui.bak -Recurse
-    }
+$file_js = Get-Content $env:APPDATA\Spotify\Apps\temporary\xpui.js -Raw
+    
+If (!($file_js -match 'patched by spotx')) {
     Copy-Item $env:APPDATA\Spotify\Apps\xpui.zip $env:APPDATA\Spotify\Apps\xpui.bak
 }
 
-# Мофифицируем и кладем обратно в архив файл xpui.js
-$file_js = Get-Content $env:APPDATA\Spotify\Apps\temporary\xpui.js -Raw
+   
+# Мофифицируем и кладем обратно в архив файл xpui.js 
+
 If (!($file_js -match 'patched by spotx')) {
     $file_js -match 'visible:!e}[)]{1}[,]{1}[A-Za-z]{1}[(]{1}[)]{1}.createElement[(]{1}[A-Za-z]{2}[,]{1}null[)]{1}[,]{1}[A-Za-z]{1}[(]{1}[)]{1}.' | Out-Null
     $menu_split_js = $Matches[0] -split 'createElement[(]{1}[A-Za-z]{2}[,]{1}null[)]{1}[,]{1}[A-Za-z]{1}[(]{1}[)]{1}.'
-    $new_js = $file_js -replace "[.]{1}createElement[(]{1}..[,]{1}[{]{1}onClick[:]{1}.[,]{1}className[:]{1}..[.]{1}.[.]{1}UpgradeButton[}]{1}[)]{1}[,]{1}.[(]{1}[)]{1}", "" -replace 'adsEnabled:!0', 'adsEnabled:!1' -replace 'visible:!e}[)]{1}[,]{1}[A-Za-z]{1}[(]{1}[)]{1}.createElement[(]{1}[A-Za-z]{2}[,]{1}null[)]{1}[,]{1}[A-Za-z]{1}[(]{1}[)]{1}.', $menu_split_js
+    $new_js = $file_js -replace "[.]{1}createElement[(]{1}..[,]{1}[{]{1}onClick[:]{1}.[,]{1}className[:]{1}..[.]{1}.[.]{1}UpgradeButton[}]{1}[)]{1}[,]{1}.[(]{1}[)]{1}", "" -replace 'adsEnabled:!0', 'adsEnabled:!1' -replace 'visible:!e}[)]{1}[,]{1}[A-Za-z]{1}[(]{1}[)]{1}.createElement[(]{1}[A-Za-z]{2}[,]{1}null[)]{1}[,]{1}[A-Za-z]{1}[(]{1}[)]{1}.', $menu_split_js -replace "allSponsorships", ""
     Set-Content -Path $env:APPDATA\Spotify\Apps\temporary\xpui.js -Force -Value $new_js
     add-content -Path $env:APPDATA\Spotify\Apps\temporary\xpui.js -Value '// Patched by SpotX' -passthru | Out-Null
     $contentjs = [System.IO.File]::ReadAllText("$env:APPDATA\Spotify\Apps\temporary\xpui.js")
     $contentjs = $contentjs.Trim()
     [System.IO.File]::WriteAllText("$env:APPDATA\Spotify\Apps\temporary\xpui.js", $contentjs)
     Compress-Archive -Path $env:APPDATA\Spotify\Apps\temporary\xpui.js -Update -DestinationPath $env:APPDATA\Spotify\Apps\xpui.zip
+}
+else {
+    "Xpui.js is already patched"
 }
 
 
@@ -252,14 +251,32 @@ $update_directory = Test-Path -Path $env:LOCALAPPDATA\Spotify
 $update_directory_file = Test-Path -Path $env:LOCALAPPDATA\Spotify\Update
 $migrator_bak = Test-Path -Path $env:APPDATA\Spotify\SpotifyMigrator.bak  
 $migrator_exe = Test-Path -Path $env:APPDATA\Spotify\SpotifyMigrator.exe
-$Check_folder_file = Get-ItemProperty -Path $env:LOCALAPPDATA\Spotify\Update | SELECT Attributes 
+$Check_folder_file = Get-ItemProperty -Path $env:LOCALAPPDATA\Spotify\Update | Select-Object Attributes 
+$folder_update_access = Get-Acl $env:LOCALAPPDATA\Spotify\Update
 
-$ch = Read-Host -Prompt "Хотите заблокировать обновления ? (Y/N), Хочу разблокировать (U)"
+do {
+    $ch = Read-Host -Prompt "Хотите заблокировать обновления ? (Y/N), Хочу разблокировать (U)"
+
+    if (!($ch -eq 'n' -or $ch -eq 'y' -or $ch -eq 'u')) {
+    
+        Write-Host "Ой, некорректное значение, " -ForegroundColor Red -NoNewline
+        Write-Host "повторите ввод через..." -NoNewline
+        Start-Sleep -Milliseconds 1000
+        Write-Host "3" -NoNewline
+        Start-Sleep -Milliseconds 1000
+        Write-Host ".2" -NoNewline
+        Start-Sleep -Milliseconds 1000
+        Write-Host ".1"
+        Start-Sleep -Milliseconds 1000     
+        Clear-Host
+    }
+}
+while ($ch -notmatch '^y$|^n$|^u$')
+
+
 if ($ch -eq 'y') {
 
-
-
-    # Если была установка клиенте 
+    # Если была установка клиента 
     if (!($update_directory)) {
 
         # Создать папку Spotify в Local
@@ -288,8 +305,17 @@ if ($ch -eq 'y') {
     If ($update_directory) {
 
 
-        #Удалить папку Update если она есть.
+        #Удалить папку Update если она есть
         if ($Check_folder_file -match '\bDirectory\b') {  
+
+            #Если у папки Update заблокированы права то разблокировать 
+            if ($folder_update_access.AccessToString -match 'Deny') {
+
+        ($ACL = Get-Acl $env:LOCALAPPDATA\Spotify\Update).access | ForEach-Object {
+                    $Users = $_.IdentityReference 
+                    $ACL.PurgeAccessRules($Users) }
+                $ACL | Set-Acl $env:LOCALAPPDATA\Spotify\Update
+            }
             Remove-item $env:LOCALAPPDATA\Spotify\Update -Recurse -Force
         } 
 
@@ -313,8 +339,7 @@ if ($ch -eq 'y') {
     }
 
   
-    Write-Host "Обновления успешно заблокированы" -ForegroundColor Green
-
+    Write-Host "Updates blocked successfully" -ForegroundColor Green
 
 }
 
@@ -326,8 +351,7 @@ if ($ch -eq 'n') {
 
 
 if ($ch -eq 'u') {
-
-    If ($migrator_bak -and $Check_folder_file -match '\bSystem\b' -and $Check_folder_file -match '\bReadOnly\b') {
+    If ($migrator_bak -or $Check_folder_file -match '\bSystem\b|\bReadOnly\b') {
        
     
         If ($update_directory_file) {
@@ -343,30 +367,42 @@ if ($ch -eq 'u') {
     }
 
 
-    If (!($migrator_bak -and $Check_folder_file -match '\bSystem\b' -and $Check_folder_file -match '\bReadOnly\b')) {
+    If (!($migrator_bak -or $Check_folder_file -match '\bSystem\b|\bReadOnly\b')) {
         Write-Host "Ого, обновления не были заблокированы" 
     }  
 }
     
 
-elseif (!($ch -eq 'n' -or $ch -eq 'y' -or $ch -eq 'u')) {
-    Write-Host "Ой, неудачно" -ForegroundColor Red
-    
-}
-
-
-
 
 # automatic cache clearing
 
+do {
+    $ch = Read-Host -Prompt "Хотите установить автоматическую очистку кеша ? (Y/N) Хочу удалить (U)"
 
-$ch = Read-Host -Prompt "Хотите установить автоматическую очистку кеша ? (Y/N) Хочу удалить (U)"
+    if (!($ch -eq 'n' -or $ch -eq 'y' -or $ch -eq 'u')) {
+
+        Write-Host "Ой, некорректное значение, " -ForegroundColor Red -NoNewline
+        Write-Host "повторите ввод через..." -NoNewline
+        Start-Sleep -Milliseconds 1000
+        Write-Host "3" -NoNewline
+        Start-Sleep -Milliseconds 1000
+        Write-Host ".2" -NoNewline
+        Start-Sleep -Milliseconds 1000
+        Write-Host ".1"
+        Start-Sleep -Milliseconds 1000     
+        Clear-Host
+    }
+}
+while ($ch -notmatch '^y$|^n$|^u$')
+
+
+
 if ($ch -eq 'y') {
 
 
     $test_cache_spotify_ps = Test-Path -Path $env:APPDATA\Spotify\cache-spotify.ps1
     $test_spotify_vbs = Test-Path -Path $env:APPDATA\Spotify\Spotify.vbs
-    $desktop_folder = Get-ItemProperty -Path $env:USERPROFILE\Desktop | SELECT Attributes 
+    $desktop_folder = Get-ItemProperty -Path $env:USERPROFILE\Desktop | Select-Object Attributes 
     
 
     # Если папки по умолчанию Dekstop не существует, то установку кэша отменить.
@@ -382,11 +418,11 @@ if ($ch -eq 'y') {
         }
         Start-Sleep -Milliseconds 200
 
-    # cache-spotify.ps1
-    $webClient.DownloadFile('https://raw.githubusercontent.com/amd64fox/SpotX/main/cache_spotify_ru.ps1', "$env:APPDATA\Spotify\cache-spotify.ps1")
+        # cache-spotify.ps1
+        $webClient.DownloadFile('https://raw.githubusercontent.com/amd64fox/SpotX/main/cache_spotify_ru.ps1', "$env:APPDATA\Spotify\cache-spotify.ps1")
 
-    # Spotify.vbs
-    $webClient.DownloadFile('https://raw.githubusercontent.com/amd64fox/SpotX/main/Spotify.vbs', "$env:APPDATA\Spotify\Spotify.vbs")
+        # Spotify.vbs
+        $webClient.DownloadFile('https://raw.githubusercontent.com/amd64fox/SpotX/main/Spotify.vbs', "$env:APPDATA\Spotify\Spotify.vbs")
 
 
 
@@ -401,23 +437,31 @@ if ($ch -eq 'y') {
         $Shortcut2.TargetPath = $source2
         $Shortcut2.Save()
 
-    $ch = Read-Host -Prompt "Файлы кэша, которые не использовались более XX дней, будут удалены.
+
+
+
+
+        do {
+            $ch = Read-Host -Prompt "Файлы кэша, которые не использовались более XX дней, будут удалены.
     Пожалуйста, введите количество дней от 1 до 100"
-    if ($ch -match "^[1-9][0-9]?$|^100$") {
-        $file_cache_spotify_ps1 = Get-Content $env:APPDATA\Spotify\cache-spotify.ps1 -Raw
-        $new_file_cache_spotify_ps1 = $file_cache_spotify_ps1 -replace 'seven', $ch -replace '-7', - $ch
-        Set-Content -Path $env:APPDATA\Spotify\cache-spotify.ps1 -Force -Value $new_file_cache_spotify_ps1
-        $contentcache_spotify_ps1 = [System.IO.File]::ReadAllText("$env:APPDATA\Spotify\cache-spotify.ps1")
-        $contentcache_spotify_ps1 = $contentcache_spotify_ps1.Trim()
-        [System.IO.File]::WriteAllText("$env:APPDATA\Spotify\cache-spotify.ps1", $contentcache_spotify_ps1)
-        Write-Host "Скрипт для очистки кэша был успешно установлен" -ForegroundColor Green
-        Write-Host "Установка завершена" -ForegroundColor Green
-        exit
-    }
-    if (!($ch -match "^[1-9][0-9]?$|^100$")) {
-        $ch = Read-Host -Prompt "Ой, неудачно, давайте попробуем еще раз
-        Файлы кэша, которые не использовались более XX дней, будут удалены.
-    Пожалуйста, введите количество дней от 1 до 100"
+
+            if (!($ch -match "^[1-9][0-9]?$|^100$")) {
+
+                Write-Host "Ой, некорректное значение, " -ForegroundColor Red -NoNewline
+                Write-Host "повторите ввод через..." -NoNewline
+                Start-Sleep -Milliseconds 1000
+                Write-Host "3" -NoNewline
+                Start-Sleep -Milliseconds 1000
+                Write-Host ".2" -NoNewline
+                Start-Sleep -Milliseconds 1000
+                Write-Host ".1"
+                Start-Sleep -Milliseconds 1000     
+                Clear-Host
+            }
+        }
+        while ($ch -notmatch '^[1-9][0-9]?$|^100$')
+
+
         if ($ch -match "^[1-9][0-9]?$|^100$") {
             $file_cache_spotify_ps1 = Get-Content $env:APPDATA\Spotify\cache-spotify.ps1 -Raw
             $new_file_cache_spotify_ps1 = $file_cache_spotify_ps1 -replace 'seven', $ch -replace '-7', - $ch
@@ -429,16 +473,9 @@ if ($ch -eq 'y') {
             Write-Host "Установка завершена" -ForegroundColor Green
             exit
         }
-        else {
-            Write-Host "Снова неудачно" -ForegroundColor Red
-            Write-Host 'Пожалуйста, откройте файл cache-spotify.ps1 по этому пути "AppData\Roaming\Spotify" и введите своё кол-во дней вручную'
-            Write-Host "Установка завершена" -ForegroundColor Green
-            exit
-        }
-
-        }
-    
+       
     }
+
     else {
         Write-Host "Ошибка, не могу найти папку Рабочего стола" -ForegroundColor Red
         Write-Host "Установка завершена" -ForegroundColor Green
@@ -486,11 +523,6 @@ if ($ch -eq 'u') {
         Write-Host "Установка завершена" -ForegroundColor Green
         exit
     }
-}
-
-else {
-    Write-Host "Ой, неудачно" -ForegroundColor Red
-    Write-Host "Установка завершена" -ForegroundColor Green
 }
 
 exit

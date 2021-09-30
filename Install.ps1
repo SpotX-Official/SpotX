@@ -163,6 +163,7 @@ Remove-Item -Recurse -LiteralPath $tempDirectory
 $zipFilePath = "$env:APPDATA\Spotify\Apps\xpui.zip"
 $extractPath = "$env:APPDATA\Spotify\Apps\temporary"
 
+
 Rename-Item -path $env:APPDATA\Spotify\Apps\xpui.spa -NewName $env:APPDATA\Spotify\Apps\xpui.zip
 
 if (Test-Path $env:APPDATA\Spotify\Apps\temporary) {
@@ -170,27 +171,23 @@ if (Test-Path $env:APPDATA\Spotify\Apps\temporary) {
 }
 New-Item -Path $env:APPDATA\Spotify\Apps\temporary -ItemType Directory | Out-Null
 
-# Достаем из архива xpui.zip 2 файла
+# Достаем из архива xpui.zip файл xpui.js
 Add-Type -Assembly 'System.IO.Compression.FileSystem'
 $zip = [System.IO.Compression.ZipFile]::Open($zipFilePath, 'read')
 $zip.Entries | Where-Object Name -eq xpui.js | ForEach-Object { [System.IO.Compression.ZipFileExtensions]::ExtractToFile($_, "$extractPath\$($_.Name)", $true) }
-$zip.Entries | Where-Object Name -eq xpui-routes-offline-browse.css | ForEach-Object { [System.IO.Compression.ZipFileExtensions]::ExtractToFile($_, "$extractPath\$($_.Name)", $true) }
 $zip.Dispose()
 
-# Делает резервную копию xpui.spa, также если бейкап устарел то заменяет старую на новую версию
-$xpui_js_last_write_time = Get-ChildItem $env:APPDATA\Spotify\Apps\temporary\xpui.js -File -Recurse
-$xpui_routes_offline_browse_last_write_time = Get-ChildItem $env:APPDATA\Spotify\Apps\temporary\xpui-routes-offline-browse.css -File -Recurse
+# Делает резервную копию xpui.spa
 
-if ($xpui_routes_offline_browse_last_write_time.LastWriteTime -eq $xpui_js_last_write_time.LastWriteTime) {
-
-    if (test-path $env:APPDATA\Spotify\Apps\xpui.bak) {
-        Remove-item $env:APPDATA\Spotify\Apps\xpui.bak -Recurse
-    }
+$file_js = Get-Content $env:APPDATA\Spotify\Apps\temporary\xpui.js -Raw
+    
+If (!($file_js -match 'patched by spotx')) {
     Copy-Item $env:APPDATA\Spotify\Apps\xpui.zip $env:APPDATA\Spotify\Apps\xpui.bak
 }
 
+   
 # Мофифицируем и кладем обратно в архив файл xpui.js 
-$file_js = Get-Content $env:APPDATA\Spotify\Apps\temporary\xpui.js -Raw
+
 If (!($file_js -match 'patched by spotx')) {
     $file_js -match 'visible:!e}[)]{1}[,]{1}[A-Za-z]{1}[(]{1}[)]{1}.createElement[(]{1}[A-Za-z]{2}[,]{1}null[)]{1}[,]{1}[A-Za-z]{1}[(]{1}[)]{1}.' | Out-Null
     $menu_split_js = $Matches[0] -split 'createElement[(]{1}[A-Za-z]{2}[,]{1}null[)]{1}[,]{1}[A-Za-z]{1}[(]{1}[)]{1}.'
@@ -201,6 +198,9 @@ If (!($file_js -match 'patched by spotx')) {
     $contentjs = $contentjs.Trim()
     [System.IO.File]::WriteAllText("$env:APPDATA\Spotify\Apps\temporary\xpui.js", $contentjs)
     Compress-Archive -Path $env:APPDATA\Spotify\Apps\temporary\xpui.js -Update -DestinationPath $env:APPDATA\Spotify\Apps\xpui.zip
+}
+else {
+    "Xpui.js is already patched"
 }
 
 
@@ -258,7 +258,7 @@ do {
     
         Write-Host "Oops, an incorrect value, " -ForegroundColor Red -NoNewline
         Write-Host "enter again through..." -NoNewline
-        Start-Sleep -Milliseconds 1500
+        Start-Sleep -Milliseconds 1000
         Write-Host "3" -NoNewline
         Start-Sleep -Milliseconds 1000
         Write-Host ".2" -NoNewline
@@ -380,7 +380,7 @@ do {
 
         Write-Host "Oops, an incorrect value, " -ForegroundColor Red -NoNewline
         Write-Host "enter again through..." -NoNewline
-        Start-Sleep -Milliseconds 1500
+        Start-Sleep -Milliseconds 1000
         Write-Host "3" -NoNewline
         Start-Sleep -Milliseconds 1000
         Write-Host ".2" -NoNewline
@@ -446,7 +446,7 @@ if ($ch -eq 'y') {
 
                 Write-Host "Oops, an incorrect value, " -ForegroundColor Red -NoNewline
                 Write-Host "enter again through..." -NoNewline
-                Start-Sleep -Milliseconds 1500
+                Start-Sleep -Milliseconds 1000
                 Write-Host "3" -NoNewline
                 Start-Sleep -Milliseconds 1000
                 Write-Host ".2" -NoNewline

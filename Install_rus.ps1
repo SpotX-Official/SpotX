@@ -222,6 +222,24 @@ Rename-Item -path $env:APPDATA\Spotify\Apps\xpui.zip -NewName $env:APPDATA\Spoti
 Remove-item $env:APPDATA\Spotify\Apps\temporary -Recurse
 
 
+# Если папки по умолчанию Dekstop не существует, то попытаться найти её через реестр.
+$ErrorActionPreference = 'SilentlyContinue' 
+
+if (Test-Path "$env:USERPROFILE\Desktop") {  
+
+    $desktop_folder = "$env:USERPROFILE\Desktop"
+    
+}
+
+$regedit_desktop_folder = Get-ItemProperty -Path "Registry::HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders\"
+$regedit_desktop = $regedit_desktop_folder.'{754AC886-DF64-4CBA-86B5-F7FBF4FBCEF5}'
+ 
+if (!(Test-Path "$env:USERPROFILE\Desktop")) {
+    $desktop_folder = $regedit_desktop
+    
+}
+
+
 
 # Shortcut bug
 $ErrorActionPreference = 'SilentlyContinue' 
@@ -229,7 +247,7 @@ $ErrorActionPreference = 'SilentlyContinue'
 If (!(Test-Path $env:USERPROFILE\Desktop\Spotify.lnk)) {
   
     $source = "$env:APPDATA\Spotify\Spotify.exe"
-    $target = "$env:USERPROFILE\Desktop\Spotify.lnk"
+    $target = "$desktop_folder\Spotify.lnk"
     $WorkingDir = "$env:APPDATA\Spotify"
     $WshShell = New-Object -comObject WScript.Shell
     $Shortcut = $WshShell.CreateShortcut($target)
@@ -399,14 +417,10 @@ while ($ch -notmatch '^y$|^n$|^u$')
 
 if ($ch -eq 'y') {
 
-
+    
     $test_cache_spotify_ps = Test-Path -Path $env:APPDATA\Spotify\cache-spotify.ps1
     $test_spotify_vbs = Test-Path -Path $env:APPDATA\Spotify\Spotify.vbs
-    $desktop_folder = Get-ItemProperty -Path $env:USERPROFILE\Desktop | Select-Object Attributes 
-    
 
-    # Если папки по умолчанию Dekstop не существует, то установку кэша отменить.
-    if ($desktop_folder -match '\bDirectory\b') {  
 
 
 
@@ -425,17 +439,16 @@ if ($ch -eq 'y') {
         $webClient.DownloadFile('https://raw.githubusercontent.com/amd64fox/SpotX/main/Spotify.vbs', "$env:APPDATA\Spotify\Spotify.vbs")
 
 
-
-        # Spotify.lnk
-        $source2 = "$env:APPDATA\Spotify\Spotify.vbs"
-        $target2 = "$env:USERPROFILE\Desktop\Spotify.lnk"
-        $WorkingDir2 = "$env:APPDATA\Spotify"
-        $WshShell2 = New-Object -comObject WScript.Shell
-        $Shortcut2 = $WshShell2.CreateShortcut($target2)
-        $Shortcut2.WorkingDirectory = $WorkingDir2
-        $Shortcut2.IconLocation = "$env:APPDATA\Spotify\Spotify.exe"
-        $Shortcut2.TargetPath = $source2
-        $Shortcut2.Save()
+    # Spotify.lnk
+    $source2 = "$env:APPDATA\Spotify\Spotify.vbs"
+    $target2 = "$desktop_folder\Spotify.lnk"
+    $WorkingDir2 = "$env:APPDATA\Spotify"
+    $WshShell2 = New-Object -comObject WScript.Shell
+    $Shortcut2 = $WshShell2.CreateShortcut($target2)
+    $Shortcut2.WorkingDirectory = $WorkingDir2
+    $Shortcut2.IconLocation = "$env:APPDATA\Spotify\Spotify.exe"
+    $Shortcut2.TargetPath = $source2
+    $Shortcut2.Save()
 
 
 
@@ -474,14 +487,9 @@ if ($ch -eq 'y') {
             exit
         }
        
-    }
-
-    else {
-        Write-Host "Ошибка, не могу найти папку Рабочего стола" -ForegroundColor Red
-        Write-Host "Установка завершена" -ForegroundColor Green
     
-        Exit
-    }
+
+
 }
 
 if ($ch -eq 'n') {
@@ -500,7 +508,7 @@ if ($ch -eq 'u') {
         Remove-item $env:APPDATA\Spotify\Spotify.vbs -Recurse -Force
 
         $source3 = "$env:APPDATA\Spotify\Spotify.exe"
-        $target3 = "$env:USERPROFILE\Desktop\Spotify.lnk"
+        $target3 = "$desktop_folder\Spotify.lnk"
         $WorkingDir3 = "$env:APPDATA\Spotify"
         $WshShell3 = New-Object -comObject WScript.Shell
         $Shortcut3 = $WshShell3.CreateShortcut($target3)

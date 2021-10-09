@@ -335,7 +335,7 @@ if ($ch -eq 'y') {
         } 
 
         #Создать файл Update если его нет
-        if (!($Check_folder_file -match '\bSystem\b|' -and $Check_folder_file -match '\bReadOnly\b')) {  
+        if (!($Check_folder_file -match '\bSystem\b' -and $Check_folder_file -match '\bReadOnly\b')) {  
             New-Item -Path $env:LOCALAPPDATA\Spotify\ -Name "Update" -ItemType "file" -Value "STOPIT" | Out-Null
             $file = Get-ItemProperty -Path $env:LOCALAPPDATA\Spotify\Update
             $file.Attributes = "ReadOnly", "System"

@@ -42,9 +42,11 @@ or
 
 
 <h1>Possible problems:</h1>
+ 
+<h3>How do I go back to the previous version of the client ?</h3>
 
-
-
+  If you have problems with the patch after upgrading the client version, then use this [tool](https://github.com/amd64fox/Rollback-Spotify) to revert back to the working    version.
+ * * *
 <h3>Outdated versions of PowerShell</h3>
    
   If you are using Windows 7 or Windows 8.1, there may be errors in the installation process due to an outdated version of NET Framework and PowerShell. 

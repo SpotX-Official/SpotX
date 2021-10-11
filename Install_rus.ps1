@@ -199,7 +199,7 @@ If (!($file_js -match 'patched by spotx')) {
     Compress-Archive -Path $env:APPDATA\Spotify\Apps\temporary\xpui.js -Update -DestinationPath $env:APPDATA\Spotify\Apps\xpui.zip
 }
 else {
-    "Xpui.js is already patched"
+    "Xpui.js уже был пропатчен"
 }
 
 
@@ -274,7 +274,6 @@ $folder_update_access = Get-Acl $env:LOCALAPPDATA\Spotify\Update
 
 do {
     $ch = Read-Host -Prompt "Хотите заблокировать обновления ? (Y/N), Хочу разблокировать (U)"
-
     if (!($ch -eq 'n' -or $ch -eq 'y' -or $ch -eq 'u')) {
     
         Write-Host "Ой, некорректное значение, " -ForegroundColor Red -NoNewline
@@ -342,6 +341,8 @@ if ($ch -eq 'y') {
             New-Item -Path $env:LOCALAPPDATA\Spotify\ -Name "Update" -ItemType "file" -Value "STOPIT" | Out-Null
             $file = Get-ItemProperty -Path $env:LOCALAPPDATA\Spotify\Update
             $file.Attributes = "ReadOnly", "System"
+    
+  
         }
         # Если оба файлав мигратора существуют то .bak удалить, а .exe переименовать в .bak
         If ($migrator_exe -and $migrator_bak) {
@@ -398,7 +399,6 @@ do {
     $ch = Read-Host -Prompt "Хотите установить автоматическую очистку кеша ? (Y/N) Хочу удалить (U)"
 
     if (!($ch -eq 'n' -or $ch -eq 'y' -or $ch -eq 'u')) {
-
         Write-Host "Ой, некорректное значение, " -ForegroundColor Red -NoNewline
         Write-Host "повторите ввод через..." -NoNewline
         Start-Sleep -Milliseconds 1000
@@ -424,19 +424,19 @@ if ($ch -eq 'y') {
 
 
 
-        If ($test_cache_spotify_ps) {
-            Remove-item $env:APPDATA\Spotify\cache-spotify.ps1 -Recurse -Force
-        }
-        If ($test_spotify_vbs) {
-            Remove-item $env:APPDATA\Spotify\Spotify.vbs -Recurse -Force
-        }
-        Start-Sleep -Milliseconds 200
+    If ($test_cache_spotify_ps) {
+        Remove-item $env:APPDATA\Spotify\cache-spotify.ps1 -Recurse -Force
+    }
+    If ($test_spotify_vbs) {
+        Remove-item $env:APPDATA\Spotify\Spotify.vbs -Recurse -Force
+    }
+    Start-Sleep -Milliseconds 200
 
-        # cache-spotify.ps1
-        $webClient.DownloadFile('https://raw.githubusercontent.com/amd64fox/SpotX/main/cache_spotify_ru.ps1', "$env:APPDATA\Spotify\cache-spotify.ps1")
+    # cache-spotify.ps1
+    $webClient.DownloadFile('https://raw.githubusercontent.com/amd64fox/SpotX/main/cache_spotify_ru.ps1', "$env:APPDATA\Spotify\cache-spotify.ps1")
 
-        # Spotify.vbs
-        $webClient.DownloadFile('https://raw.githubusercontent.com/amd64fox/SpotX/main/Spotify.vbs', "$env:APPDATA\Spotify\Spotify.vbs")
+    # Spotify.vbs
+    $webClient.DownloadFile('https://raw.githubusercontent.com/amd64fox/SpotX/main/Spotify.vbs', "$env:APPDATA\Spotify\Spotify.vbs")
 
 
     # Spotify.lnk
@@ -454,38 +454,38 @@ if ($ch -eq 'y') {
 
 
 
-        do {
-            $ch = Read-Host -Prompt "Файлы кэша, которые не использовались более XX дней, будут удалены.
+    do {
+        $ch = Read-Host -Prompt "Файлы кэша, которые не использовались более XX дней, будут удалены.
     Пожалуйста, введите количество дней от 1 до 100"
 
-            if (!($ch -match "^[1-9][0-9]?$|^100$")) {
-
-                Write-Host "Ой, некорректное значение, " -ForegroundColor Red -NoNewline
-                Write-Host "повторите ввод через..." -NoNewline
-                Start-Sleep -Milliseconds 1000
-                Write-Host "3" -NoNewline
-                Start-Sleep -Milliseconds 1000
-                Write-Host ".2" -NoNewline
-                Start-Sleep -Milliseconds 1000
-                Write-Host ".1"
-                Start-Sleep -Milliseconds 1000     
-                Clear-Host
-            }
+        if (!($ch -match "^[1-9][0-9]?$|^100$")) {
+            Write-Host "Ой, некорректное значение, " -ForegroundColor Red -NoNewline
+            Write-Host "повторите ввод через..." -NoNewline
+		
+            Start-Sleep -Milliseconds 1000
+            Write-Host "3" -NoNewline
+            Start-Sleep -Milliseconds 1000
+            Write-Host ".2" -NoNewline
+            Start-Sleep -Milliseconds 1000
+            Write-Host ".1"
+            Start-Sleep -Milliseconds 1000     
+            Clear-Host
         }
-        while ($ch -notmatch '^[1-9][0-9]?$|^100$')
+    }
+    while ($ch -notmatch '^[1-9][0-9]?$|^100$')
 
 
-        if ($ch -match "^[1-9][0-9]?$|^100$") {
-            $file_cache_spotify_ps1 = Get-Content $env:APPDATA\Spotify\cache-spotify.ps1 -Raw
-            $new_file_cache_spotify_ps1 = $file_cache_spotify_ps1 -replace 'seven', $ch -replace '-7', - $ch
-            Set-Content -Path $env:APPDATA\Spotify\cache-spotify.ps1 -Force -Value $new_file_cache_spotify_ps1
-            $contentcache_spotify_ps1 = [System.IO.File]::ReadAllText("$env:APPDATA\Spotify\cache-spotify.ps1")
-            $contentcache_spotify_ps1 = $contentcache_spotify_ps1.Trim()
-            [System.IO.File]::WriteAllText("$env:APPDATA\Spotify\cache-spotify.ps1", $contentcache_spotify_ps1)
-            Write-Host "Скрипт для очистки кэша был успешно установлен" -ForegroundColor Green
-            Write-Host "Установка завершена" -ForegroundColor Green
-            exit
-        }
+    if ($ch -match "^[1-9][0-9]?$|^100$") {
+        $file_cache_spotify_ps1 = Get-Content $env:APPDATA\Spotify\cache-spotify.ps1 -Raw
+        $new_file_cache_spotify_ps1 = $file_cache_spotify_ps1 -replace 'seven', $ch -replace '-7', - $ch
+        Set-Content -Path $env:APPDATA\Spotify\cache-spotify.ps1 -Force -Value $new_file_cache_spotify_ps1
+        $contentcache_spotify_ps1 = [System.IO.File]::ReadAllText("$env:APPDATA\Spotify\cache-spotify.ps1")
+        $contentcache_spotify_ps1 = $contentcache_spotify_ps1.Trim()
+        [System.IO.File]::WriteAllText("$env:APPDATA\Spotify\cache-spotify.ps1", $contentcache_spotify_ps1)
+        Write-Host "Скрипт для очистки кэша был успешно установлен" -ForegroundColor Green
+        Write-Host "Установка завершена" -ForegroundColor Green
+        exit
+    }
        
     
 
@@ -493,7 +493,6 @@ if ($ch -eq 'y') {
 }
 
 if ($ch -eq 'n') {
-
     Write-Host "Установка завершена" -ForegroundColor Green
 
     exit

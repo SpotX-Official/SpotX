@@ -358,7 +358,7 @@ if ($ch -eq 'y') {
     }
 
   
-    Write-Host "Updates blocked successfully" -ForegroundColor Green
+    Write-Host "Обновления успешно заблокированы" -ForegroundColor Green
 
 }
 
@@ -387,7 +387,7 @@ if ($ch -eq 'u') {
 
 
     If (!($migrator_bak -or $Check_folder_file -match '\bSystem\b|\bReadOnly\b')) {
-        Write-Host "Ого, обновления не были заблокированы" 
+        Write-Host "Ого, обновления уже были разблокированы" 
     }  
 }
     

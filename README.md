@@ -1,7 +1,7 @@
 <center>
     <h1 align="center">SpotX</h1>
     <h4 align="center">A multi-purpose adblocker and skip-bypass for the <strong>Windows</strong> Spotify desktop application.</h4>
-    <h5 align="center">(The repository is based on BlockTheSpot, many thanks to the contributors)</h5>
+    <h5 align="center">(The repository is based on  BlockTheSpot, many thanks to the contributors)</h5>
 </center>
 
 
@@ -40,19 +40,31 @@ or
 
 <h1>Possible problems:</h1>
  
-<h3>How do I go back to the previous version of the client ?</h3>
+ 
+ <details>
+<summary><small>How do I go back to the previous version of the client ?</small></summary><p>
 
   If you have problems with the patch after upgrading the client version, then use this [tool](https://github.com/amd64fox/Rollback-Spotify) to revert back to the working    version.
- * * *
-<h3>Outdated versions of PowerShell</h3>
-   
-  If you are using Windows 7 or Windows 8.1, there may be errors in the installation process due to an outdated version of NET Framework and PowerShell. 
+
+</details>
+ 
+
+ <details>
+<summary><small>Outdated versions of PowerShell</small></summary><p>
+
+If you are using Windows 7 or Windows 8.1, there may be errors in the installation process due to an outdated version of NET Framework and PowerShell. 
    Do the following:
    * Upgrade to [NET Framework 4.8](https://go.microsoft.com/fwlink/?linkid=2088631)
    * Upgrade to [WMF 5.1](https://www.microsoft.com/en-us/download/details.aspx?id=54616)
    * Reboot your PC
    
    <strong>Note:</strong> For Windows 8 it is not possible to upgrade the PowerShell version, please upgrade to Windows 8.1 or 10
+
+</details>
+
+
+   
+  
 
 
   

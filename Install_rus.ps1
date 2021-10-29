@@ -140,8 +140,8 @@ if (-not $spotifyInstalled) {
     
 }
 
-if (!(test-path $SpotifyDirectory/chrome_elf.dll.bak)) {
-    Move-Item $SpotifyDirectory\chrome_elf.dll $SpotifyDirectory\chrome_elf.dll.bak >$null 2>&1
+if (!(test-path $SpotifyDirectory/chrome_elf_bak.dll)) {
+    Move-Item $SpotifyDirectory\chrome_elf.dll $SpotifyDirectory\chrome_elf_bak.dll >$null 2>&1
 }
 
 Write-Host 'Модифицирую Spotify...'

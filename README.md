@@ -14,6 +14,8 @@
 * <strong>Unlocks the skip function of any track</strong>
 * <strong>Blocks automatic updates (optional)</strong>
 * <strong>[Automatic cache clearing](https://github.com/amd64fox/SpotX/discussions/2) (optional)</strong>
+* Disabled logging (Stopped various elements to log user interaction)
+* Removed RTL rules (Removed all right-to-left CSS rules to simplify CSS files)
 
 
 

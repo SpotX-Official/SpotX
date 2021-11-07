@@ -159,44 +159,117 @@ Remove-Item -Recurse -LiteralPath $tempDirectory
 
 
 # Removing an empty block, "Upgrade button", "Upgrade to premium" menu
-
+$xpui_spa = "$env:APPDATA\Spotify\Apps\xpui.spa"
 $zipFilePath = "$env:APPDATA\Spotify\Apps\xpui.zip"
 $extractPath = "$env:APPDATA\Spotify\Apps\temporary"
+$extractPath_removeRTL = "$env:APPDATA\Spotify\Apps\temporary\removeRTL"
 
-Rename-Item -path $env:APPDATA\Spotify\Apps\xpui.spa -NewName $env:APPDATA\Spotify\Apps\xpui.zip
+Rename-Item -path $xpui_spa -NewName $zipFilePath
 
-if (Test-Path $env:APPDATA\Spotify\Apps\temporary) {
-    Remove-item $env:APPDATA\Spotify\Apps\temporary -Recurse
+if (Test-Path $extractPath) {
+    Remove-item $extractPath -Recurse
 }
-New-Item -Path $env:APPDATA\Spotify\Apps\temporary -ItemType Directory | Out-Null
+New-Item -Path $extractPath -ItemType Directory | Out-Null
+New-Item -Path $extractPath_removeRTL -ItemType Directory | Out-Null
 
 # Достаем из архива xpui.zip файл xpui.js
 Add-Type -Assembly 'System.IO.Compression.FileSystem'
 $zip = [System.IO.Compression.ZipFile]::Open($zipFilePath, 'read')
 $zip.Entries | Where-Object Name -eq xpui.js | ForEach-Object { [System.IO.Compression.ZipFileExtensions]::ExtractToFile($_, "$extractPath\$($_.Name)", $true) }
+# Достаем из архива xpui.zip файлы css
+$zip.Entries | Where-Object Name -eq xpui.css | ForEach-Object { [System.IO.Compression.ZipFileExtensions]::ExtractToFile($_, "$extractPath_removeRTL\$($_.Name)", $true) }
+$zip.Entries | Where-Object Name -eq xpui-routes-artist.css | ForEach-Object { [System.IO.Compression.ZipFileExtensions]::ExtractToFile($_, "$extractPath_removeRTL\$($_.Name)", $true) }
+$zip.Entries | Where-Object Name -eq xpui-routes-collection-episodes.css | ForEach-Object { [System.IO.Compression.ZipFileExtensions]::ExtractToFile($_, "$extractPath_removeRTL\$($_.Name)", $true) }
+$zip.Entries | Where-Object Name -eq xpui-routes-show.css | ForEach-Object { [System.IO.Compression.ZipFileExtensions]::ExtractToFile($_, "$extractPath_removeRTL\$($_.Name)", $true) }
+$zip.Entries | Where-Object Name -eq xpui-routes-playlist.css | ForEach-Object { [System.IO.Compression.ZipFileExtensions]::ExtractToFile($_, "$extractPath_removeRTL\$($_.Name)", $true) }
+$zip.Entries | Where-Object Name -eq xpui-routes-track-v2.css | ForEach-Object { [System.IO.Compression.ZipFileExtensions]::ExtractToFile($_, "$extractPath_removeRTL\$($_.Name)", $true) }
+$zip.Entries | Where-Object Name -eq xpui-routes-collection-songs.css | ForEach-Object { [System.IO.Compression.ZipFileExtensions]::ExtractToFile($_, "$extractPath_removeRTL\$($_.Name)", $true) }
+$zip.Entries | Where-Object Name -eq xpui-routes-collection.css | ForEach-Object { [System.IO.Compression.ZipFileExtensions]::ExtractToFile($_, "$extractPath_removeRTL\$($_.Name)", $true) }
+$zip.Entries | Where-Object Name -eq xpui-routes-search.css | ForEach-Object { [System.IO.Compression.ZipFileExtensions]::ExtractToFile($_, "$extractPath_removeRTL\$($_.Name)", $true) }
+$zip.Entries | Where-Object Name -eq xpui-routes-profile.css | ForEach-Object { [System.IO.Compression.ZipFileExtensions]::ExtractToFile($_, "$extractPath_removeRTL\$($_.Name)", $true) }
+$zip.Entries | Where-Object Name -eq xpui-routes-episode.css | ForEach-Object { [System.IO.Compression.ZipFileExtensions]::ExtractToFile($_, "$extractPath_removeRTL\$($_.Name)", $true) }
+$zip.Entries | Where-Object Name -eq xpui-routes-view.css | ForEach-Object { [System.IO.Compression.ZipFileExtensions]::ExtractToFile($_, "$extractPath_removeRTL\$($_.Name)", $true) }
+$zip.Entries | Where-Object Name -eq xpui-routes-folder.css | ForEach-Object { [System.IO.Compression.ZipFileExtensions]::ExtractToFile($_, "$extractPath_removeRTL\$($_.Name)", $true) }
+$zip.Entries | Where-Object Name -eq xpui-desktop-routes-homepage-takeover-ad.css | ForEach-Object { [System.IO.Compression.ZipFileExtensions]::ExtractToFile($_, "$extractPath_removeRTL\$($_.Name)", $true) }
+$zip.Entries | Where-Object Name -eq xpui-routes-queue.css | ForEach-Object { [System.IO.Compression.ZipFileExtensions]::ExtractToFile($_, "$extractPath_removeRTL\$($_.Name)", $true) }
+$zip.Entries | Where-Object Name -eq xpui-routes-home.css | ForEach-Object { [System.IO.Compression.ZipFileExtensions]::ExtractToFile($_, "$extractPath_removeRTL\$($_.Name)", $true) }
+$zip.Entries | Where-Object Name -eq 330.css | ForEach-Object { [System.IO.Compression.ZipFileExtensions]::ExtractToFile($_, "$extractPath_removeRTL\$($_.Name)", $true) }
+$zip.Entries | Where-Object Name -eq xpui-routes-album.css | ForEach-Object { [System.IO.Compression.ZipFileExtensions]::ExtractToFile($_, "$extractPath_removeRTL\$($_.Name)", $true) }
+$zip.Entries | Where-Object Name -eq xpui-desktop-modals.css | ForEach-Object { [System.IO.Compression.ZipFileExtensions]::ExtractToFile($_, "$extractPath_removeRTL\$($_.Name)", $true) }
 $zip.Dispose()
 
 # Делает резервную копию xpui.spa
 
-$file_js = Get-Content $env:APPDATA\Spotify\Apps\temporary\xpui.js -Raw
+$file_js = Get-Content $extractPath\xpui.js -Raw
     
 If (!($file_js -match 'patched by spotx')) {
-    Copy-Item $env:APPDATA\Spotify\Apps\xpui.zip $env:APPDATA\Spotify\Apps\xpui.bak
+    Copy-Item $zipFilePath $env:APPDATA\Spotify\Apps\xpui.bak
 }
 
    
-# Мофифицируем и кладем обратно в архив файл xpui.js 
+# Мофифицируем и кладем обратно в архив файлы 
 
 If (!($file_js -match 'patched by spotx')) {
+	
+    # Js
     $file_js -match 'visible:!e}[)]{1}[,]{1}[A-Za-z]{1}[(]{1}[)]{1}.createElement[(]{1}[A-Za-z]{2}[,]{1}null[)]{1}[,]{1}[A-Za-z]{1}[(]{1}[)]{1}.' | Out-Null
     $menu_split_js = $Matches[0] -split 'createElement[(]{1}[A-Za-z]{2}[,]{1}null[)]{1}[,]{1}[A-Za-z]{1}[(]{1}[)]{1}.'
-    $new_js = $file_js -replace "[.]{1}createElement[(]{1}..[,]{1}[{]{1}onClick[:]{1}.[,]{1}className[:]{1}..[.]{1}.[.]{1}UpgradeButton[}]{1}[)]{1}[,]{1}.[(]{1}[)]{1}", "" -replace 'adsEnabled:!0', 'adsEnabled:!1' -replace 'visible:!e}[)]{1}[,]{1}[A-Za-z]{1}[(]{1}[)]{1}.createElement[(]{1}[A-Za-z]{2}[,]{1}null[)]{1}[,]{1}[A-Za-z]{1}[(]{1}[)]{1}.', $menu_split_js -replace "allSponsorships", ""
-    Set-Content -Path $env:APPDATA\Spotify\Apps\temporary\xpui.js -Force -Value $new_js
-    add-content -Path $env:APPDATA\Spotify\Apps\temporary\xpui.js -Value '// Patched by SpotX' -passthru | Out-Null
-    $contentjs = [System.IO.File]::ReadAllText("$env:APPDATA\Spotify\Apps\temporary\xpui.js")
+    $new_js = $file_js <# Removing "Upgrade button" #> -replace "[.]{1}createElement[(]{1}..[,]{1}[{]{1}onClick[:]{1}.[,]{1}className[:]{1}..[.]{1}.[.]{1}UpgradeButton[}]{1}[)]{1}[,]{1}.[(]{1}[)]{1}", "" <# Removing an empty block #> -replace 'adsEnabled:!0', 'adsEnabled:!1' <# Removing "Upgrade to premium" menu #> -replace 'visible:!e}[)]{1}[,]{1}[A-Za-z]{1}[(]{1}[)]{1}.createElement[(]{1}[A-Za-z]{2}[,]{1}null[)]{1}[,]{1}[A-Za-z]{1}[(]{1}[)]{1}.', $menu_split_js <# Disabling a playlist sponsor #> -replace "allSponsorships", "" <# Disable Logging #> -replace "sp://logging/v3/\w+", "" 
+    Set-Content -Path $extractPath\xpui.js -Force -Value $new_js
+    add-content -Path $extractPath\xpui.js -Value '// Patched by SpotX' -passthru | Out-Null
+    $contentjs = [System.IO.File]::ReadAllText("$extractPath\xpui.js")
     $contentjs = $contentjs.Trim()
-    [System.IO.File]::WriteAllText("$env:APPDATA\Spotify\Apps\temporary\xpui.js", $contentjs)
-    Compress-Archive -Path $env:APPDATA\Spotify\Apps\temporary\xpui.js -Update -DestinationPath $env:APPDATA\Spotify\Apps\xpui.zip
+    [System.IO.File]::WriteAllText("$extractPath\xpui.js", $contentjs)
+
+    # Css
+    Get-ChildItem -Path $extractPath_removeRTL\*.css | ForEach-Object {
+
+        $Path = $_.FullName; (Get-Content $Path) -replace "}\[dir=ltr\]\s?", "} " -replace "html\[dir=ltr\]", "html" -replace ",\s?\[dir=rtl\].+?(\{.+?\})", '$1' -replace "[\w\-\.]+\[dir=rtl\].+?\{.+?\}", "" -replace "\}\[lang=ar\].+?\{.+?\}", "}" -replace "\}\[dir=rtl\].+?\{.+?\}", "}" -replace "\}html\[dir=rtl\].+?\{.+?\}", "}" -replace "\}html\[lang=ar\].+?\{.+?\}", "}" -replace "\[lang=ar\].+?\{.+?\}", "" -replace "html\[dir=rtl\].+?\{.+?\}", "" -replace "html\[lang=ar\].+?\{.+?\}", "" -replace "\[dir=rtl\].+?\{.+?\}", "" | Set-Content $Path # Remove RTL
+    }
+
+    $stream = [IO.File]::OpenWrite("$extractPath_removeRTL\xpui.css")
+    $stream.SetLength($stream.Length - 2)
+    $stream = [IO.File]::OpenWrite("$extractPath_removeRTL\xpui-routes-artist.css")
+    $stream.SetLength($stream.Length - 2)
+    $stream = [IO.File]::OpenWrite("$extractPath_removeRTL\xpui-routes-collection-episodes.css")
+    $stream.SetLength($stream.Length - 2)
+    $stream = [IO.File]::OpenWrite("$extractPath_removeRTL\xpui-routes-show.css")
+    $stream.SetLength($stream.Length - 2)
+    $stream = [IO.File]::OpenWrite("$extractPath_removeRTL\xpui-routes-playlist.css")
+    $stream.SetLength($stream.Length - 2)
+    $stream = [IO.File]::OpenWrite("$extractPath_removeRTL\xpui-routes-track-v2.css")
+    $stream.SetLength($stream.Length - 2)
+    $stream = [IO.File]::OpenWrite("$extractPath_removeRTL\xpui-routes-collection-songs.css")
+    $stream.SetLength($stream.Length - 2)
+    $stream = [IO.File]::OpenWrite("$extractPath_removeRTL\xpui-routes-collection.css")
+    $stream.SetLength($stream.Length - 2)
+    $stream = [IO.File]::OpenWrite("$extractPath_removeRTL\xpui-routes-search.css")
+    $stream.SetLength($stream.Length - 2)
+    $stream = [IO.File]::OpenWrite("$extractPath_removeRTL\xpui-routes-profile.css")
+    $stream.SetLength($stream.Length - 2)
+    $stream = [IO.File]::OpenWrite("$extractPath_removeRTL\xpui-routes-episode.css")
+    $stream.SetLength($stream.Length - 2)
+    $stream = [IO.File]::OpenWrite("$extractPath_removeRTL\xpui-routes-view.css")
+    $stream.SetLength($stream.Length - 2)
+    $stream = [IO.File]::OpenWrite("$extractPath_removeRTL\xpui-routes-folder.css")
+    $stream.SetLength($stream.Length - 2)
+    $stream = [IO.File]::OpenWrite("$extractPath_removeRTL\xpui-desktop-routes-homepage-takeover-ad.css")
+    $stream.SetLength($stream.Length - 2)
+    $stream = [IO.File]::OpenWrite("$extractPath_removeRTL\xpui-routes-queue.css")
+    $stream.SetLength($stream.Length - 2)
+    $stream = [IO.File]::OpenWrite("$extractPath_removeRTL\xpui-routes-home.css")
+    $stream.SetLength($stream.Length - 2)
+    $stream = [IO.File]::OpenWrite("$extractPath_removeRTL\330.css")
+    $stream.SetLength($stream.Length - 2)
+    $stream = [IO.File]::OpenWrite("$extractPath_removeRTL\xpui-routes-album.css")
+    $stream.SetLength($stream.Length - 2)
+    $stream = [IO.File]::OpenWrite("$extractPath_removeRTL\xpui-desktop-modals.css")
+    $stream.SetLength($stream.Length - 2)
+    $stream.Close()
+    $stream.Dispose()
+
+    Compress-Archive -Path $extractPath\xpui.js -Update -DestinationPath $zipFilePath
+    Compress-Archive -Path $extractPath_removeRTL\*.css -Update -DestinationPath $zipFilePath
 }
 else {
     "Xpui.js is already patched"
@@ -218,8 +291,8 @@ If (!($file_css -match 'patched by spotx')) {
 #>
 
 
-Rename-Item -path $env:APPDATA\Spotify\Apps\xpui.zip -NewName $env:APPDATA\Spotify\Apps\xpui.spa
-Remove-item $env:APPDATA\Spotify\Apps\temporary -Recurse
+Rename-Item -path $zipFilePath -NewName $xpui_spa
+Remove-item $extractPath -Recurse
 
 
 # Если папки по умолчанию Dekstop не существует, то попытаться найти её через реестр.
@@ -486,9 +559,7 @@ if ($ch -eq 'y') {
         Write-Host "installation completed" -ForegroundColor Green
         exit
     }
-       
-    
-
+         
 
 }
 
@@ -519,10 +590,6 @@ if ($ch -eq 'u') {
         Write-Host "Installation completed" -ForegroundColor Green
         exit
     }
-
-
-
-
 
 
     If (!($test_cache_spotify_ps -and $test_spotify_vbs)) {

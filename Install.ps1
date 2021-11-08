@@ -177,25 +177,7 @@ Add-Type -Assembly 'System.IO.Compression.FileSystem'
 $zip = [System.IO.Compression.ZipFile]::Open($zipFilePath, 'read')
 $zip.Entries | Where-Object Name -eq xpui.js | ForEach-Object { [System.IO.Compression.ZipFileExtensions]::ExtractToFile($_, "$extractPath\$($_.Name)", $true) }
 # Достаем из архива xpui.zip файлы css
-$zip.Entries | Where-Object Name -eq xpui.css | ForEach-Object { [System.IO.Compression.ZipFileExtensions]::ExtractToFile($_, "$extractPath_removeRTL\$($_.Name)", $true) }
-$zip.Entries | Where-Object Name -eq xpui-routes-artist.css | ForEach-Object { [System.IO.Compression.ZipFileExtensions]::ExtractToFile($_, "$extractPath_removeRTL\$($_.Name)", $true) }
-$zip.Entries | Where-Object Name -eq xpui-routes-collection-episodes.css | ForEach-Object { [System.IO.Compression.ZipFileExtensions]::ExtractToFile($_, "$extractPath_removeRTL\$($_.Name)", $true) }
-$zip.Entries | Where-Object Name -eq xpui-routes-show.css | ForEach-Object { [System.IO.Compression.ZipFileExtensions]::ExtractToFile($_, "$extractPath_removeRTL\$($_.Name)", $true) }
-$zip.Entries | Where-Object Name -eq xpui-routes-playlist.css | ForEach-Object { [System.IO.Compression.ZipFileExtensions]::ExtractToFile($_, "$extractPath_removeRTL\$($_.Name)", $true) }
-$zip.Entries | Where-Object Name -eq xpui-routes-track-v2.css | ForEach-Object { [System.IO.Compression.ZipFileExtensions]::ExtractToFile($_, "$extractPath_removeRTL\$($_.Name)", $true) }
-$zip.Entries | Where-Object Name -eq xpui-routes-collection-songs.css | ForEach-Object { [System.IO.Compression.ZipFileExtensions]::ExtractToFile($_, "$extractPath_removeRTL\$($_.Name)", $true) }
-$zip.Entries | Where-Object Name -eq xpui-routes-collection.css | ForEach-Object { [System.IO.Compression.ZipFileExtensions]::ExtractToFile($_, "$extractPath_removeRTL\$($_.Name)", $true) }
-$zip.Entries | Where-Object Name -eq xpui-routes-search.css | ForEach-Object { [System.IO.Compression.ZipFileExtensions]::ExtractToFile($_, "$extractPath_removeRTL\$($_.Name)", $true) }
-$zip.Entries | Where-Object Name -eq xpui-routes-profile.css | ForEach-Object { [System.IO.Compression.ZipFileExtensions]::ExtractToFile($_, "$extractPath_removeRTL\$($_.Name)", $true) }
-$zip.Entries | Where-Object Name -eq xpui-routes-episode.css | ForEach-Object { [System.IO.Compression.ZipFileExtensions]::ExtractToFile($_, "$extractPath_removeRTL\$($_.Name)", $true) }
-$zip.Entries | Where-Object Name -eq xpui-routes-view.css | ForEach-Object { [System.IO.Compression.ZipFileExtensions]::ExtractToFile($_, "$extractPath_removeRTL\$($_.Name)", $true) }
-$zip.Entries | Where-Object Name -eq xpui-routes-folder.css | ForEach-Object { [System.IO.Compression.ZipFileExtensions]::ExtractToFile($_, "$extractPath_removeRTL\$($_.Name)", $true) }
-$zip.Entries | Where-Object Name -eq xpui-desktop-routes-homepage-takeover-ad.css | ForEach-Object { [System.IO.Compression.ZipFileExtensions]::ExtractToFile($_, "$extractPath_removeRTL\$($_.Name)", $true) }
-$zip.Entries | Where-Object Name -eq xpui-routes-queue.css | ForEach-Object { [System.IO.Compression.ZipFileExtensions]::ExtractToFile($_, "$extractPath_removeRTL\$($_.Name)", $true) }
-$zip.Entries | Where-Object Name -eq xpui-routes-home.css | ForEach-Object { [System.IO.Compression.ZipFileExtensions]::ExtractToFile($_, "$extractPath_removeRTL\$($_.Name)", $true) }
-$zip.Entries | Where-Object Name -eq 330.css | ForEach-Object { [System.IO.Compression.ZipFileExtensions]::ExtractToFile($_, "$extractPath_removeRTL\$($_.Name)", $true) }
-$zip.Entries | Where-Object Name -eq xpui-routes-album.css | ForEach-Object { [System.IO.Compression.ZipFileExtensions]::ExtractToFile($_, "$extractPath_removeRTL\$($_.Name)", $true) }
-$zip.Entries | Where-Object Name -eq xpui-desktop-modals.css | ForEach-Object { [System.IO.Compression.ZipFileExtensions]::ExtractToFile($_, "$extractPath_removeRTL\$($_.Name)", $true) }
+$zip.Entries | Where-Object Name -like *.css | ForEach-Object { [System.IO.Compression.ZipFileExtensions]::ExtractToFile($_, "$extractPath_removeRTL\$($_.Name)", $true) }
 $zip.Dispose()
 
 # Делает резервную копию xpui.spa
@@ -226,47 +208,6 @@ If (!($file_js -match 'patched by spotx')) {
 
         $Path = $_.FullName; (Get-Content $Path) -replace "}\[dir=ltr\]\s?", "} " -replace "html\[dir=ltr\]", "html" -replace ",\s?\[dir=rtl\].+?(\{.+?\})", '$1' -replace "[\w\-\.]+\[dir=rtl\].+?\{.+?\}", "" -replace "\}\[lang=ar\].+?\{.+?\}", "}" -replace "\}\[dir=rtl\].+?\{.+?\}", "}" -replace "\}html\[dir=rtl\].+?\{.+?\}", "}" -replace "\}html\[lang=ar\].+?\{.+?\}", "}" -replace "\[lang=ar\].+?\{.+?\}", "" -replace "html\[dir=rtl\].+?\{.+?\}", "" -replace "html\[lang=ar\].+?\{.+?\}", "" -replace "\[dir=rtl\].+?\{.+?\}", "" | Set-Content $Path # Remove RTL
     }
-
-    $stream = [IO.File]::OpenWrite("$extractPath_removeRTL\xpui.css")
-    $stream.SetLength($stream.Length - 2)
-    $stream = [IO.File]::OpenWrite("$extractPath_removeRTL\xpui-routes-artist.css")
-    $stream.SetLength($stream.Length - 2)
-    $stream = [IO.File]::OpenWrite("$extractPath_removeRTL\xpui-routes-collection-episodes.css")
-    $stream.SetLength($stream.Length - 2)
-    $stream = [IO.File]::OpenWrite("$extractPath_removeRTL\xpui-routes-show.css")
-    $stream.SetLength($stream.Length - 2)
-    $stream = [IO.File]::OpenWrite("$extractPath_removeRTL\xpui-routes-playlist.css")
-    $stream.SetLength($stream.Length - 2)
-    $stream = [IO.File]::OpenWrite("$extractPath_removeRTL\xpui-routes-track-v2.css")
-    $stream.SetLength($stream.Length - 2)
-    $stream = [IO.File]::OpenWrite("$extractPath_removeRTL\xpui-routes-collection-songs.css")
-    $stream.SetLength($stream.Length - 2)
-    $stream = [IO.File]::OpenWrite("$extractPath_removeRTL\xpui-routes-collection.css")
-    $stream.SetLength($stream.Length - 2)
-    $stream = [IO.File]::OpenWrite("$extractPath_removeRTL\xpui-routes-search.css")
-    $stream.SetLength($stream.Length - 2)
-    $stream = [IO.File]::OpenWrite("$extractPath_removeRTL\xpui-routes-profile.css")
-    $stream.SetLength($stream.Length - 2)
-    $stream = [IO.File]::OpenWrite("$extractPath_removeRTL\xpui-routes-episode.css")
-    $stream.SetLength($stream.Length - 2)
-    $stream = [IO.File]::OpenWrite("$extractPath_removeRTL\xpui-routes-view.css")
-    $stream.SetLength($stream.Length - 2)
-    $stream = [IO.File]::OpenWrite("$extractPath_removeRTL\xpui-routes-folder.css")
-    $stream.SetLength($stream.Length - 2)
-    $stream = [IO.File]::OpenWrite("$extractPath_removeRTL\xpui-desktop-routes-homepage-takeover-ad.css")
-    $stream.SetLength($stream.Length - 2)
-    $stream = [IO.File]::OpenWrite("$extractPath_removeRTL\xpui-routes-queue.css")
-    $stream.SetLength($stream.Length - 2)
-    $stream = [IO.File]::OpenWrite("$extractPath_removeRTL\xpui-routes-home.css")
-    $stream.SetLength($stream.Length - 2)
-    $stream = [IO.File]::OpenWrite("$extractPath_removeRTL\330.css")
-    $stream.SetLength($stream.Length - 2)
-    $stream = [IO.File]::OpenWrite("$extractPath_removeRTL\xpui-routes-album.css")
-    $stream.SetLength($stream.Length - 2)
-    $stream = [IO.File]::OpenWrite("$extractPath_removeRTL\xpui-desktop-modals.css")
-    $stream.SetLength($stream.Length - 2)
-    $stream.Close()
-    $stream.Dispose()
 
     Compress-Archive -Path $extractPath\xpui.js -Update -DestinationPath $zipFilePath
     Compress-Archive -Path $extractPath_removeRTL\*.css -Update -DestinationPath $zipFilePath

@@ -1,7 +1,7 @@
 <center>
     <h1 align="center">SpotX</h1>
     <h4 align="center">A multi-purpose adblocker and skip-bypass for the <strong>Windows</strong> Spotify desktop application.</h4>
-    <h5 align="center">(The repository is based on  BlockTheSpot, many thanks to the contributors)</h5>
+    <h5 align="center">(The repository is based on <a href="https://github.com/mrpond/BlockTheSpot">BlockTheSpot</a>, and also some tricks were taken from <a href="https://github.com/khanhas/spicetify-cli">spicetify-cli</a>, many thanks to the contributors)</h5>
 </center>
 
 
@@ -14,6 +14,7 @@
 * <strong>Unlocks the skip function of any track</strong>
 * <strong>Blocks automatic updates (optional)</strong>
 * <strong>[Automatic cache clearing](https://github.com/amd64fox/SpotX/discussions/2) (optional)</strong>
+* Disabled Sentry (Prevented Sentry from sending console log/error/warning to Spotify developers)
 * Disabled logging (Stopped various elements to log user interaction)
 * Removed RTL rules (Removed all right-to-left CSS rules to simplify CSS files)
 

@@ -172,19 +172,21 @@ if (Test-Path $extractPath) {
 New-Item -Path $extractPath -ItemType Directory | Out-Null
 New-Item -Path $extractPath_removeRTL -ItemType Directory | Out-Null
 
-# Достаем из архива xpui.zip файл xpui.js
+# Достаем из архива xpui.zip файлы js
 Add-Type -Assembly 'System.IO.Compression.FileSystem'
 $zip = [System.IO.Compression.ZipFile]::Open($zipFilePath, 'read')
 $zip.Entries | Where-Object Name -eq xpui.js | ForEach-Object { [System.IO.Compression.ZipFileExtensions]::ExtractToFile($_, "$extractPath\$($_.Name)", $true) }
+$zip.Entries | Where-Object Name -eq vendor~xpui.js | ForEach-Object { [System.IO.Compression.ZipFileExtensions]::ExtractToFile($_, "$extractPath\$($_.Name)", $true) }
 # Достаем из архива xpui.zip файлы css
 $zip.Entries | Where-Object Name -like *.css | ForEach-Object { [System.IO.Compression.ZipFileExtensions]::ExtractToFile($_, "$extractPath_removeRTL\$($_.Name)", $true) }
 $zip.Dispose()
 
 # Делает резервную копию xpui.spa
 
-$file_js = Get-Content $extractPath\xpui.js -Raw
+$xpui_js = Get-Content $extractPath\xpui.js -Raw
+$vendor_xpui_js = Get-Content $extractPath\vendor~xpui.js -Raw
     
-If (!($file_js -match 'patched by spotx')) {
+If (!($xpui_js -match 'patched by spotx')) {
     Copy-Item $zipFilePath $env:APPDATA\Spotify\Apps\xpui.bak
 }
 
@@ -194,14 +196,20 @@ If (!($file_js -match 'patched by spotx')) {
 If (!($file_js -match 'patched by spotx')) {
 	
     # Js
-    $file_js -match 'visible:!e}[)]{1}[,]{1}[A-Za-z]{1}[(]{1}[)]{1}.createElement[(]{1}[A-Za-z]{2}[,]{1}null[)]{1}[,]{1}[A-Za-z]{1}[(]{1}[)]{1}.' | Out-Null
+    $xpui_js -match 'visible:!e}[)]{1}[,]{1}[A-Za-z]{1}[(]{1}[)]{1}.createElement[(]{1}[A-Za-z]{2}[,]{1}null[)]{1}[,]{1}[A-Za-z]{1}[(]{1}[)]{1}.' | Out-Null
     $menu_split_js = $Matches[0] -split 'createElement[(]{1}[A-Za-z]{2}[,]{1}null[)]{1}[,]{1}[A-Za-z]{1}[(]{1}[)]{1}.'
-    $new_js = $file_js <# Removing "Upgrade button" #> -replace "[.]{1}createElement[(]{1}..[,]{1}[{]{1}onClick[:]{1}.[,]{1}className[:]{1}..[.]{1}.[.]{1}UpgradeButton[}]{1}[)]{1}[,]{1}.[(]{1}[)]{1}", "" <# Removing an empty block #> -replace 'adsEnabled:!0', 'adsEnabled:!1' <# Removing "Upgrade to premium" menu #> -replace 'visible:!e}[)]{1}[,]{1}[A-Za-z]{1}[(]{1}[)]{1}.createElement[(]{1}[A-Za-z]{2}[,]{1}null[)]{1}[,]{1}[A-Za-z]{1}[(]{1}[)]{1}.', $menu_split_js <# Disabling a playlist sponsor #> -replace "allSponsorships", "" <# Disable Logging #> -replace "sp://logging/v3/\w+", "" 
+    $new_js = $xpui_js <# Removing "Upgrade button" #> -replace "[.]{1}createElement[(]{1}..[,]{1}[{]{1}onClick[:]{1}.[,]{1}className[:]{1}..[.]{1}.[.]{1}UpgradeButton[}]{1}[)]{1}[,]{1}.[(]{1}[)]{1}", "" <# Removing an empty block #> -replace 'adsEnabled:!0', 'adsEnabled:!1' <# Removing "Upgrade to premium" menu #> -replace 'visible:!e}[)]{1}[,]{1}[A-Za-z]{1}[(]{1}[)]{1}.createElement[(]{1}[A-Za-z]{2}[,]{1}null[)]{1}[,]{1}[A-Za-z]{1}[(]{1}[)]{1}.', $menu_split_js <# Disabling a playlist sponsor #> -replace "allSponsorships", "" <# Disable Logging #> -replace "sp://logging/v3/\w+", "" 
     Set-Content -Path $extractPath\xpui.js -Force -Value $new_js
     add-content -Path $extractPath\xpui.js -Value '// Patched by SpotX' -passthru | Out-Null
     $contentjs = [System.IO.File]::ReadAllText("$extractPath\xpui.js")
     $contentjs = $contentjs.Trim()
     [System.IO.File]::WriteAllText("$extractPath\xpui.js", $contentjs)
+
+    $new_js = $vendor_xpui_js <# Disable Sentry" #> -replace "prototype\.bindClient=function\(\w+\)\{", '${0}return;'
+    Set-Content -Path $extractPath\vendor~xpui.js -Force -Value $new_js
+    $contentjs = [System.IO.File]::ReadAllText("$extractPath\vendor~xpui.js")
+    $contentjs = $contentjs.Trim()
+    [System.IO.File]::WriteAllText("$extractPath\vendor~xpui.js", $contentjs)
 
     # Css
     Get-ChildItem -Path $extractPath_removeRTL\*.css | ForEach-Object {
@@ -209,11 +217,11 @@ If (!($file_js -match 'patched by spotx')) {
         $Path = $_.FullName; (Get-Content $Path) -replace "}\[dir=ltr\]\s?", "} " -replace "html\[dir=ltr\]", "html" -replace ",\s?\[dir=rtl\].+?(\{.+?\})", '$1' -replace "[\w\-\.]+\[dir=rtl\].+?\{.+?\}", "" -replace "\}\[lang=ar\].+?\{.+?\}", "}" -replace "\}\[dir=rtl\].+?\{.+?\}", "}" -replace "\}html\[dir=rtl\].+?\{.+?\}", "}" -replace "\}html\[lang=ar\].+?\{.+?\}", "}" -replace "\[lang=ar\].+?\{.+?\}", "" -replace "html\[dir=rtl\].+?\{.+?\}", "" -replace "html\[lang=ar\].+?\{.+?\}", "" -replace "\[dir=rtl\].+?\{.+?\}", "" | Set-Content $Path # Remove RTL
     }
 
-    Compress-Archive -Path $extractPath\xpui.js -Update -DestinationPath $zipFilePath
+    Compress-Archive -Path $extractPath\*.js -Update -DestinationPath $zipFilePath
     Compress-Archive -Path $extractPath_removeRTL\*.css -Update -DestinationPath $zipFilePath
 }
 else {
-    "Xpui.js is already patched"
+    "Spotify is already patched"
 }
 
 

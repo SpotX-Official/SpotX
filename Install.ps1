@@ -116,7 +116,7 @@ if (-not $spotifyInstalled) {
    
     Write-Host "Downloading and installing Spotify " -NoNewline
     Write-Host  $version_client -ForegroundColor Green
-    Write-Host "Please wait..."
+    Write-Host "Please wait..."`n
     
     Start-Process -FilePath $PWD\SpotifySetup.exe; wait-process -name SpotifySetup
 
@@ -144,7 +144,7 @@ if (!(test-path $SpotifyDirectory/chrome_elf_bak.dll)) {
     Move-Item $SpotifyDirectory\chrome_elf.dll $SpotifyDirectory\chrome_elf_bak.dll >$null 2>&1
 }
 
-Write-Host 'Patching Spotify...'
+Write-Host 'Patching Spotify...'`n
 $patchFiles = "$PWD\chrome_elf.dll", "$PWD\config.ini"
 Copy-Item -LiteralPath $patchFiles -Destination "$SpotifyDirectory"
 
@@ -164,7 +164,7 @@ $xpui_spa_patch = "$env:APPDATA\Spotify\Apps\xpui.spa"
 $xpui_js_patch = "$env:APPDATA\Spotify\Apps\xpui\xpui.js"
 
 If (Test-Path $xpui_js_patch) {
-    "Spicetify detected" 
+    Write-Host 'Spicetify detected'`n
     $xpui_js = Get-Content $xpui_js_patch -Raw
     
     If (!($xpui_js -match 'patched by spotx')) {
@@ -190,7 +190,7 @@ If (Test-Path $xpui_js_patch) {
 
     }
     else {
-        "Spotify is already patched" 
+        Write-Host 'Spotify is already patched'`n
     }
 }
 
@@ -289,7 +289,7 @@ If (Test-Path $xpui_spa_patch) {
     }
     else {
         $zip.Dispose()
-        "Spotify is already patched"
+        Write-Host 'Spotify is already patched'`n
     }
 }
 
@@ -345,7 +345,7 @@ $Check_folder_file = Get-ItemProperty -Path $env:LOCALAPPDATA\Spotify\Update | S
 $folder_update_access = Get-Acl $env:LOCALAPPDATA\Spotify\Update
 
 do {
-    $ch = Read-Host -Prompt "Want to block updates ? (Y/N), Unlock updates (U)"
+    $ch = Read-Host -Prompt "Want to block updates ? (Y/N), Unlock updates (U)"`n
     if (!($ch -eq 'n' -or $ch -eq 'y' -or $ch -eq 'u')) {
     
         Write-Host "Oops, an incorrect value, " -ForegroundColor Red -NoNewline
@@ -430,13 +430,13 @@ if ($ch -eq 'y') {
     }
 
   
-    Write-Host "Updates blocked successfully" -ForegroundColor Green
+    Write-Host "Updates blocked successfully"`n -ForegroundColor Green
 
 }
 
 
 if ($ch -eq 'n') {
-    Write-Host "Left unchanged" 
+    Write-Host "Left unchanged"`n
 }
 
 
@@ -459,7 +459,7 @@ if ($ch -eq 'u') {
 
 
     If (!($migrator_bak -or $Check_folder_file -match '\bSystem\b|\bReadOnly\b')) {
-        Write-Host "Oops, updates are not blocked" 
+        Write-Host "Oops, updates are not blocked"`n
     }  
 }
     
@@ -468,7 +468,7 @@ if ($ch -eq 'u') {
 # automatic cache clearing
 
 do {
-    $ch = Read-Host -Prompt "Want to set up automatic cache cleanup? (Y/N) Delete script (U)"
+    $ch = Read-Host -Prompt "Want to set up automatic cache cleanup? (Y/N) Delete script (U)"`n
 
     if (!($ch -eq 'n' -or $ch -eq 'y' -or $ch -eq 'u')) {
         Write-Host "Oops, an incorrect value, " -ForegroundColor Red -NoNewline
@@ -528,7 +528,7 @@ if ($ch -eq 'y') {
 
     do {
         $ch = Read-Host -Prompt "Cache files that have not been used for more than XX days will be deleted.
-    Enter the number of days from 1 to 100"
+    Enter the number of days from 1 to 100"`n
     
         if (!($ch -match "^[1-9][0-9]?$|^100$")) {
             Write-Host "Oops, an incorrect value, " -ForegroundColor Red -NoNewline
@@ -554,8 +554,8 @@ if ($ch -eq 'y') {
         $contentcache_spotify_ps1 = [System.IO.File]::ReadAllText("$env:APPDATA\Spotify\cache-spotify.ps1")
         $contentcache_spotify_ps1 = $contentcache_spotify_ps1.Trim()
         [System.IO.File]::WriteAllText("$env:APPDATA\Spotify\cache-spotify.ps1", $contentcache_spotify_ps1)
-        Write-Host "Clearing the cache has been successfully installed" -ForegroundColor Green
-        Write-Host "installation completed" -ForegroundColor Green
+        Write-Host "Clearing the cache has been successfully installed"`n -ForegroundColor Green
+        Write-Host "installation completed"`n -ForegroundColor Green
         exit
     }
          
@@ -563,7 +563,7 @@ if ($ch -eq 'y') {
 }
 
 if ($ch -eq 'n') {
-    Write-Host "installation completed" -ForegroundColor Green
+    Write-Host "installation completed"`n -ForegroundColor Green
 
     exit
 }
@@ -592,8 +592,8 @@ if ($ch -eq 'u') {
 
 
     If (!($test_cache_spotify_ps -and $test_spotify_vbs)) {
-        Write-Host "Oops, no cache clearing script found" 
-        Write-Host "Installation completed" -ForegroundColor Green
+        Write-Host "Oops, no cache clearing script found"`n
+        Write-Host "Installation completed"`n -ForegroundColor Green
         exit
     }
 }

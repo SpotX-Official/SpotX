@@ -6,31 +6,31 @@ echo *****************
 echo Removing Patch...
 
 
-if exist "%APPDATA%\Spotify\chrome_elf_bak.dll" ( 
-    del /s /q "%APPDATA%\Spotify\chrome_elf.dll" > NUL 2>&1
-    move "%APPDATA%\Spotify\chrome_elf_bak.dll" "%APPDATA%\Spotify\chrome_elf.dll" > NUL 2>&1
+if exist "%Appdata%\Spotify\chrome_elf_bak.dll" ( 
+    del /s /q "%Appdata%\Spotify\chrome_elf.dll" > NUL 2>&1
+    move "%Appdata%\Spotify\chrome_elf_bak.dll" "%Appdata%\Spotify\chrome_elf.dll" > NUL 2>&1
 ) 
 
 
-if exist "%APPDATA%\Spotify\config.ini" (
-    del /s /q "%APPDATA%\Spotify\config.ini" > NUL 2>&1
+if exist "%Appdata%\Spotify\config.ini" (
+    del /s /q "%Appdata%\Spotify\config.ini" > NUL 2>&1
 ) 
 
 
-if exist "%APPDATA%\Spotify\Apps\xpui.bak" (
-    del /s /q "%APPDATA%\Spotify\Apps\xpui.spa" > NUL 2>&1
-    move "%APPDATA%\Spotify\Apps\xpui.bak" "%APPDATA%\Spotify\Apps\xpui.spa" > NUL 2>&1
+if exist "%Appdata%\Spotify\Apps\xpui.bak" (
+    del /s /q "%Appdata%\Spotify\Apps\xpui.spa" > NUL 2>&1
+    move "%Appdata%\Spotify\Apps\xpui.bak" "%Appdata%\Spotify\Apps\xpui.spa" > NUL 2>&1
 ) 
 
 
-if exist "%APPDATA%\Spotify\Apps\xpui\xpui.js.bak" (
-    del /s /q "%APPDATA%\Spotify\Apps\xpui\xpui.js" > NUL 2>&1
-	move "%APPDATA%\Spotify\Apps\xpui\xpui.js.bak" "%APPDATA%\Spotify\Apps\xpui\xpui.js" > NUL 2>&1
+if exist "%Appdata%\Spotify\Apps\xpui\xpui.js.bak" (
+    del /s /q "%Appdata%\Spotify\Apps\xpui\xpui.js" > NUL 2>&1
+	move "%Appdata%\Spotify\Apps\xpui\xpui.js.bak" "%Appdata%\Spotify\Apps\xpui\xpui.js" > NUL 2>&1
 )
 
 
-if exist "%APPDATA%\Spotify\blockthespot_log.txt" (
-    del /s /q "%APPDATA%\Spotify\blockthespot_log.txt" > NUL 2>&1
+if exist "%Appdata%\Spotify\blockthespot_log.txt" (
+    del /s /q "%Appdata%\Spotify\blockthespot_log.txt" > NUL 2>&1
 )
 
 
@@ -39,28 +39,28 @@ if exist "%localappdata%\Spotify\Update" (
 ) 
 
 
-if exist "%APPDATA%\Spotify\SpotifyMigrator.bak" (
-    rename %APPDATA%\Spotify\SpotifyMigrator.bak SpotifyMigrator.exe > NUL 2>&1
+if exist "%Appdata%\Spotify\SpotifyMigrator.bak" (
+    rename %Appdata%\Spotify\SpotifyMigrator.bak SpotifyMigrator.exe > NUL 2>&1
 ) 
-if exist "%APPDATA%\Spotify\SpotifyMigrator.exe" (
-if exist "%APPDATA%\Spotify\SpotifyMigrator.bak" (
-	del /f /s /q %APPDATA%\Spotify\SpotifyMigrator.bak > NUL 2>&1
+if exist "%Appdata%\Spotify\SpotifyMigrator.exe" (
+if exist "%Appdata%\Spotify\SpotifyMigrator.bak" (
+	del /f /s /q %Appdata%\Spotify\SpotifyMigrator.bak > NUL 2>&1
 ) 
 )
 
 
-if exist "%APPDATA%\Spotify\Spotify.vbs" (
-    del /f /s /q %APPDATA%\Spotify\Spotify.vbs > NUL 2>&1
+if exist "%Appdata%\Spotify\Spotify.vbs" (
+    del /f /s /q %Appdata%\Spotify\Spotify.vbs > NUL 2>&1
 ) 
 
-if exist "%APPDATA%\Spotify\cache-spotify.ps1" (
-    del /f /s /q %APPDATA%\Spotify\cache-spotify.ps1 > NUL 2>&1
-	del /f /s /q %USERPROFILE%\Desktop\Spotify.lnk > NUL 2>&1
+if exist "%Appdata%\Spotify\cache-spotify.ps1" (
+    del /f /s /q %Appdata%\Spotify\cache-spotify.ps1 > NUL 2>&1
+	del /f /s /q %Userprofile%\Desktop\Spotify.lnk > NUL 2>&1
 
 
-SET Esc_LinkDest=%USERPROFILE%\Desktop\Spotify.lnk
-SET Esc_LinkTarget=%APPDATA%\Spotify\Spotify.exe
-SET Esc_WorkLinkTarget=%APPDATA%\Spotify\
+SET Esc_LinkDest=%Userprofile%\Desktop\Spotify.lnk
+SET Esc_LinkTarget=%Appdata%\Spotify\Spotify.exe
+SET Esc_WorkLinkTarget=%Appdata%\Spotify\
 SET cSctVBS=CreateShortcut.vbs
 ((
 echo Set oWS = WScript.CreateObject^("WScript.Shell"^) 

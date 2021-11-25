@@ -1,7 +1,6 @@
 <p align="center">                
       <a href="https://t.me/amd64fox"><img src="https://img.shields.io/badge/%40Amd64fox-%40Amd64fox-blue.svg?style=flat&logo=telegram&label=Telegram"></a>
       <a href="https://4pda.to/forum/index.php?act=findpost&pid=104279894&anchor=Spoil-104279894-1"><img src="https://img.shields.io/badge/4PDA-Post-yellow"></a>
-      <a href="https://github.com/amd64fox/SpotX"><img src="https://img.shields.io/github/watchers/amd64fox/spotx?label=Online repo"></a>
       </p>
       <p align="center">  
       <a href="https://github.com/amd64fox/SpotX/releases"><img src="https://img.shields.io/github/downloads/amd64fox/SpotX/total.svg?style=flat&label=Total downloads"></a>

@@ -1,14 +1,12 @@
 <p align="center">                
       <a href="https://t.me/amd64fox"><img src="https://img.shields.io/badge/%40Amd64fox-%40Amd64fox-blue.svg?style=flat&logo=telegram&label=Telegram"></a>
       <a href="https://4pda.to/forum/index.php?act=findpost&pid=104279894&anchor=Spoil-104279894-1"><img src="https://img.shields.io/badge/4PDA-Post-yellow"></a>
+      <a href="https://github.com/amd64fox/SpotX"><img src="https://img.shields.io/github/watchers/amd64fox/spotx?label=Online repo"></a>
       </p>
       <p align="center">  
       <a href="https://github.com/amd64fox/SpotX/releases"><img src="https://img.shields.io/github/downloads/amd64fox/SpotX/total.svg?style=flat&label=Total downloads"></a>
       <a href="https://cutt.ly/PErptD8"><img src="https://img.shields.io/github/downloads/amd64fox/spotx/1.0/Install.bat?color=9cf&label=Downloads"></a>
       <a href="https://cutt.ly/ZEnk1qf"><img src="https://img.shields.io/github/downloads/amd64fox/spotx/1.0/Install_rus.bat?color=9cf&label=Downloads"></a>
-      <p align="center">  
-      <a href="https://github.com/amd64fox/SpotX"><img src="https://img.shields.io/github/watchers/amd64fox/spotx?label=Online repo"></a>
-            </p>
     <h1 align="center">SpotX</h1>
     <h4 align="center">A multi-purpose adblocker and skip-bypass for the <strong>Windows</strong> Spotify desktop application.</h4>
     <h5 align="center">(The repository is based on <a href="https://github.com/mrpond/BlockTheSpot">BlockTheSpot</a>, and also some tricks were taken from <a href="https://github.com/khanhas/spicetify-cli">spicetify-cli</a>, many thanks to the contributors)</h5>

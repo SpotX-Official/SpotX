@@ -13,7 +13,7 @@ assignees: ''
 - Windows version: 
 - PowerShell version:
 
-## 📝 Describe your problem in detail
+## 📝 Description of the problem
 
 1. …
 2. …

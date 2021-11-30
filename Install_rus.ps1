@@ -16,6 +16,7 @@ Write-Host "*****************"
 
 $SpotifyDirectory = "$env:APPDATA\Spotify"
 $SpotifyExecutable = "$SpotifyDirectory\Spotify.exe"
+$Podcasts_off = $false
 
 
 Stop-Process -Name Spotify
@@ -158,6 +159,28 @@ Remove-Item -Recurse -LiteralPath $tempDirectory
 
 
 
+
+
+do {
+    $ch = Read-Host -Prompt "Хотите отключить подкасты ?  (Y/N)"
+    if (!($ch -eq 'n' -or $ch -eq 'y')) {
+    
+        Write-Host "Ой, некорректное значение, " -ForegroundColor Red -NoNewline
+        Write-Host "повторите ввод через..." -NoNewline
+        Start-Sleep -Milliseconds 1000
+        Write-Host "3" -NoNewline
+        Start-Sleep -Milliseconds 1000
+        Write-Host ".2" -NoNewline
+        Start-Sleep -Milliseconds 1000
+        Write-Host ".1"
+        Start-Sleep -Milliseconds 1000     
+        Clear-Host
+    }
+}
+while ($ch -notmatch '^y$|^n$')
+if ($ch -eq 'y') { $Podcasts_off = $true }
+
+
 # Мофифицируем файлы 
 
 $xpui_spa_patch = "$env:APPDATA\Spotify\Apps\xpui.spa"
@@ -181,6 +204,12 @@ If (Test-Path $xpui_js_patch) {
             <# Removing an empty block #> -replace 'adsEnabled:!0', 'adsEnabled:!1' `
             <# Removing "Upgrade to premium" menu #> -replace 'visible:!e}[)]{1}[,]{1}[A-Za-z]{1}[(]{1}[)]{1}.createElement[(]{1}[A-Za-z]{2}[,]{1}null[)]{1}[,]{1}[A-Za-z]{1}[(]{1}[)]{1}.', $menu_split_js `
             <# Disabling a playlist sponsor #> -replace "allSponsorships", ""
+
+        # Disable Podcast
+        if ($Podcasts_off) {
+            $new_js = $new_js `
+                -replace '"album,playlist,artist,show,station,episode"', '"album,playlist,artist,station"' -replace ',this[.]enableShows=[a-z]', ""
+        }
 
         Set-Content -Path $xpui_js_patch -Force -Value $new_js
         add-content -Path $xpui_js_patch -Value '// Patched by SpotX' -passthru | Out-Null
@@ -230,7 +259,13 @@ If (Test-Path $xpui_spa_patch) {
             <# Removing an empty block #> -replace 'adsEnabled:!0', 'adsEnabled:!1' `
             <# Removing "Upgrade to premium" menu #> -replace 'visible:!e}[)]{1}[,]{1}[A-Za-z]{1}[(]{1}[)]{1}.createElement[(]{1}[A-Za-z]{2}[,]{1}null[)]{1}[,]{1}[A-Za-z]{1}[(]{1}[)]{1}.', $menu_split_js `
             <# Disabling a playlist sponsor #> -replace "allSponsorships", "" `
-            <# Disable Logging #> -replace "sp://logging/v3/\w+", ""
+            <# Disable Logging #> -replace "sp://logging/v3/\w+", "" 
+
+        # Disable Podcast
+        if ($Podcasts_off) {
+            $xpuiContents = $xpuiContents `
+                -replace '"album,playlist,artist,show,station,episode"', '"album,playlist,artist,station"' -replace ',this[.]enableShows=[a-z]', ""
+        }
 
         $writer = New-Object System.IO.StreamWriter($entry_xpui.Open())
         $writer.BaseStream.SetLength(0)

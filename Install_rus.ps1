@@ -153,7 +153,7 @@ Remove-Item -Recurse -LiteralPath $tempDirectory
 
 
 do {
-    $ch = Read-Host -Prompt "Хотите отключить подкасты ?  (Y/N)"
+    $ch = Read-Host -Prompt "Хотите удалить подкасты с домашней страницы ? (Y/N)"
     Write-Host ""
     if (!($ch -eq 'n' -or $ch -eq 'y')) {
     

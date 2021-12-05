@@ -153,7 +153,7 @@ Remove-Item -Recurse -LiteralPath $tempDirectory
 
 
 do {
-    $ch = Read-Host -Prompt "Хотите удалить подкасты с домашней страницы ? (Y/N)"
+    $ch = Read-Host -Prompt "Хотите отключить подкасты ? (Y/N)"
     Write-Host ""
     if (!($ch -eq 'n' -or $ch -eq 'y')) {
     
@@ -198,10 +198,10 @@ If (Test-Path $xpui_js_patch) {
             <# Removing "Upgrade to premium" menu #> -replace 'visible:!e}[)]{1}[,]{1}[A-Za-z]{1}[(]{1}[)]{1}.createElement[(]{1}[A-Za-z]{2}[,]{1}null[)]{1}[,]{1}[A-Za-z]{1}[(]{1}[)]{1}.', $menu_split_js `
             <# Disabling a playlist sponsor #> -replace "allSponsorships", ""
 
-        # Disable podcasts on the homepage
+        # Disable Podcast
         if ($Podcasts_off) {
             $new_js = $new_js `
-                -replace '"album,playlist,artist,show,station,episode"', '"album,playlist,artist,station"'
+                -replace '"album,playlist,artist,show,station,episode"', '"album,playlist,artist,station"' -replace ',this[.]enableShows=[a-z]', ""
         }
 
         Set-Content -Path $xpui_js_patch -Force -Value $new_js
@@ -254,10 +254,10 @@ If (Test-Path $xpui_spa_patch) {
             <# Disabling a playlist sponsor #> -replace "allSponsorships", "" `
             <# Disable Logging #> -replace "sp://logging/v3/\w+", "" 
 
-        # Disable podcasts on the homepage
+        # Disable Podcast
         if ($Podcasts_off) {
             $xpuiContents = $xpuiContents `
-                -replace '"album,playlist,artist,show,station,episode"', '"album,playlist,artist,station"'
+                -replace '"album,playlist,artist,show,station,episode"', '"album,playlist,artist,station"' -replace ',this[.]enableShows=[a-z]', ""
         }
 
         $writer = New-Object System.IO.StreamWriter($entry_xpui.Open())

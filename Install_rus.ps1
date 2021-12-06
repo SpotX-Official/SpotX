@@ -181,22 +181,21 @@ $xpui_js_patch = "$env:APPDATA\Spotify\Apps\xpui\xpui.js"
 If (Test-Path $xpui_js_patch) {
     Write-Host "Обнаружен Spicetify"`n
 
-     $xpui_js = Get-Content $xpui_js_patch -Raw
+    $xpui_js = Get-Content $xpui_js_patch -Raw
     
     If (!($xpui_js -match 'patched by spotx')) {
         
     
         Copy-Item $xpui_js_patch "$xpui_js_patch.bak"
-    
-
-
-        $xpui_js -match 'visible:!e}[)]{1}[,]{1}[A-Za-z]{1}[(]{1}[)]{1}.createElement[(]{1}[A-Za-z]{2}[,]{1}null[)]{1}[,]{1}[A-Za-z]{1}[(]{1}[)]{1}.' | Out-Null
-        $menu_split_js = $Matches[0] -split 'createElement[(]{1}[A-Za-z]{2}[,]{1}null[)]{1}[,]{1}[A-Za-z]{1}[(]{1}[)]{1}.'
+  
         $new_js = $xpui_js `
-            <# Removing "Upgrade button" #> -replace ">=1024", ">=1000024" `
-            <# Removing an empty block #> -replace 'adsEnabled:!0', 'adsEnabled:!1' `
-            <# Removing "Upgrade to premium" menu #> -replace 'visible:!e}[)]{1}[,]{1}[A-Za-z]{1}[(]{1}[)]{1}.createElement[(]{1}[A-Za-z]{2}[,]{1}null[)]{1}[,]{1}[A-Za-z]{1}[(]{1}[)]{1}.', $menu_split_js `
-            <# Disabling a playlist sponsor #> -replace "allSponsorships", ""
+            <# Removing an empty block #> `
+            -replace 'adsEnabled:!0', 'adsEnabled:!1' `
+            <# Full screen mode activation and removing "Upgrade to premium" menu, upgrade button #> `
+            -replace '(session[,]{1}[a-z]{1}[=]{1}[a-z]{1}[=]{1}[>]{1}[{]{1}var [a-z]{1}[,]{1}[a-z]{1}[,]{1}[a-z]{1}[;]{1}[a-z]{6})(["]{1}free["]{1})', '$1"premium"' `
+            -replace '([a-z]{1}[.]{1}toLowerCase[(]{1}[)]{2}[}]{1}[,]{1}[a-z]{1}[=]{1}[a-z]{1}[=]{1}[>]{1}[{]{1}var [a-z]{1}[,]{1}[a-z]{1}[,]{1}[a-z]{1}[;]{1}return)(["]{1}premium["]{1})', '$1"free"' `
+            <# Disabling a playlist sponsor #>`
+            -replace "allSponsorships", ""
 
         # Disable Podcast
         if ($Podcasts_off) {
@@ -245,14 +244,16 @@ If (Test-Path $xpui_spa_patch) {
         $xpuiContents = $reader.ReadToEnd()
         $reader.Close()
 
-        $xpuiContents -match 'visible:!e}[)]{1}[,]{1}[A-Za-z]{1}[(]{1}[)]{1}.createElement[(]{1}[A-Za-z]{2}[,]{1}null[)]{1}[,]{1}[A-Za-z]{1}[(]{1}[)]{1}.' | Out-Null
-        $menu_split_js = $Matches[0] -split 'createElement[(]{1}[A-Za-z]{2}[,]{1}null[)]{1}[,]{1}[A-Za-z]{1}[(]{1}[)]{1}.'
         $xpuiContents = $xpuiContents `
-            <# Removing "Upgrade button" #> -replace ">=1024", ">=1000024" `
-            <# Removing an empty block #> -replace 'adsEnabled:!0', 'adsEnabled:!1' `
-            <# Removing "Upgrade to premium" menu #> -replace 'visible:!e}[)]{1}[,]{1}[A-Za-z]{1}[(]{1}[)]{1}.createElement[(]{1}[A-Za-z]{2}[,]{1}null[)]{1}[,]{1}[A-Za-z]{1}[(]{1}[)]{1}.', $menu_split_js `
-            <# Disabling a playlist sponsor #> -replace "allSponsorships", "" `
-            <# Disable Logging #> -replace "sp://logging/v3/\w+", "" 
+            <# Removing an empty block #> `
+            -replace 'adsEnabled:!0', 'adsEnabled:!1' `
+            <# Full screen mode activation and removing "Upgrade to premium" menu, upgrade button #> `
+            -replace '(session[,]{1}[a-z]{1}[=]{1}[a-z]{1}[=]{1}[>]{1}[{]{1}var [a-z]{1}[,]{1}[a-z]{1}[,]{1}[a-z]{1}[;]{1}[a-z]{6})(["]{1}free["]{1})', '$1"premium"' `
+            -replace '([a-z]{1}[.]{1}toLowerCase[(]{1}[)]{2}[}]{1}[,]{1}[a-z]{1}[=]{1}[a-z]{1}[=]{1}[>]{1}[{]{1}var [a-z]{1}[,]{1}[a-z]{1}[,]{1}[a-z]{1}[;]{1}return)(["]{1}premium["]{1})', '$1"free"' `
+            <# Disabling a playlist sponsor #>`
+            -replace "allSponsorships", "" `
+            <# Disable Logging #>`
+            -replace "sp://logging/v3/\w+", "" 
 
         # Disable Podcast
         if ($Podcasts_off) {

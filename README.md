@@ -19,8 +19,9 @@
 * <strong>For [Windows Desktop](https://www.spotify.com/download/windows/) only. (Microsoft store version is not suitable)</strong>
 * <strong>Blocks all banner, video and audio ads in the client</strong>
 * <strong>Unlocks the skip function of any track</strong>
-* <strong>Blocks automatic updates (optional)</strong>
+* <strong>Full screen mode activated</strong>
 * <strong>Podcasts disabled (optional)</strong>
+* <strong>Blocks automatic updates (optional)</strong>
 * <strong>[Automatic cache clearing](https://github.com/amd64fox/SpotX/discussions/2) (optional)</strong>
 * <strong>Disabled Sentry (Prevented Sentry from sending console log/error/warning to Spotify developers)</strong>
 * <strong>Disabled logging (Stopped various elements to log user interaction)</strong>

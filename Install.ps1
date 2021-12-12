@@ -207,7 +207,9 @@ If (Test-Path $xpui_js_patch) {
             <# Enables quicksilver in-app messaging modal #>`
             -replace '(Enables quicksilver in-app messaging modal",default:)(!0)', '$1!1' `
             <# With this enabled, clients will check whether tracks have lyrics available #>`
-            -replace '(With this enabled, clients will check whether tracks have lyrics available",default:)(!1)', '$1!0'
+            -replace '(With this enabled, clients will check whether tracks have lyrics available",default:)(!1)', '$1!0' `
+            <# Enables new playlist creation flow #>`
+            -replace '(Enables new playlist creation flow in Web Player and DesktopX",default:)(!1)', '$1!0'
 
         # Disable Podcast
         if ($Podcasts_off) {
@@ -277,7 +279,9 @@ If (Test-Path $xpui_spa_patch) {
             <# Enables quicksilver in-app messaging modal #>`
             -replace '(Enables quicksilver in-app messaging modal",default:)(!0)', '$1!1' `
             <# With this enabled, clients will check whether tracks have lyrics available #>`
-            -replace '(With this enabled, clients will check whether tracks have lyrics available",default:)(!1)', '$1!0'
+            -replace '(With this enabled, clients will check whether tracks have lyrics available",default:)(!1)', '$1!0' `
+            <# Enables new playlist creation flow #>`
+            -replace '(Enables new playlist creation flow in Web Player and DesktopX",default:)(!1)', '$1!0'
 
         # Disable Podcast
         if ($Podcasts_off) {

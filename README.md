@@ -1,3 +1,4 @@
+![234324](https://user-images.githubusercontent.com/62529699/145706823-a51a7456-2b62-4802-a83a-c72333c97a17.png)
 <p align="center">                
       <a href="https://t.me/amd64fox"><img src="https://img.shields.io/badge/%40Amd64fox-%40Amd64fox-blue.svg?style=flat&logo=telegram&label=Telegram"></a>
       <a href="https://4pda.to/forum/index.php?act=findpost&pid=104279894&anchor=Spoil-104279894-1"><img src="https://img.shields.io/badge/4PDA-Post-yellow"></a>
@@ -6,8 +7,6 @@
       <a href="https://github.com/amd64fox/SpotX/releases"><img src="https://img.shields.io/github/downloads/amd64fox/SpotX/total.svg?style=flat&label=Total downloads"></a>
       <a href="https://cutt.ly/PErptD8"><img src="https://img.shields.io/github/downloads/amd64fox/spotx/1.0/Install.bat?color=9cf&label=Downloads"></a>
       <a href="https://cutt.ly/ZEnk1qf"><img src="https://img.shields.io/github/downloads/amd64fox/spotx/1.0/Install_rus.bat?color=9cf&label=Downloads"></a>
-    <h1 align="center">SpotX</h1>
-    <h4 align="center">A multi-purpose adblocker and skip-bypass for the <strong>Windows</strong> Spotify desktop application.</h4>
     <h5 align="center">(The repository is based on <a href="https://github.com/mrpond/BlockTheSpot">BlockTheSpot</a>, and also some tricks were taken from <a href="https://github.com/khanhas/spicetify-cli">spicetify-cli</a>, many thanks to the contributors)</h5>
 </p>
 
@@ -23,6 +22,8 @@
 * <strong>Podcasts disabled (optional)</strong>
 * <strong>Blocks automatic updates (optional)</strong>
 * <strong>[Automatic cache clearing](https://github.com/amd64fox/SpotX/discussions/2) (optional)</strong>
+* <strong>Enabled the 2021 icons redraw</strong>
+* <strong>Activated "Made For You" in the left sidebar</strong>
 * <strong>Disabled Sentry (Prevented Sentry from sending console log/error/warning to Spotify developers)</strong>
 * <strong>Disabled logging (Stopped various elements to log user interaction)</strong>
 * <strong>Removed RTL rules (Removed all right-to-left CSS rules to simplify CSS files)</strong>

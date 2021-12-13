@@ -1,5 +1,9 @@
-![234324](https://user-images.githubusercontent.com/62529699/145706823-a51a7456-2b62-4802-a83a-c72333c97a17.png)
-<p align="center">                
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/62529699/145750188-e99e5aed-be32-4f85-9faa-e826ef92dd37.png" />
+</p>
+
+
+<p align="center">        
       <a href="https://t.me/amd64fox"><img src="https://img.shields.io/badge/%40Amd64fox-%40Amd64fox-blue.svg?style=flat&logo=telegram&label=Telegram"></a>
       <a href="https://youtu.be/d2-bKw6yTjo"><img src="https://img.shields.io/badge/ -red?style=flat&logo=youtube&label=Tutorial on Youtube"></a>
       <a href="https://4pda.to/forum/index.php?act=findpost&pid=104279894&anchor=Spoil-104279894-1"><img src="https://img.shields.io/badge/4PDA-Post-yellow"></a>
@@ -10,6 +14,7 @@
       <a href="https://cutt.ly/ZEnk1qf"><img src="https://img.shields.io/github/downloads/amd64fox/spotx/1.0/Install_rus.bat?color=9cf&label=Downloads"></a>
     <h5 align="center">(The repository is based on <a href="https://github.com/mrpond/BlockTheSpot">BlockTheSpot</a>, and also some tricks were taken from <a href="https://github.com/khanhas/spicetify-cli">spicetify-cli</a>, many thanks to the contributors)</h5>
 </p>
+
 
 
 

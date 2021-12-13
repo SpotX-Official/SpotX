@@ -1,6 +1,7 @@
 ![234324](https://user-images.githubusercontent.com/62529699/145706823-a51a7456-2b62-4802-a83a-c72333c97a17.png)
 <p align="center">                
       <a href="https://t.me/amd64fox"><img src="https://img.shields.io/badge/%40Amd64fox-%40Amd64fox-blue.svg?style=flat&logo=telegram&label=Telegram"></a>
+      <a href="https://youtu.be/d2-bKw6yTjo"><img src="https://img.shields.io/badge/ -red?style=flat&logo=youtube&label=Tutorial on Youtube"></a>
       <a href="https://4pda.to/forum/index.php?act=findpost&pid=104279894&anchor=Spoil-104279894-1"><img src="https://img.shields.io/badge/4PDA-Post-yellow"></a>
       </p>
       <p align="center">  

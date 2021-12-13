@@ -1,6 +1,7 @@
 <p align="center">
-  <img src="https://user-images.githubusercontent.com/62529699/145750188-e99e5aed-be32-4f85-9faa-e826ef92dd37.png" />
+  <a href="https://github.com/amd64fox/SpotX/releases"><img src="https://user-images.githubusercontent.com/62529699/145750769-3d74b068-2d87-4292-9f21-ddd4bcea6d50.png" />
 </p>
+
 
 
 <p align="center">        

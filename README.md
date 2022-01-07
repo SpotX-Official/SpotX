@@ -83,11 +83,15 @@ If you are using Windows 7 or Windows 8.1, there may be errors in the installati
 </details>
 
 
-   
-  
+ <details>
+<summary><small>I want to return old icons</small></summary><p>
+
+  [There is an answer here](https://github.com/amd64fox/SpotX/discussions/20#discussioncomment-1922206), if you do not like the new icons leave your comment there.
+
+</details>
 
 
-  
+
 <h1>Additional Notes:</h1>
 
 * SpotX will only work correctly on the latest versions of Spotify, please make sure of this before asking a question.  

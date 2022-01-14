@@ -1,19 +1,13 @@
 ---
-name: Bug report
-about: Create a report to help us improve
+name: To suggest an idea
+about: Suggest an idea for this project
 title: ''
-labels: bug
+labels: enhancement
 assignees: ''
 
 ---
 
-## ℹ Computer information
-
-- Spotify version: 
-- Windows version: 
-- PowerShell version:
-
-## 📝 Description of the problem
+## 📝 Description of the idea
 
 1. …
 2. …

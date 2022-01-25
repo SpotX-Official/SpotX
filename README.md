@@ -7,7 +7,7 @@
 <p align="center">        
       <a href="https://t.me/amd64fox"><img src="https://img.shields.io/badge/%40Amd64fox-%40Amd64fox-blue.svg?style=flat&logo=telegram&label=Telegram"></a>
       <a href="https://youtu.be/d2-bKw6yTjo"><img src="https://img.shields.io/badge/ -red?style=flat&logo=youtube&label=Tutorial on Youtube"></a>
-      <a href="https://4pda.to/forum/index.php?act=findpost&pid=104279894&anchor=Spoil-104279894-1"><img src="https://img.shields.io/badge/4PDA-Post-yellow"></a>
+      <a href="https://4pda.to/forum/index.php?s=&showtopic=715234&view=findpost&p=104279894"><img src="https://img.shields.io/badge/4PDA-Post-yellow"></a>
       </p>
     <h5 align="center">(The repository is based on <a href="https://github.com/mrpond/BlockTheSpot">BlockTheSpot</a>, and also some tricks were taken from <a href="https://github.com/khanhas/spicetify-cli">spicetify-cli</a>, many thanks to the contributors)</h5>
 </p>

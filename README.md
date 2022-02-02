@@ -7,30 +7,34 @@
 <p align="center">        
       <a href="https://t.me/amd64fox"><img src="https://img.shields.io/badge/%40Amd64fox-%40Amd64fox-blue.svg?style=flat&logo=telegram&label=Telegram"></a>
       <a href="https://youtu.be/d2-bKw6yTjo"><img src="https://img.shields.io/badge/ -red?style=flat&logo=youtube&label=Tutorial on Youtube"></a>
-      <a href="https://4pda.to/forum/index.php?s=&showtopic=715234&view=findpost&p=104279894"><img src="https://img.shields.io/badge/4PDA-Post-yellow"></a>
+      <a href="https://4pda.to/forum/index.php?act=findpost&pid=104279894&anchor=Spoil-104279894-1"><img src="https://img.shields.io/badge/4PDA-Post-yellow"></a>
       </p>
-    <h5 align="center">(The repository is based on <a href="https://github.com/mrpond/BlockTheSpot">BlockTheSpot</a>, and also some tricks were taken from <a href="https://github.com/khanhas/spicetify-cli">spicetify-cli</a>, many thanks to the contributors)</h5>
-</p>
+      
+     
+<h2> <div align="center"><b> Modified Spotify Client for Windows </b></div> </h2>
 
+<h1>System requirements:</h1>
 
-
-
+* <strong>Windows: 7-11</strong>
+* <strong>Free Account</strong>
+* <strong>PowerShell: 5.1 or higher</strong>
+* <strong>For [Windows Desktop](https://www.spotify.com/download/windows/) only (Microsoft store version is not suitable).</strong>
 
 <h1>Features:</h1>
 
-* <strong>For [Windows Desktop](https://www.spotify.com/download/windows/) only. (Microsoft store version is not suitable)</strong>
 * <strong>Blocks all banner, video and audio ads in the client</strong>
 * <strong>Unlocks the skip function of any track</strong>
 * <strong>Full screen mode activated</strong>
 * <strong>Podcasts disabled (optional)</strong>
 * <strong>Blocks automatic updates (optional)</strong>
 * <strong>[Automatic cache clearing](https://github.com/amd64fox/SpotX/discussions/2) (optional)</strong>
+* <strong>Enabled Enhance playlist</strong>
 * <strong>Enabled the 2021 icons redraw</strong>
 * <strong>Activated "Made For You" in the left sidebar</strong>
 * <strong>Disabled Sentry (Prevented Sentry from sending console log/error/warning to Spotify developers)</strong>
 * <strong>Disabled logging (Stopped various elements to log user interaction)</strong>
 * <strong>Removed RTL rules (Removed all right-to-left CSS rules to simplify CSS files)</strong>
-
+* <strong>Code minification</strong>
 
 
 <h1>Fast installation / Update:</h1>
@@ -90,6 +94,7 @@ If you are using Windows 7 or Windows 8.1, there may be errors in the installati
 
 <h1>Additional Notes:</h1>
 
+* The repository is based on <a href="https://github.com/mrpond/BlockTheSpot">BlockTheSpot</a>, and also some tricks were taken from <a href="https://github.com/khanhas/spicetify-cli">spicetify-cli</a>, many thanks to the contributors
 * SpotX will only work correctly on the latest versions of Spotify, please make sure of this before asking a question.  
 * The modifiable files are replaced by the Spotify installer every time it is updated, so you will need to apply the patch again when this happens.
 * SpotX will be installed even if you are using Spicetify, but you may need to run Install.bat again after running the `spicetify apply` or other commands.

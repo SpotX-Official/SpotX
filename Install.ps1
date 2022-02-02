@@ -15,6 +15,8 @@ $upgrade_client = $false
 $podcasts_off = $false
 $spotx_new = $false
 $run_as_admin = $false
+$block_update = $false
+$cache_install = $false
 
 
 # Check Tls12
@@ -205,6 +207,15 @@ if (-not $spotifyInstalled -or $upgrade_client) {
     Write-Host "Please wait..."`n
 
 
+    # Try deleting chrome_elf files if Spotify folder exists
+    
+    if (Test-Path -LiteralPath $spotifyDirectory) {
+        $ErrorActionPreference = 'SilentlyContinue'  # extinguishes light mistakes
+        Stop-Process -Name Spotify 
+        Start-Sleep -Seconds 1
+        Remove-Item $spotifyDirectory -Include *chrome_elf* -Recurse -Force
+    } 
+
     # Correcting the error if the spotify installer was launched from the administrator
 
     if ($run_as_admin) {
@@ -228,16 +239,9 @@ if (-not $spotifyInstalled -or $upgrade_client) {
     Stop-Process -Name SpotifyWebHelper 
     Stop-Process -Name SpotifyFullSetup 
 
-
     $ErrorActionPreference = 'SilentlyContinue'  # extinguishes light mistakes
 
-    # Update backup chrome_elf.dll
-    if (Test-Path -LiteralPath $chrome_elf_bak) {
-        Remove-item $spotifyDirectory/chrome_elf_bak.dll
-        Move-Item $chrome_elf $chrome_elf_bak 
-    }
-
-    # Remove spotify installer
+    # Remove Spotify installer
     if (test-path "$env:LOCALAPPDATA\Microsoft\Windows\Temporary Internet Files\") {
         get-childitem -path "$env:LOCALAPPDATA\Microsoft\Windows\Temporary Internet Files\" -Recurse -Force -Filter  "SpotifyFullSetup*" | remove-item  -Force
     }
@@ -246,22 +250,11 @@ if (-not $spotifyInstalled -or $upgrade_client) {
     }
 }
 
-
 # Create backup chrome_elf.dll
+
 if (!(Test-Path -LiteralPath $chrome_elf_bak)) {
     Move-Item $chrome_elf $chrome_elf_bak 
 }
-
-Write-Host 'Patching Spotify...'`n
-$patchFiles = "$PWD\chrome_elf.dll", "$PWD\config.ini"
-Copy-Item -LiteralPath $patchFiles -Destination "$spotifyDirectory"
-
-$tempDirectory = $PWD
-Pop-Location
-
-
-Start-Sleep -Milliseconds 200
-Remove-Item -Recurse -LiteralPath $tempDirectory 
 
 
 
@@ -286,15 +279,174 @@ while ($ch -notmatch '^y$|^n$')
 if ($ch -eq 'y') { $podcasts_off = $true }
 
 
-# Modify files
+do {
+    $ch = Read-Host -Prompt "Want to block updates ? (Y/N)"
+    Write-Host ""
+    if (!($ch -eq 'n' -or $ch -eq 'y')) {
+    
+        Write-Host "Oops, an incorrect value, " -ForegroundColor Red -NoNewline
+        Write-Host "enter again through..." -NoNewline
+        Start-Sleep -Milliseconds 1000
+        Write-Host "3" -NoNewline
+        Start-Sleep -Milliseconds 1000
+        Write-Host ".2" -NoNewline
+        Start-Sleep -Milliseconds 1000
+        Write-Host ".1"
+        Start-Sleep -Milliseconds 1000     
+        Clear-Host
+    }
+}
+while ($ch -notmatch '^y$|^n$')
+
+if ($ch -eq 'y') { $block_update = $true }
+
+do {
+    $ch = Read-Host -Prompt "Want to set up automatic cache cleanup? (Y/N)"
+    Write-Host ""
+    if (!($ch -eq 'n' -or $ch -eq 'y')) {
+        Write-Host "Oops, an incorrect value, " -ForegroundColor Red -NoNewline
+        Write-Host "enter again through..." -NoNewline
+        Start-Sleep -Milliseconds 1000
+        Write-Host "3" -NoNewline
+        Start-Sleep -Milliseconds 1000
+        Write-Host ".2" -NoNewline
+        Start-Sleep -Milliseconds 1000
+        Write-Host ".1"
+        Start-Sleep -Milliseconds 1000     
+        Clear-Host
+    }
+}
+while ($ch -notmatch '^y$|^n$')
+if ($ch -eq 'y') {
+    $cache_install = $true 
+
+    do {
+        $ch = Read-Host -Prompt "Cache files that have not been used for more than XX days will be deleted.
+    Enter the number of days from 1 to 100"
+        Write-Host ""
+        if (!($ch -match "^[1-9][0-9]?$|^100$")) {
+            Write-Host "Oops, an incorrect value, " -ForegroundColor Red -NoNewline
+            Write-Host "enter again through..." -NoNewline
+		
+            Start-Sleep -Milliseconds 1000
+            Write-Host "3" -NoNewline
+            Start-Sleep -Milliseconds 1000
+            Write-Host ".2" -NoNewline
+            Start-Sleep -Milliseconds 1000
+            Write-Host ".1"
+            Start-Sleep -Milliseconds 1000     
+            Clear-Host
+        }
+    }
+    while ($ch -notmatch '^[1-9][0-9]?$|^100$')
+
+    if ($ch -match "^[1-9][0-9]?$|^100$") { $number_days = $ch }
+
+}
+
+
+function OffUpdStatus {
+    # Remove the label about the new version
+    $upgrade_status = "sp://desktop/v1/upgrade/status"
+    if ($xpui_js -match $upgrade_status) { $xpui_js = $xpui_js -replace $upgrade_status, "" } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$upgrade_status in xpui.js" }
+    $xpui_js
+}
+function OffPodcasts {
+    # Turn off podcasts
+    $podcasts_off1 = '"album,playlist,artist,show,station,episode"', '"album,playlist,artist,station"'
+    $podcasts_off2 = ',this[.]enableShows=[a-z]'
+    if ($xpui_js -match $podcasts_off1[0]) { $xpui_js = $xpui_js -replace $podcasts_off1[0], $podcasts_off1[1] } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$podcasts_off1[0] in xpui.js" }
+    if ($xpui_js -match $podcasts_off2) { $xpui_js = $xpui_js -replace $podcasts_off2, "" } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$podcasts_off2 in xpui.js" }
+    $xpui_js
+}
+function OffAdsOnFullscreen {
+    # Removing an empty block
+    $empty_block_ad = 'adsEnabled:!0', 'adsEnabled:!1'
+    # Full screen mode activation and removing "Upgrade to premium" menu, upgrade button
+    $full_screen_1 = '(session[,]{1}[a-z]{1}[=]{1}[a-z]{1}[=]{1}[>]{1}[{]{1}var [a-z]{1}[,]{1}[a-z]{1}[,]{1}[a-z]{1}[;]{1}[a-z]{6})(["]{1}free["]{1})', '$1"premium"'
+    $full_screen_2 = '([a-z]{1}[.]{1}toLowerCase[(]{1}[)]{2}[}]{1}[,]{1}[a-z]{1}[=]{1}[a-z]{1}[=]{1}[>]{1}[{]{1}var [a-z]{1}[,]{1}[a-z]{1}[,]{1}[a-z]{1}[;]{1}return)(["]{1}premium["]{1})', '$1"free"'
+    # Disabling a playlist sponsor
+    $playlist_ad_off = "allSponsorships"
+    if ($xpui_js -match $empty_block_ad[0]) { $xpui_js = $xpui_js -replace $empty_block_ad[0], $empty_block_ad[1] } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$empty_block_ad[0] in xpui.js" }
+    if ($xpui_js -match $full_screen_1[0]) { $xpui_js = $xpui_js -replace $full_screen_1[0], $full_screen_1[1] } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$full_screen_1[0] in xpui.js" }
+    if ($xpui_js -match $full_screen_2[0]) { $xpui_js = $xpui_js -replace $full_screen_2[0], $full_screen_2[1] } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$full_screen_2[0] in xpui.js" }
+    if ($xpui_js -match $playlist_ad_off) { $xpui_js = $xpui_js -replace $playlist_ad_off, "" } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$playlist_ad_off in xpui.js" }
+    $xpui_js
+}
+function ExpFeature {
+    # Experimental Feature
+    $exp_features1 = '(Show "Made For You" entry point in the left sidebar.,default:)(!1)', '$1!0' 
+    $exp_features2 = '(Enables the 2021 icons redraw which loads a different font asset for rendering icon glyphs.",default:)(!1)', '$1!0' 
+    $exp_features3 = '(Enable Liked Songs section on Artist page",default:)(!1)', '$1!0' 
+    $exp_features4 = '(Enable block users feature in clientX",default:)(!1)', '$1!0' 
+    $exp_features5 = '(Enables quicksilver in-app messaging modal",default:)(!0)', '$1!1' 
+    $exp_features6 = '(With this enabled, clients will check whether tracks have lyrics available",default:)(!1)', '$1!0' 
+    $exp_features7 = '(Enables new playlist creation flow in Web Player and DesktopX",default:)(!1)', '$1!0' 
+    $exp_features8 = '(Enable Enhance Playlist UI and functionality",default:)(!1)', '$1!0' 
+    if ($xpui_js -match $exp_features1[0]) { $xpui_js = $xpui_js -replace $exp_features1[0], $exp_features1[1] } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$exp_features1[0] in xpui.js" }
+    if ($xpui_js -match $exp_features2[0]) { $xpui_js = $xpui_js -replace $exp_features2[0], $exp_features2[1] } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$exp_features2[0] in xpui.js" }
+    if ($xpui_js -match $exp_features3[0]) { $xpui_js = $xpui_js -replace $exp_features3[0], $exp_features3[1] } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$exp_features3[0] in xpui.js" }
+    if ($xpui_js -match $exp_features4[0]) { $xpui_js = $xpui_js -replace $exp_features4[0], $exp_features4[1] } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$exp_features4[0] in xpui.js" }
+    if ($xpui_js -match $exp_features5[0]) { $xpui_js = $xpui_js -replace $exp_features5[0], $exp_features5[1] } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$exp_features5[0] in xpui.js" }
+    if ($xpui_js -match $exp_features6[0]) { $xpui_js = $xpui_js -replace $exp_features6[0], $exp_features6[1] } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$exp_features6[0] in xpui.js" }
+    if ($xpui_js -match $exp_features7[0]) { $xpui_js = $xpui_js -replace $exp_features7[0], $exp_features7[1] } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$exp_features7[0] in xpui.js" }
+    if ($xpui_js -match $exp_features8[0]) { $xpui_js = $xpui_js -replace $exp_features8[0], $exp_features8[1] } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$exp_features8[0] in xpui.js" }
+    $xpui_js
+}
+
+function ContentsHtml {
+    # licenses.html minification
+    
+    $html_lic_min1 = '<li><a href="#6eef7">zlib<\/a><\/li>\n(.|\n)*<\/p><!-- END CONTAINER DEPS LICENSES -->(<\/div>)'
+    $html_lic_min2 = "	"
+    $html_lic_min3 = "  "
+    $html_lic_min4 = "(?m)(^\s*\r?\n)"
+    $html_lic_min5 = "\r?\n(?!\(1|\d)"
+    if ($xpuiContents_html -match $html_lic_min1) { $xpuiContents_html = $xpuiContents_html -replace $html_lic_min1, '$2' } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$html_lic_min1 в licenses.html" }
+    if ($xpuiContents_html -match $html_lic_min2) { $xpuiContents_html = $xpuiContents_html -replace $html_lic_min2, "" } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$html_lic_min2 в licenses.html" }
+    if ($xpuiContents_html -match $html_lic_min3) { $xpuiContents_html = $xpuiContents_html -replace $html_lic_min3, "" } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$html_lic_min3 в licenses.html" }
+    if ($xpuiContents_html -match $html_lic_min4) { $xpuiContents_html = $xpuiContents_html -replace $html_lic_min4, "" } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$html_lic_min4 в licenses.html" }
+    if ($xpuiContents_html -match $html_lic_min5) { $xpuiContents_html = $xpuiContents_html -replace $html_lic_min5, "" } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$html_lic_min5 в licenses.html" }
+    $xpuiContents_html
+}
+
+Write-Host 'Patching Spotify...'`n
+
+# Patching files
+
+$patchFiles = "$PWD\chrome_elf.dll", "$PWD\config.ini"
+Copy-Item -LiteralPath $patchFiles -Destination "$spotifyDirectory"
+
+$tempDirectory = $PWD
+Pop-Location
+
+
+
+Start-Sleep -Milliseconds 200
+Remove-Item -Recurse -LiteralPath $tempDirectory 
 
 $xpui_spa_patch = "$env:APPDATA\Spotify\Apps\xpui.spa"
 $xpui_js_patch = "$env:APPDATA\Spotify\Apps\xpui\xpui.js"
 
-If (Test-Path $xpui_js_patch) {
-    Write-Host "Spicetify detected"`n 
+$test_spa = Test-Path -Path $env:APPDATA\Spotify\Apps\xpui.spa
+$test_js = Test-Path -Path $env:APPDATA\Spotify\Apps\xpui\xpui.js
 
-    $xpui_js = Get-Content $xpui_js_patch -Raw
+if ($test_spa -and $test_js) {
+    Write-Host "Error" -ForegroundColor Red
+    Write-Host "The location of Spotify files is broken, uninstall the client and run the script again."
+    Write-Host "The script is stopped."
+    exit
+}
+
+if (Test-Path $xpui_js_patch) {
+    Write-Host "Spicetify detected"`n
+
+
+
+
+    $reader = New-Object -TypeName System.IO.StreamReader -ArgumentList $xpui_js_patch
+    $xpui_js = $reader.ReadToEnd()
+    $reader.Close()
         
     If (!($xpui_js -match 'patched by spotx')) {
         $spotx_new = $true
@@ -302,40 +454,36 @@ If (Test-Path $xpui_js_patch) {
     }
 
 
+    # Remove the label about the new version
+    if ($block_update) { $xpui_js = OffUpdStatus }
 
-    # Disable Podcast
-    if ($Podcasts_off) {
-        $xpui_js = $xpui_js `
-            -replace '"album,playlist,artist,show,station,episode"', '"album,playlist,artist,station"' -replace ',this[.]enableShows=[a-z]', ""
-    }
-    $xpui_js = $xpui_js `
-        <# Removing an empty block #> `
-        -replace 'adsEnabled:!0', 'adsEnabled:!1' `
-        <# Full screen mode activation and removing "Upgrade to premium" menu, upgrade button #> `
-        -replace '(session[,]{1}[a-z]{1}[=]{1}[a-z]{1}[=]{1}[>]{1}[{]{1}var [a-z]{1}[,]{1}[a-z]{1}[,]{1}[a-z]{1}[;]{1}[a-z]{6})(["]{1}free["]{1})', '$1"premium"' `
-        -replace '([a-z]{1}[.]{1}toLowerCase[(]{1}[)]{2}[}]{1}[,]{1}[a-z]{1}[=]{1}[a-z]{1}[=]{1}[>]{1}[{]{1}var [a-z]{1}[,]{1}[a-z]{1}[,]{1}[a-z]{1}[;]{1}return)(["]{1}premium["]{1})', '$1"free"' `
-        <# Disabling a playlist sponsor #>`
-        -replace "allSponsorships", "" `
-        <# Show "Made For You" entry point in the left sidebar #>`
-        -replace '(Show "Made For You" entry point in the left sidebar.,default:)(!1)', '$1!0' `
-        <# Enables the 2021 icons redraw #>`
-        -replace '(Enables the 2021 icons redraw which loads a different font asset for rendering icon glyphs.",default:)(!1)', '$1!0' `
-        <# Enable Liked Songs section on Artist page #>`
-        -replace '(Enable Liked Songs section on Artist page",default:)(!1)', '$1!0' `
-        <# Enable block users #>`
-        -replace '(Enable block users feature in clientX",default:)(!1)', '$1!0' `
-        <# Enables quicksilver in-app messaging modal #>`
-        -replace '(Enables quicksilver in-app messaging modal",default:)(!0)', '$1!1' `
-        <# With this enabled, clients will check whether tracks have lyrics available #>`
-        -replace '(With this enabled, clients will check whether tracks have lyrics available",default:)(!1)', '$1!0' `
-        <# Enables new playlist creation flow #>`
-        -replace '(Enables new playlist creation flow in Web Player and DesktopX",default:)(!1)', '$1!0'
+    # Turn off podcasts
+    if ($Podcasts_off) { $xpui_js = OffPodcasts }
+    
+    # Full screen mode activation and removing "Upgrade to premium" menu, upgrade button, disabling a playlist sponsor
+    $xpui_js = OffAdsOnFullscreen
+       
+    # Experimental Feature
+    $xpui_js = ExpFeature
 
-    Set-Content -Path $xpui_js_patch -Force -Value $xpui_js
-    if ($spotx_new) { add-content -Path $xpui_js_patch -Value '// Patched by SpotX' -passthru | Out-Null }
-    $contentjs = [System.IO.File]::ReadAllText($xpui_js_patch)
-    $contentjs = $contentjs.Trim()
-    [System.IO.File]::WriteAllText($xpui_js_patch, $contentjs)
+    $writer = New-Object System.IO.StreamWriter -ArgumentList $xpui_js_patch
+    $writer.BaseStream.SetLength(0)
+    $writer.Write($xpui_js)
+    if ($spotx_new) { $writer.Write([System.Environment]::NewLine + '// Patched by SpotX') }
+    $writer.Close()  
+
+
+    # licenses.html minification
+    $file_licenses = get-item $env:APPDATA\Spotify\Apps\xpui\licenses.html
+    $reader = New-Object -TypeName System.IO.StreamReader -ArgumentList $file_licenses
+    $xpuiContents_html = $reader.ReadToEnd()
+    $reader.Close()
+    $xpuiContents_html = ContentsHtml
+    $writer = New-Object System.IO.StreamWriter -ArgumentList $file_licenses
+    $writer.BaseStream.SetLength(0)
+    $writer.Write($xpuiContents_html)
+    $writer.Close()
+
 }  
 
 
@@ -362,70 +510,61 @@ If (Test-Path $xpui_spa_patch) {
     
     # xpui.js
     $entry_xpui = $zip.GetEntry('xpui.js')
-
-    # Extract xpui.js from zip to memory
     $reader = New-Object System.IO.StreamReader($entry_xpui.Open())
-    $xpuiContents = $reader.ReadToEnd()
+    $xpui_js = $reader.ReadToEnd()
     $reader.Close()
 
 
-
-    # Disable Podcast
-    if ($podcasts_off) {
-        $xpuiContents = $xpuiContents `
-            -replace '"album,playlist,artist,show,station,episode"', '"album,playlist,artist,station"' -replace ',this[.]enableShows=[a-z]', ""
-    }
-    $xpuiContents = $xpuiContents `
-        <# Removing an empty block #> `
-        -replace 'adsEnabled:!0', 'adsEnabled:!1' `
-        <# Full screen mode activation and removing "Upgrade to premium" menu, upgrade button #> `
-        -replace '(session[,]{1}[a-z]{1}[=]{1}[a-z]{1}[=]{1}[>]{1}[{]{1}var [a-z]{1}[,]{1}[a-z]{1}[,]{1}[a-z]{1}[;]{1}[a-z]{6})(["]{1}free["]{1})', '$1"premium"' `
-        -replace '([a-z]{1}[.]{1}toLowerCase[(]{1}[)]{2}[}]{1}[,]{1}[a-z]{1}[=]{1}[a-z]{1}[=]{1}[>]{1}[{]{1}var [a-z]{1}[,]{1}[a-z]{1}[,]{1}[a-z]{1}[;]{1}return)(["]{1}premium["]{1})', '$1"free"' `
-        <# Disabling a playlist sponsor #>`
-        -replace "allSponsorships", "" `
-        <# Disable Logging #>`
-        -replace "sp://logging/v3/\w+", "" `
-        <# Show "Made For You" entry point in the left sidebar #>`
-        -replace '(Show "Made For You" entry point in the left sidebar.,default:)(!1)', '$1!0' `
-        <# Enables the 2021 icons redraw #>`
-        -replace '(Enables the 2021 icons redraw which loads a different font asset for rendering icon glyphs.",default:)(!1)', '$1!0' `
-        <# Enable Liked Songs section on Artist page #>`
-        -replace '(Enable Liked Songs section on Artist page",default:)(!1)', '$1!0' `
-        <# Enable block users #>`
-        -replace '(Enable block users feature in clientX",default:)(!1)', '$1!0' `
-        <# Enables quicksilver in-app messaging modal #>`
-        -replace '(Enables quicksilver in-app messaging modal",default:)(!0)', '$1!1' `
-        <# With this enabled, clients will check whether tracks have lyrics available #>`
-        -replace '(With this enabled, clients will check whether tracks have lyrics available",default:)(!1)', '$1!0' `
-        <# Enables new playlist creation flow #>`
-        -replace '(Enables new playlist creation flow in Web Player and DesktopX",default:)(!1)', '$1!0'
+    # Remove the label about the new version
+    if ($block_update) { $xpui_js = OffUpdStatus }
 
 
-        
+    # Turn off podcasts
+    if ($podcasts_off) { $xpui_js = OffPodcasts }
+    
 
+    # Full screen mode activation and removing "Upgrade to premium" menu, upgrade button, disabling a playlist sponsor
+    $xpui_js = OffAdsOnFullscreen
+       
+    # Experimental Feature
+    $xpui_js = ExpFeature
+   
     $writer = New-Object System.IO.StreamWriter($entry_xpui.Open())
     $writer.BaseStream.SetLength(0)
-    $writer.Write($xpuiContents)
+    $writer.Write($xpui_js)
     if ($spotx_new) { $writer.Write([System.Environment]::NewLine + '// Patched by SpotX') }
     $writer.Close()
 
 
     # vendor~xpui.js
     $entry_vendor_xpui = $zip.GetEntry('vendor~xpui.js')
-
-    # Extract vendor~xpui.js from zip to memory
     $reader = New-Object System.IO.StreamReader($entry_vendor_xpui.Open())
     $xpuiContents_vendor = $reader.ReadToEnd()
     $reader.Close()
 
     $xpuiContents_vendor = $xpuiContents_vendor `
         <# Disable Sentry" #> -replace "prototype\.bindClient=function\(\w+\)\{", '${0}return;'
-
-    # Rewrite it to the zip
     $writer = New-Object System.IO.StreamWriter($entry_vendor_xpui.Open())
     $writer.BaseStream.SetLength(0)
     $writer.Write($xpuiContents_vendor)
     $writer.Close()
+
+
+
+    # js minification
+    $zip.Entries | Where-Object FullName -like '*.js' | ForEach-Object {
+        $readerjs = New-Object System.IO.StreamReader($_.Open())
+        $xpuiContents_js = $readerjs.ReadToEnd()
+        $readerjs.Close()
+        $xpuiContents_js = $xpuiContents_js `
+            -replace "[/][/][#] sourceMappingURL=.*[.]map", "" `
+            -replace "\r?\n(?!\(1|\d)", ""
+        $writer = New-Object System.IO.StreamWriter($_.Open())
+        $writer.BaseStream.SetLength(0)
+        $writer.Write($xpuiContents_js)
+        $writer.Close()
+    }
+
 
 
     # *.Css
@@ -434,8 +573,9 @@ If (Test-Path $xpui_spa_patch) {
         $xpuiContents_css = $readercss.ReadToEnd()
         $readercss.Close()
 
-        # Remove RTL
+        
         $xpuiContents_css = $xpuiContents_css `
+            <#  Remove RTL #>`
             -replace "}\[dir=ltr\]\s?", "} " `
             -replace "html\[dir=ltr\]", "html" `
             -replace ",\s?\[dir=rtl\].+?(\{.+?\})", '$1' `
@@ -447,14 +587,67 @@ If (Test-Path $xpui_spa_patch) {
             -replace "\[lang=ar\].+?\{.+?\}", "" `
             -replace "html\[dir=rtl\].+?\{.+?\}", "" `
             -replace "html\[lang=ar\].+?\{.+?\}", "" `
-            -replace "\[dir=rtl\].+?\{.+?\}", ""
+            -replace "\[dir=rtl\].+?\{.+?\}", "" `
+            <# Css minification #>`
+            -replace "[/]\*([^*]|[\r\n]|(\*([^/]|[\r\n])))*\*[/]", "" `
+            -replace "[/][/]#\s.*", "" `
+            -replace "\r?\n(?!\(1|\d)", ""
     
         $writer = New-Object System.IO.StreamWriter($_.Open())
         $writer.BaseStream.SetLength(0)
         $writer.Write($xpuiContents_css)
         $writer.Close()
 
-    }    
+    }
+    
+
+    # licenses.html minification
+    $zip.Entries | Where-Object FullName -like '*licenses.html' | ForEach-Object {
+        $reader = New-Object System.IO.StreamReader($_.Open())
+        $xpuiContents_html = $reader.ReadToEnd()
+        $reader.Close()      
+        $xpuiContents_html = ContentsHtml
+        $writer = New-Object System.IO.StreamWriter($_.Open())
+        $writer.BaseStream.SetLength(0)
+        $writer.Write($xpuiContents_html)
+        $writer.Close()
+    }
+
+    # blank.html minification
+    $entry_blank_html = $zip.GetEntry('blank.html')
+    $reader = New-Object System.IO.StreamReader($entry_blank_html.Open())
+    $xpuiContents_html_blank = $reader.ReadToEnd()
+    $reader.Close()
+
+    $html_min1 = "  "
+    $html_min2 = "(?m)(^\s*\r?\n)"
+    $html_min3 = "\r?\n(?!\(1|\d)"
+    if ($xpuiContents_html_blank -match $html_min1) { $xpuiContents_html_blank = $xpuiContents_html_blank -replace $html_min1, "" } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$html_min1 in html" }
+    if ($xpuiContents_html_blank -match $html_min2) { $xpuiContents_html_blank = $xpuiContents_html_blank -replace $html_min2, "" } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$html_min2 in html" }
+    if ($xpuiContents_html_blank -match $html_min3) { $xpuiContents_html_blank = $xpuiContents_html_blank -replace $html_min3, "" } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$html_min3 in html" }
+
+    $xpuiContents_html_blank = $xpuiContents_html_blank
+    $writer = New-Object System.IO.StreamWriter($entry_blank_html.Open())
+    $writer.BaseStream.SetLength(0)
+    $writer.Write($xpuiContents_html_blank)
+    $writer.Close()
+    
+    # Json
+    $zip.Entries | Where-Object FullName -like '*.json' | ForEach-Object {
+        $readerjson = New-Object System.IO.StreamReader($_.Open())
+        $xpuiContents_json = $readerjson.ReadToEnd()
+        $readerjson.Close()
+
+        # Json minification
+        $xpuiContents_json = $xpuiContents_json `
+            -replace "  ", "" -replace "    ", "" -replace '": ', '":' -replace "\r?\n(?!\(1|\d)", "" 
+
+        $writer = New-Object System.IO.StreamWriter($_.Open())
+        $writer.BaseStream.SetLength(0)
+        $writer.Write($xpuiContents_json)
+        $writer.Close()
+            
+    }
     $zip.Dispose()   
 }
 
@@ -502,29 +695,11 @@ $migrator_exe = Test-Path -Path $env:APPDATA\Spotify\SpotifyMigrator.exe
 $Check_folder_file = Get-ItemProperty -Path $env:LOCALAPPDATA\Spotify\Update | Select-Object Attributes 
 $folder_update_access = Get-Acl $env:LOCALAPPDATA\Spotify\Update
 
-do {
-    $ch = Read-Host -Prompt "Want to block updates ? (Y/N)"
-    Write-Host ""
-    if (!($ch -eq 'n' -or $ch -eq 'y' -or $ch -eq 'u')) {
-    
-        Write-Host "Oops, an incorrect value, " -ForegroundColor Red -NoNewline
-        Write-Host "enter again through..." -NoNewline
-        Start-Sleep -Milliseconds 1000
-        Write-Host "3" -NoNewline
-        Start-Sleep -Milliseconds 1000
-        Write-Host ".2" -NoNewline
-        Start-Sleep -Milliseconds 1000
-        Write-Host ".1"
-        Start-Sleep -Milliseconds 1000     
-        Clear-Host
-    }
-}
-while ($ch -notmatch '^y$|^n$')
 
 
-if ($ch -eq 'y') {
+if ($block_update) {
 
-    # If there was a client installation
+    # If there was a client installation 
     if (!($update_directory)) {
 
         # Create Spotify folder in Localappdata
@@ -532,8 +707,8 @@ if ($ch -eq 'y') {
 
         # Create Update file
         New-Item -Path $env:LOCALAPPDATA\Spotify\ -Name "Update" -ItemType "file" -Value "STOPIT" | Out-Null
-        $file = Get-ItemProperty -Path $env:LOCALAPPDATA\Spotify\Update
-        $file.Attributes = "ReadOnly", "System"
+        $file_upd = Get-ItemProperty -Path $env:LOCALAPPDATA\Spotify\Update
+        $file_upd.Attributes = "ReadOnly", "System"
       
         # Если оба файлав мигратора существуют то .bak удалить, а .exe переименовать в .bak
         If ($migrator_exe -and $migrator_bak) {
@@ -569,8 +744,8 @@ if ($ch -eq 'y') {
         # Create Update file if it doesn't exist
         if (!($Check_folder_file -match '\bSystem\b' -and $Check_folder_file -match '\bReadOnly\b')) {  
             New-Item -Path $env:LOCALAPPDATA\Spotify\ -Name "Update" -ItemType "file" -Value "STOPIT" | Out-Null
-            $file = Get-ItemProperty -Path $env:LOCALAPPDATA\Spotify\Update
-            $file.Attributes = "ReadOnly", "System"
+            $file_upd = Get-ItemProperty -Path $env:LOCALAPPDATA\Spotify\Update
+            $file_upd.Attributes = "ReadOnly", "System"
     
   
         }
@@ -591,27 +766,8 @@ if ($ch -eq 'y') {
 
 # automatic cache clearing
 
-do {
-    $ch = Read-Host -Prompt "Want to set up automatic cache cleanup? (Y/N)"
-    Write-Host ""
-    if (!($ch -eq 'n' -or $ch -eq 'y')) {
-        Write-Host "Oops, an incorrect value, " -ForegroundColor Red -NoNewline
-        Write-Host "enter again through..." -NoNewline
-        Start-Sleep -Milliseconds 1000
-        Write-Host "3" -NoNewline
-        Start-Sleep -Milliseconds 1000
-        Write-Host ".2" -NoNewline
-        Start-Sleep -Milliseconds 1000
-        Write-Host ".1"
-        Start-Sleep -Milliseconds 1000     
-        Clear-Host
-    }
-}
-while ($ch -notmatch '^y$|^n$')
 
-
-
-if ($ch -eq 'y') {
+if ($cache_install) {
 
     $test_cache_spotify_ps = Test-Path -Path $env:APPDATA\Spotify\cache-spotify.ps1
     $test_spotify_vbs = Test-Path -Path $env:APPDATA\Spotify\Spotify.vbs
@@ -643,30 +799,9 @@ if ($ch -eq 'y') {
     $Shortcut2.Save()
 
 
-    do {
-        $ch = Read-Host -Prompt "Cache files that have not been used for more than XX days will be deleted.
-    Enter the number of days from 1 to 100"
-        Write-Host ""
-        if (!($ch -match "^[1-9][0-9]?$|^100$")) {
-            Write-Host "Oops, an incorrect value, " -ForegroundColor Red -NoNewline
-            Write-Host "enter again through..." -NoNewline
-		
-            Start-Sleep -Milliseconds 1000
-            Write-Host "3" -NoNewline
-            Start-Sleep -Milliseconds 1000
-            Write-Host ".2" -NoNewline
-            Start-Sleep -Milliseconds 1000
-            Write-Host ".1"
-            Start-Sleep -Milliseconds 1000     
-            Clear-Host
-        }
-    }
-    while ($ch -notmatch '^[1-9][0-9]?$|^100$')
-
-
-    if ($ch -match "^[1-9][0-9]?$|^100$") {
+    if ($number_days -match "^[1-9][0-9]?$|^100$") {
         $file_cache_spotify_ps1 = Get-Content $env:APPDATA\Spotify\cache-spotify.ps1 -Raw
-        $new_file_cache_spotify_ps1 = $file_cache_spotify_ps1 -replace '-7', - $ch
+        $new_file_cache_spotify_ps1 = $file_cache_spotify_ps1 -replace '-7', - $number_days
         Set-Content -Path $env:APPDATA\Spotify\cache-spotify.ps1 -Force -Value $new_file_cache_spotify_ps1
         $contentcache_spotify_ps1 = [System.IO.File]::ReadAllText("$env:APPDATA\Spotify\cache-spotify.ps1")
         $contentcache_spotify_ps1 = $contentcache_spotify_ps1.Trim()

@@ -769,28 +769,31 @@ if ($block_update) {
 
 if ($cache_install) {
 
-    $test_cache_spotify_ps = Test-Path -Path $env:APPDATA\Spotify\cache-spotify.ps1
-    $test_spotify_vbs = Test-Path -Path $env:APPDATA\Spotify\Spotify.vbs
+    $test_cache_folder = Test-Path -Path $env:APPDATA\Spotify\cache
 
-    If ($test_cache_spotify_ps) {
-        Remove-item $env:APPDATA\Spotify\cache-spotify.ps1 -Recurse -Force
+    if ($test_cache_folder) {
+        Remove-item $env:APPDATA\Spotify\cache -Recurse -Force
     }
-    If ($test_spotify_vbs) {
-        Remove-item $env:APPDATA\Spotify\Spotify.vbs -Recurse -Force
-    }
+    
     Start-Sleep -Milliseconds 200
 
-    # cache-spotify.ps1
-    $webClient.DownloadFile('https://raw.githubusercontent.com/amd64fox/SpotX/main/Cache/cache-spotify.ps1', "$env:APPDATA\Spotify\cache-spotify.ps1")
 
-    # Spotify.vbs
-    $webClient.DownloadFile('https://raw.githubusercontent.com/amd64fox/SpotX/main/Cache/Spotify.vbs', "$env:APPDATA\Spotify\Spotify.vbs")
+    New-Item -Path $env:APPDATA\Spotify\ -Name "cache" -ItemType "directory" | Out-Null
+
+    # cache-spotify.ps1
+    $webClient.DownloadFile('https://raw.githubusercontent.com/amd64fox/SpotX/main/Cache/cache-spotify.ps1', "$env:APPDATA\Spotify\cache\cache-spotify.ps1")
+
+    # hide_window.vbs
+    $webClient.DownloadFile('https://raw.githubusercontent.com/amd64fox/SpotX/main/Cache/hide_window.vbs', "$env:APPDATA\Spotify\cache\hide_window.vbs")
+    
+    # run_ps.bat
+    $webClient.DownloadFile('https://raw.githubusercontent.com/amd64fox/SpotX/main/Cache/run_ps.bat', "$env:APPDATA\Spotify\cache\run_ps.bat")
 
 
     # Spotify.lnk
-    $source2 = "$env:APPDATA\Spotify\Spotify.vbs"
+    $source2 = "$env:APPDATA\Spotify\cache\hide_window.vbs"
     $target2 = "$desktop_folder\Spotify.lnk"
-    $WorkingDir2 = "$env:APPDATA\Spotify"
+    $WorkingDir2 = "$env:APPDATA\Spotify\cache\"
     $WshShell2 = New-Object -comObject WScript.Shell
     $Shortcut2 = $WshShell2.CreateShortcut($target2)
     $Shortcut2.WorkingDirectory = $WorkingDir2
@@ -800,12 +803,30 @@ if ($cache_install) {
 
 
     if ($number_days -match "^[1-9][0-9]?$|^100$") {
-        $file_cache_spotify_ps1 = Get-Content $env:APPDATA\Spotify\cache-spotify.ps1 -Raw
-        $new_file_cache_spotify_ps1 = $file_cache_spotify_ps1 -replace '-7', - $number_days
-        Set-Content -Path $env:APPDATA\Spotify\cache-spotify.ps1 -Force -Value $new_file_cache_spotify_ps1
-        $contentcache_spotify_ps1 = [System.IO.File]::ReadAllText("$env:APPDATA\Spotify\cache-spotify.ps1")
+        $file_cache_spotify_ps1 = Get-Content $env:APPDATA\Spotify\cache\cache-spotify.ps1 -Raw
+        $new_file_cache_spotify_ps1 = $file_cache_spotify_ps1 -replace '7', $number_days
+        Set-Content -Path $env:APPDATA\Spotify\cache\cache-spotify.ps1 -Force -Value $new_file_cache_spotify_ps1
+        $contentcache_spotify_ps1 = [System.IO.File]::ReadAllText("$env:APPDATA\Spotify\cache\cache-spotify.ps1")
         $contentcache_spotify_ps1 = $contentcache_spotify_ps1.Trim()
-        [System.IO.File]::WriteAllText("$env:APPDATA\Spotify\cache-spotify.ps1", $contentcache_spotify_ps1)
+        [System.IO.File]::WriteAllText("$env:APPDATA\Spotify\cache\cache-spotify.ps1", $contentcache_spotify_ps1)
+
+        $infile = "$env:APPDATA\Spotify\cache\cache-spotify.ps1"
+        $outfile = "$env:APPDATA\Spotify\cache\cache-spotify2.ps1"
+
+        $sr = New-Object System.IO.StreamReader($infile) 
+        $sw = New-Object System.IO.StreamWriter($outfile, $false, [System.Text.Encoding]::Default)
+        $sw.Write($sr.ReadToEnd())
+        $sw.Close()
+        $sr.Close() 
+        $sw.Dispose()
+        $sr.Dispose()
+
+        Start-Sleep -Milliseconds 200
+
+        Remove-item $infile -Recurse -Force
+        Rename-Item -path $outfile -NewName $infile
+
+
         Write-Host "installation completed"`n -ForegroundColor Green
         exit
     }

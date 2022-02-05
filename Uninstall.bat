@@ -48,15 +48,8 @@ if exist "%Appdata%\Spotify\SpotifyMigrator.bak" (
 ) 
 )
 
-
-if exist "%Appdata%\Spotify\Spotify.vbs" (
-    del /f /s /q %Appdata%\Spotify\Spotify.vbs > NUL 2>&1
-) 
-
-if exist "%Appdata%\Spotify\cache-spotify.ps1" (
-    del /f /s /q %Appdata%\Spotify\cache-spotify.ps1 > NUL 2>&1
-	del /f /s /q %Userprofile%\Desktop\Spotify.lnk > NUL 2>&1
-
+if exist "%Appdata%\Spotify\cache" (
+	rd /s /q %Appdata%\Spotify\cache > NUL 2>&1
 
 SET Esc_LinkDest=%Userprofile%\Desktop\Spotify.lnk
 SET Esc_LinkTarget=%Appdata%\Spotify\Spotify.exe

@@ -1,13 +1,43 @@
-# Launch Spotify.exe and wait for the process to stop
-Start-Process -FilePath $env:APPDATA\Spotify\Spotify.exe; wait-process -name Spotify
+<# 
+Name: Clear Spotify Cache.
 
-# This block deletes files by the last access time to it, files that have not been changed and have not been opened for more than the number of days you have selected will be deleted. If you need to replace with another number of days, then substitute the value in the 6th row and 118th column (The default is 7 days).
-If (Test-Path -Path $env:LOCALAPPDATA\Spotify\Data) {
-    Get-ChildItem $env:LOCALAPPDATA\Spotify\Data -File -Recurse | Where-Object lastaccesstime -lt (get-date).AddDays(-7) | Remove-Item
-}
+Description: The script clears outdated cache from the listened music in Spotify.
+Fires every time you completely close the client (If the client was minimized to tray then the script will not work).
 
-# Delete the file mercury.db if its size exceeds 100 MB.
-If (Test-Path -Path $env:LOCALAPPDATA\Spotify\mercury.db) {
-    $file_mercury = Get-Item "$env:LOCALAPPDATA\Spotify\mercury.db"
-    if ($file_mercury.length -gt 100MB) { Get-ChildItem $env:LOCALAPPDATA\Spotify\mercury.db -File -Recurse | Remove-Item }
+For the APPDATA\Spotify\Data folder, the rule is that all cache files that are not used
+by the customer more than the specified number of days will be deleted.
+
+#>
+
+$day = 7 # Number of days after which the cache is considered stale 
+
+# Clear the \Data folder if it finds an outdated cache
+
+try {
+    If (!(Test-Path -Path $env:LOCALAPPDATA\Spotify\Data)) {
+        "$(Get-Date -uformat ‘%D %T’) Folder Local\Spotify\Data not found" | Out-File log.txt -append
+        exit	
+    }
+    $check = Get-ChildItem $env:LOCALAPPDATA\Spotify\Data -File -Recurse | Where-Object lastaccesstime -lt (get-date).AddDays(-$day)
+    if ($check.Length -ge 1) {
+
+        $count = $check
+        $sum = $count | Measure-Object -Property Length -sum
+        if ($sum.Sum -ge 104434441824) {
+            $gb = "{0:N2} Gb" -f (($check | Measure-Object Length -s).sum / 1Gb)
+            "$(Get-Date -uformat ‘%D %T’) Removed $gb obsolete cache" | Out-File log.txt -append
+        }
+        else {
+            $mb = "{0:N2} Mb" -f (($check | Measure-Object Length -s).sum / 1Mb)
+            "$(Get-Date -uformat ‘%D %T’) Removed $mb obsolete cache" | Out-File log.txt -append
+        }
+        Get-ChildItem $env:LOCALAPPDATA\Spotify\Data -File -Recurse | Where-Object lastaccesstime -lt (get-date).AddDays(-$day) | Remove-Item
+    }
+    if ($check.Length -lt 1) {
+        "$(Get-Date -uformat ‘%D %T’) Stale cache not found" | Out-File log.txt -append
+    }   
 }
+catch {
+    "$(Get-Date -uformat ‘%D %T’) $error[0].Exception" | Out-File log.txt -append
+}
+exit

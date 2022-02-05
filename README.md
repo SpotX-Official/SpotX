@@ -9,7 +9,7 @@
       <a href="https://youtu.be/d2-bKw6yTjo"><img src="https://img.shields.io/badge/-red?style=flat&logo=youtube&label=Tutorial%20on%20Youtube"></a>
       <a href="https://4pda.to/forum/index.php?showtopic=715234&view=findpost&p=104279894"><img src="https://img.shields.io/badge/4PDA-Post-yellow"></a>
       </p>
-     
+     <h2> <div align="center"><b> Modified Spotify Client for Windows </b></div> </h2>
 
 
 <h1>System requirements:</h1>

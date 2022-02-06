@@ -14,7 +14,6 @@ $chrome_elf_bak = "$spotifyDirectory\chrome_elf_bak.dll"
 $upgrade_client = $false
 $podcasts_off = $false
 $spotx_new = $false
-$run_as_admin = $false
 $block_update = $false
 $cache_install = $false
 
@@ -24,16 +23,6 @@ $tsl_check = [Net.ServicePointManager]::SecurityProtocol
 if (!($tsl_check -match '^tls12$' )) {
     [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 }
-
-# Проверка прав запуска
-[System.Security.Principal.WindowsPrincipal] $principal = [System.Security.Principal.WindowsIdentity]::GetCurrent()
-$isUserAdmin = $principal.IsInRole([System.Security.Principal.WindowsBuiltInRole]::Administrator)
-
-if ($isUserAdmin) {
-    Write-Host 'Обнаружен запуск с правами администратора'`n
-    $run_as_admin = $true
-}
-
 
 Stop-Process -Name Spotify
 Stop-Process -Name SpotifyWebHelper
@@ -215,26 +204,12 @@ if (-not $spotifyInstalled -or $upgrade_client) {
         Start-Sleep -Seconds 1
         Remove-Item $spotifyDirectory -Include *chrome_elf* -Recurse -Force
     } 
-
-    # Исправление ошибки, если установщик Spotify был запущен от администратора
-
-    if ($run_as_admin) {
-        $apppath = 'powershell.exe'
-        $taskname = 'Spotify install'
-        $action = New-ScheduledTaskAction -Execute $apppath -Argument "-NoLogo -NoProfile -Command & `'$PWD\SpotifySetup.exe`'" 
-        $trigger = New-ScheduledTaskTrigger -Once -At (Get-Date)
-        $settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -WakeToRun
-        Register-ScheduledTask -Action $action -Trigger $trigger -TaskName $taskname -Settings $settings -Force | Write-Verbose
-        Start-ScheduledTask -TaskName $taskname
-        Start-Sleep -Seconds 2
-        Unregister-ScheduledTask -TaskName $taskname -Confirm:$false
-        Start-Sleep -Seconds 2
-        wait-process -name SpotifySetup
-    }
-    else {
-        Start-Process -FilePath $PWD\SpotifySetup.exe; wait-process -name SpotifySetup
-    }
-
+    
+    # Установка клиента
+    Start-Process -FilePath explorer.exe -ArgumentList $PWD\SpotifySetup.exe
+    while (-not (get-process | Where-Object { $_.ProcessName -eq 'SpotifySetup' })) {}
+    wait-process -name SpotifySetup
+   
     Stop-Process -Name Spotify 
     Stop-Process -Name SpotifyWebHelper 
     Stop-Process -Name SpotifyFullSetup 

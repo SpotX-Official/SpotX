@@ -50,7 +50,7 @@ if ($win11 -or $win10 -or $win8_1 -or $win8) {
             Get-AppxPackage -Name SpotifyAB.SpotifyMusic | Remove-AppxPackage
         }
         else {
-            Read-Host "Завершение работы...`nНажмите любую клавишу для выхода..." 
+            Read-Host "Завершение работы скрипта...`nНажмите любую клавишу для выхода..." 
             exit
         }
     }
@@ -166,8 +166,8 @@ if ($spotifyInstalled) {
             Write-Host ""
             if (!($ch -eq 'n' -or $ch -eq 'y')) {
 
-                Write-Host "Oops, an incorrect value, " -ForegroundColor Red -NoNewline
-                Write-Host "enter again through..." -NoNewline
+                Write-Host "Ой, некорректное значение, " -ForegroundColor Red -NoNewline
+                Write-Host "повторите ввод через..." -NoNewline
                 Start-Sleep -Milliseconds 1000
                 Write-Host "3" -NoNewline
                 Start-Sleep -Milliseconds 1000
@@ -185,7 +185,6 @@ if ($spotifyInstalled) {
 
 
 # Если клиента нет или он устарел, то начинаем установку/обновление
-
 if (-not $spotifyInstalled -or $upgrade_client) {
 
     $version_client_check = (get-item $PWD\SpotifySetup.exe).VersionInfo.ProductVersion
@@ -197,7 +196,6 @@ if (-not $spotifyInstalled -or $upgrade_client) {
     
 
     # Попробовать удалить файлы chrome_elf если существует папка Spotify
-    
     if (Test-Path -LiteralPath $spotifyDirectory) {
         $ErrorActionPreference = 'SilentlyContinue'  # Команда гасит легкие ошибки
         Stop-Process -Name Spotify 
@@ -214,9 +212,8 @@ if (-not $spotifyInstalled -or $upgrade_client) {
     Stop-Process -Name SpotifyWebHelper 
     Stop-Process -Name SpotifyFullSetup 
 
-
-    $ErrorActionPreference = 'SilentlyContinue'  # Команда гасит легкие ошибки
     # Удалите установщик Spotify
+    $ErrorActionPreference = 'SilentlyContinue'  # Команда гасит легкие ошибки
     if (test-path "$env:LOCALAPPDATA\Microsoft\Windows\Temporary Internet Files\") {
         get-childitem -path "$env:LOCALAPPDATA\Microsoft\Windows\Temporary Internet Files\" -Recurse -Force -Filter  "SpotifyFullSetup*" | remove-item  -Force
     }
@@ -227,7 +224,6 @@ if (-not $spotifyInstalled -or $upgrade_client) {
 
 
 # Создать резервную копию chrome_elf.dll
-
 if (!(Test-Path -LiteralPath $chrome_elf_bak)) {
     Move-Item $chrome_elf $chrome_elf_bak 
 }
@@ -317,7 +313,6 @@ if ($ch -eq 'y') {
     while ($ch -notmatch '^[1-9][0-9]?$|^100$')
 
     if ($ch -match "^[1-9][0-9]?$|^100$") { $number_days = $ch }
-
 }
 
 
@@ -356,6 +351,7 @@ function OffRujs {
     $xpui_js
 }
 function ExpFeature {
+    # Эксперементальные фишки
     $exp_features1 = '(Show "Made For You" entry point in the left sidebar.,default:)(!1)', '$1!0' 
     $exp_features2 = '(Enables the 2021 icons redraw which loads a different font asset for rendering icon glyphs.",default:)(!1)', '$1!0' 
     $exp_features3 = '(Enable Liked Songs section on Artist page",default:)(!1)', '$1!0' 
@@ -376,9 +372,7 @@ function ExpFeature {
 }
 
 function ContentsHtml {
-
     # Минификация html
-    
     $html_lic_min1 = '<li><a href="#6eef7">zlib<\/a><\/li>\n(.|\n)*<\/p><!-- END CONTAINER DEPS LICENSES -->(<\/div>)'
     $html_lic_min2 = "	"
     $html_lic_min3 = "  "
@@ -393,6 +387,7 @@ function ContentsHtml {
 }
 
 function RuTranslate {
+    # Доперевод некоторых слов для русского языка
     $ru_translate1 = '"one": "Enhanced with [{]0[}] recommended song."', '"one": "Добавлен {0} рекомендованный трек."' 
     $ru_translate2 = '"few": "Enhanced with [{]0[}] recommended songs."', '"few": "Добавлено {0} рекомендованных трека."' 
     $ru_translate3 = '"many": "Enhanced with [{]0[}] recommended songs."', '"many": "Добавлено {0} рекомендованных треков."' 
@@ -553,7 +548,7 @@ if (Test-Path $xpui_js_patch) {
     if ($spotx_new) { $writer.Write([System.Environment]::NewLine + '// Patched by SpotX') }
     $writer.Close()  
 
-    # Russian Translate
+    # Русский доперевод
     $file_ru = get-item $env:APPDATA\Spotify\Apps\xpui\i18n\ru.json
     $reader = New-Object -TypeName System.IO.StreamReader -ArgumentList $file_ru
     $xpui_ru = $reader.ReadToEnd()
@@ -580,7 +575,6 @@ if (Test-Path $xpui_js_patch) {
 If (Test-Path $xpui_spa_patch) {
 
     # Делаем резервную копию xpui.spa если он оригинальный
-
     Add-Type -Assembly 'System.IO.Compression.FileSystem'
     $zip = [System.IO.Compression.ZipFile]::Open($xpui_spa_patch, 'update')
     $entry = $zip.GetEntry('xpui.js')
@@ -618,8 +612,6 @@ If (Test-Path $xpui_spa_patch) {
     $stream.Close()
     $stream.Dispose()
 
-
-    
     Add-Type -Assembly 'System.IO.Compression.FileSystem'
     $zip = [System.IO.Compression.ZipFile]::Open($xpui_spa_patch, 'update')
     
@@ -684,7 +676,6 @@ If (Test-Path $xpui_spa_patch) {
     }
 
 
-
     # *.Css
     $zip.Entries | Where-Object FullName -like '*.css' | ForEach-Object {
         $readercss = New-Object System.IO.StreamReader($_.Open())
@@ -693,7 +684,7 @@ If (Test-Path $xpui_spa_patch) {
 
         
         $xpuiContents_css = $xpuiContents_css `
-            <#  Remove RTL #>`
+            <# Remove RTL #>`
             -replace "}\[dir=ltr\]\s?", "} " `
             -replace "html\[dir=ltr\]", "html" `
             -replace ",\s?\[dir=rtl\].+?(\{.+?\})", '$1' `
@@ -715,10 +706,8 @@ If (Test-Path $xpui_spa_patch) {
         $writer.BaseStream.SetLength(0)
         $writer.Write($xpuiContents_css)
         $writer.Close()
-
     }
     
-
     # Минификация licenses.html
     $zip.Entries | Where-Object FullName -like '*licenses.html' | ForEach-Object {
         $reader = New-Object System.IO.StreamReader($_.Open())
@@ -779,17 +768,14 @@ If (Test-Path $xpui_spa_patch) {
         $writer = New-Object System.IO.StreamWriter($_.Open())
         $writer.BaseStream.SetLength(0)
         $writer.Write($xpuiContents_json)
-        $writer.Close()
-            
+        $writer.Close()       
     }
 
     $zip.Dispose()   
 }
 
 
-
 # Удалить все файлы кроме "en" и "ru" 
-
 $patch_lang = "$spotifyDirectory\locales"
 
 Remove-Item $patch_lang -Exclude *en*, *ru* -Recurse
@@ -799,8 +785,7 @@ $ErrorActionPreference = 'SilentlyContinue'
 
 if (Test-Path "$env:USERPROFILE\Desktop") {  
 
-    $desktop_folder = "$env:USERPROFILE\Desktop"
-    
+    $desktop_folder = "$env:USERPROFILE\Desktop"  
 }
 
 $regedit_desktop_folder = Get-ItemProperty -Path "Registry::HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders\"
@@ -808,7 +793,6 @@ $regedit_desktop = $regedit_desktop_folder.'{754AC886-DF64-4CBA-86B5-F7FBF4FBCEF
  
 if (!(Test-Path "$env:USERPROFILE\Desktop")) {
     $desktop_folder = $regedit_desktop
-    
 }
 
 # Испраление бага ярлыка на рабочем столе
@@ -830,7 +814,6 @@ If (!(Test-Path $env:USERPROFILE\Desktop\Spotify.lnk)) {
 # Блокировка обновлений
 
 $ErrorActionPreference = 'SilentlyContinue'
-
 $update_directory = Test-Path -Path $env:LOCALAPPDATA\Spotify
 $migrator_bak = Test-Path -Path $env:APPDATA\Spotify\SpotifyMigrator.bak  
 $migrator_exe = Test-Path -Path $env:APPDATA\Spotify\SpotifyMigrator.exe
@@ -862,7 +845,6 @@ if ($block_update) {
         if ($migrator_exe) {
             Rename-Item -path $env:APPDATA\Spotify\SpotifyMigrator.exe -NewName $env:APPDATA\Spotify\SpotifyMigrator.bak
         }
-
     }
 
     # Если клиент уже был
@@ -888,8 +870,6 @@ if ($block_update) {
             New-Item -Path $env:LOCALAPPDATA\Spotify\ -Name "Update" -ItemType "file" -Value "STOPIT" | Out-Null
             $file_upd = Get-ItemProperty -Path $env:LOCALAPPDATA\Spotify\Update
             $file_upd.Attributes = "ReadOnly", "System"
-    
-  
         }
         # Если оба файлав мигратора существуют то .bak удалить, а .exe переименовать в .bak
         If ($migrator_exe -and $migrator_bak) {
@@ -905,9 +885,7 @@ if ($block_update) {
 }
 
 
-
 # Автоматическая очистка кеша
-
 
 if ($cache_install) {
 

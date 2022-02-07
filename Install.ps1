@@ -185,7 +185,6 @@ if ($spotifyInstalled) {
 
 
 # If there is no client or it is outdated, then install
-
 if (-not $spotifyInstalled -or $upgrade_client) {
 
     $version_client_check = (get-item $PWD\SpotifySetup.exe).VersionInfo.ProductVersion
@@ -197,7 +196,6 @@ if (-not $spotifyInstalled -or $upgrade_client) {
 
 
     # Try deleting chrome_elf files if Spotify folder exists
-    
     if (Test-Path -LiteralPath $spotifyDirectory) {
         $ErrorActionPreference = 'SilentlyContinue'  # extinguishes light mistakes
         Stop-Process -Name Spotify 
@@ -226,7 +224,6 @@ if (-not $spotifyInstalled -or $upgrade_client) {
 }
 
 # Create backup chrome_elf.dll
-
 if (!(Test-Path -LiteralPath $chrome_elf_bak)) {
     Move-Item $chrome_elf $chrome_elf_bak 
 }
@@ -458,14 +455,12 @@ if (Test-Path $xpui_js_patch) {
     $writer.BaseStream.SetLength(0)
     $writer.Write($xpuiContents_html)
     $writer.Close()
-
 }  
 
 
 If (Test-Path $xpui_spa_patch) {
 
     # Make a backup copy of xpui.spa if it is original
-
     Add-Type -Assembly 'System.IO.Compression.FileSystem'
     $zip = [System.IO.Compression.ZipFile]::Open($xpui_spa_patch, 'update')
     $entry = $zip.GetEntry('xpui.js')
@@ -550,7 +545,7 @@ If (Test-Path $xpui_spa_patch) {
 
         
         $xpuiContents_css = $xpuiContents_css `
-            <#  Remove RTL #>`
+            <# Remove RTL #>`
             -replace "}\[dir=ltr\]\s?", "} " `
             -replace "html\[dir=ltr\]", "html" `
             -replace ",\s?\[dir=rtl\].+?(\{.+?\})", '$1' `
@@ -572,10 +567,8 @@ If (Test-Path $xpui_spa_patch) {
         $writer.BaseStream.SetLength(0)
         $writer.Write($xpuiContents_css)
         $writer.Close()
-
     }
     
-
     # licenses.html minification
     $zip.Entries | Where-Object FullName -like '*licenses.html' | ForEach-Object {
         $reader = New-Object System.IO.StreamReader($_.Open())
@@ -621,7 +614,6 @@ If (Test-Path $xpui_spa_patch) {
         $writer.BaseStream.SetLength(0)
         $writer.Write($xpuiContents_json)
         $writer.Close()
-            
     }
     $zip.Dispose()   
 }
@@ -632,8 +624,7 @@ $ErrorActionPreference = 'SilentlyContinue'
 
 if (Test-Path "$env:USERPROFILE\Desktop") {  
 
-    $desktop_folder = "$env:USERPROFILE\Desktop"
-    
+    $desktop_folder = "$env:USERPROFILE\Desktop"  
 }
 
 $regedit_desktop_folder = Get-ItemProperty -Path "Registry::HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders\"
@@ -641,7 +632,6 @@ $regedit_desktop = $regedit_desktop_folder.'{754AC886-DF64-4CBA-86B5-F7FBF4FBCEF
  
 if (!(Test-Path "$env:USERPROFILE\Desktop")) {
     $desktop_folder = $regedit_desktop
-    
 }
 
 # Shortcut bug
@@ -663,7 +653,6 @@ If (!(Test-Path $env:USERPROFILE\Desktop\Spotify.lnk)) {
 # Block updates
 
 $ErrorActionPreference = 'SilentlyContinue'
-
 $update_directory = Test-Path -Path $env:LOCALAPPDATA\Spotify
 $migrator_bak = Test-Path -Path $env:APPDATA\Spotify\SpotifyMigrator.bak  
 $migrator_exe = Test-Path -Path $env:APPDATA\Spotify\SpotifyMigrator.exe
@@ -695,7 +684,6 @@ if ($block_update) {
         if ($migrator_exe) {
             Rename-Item -path $env:APPDATA\Spotify\SpotifyMigrator.exe -NewName $env:APPDATA\Spotify\SpotifyMigrator.bak
         }
-
     }
 
     # If the client has already been
@@ -721,8 +709,6 @@ if ($block_update) {
             New-Item -Path $env:LOCALAPPDATA\Spotify\ -Name "Update" -ItemType "file" -Value "STOPIT" | Out-Null
             $file_upd = Get-ItemProperty -Path $env:LOCALAPPDATA\Spotify\Update
             $file_upd.Attributes = "ReadOnly", "System"
-    
-  
         }
         # Если оба файлав мигратора существуют то .bak удалить, а .exe переименовать в .bak
         If ($migrator_exe -and $migrator_bak) {
@@ -738,7 +724,6 @@ if ($block_update) {
 }
 
 
-
 # automatic cache clearing
 
 
@@ -749,7 +734,7 @@ if ($cache_install) {
     if ($test_cache_folder) {
         Remove-item $env:APPDATA\Spotify\cache -Recurse -Force
     }
-    
+
     Start-Sleep -Milliseconds 200
 
 

@@ -14,10 +14,11 @@
 
 <h1>System requirements:</h1>
 
+
 * <strong>Windows: 7-11</strong>
+* <strong>For [Windows Desktop](https://www.spotify.com/download/windows/) only (Microsoft store version is not suitable).</strong>
 * <strong>Free Account</strong>
 * <strong>PowerShell: 5.1 or higher</strong>
-* <strong>For [Windows Desktop](https://www.spotify.com/download/windows/) only (Microsoft store version is not suitable).</strong>
 
 <h1>Features:</h1>
 
@@ -58,15 +59,6 @@ or
 
 
 <h1>Possible problems:</h1>
- 
- 
- <details>
-<summary><small>How do I go back to the previous version of the client ?</small></summary><p>
-
-  If you have problems with the patch after upgrading the client version, then use this [tool](https://github.com/amd64fox/Rollback-Spotify) to revert back to the working    version.
-
-</details>
- 
 
  <details>
 <summary><small>Outdated versions of PowerShell</small></summary><p>
@@ -78,6 +70,28 @@ If you are using Windows 7 or Windows 8.1, there may be errors in the installati
    * Reboot your PC
    
    <strong>Note:</strong> For Windows 8 it is not possible to upgrade the PowerShell version, please upgrade to Windows 8.1 or 10
+
+</details>
+
+ <details>
+<summary><small>After running Install.bat, the console window closes</small></summary><p>
+
+After launching Install.bat the console window closes immediately and nothing happens. Most likely the problem is related to the `curl` command line utility.
+`curl` is also shipped by Microsoft as part of Windows 10 and 11, if your Windows version is lower then you need to manually install this utility:
+  *  Click on the [link](http://www.confusedbycode.com/curl/#downloads) and download based on your OS bit depth.
+  *  We start the installation process, at the end we must restart the PC.
+  * We check that everything went right
+    * Opening the console `Win + R`, writing `cmd`, `Ok`
+    * in the console, we write the command `curl -V`
+    * In response, you should get the `curl version`, for example, I had version `7.79.1`
+  
+</details>
+
+
+<details>
+<summary><small>How do I go back to the previous version of the client ?</small></summary><p>
+
+  If you have problems with the patch after upgrading the client version, then use this [tool](https://github.com/amd64fox/Rollback-Spotify) to revert back to the working    version.
 
 </details>
 

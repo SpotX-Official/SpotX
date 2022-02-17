@@ -325,7 +325,7 @@ function OffUpdStatus {
 }
 function OffPodcasts {
     # Turn off podcasts
-    $podcasts_off1 = '"album,playlist,artist,show,station,episode"', '"album,playlist,artist,station"'
+    $podcasts_off1 = 'album,playlist,artist,show,station,episode', 'album,playlist,artist,station'
     $podcasts_off2 = ',this[.]enableShows=[a-z]'
     if ($xpui_js -match $podcasts_off1[0]) { $xpui_js = $xpui_js -replace $podcasts_off1[0], $podcasts_off1[1] } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$podcasts_off1[0] in xpui.js" }
     if ($xpui_js -match $podcasts_off2) { $xpui_js = $xpui_js -replace $podcasts_off2, "" } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$podcasts_off2 in xpui.js" }

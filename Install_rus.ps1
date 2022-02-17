@@ -324,7 +324,7 @@ function OffUpdStatus {
 }
 function OffPodcasts {
     # Отключить подкасты
-    $podcasts_off1 = '"album,playlist,artist,show,station,episode"', '"album,playlist,artist,station"'
+    $podcasts_off1 = 'album,playlist,artist,show,station,episode', 'album,playlist,artist,station'
     $podcasts_off2 = ',this[.]enableShows=[a-z]'
     if ($xpui_js -match $podcasts_off1[0]) { $xpui_js = $xpui_js -replace $podcasts_off1[0], $podcasts_off1[1] } else { Write-Host "Не нашел " -ForegroundColor red -NoNewline; Write-Host "переменную `$podcasts_off1[0] в xpui.js" }
     if ($xpui_js -match $podcasts_off2) { $xpui_js = $xpui_js -replace $podcasts_off2, "" } else { Write-Host "Не нашел " -ForegroundColor red -NoNewline; Write-Host "переменную `$podcasts_off2 в xpui.js" }

@@ -374,11 +374,11 @@ function ContentsHtml {
     $html_lic_min3 = "  "
     $html_lic_min4 = "(?m)(^\s*\r?\n)"
     $html_lic_min5 = "\r?\n(?!\(1|\d)"
-    if ($xpuiContents_html -match $html_lic_min1) { $xpuiContents_html = $xpuiContents_html -replace $html_lic_min1, '$2' } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$html_lic_min1 в licenses.html" }
-    if ($xpuiContents_html -match $html_lic_min2) { $xpuiContents_html = $xpuiContents_html -replace $html_lic_min2, "" } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$html_lic_min2 в licenses.html" }
-    if ($xpuiContents_html -match $html_lic_min3) { $xpuiContents_html = $xpuiContents_html -replace $html_lic_min3, "" } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$html_lic_min3 в licenses.html" }
-    if ($xpuiContents_html -match $html_lic_min4) { $xpuiContents_html = $xpuiContents_html -replace $html_lic_min4, "" } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$html_lic_min4 в licenses.html" }
-    if ($xpuiContents_html -match $html_lic_min5) { $xpuiContents_html = $xpuiContents_html -replace $html_lic_min5, "" } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$html_lic_min5 в licenses.html" }
+    if ($xpuiContents_html -match $html_lic_min1) { $xpuiContents_html = $xpuiContents_html -replace $html_lic_min1, '$2' } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$html_lic_min1 in licenses.html" }
+    if ($xpuiContents_html -match $html_lic_min2) { $xpuiContents_html = $xpuiContents_html -replace $html_lic_min2, "" } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$html_lic_min2 in licenses.html" }
+    if ($xpuiContents_html -match $html_lic_min3) { $xpuiContents_html = $xpuiContents_html -replace $html_lic_min3, "" } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$html_lic_min3 in licenses.html" }
+    if ($xpuiContents_html -match $html_lic_min4) { $xpuiContents_html = $xpuiContents_html -replace $html_lic_min4, "" } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$html_lic_min4 in licenses.html" }
+    if ($xpuiContents_html -match $html_lic_min5) { $xpuiContents_html = $xpuiContents_html -replace $html_lic_min5, "" } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$html_lic_min5 in licenses.html" }
     $xpuiContents_html
 }
 

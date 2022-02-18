@@ -18,7 +18,7 @@
 * <strong>Windows: 7-11</strong>
 * <strong>For [Windows Desktop](https://www.spotify.com/download/windows/) only (Microsoft store version is not suitable).</strong>
 * <strong>Free Account</strong>
-* <strong>PowerShell: 5.1 or higher</strong>
+* <strong>PowerShell: 3 or higher</strong>
 
 <h1>Features:</h1>
 

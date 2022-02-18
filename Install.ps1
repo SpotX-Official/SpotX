@@ -100,10 +100,12 @@ catch [System.Management.Automation.MethodInvocationException] {
     }
 }
 
-Expand-Archive -Force -LiteralPath "$PWD\chrome_elf.zip" -DestinationPath $PWD
+Add-Type -Assembly 'System.IO.Compression.FileSystem'
+$zip = [System.IO.Compression.ZipFile]::Open("$PWD\chrome_elf.zip", 'read')
+[System.IO.Compression.ZipFileExtensions]::ExtractToDirectory($zip, $PWD)
+$zip.Dispose()
+
 Remove-Item -LiteralPath "$PWD\chrome_elf.zip"
-
-
 
 try {
     $webClient.DownloadFile(

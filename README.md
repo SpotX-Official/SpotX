@@ -15,8 +15,9 @@
 <h1>System requirements:</h1>
 
 
-* <strong>Windows: 7-11</strong>
-* <strong>For [Windows Desktop](https://www.spotify.com/download/windows/) only (Microsoft store version is not suitable).</strong>
+* <strong>OS: Windows 7-11</strong>
+* <strong>Spotify: It is recommended to use the [latest version](https://cutt.ly/8EH6NuH)</strong>
+* <strong>For Windows Desktop only (Microsoft store version is not suitable).</strong>
 * <strong>Free Account</strong>
 * <strong>PowerShell: 3 or higher</strong>
 
@@ -64,13 +65,11 @@ or
  <details>
 <summary><small>Outdated versions of PowerShell</small></summary><p>
 
-If you are using Windows 7 or Windows 8.1, there may be errors in the installation process due to an outdated version of NET Framework and PowerShell. 
+If you are using Windows 7, there may be errors in the installation process due to an outdated version of NET Framework and PowerShell. 
    Do the following:
    * Upgrade to [NET Framework 4.8](https://go.microsoft.com/fwlink/?linkid=2088631)
    * Upgrade to [WMF 5.1](https://www.microsoft.com/en-us/download/details.aspx?id=54616)
    * Reboot your PC
-   
-   <strong>Note:</strong> For Windows 8 it is not possible to upgrade the PowerShell version, please upgrade to Windows 8.1 or 10
 
 </details>
 

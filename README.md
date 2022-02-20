@@ -33,6 +33,7 @@
 * <strong>Enabled the 2021 icons redraw</strong>
 * <strong>Enabled a condensed discography shelf on artist pages</strong>
 * <strong>Activated "Made For You" in the left sidebar</strong>
+* <strong>Disabled the friends feed on the first start of the client</strong>
 * <strong>Disabled Sentry (Prevented Sentry from sending console log/error/warning to Spotify developers)</strong>
 * <strong>Disabled logging (Stopped various elements to log user interaction)</strong>
 * <strong>Removed RTL rules (Removed all right-to-left CSS rules to simplify CSS files)</strong>

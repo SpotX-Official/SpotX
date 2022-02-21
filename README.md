@@ -111,4 +111,3 @@ After launching Install.bat the console window closes immediately and nothing ha
 * SpotX will only work correctly on the latest versions of Spotify, please make sure of this before asking a question.  
 * The modifiable files are replaced by the Spotify installer every time it is updated, so you will need to apply the patch again when this happens.
 * SpotX will be installed even if you are using Spicetify, but you may need to run Install.bat again after running the `spicetify apply` or other commands.
-* [Where did all the stars of this repo go? 🤣](https://github.com/amd64fox/SpotX/discussions/21)

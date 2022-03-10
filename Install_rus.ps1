@@ -333,11 +333,25 @@ function OffPodcasts {
     $xpui_js
 }
 function OffAdsOnFullscreen {
+    
     # Удаление пустого рекламного блока
     $empty_block_ad = 'adsEnabled:!0', 'adsEnabled:!1'
+
     # Активация полноэкранного режима, а также удаление кнопки и меню "Перейти на Premium"
-    $full_screen_1 = '(session[,]{1}[a-z]{1}[=]{1}[a-z]{1}[=]{1}[>]{1}[{]{1}var [a-z]{1}[,]{1}[a-z]{1}[,]{1}[a-z]{1}[;]{1}[a-z]{6})(["]{1}free["]{1})', '$1"premium"'
-    $full_screen_2 = '([a-z]{1}[.]{1}toLowerCase[(]{1}[)]{2}[}]{1}[,]{1}[a-z]{1}[=]{1}[a-z]{1}[=]{1}[>]{1}[{]{1}var [a-z]{1}[,]{1}[a-z]{1}[,]{1}[a-z]{1}[;]{1}return)(["]{1}premium["]{1})', '$1"free"'
+    
+    $ofline_version2 = (Get-Item $spotifyExecutable).VersionInfo.FileVersion
+    
+    if ($ofline_version2 -ge "1.1.80.699") {
+            
+        $full_screen_1 = '({return ..session},.=function\(.\){var .,.,.;return)("free")', '$1"premium"'
+        $full_screen_2 = '(toLowerCase\(\)\)},.=function\(.\){var .,.,.;return)("premium")', '$1"free"'
+    }
+    if ($ofline_version2 -le "1.1.79.763") {
+            
+        $full_screen_1 = '(session[,]{1}[a-z]{1}[=]{1}[a-z]{1}[=]{1}[>]{1}[{]{1}var [a-z]{1}[,]{1}[a-z]{1}[,]{1}[a-z]{1}[;]{1}[a-z]{6})(["]{1}free["]{1})', '$1"premium"'
+        $full_screen_2 = '([a-z]{1}[.]{1}toLowerCase[(]{1}[)]{2}[}]{1}[,]{1}[a-z]{1}[=]{1}[a-z]{1}[=]{1}[>]{1}[{]{1}var [a-z]{1}[,]{1}[a-z]{1}[,]{1}[a-z]{1}[;]{1}return)(["]{1}premium["]{1})', '$1"free"'
+    }
+
     # Отключиние спонсорской рекламы в некоторых плейлистах
     $playlist_ad_off = "allSponsorships"
     if ($xpui_js -match $empty_block_ad[0]) { $xpui_js = $xpui_js -replace $empty_block_ad[0], $empty_block_ad[1] } else { Write-Host "Не нашел " -ForegroundColor red -NoNewline; Write-Host "переменную `$empty_block_ad[0] в xpui.js" }

@@ -431,9 +431,7 @@ if ($test_spa -and $test_js) {
 if (Test-Path $xpui_js_patch) {
     Write-Host "Spicetify detected"`n
 
-
-
-
+    
     $reader = New-Object -TypeName System.IO.StreamReader -ArgumentList $xpui_js_patch
     $xpui_js = $reader.ReadToEnd()
     $reader.Close()
@@ -564,6 +562,7 @@ If (Test-Path $xpui_spa_patch) {
         
         $xpuiContents_css = $xpuiContents_css `
             <# Remove RTL #>`
+            -replace "}\[dir=ltr\]\s?([.a-zA-Z\d[_]+?,\[dir=ltr\])", '}[dir=str] $1' `
             -replace "}\[dir=ltr\]\s?", "} " `
             -replace "html\[dir=ltr\]", "html" `
             -replace ",\s?\[dir=rtl\].+?(\{.+?\})", '$1' `
@@ -576,6 +575,7 @@ If (Test-Path $xpui_spa_patch) {
             -replace "html\[dir=rtl\].+?\{.+?\}", "" `
             -replace "html\[lang=ar\].+?\{.+?\}", "" `
             -replace "\[dir=rtl\].+?\{.+?\}", "" `
+            -replace "\[dir=str\]", "[dir=ltr]" `
             <# Css minification #>`
             -replace "[/]\*([^*]|[\r\n]|(\*([^/]|[\r\n])))*\*[/]", "" `
             -replace "[/][/]#\s.*", "" `

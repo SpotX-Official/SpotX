@@ -702,7 +702,8 @@ If (Test-Path $xpui_spa_patch) {
 
         
         $xpuiContents_css = $xpuiContents_css `
-            <# Remove RTL #>`
+            <# удаление RTL правил #>`
+            -replace "}\[dir=ltr\]\s?([.a-zA-Z\d[_]+?,\[dir=ltr\])", '}[dir=str] $1' `
             -replace "}\[dir=ltr\]\s?", "} " `
             -replace "html\[dir=ltr\]", "html" `
             -replace ",\s?\[dir=rtl\].+?(\{.+?\})", '$1' `
@@ -715,6 +716,7 @@ If (Test-Path $xpui_spa_patch) {
             -replace "html\[dir=rtl\].+?\{.+?\}", "" `
             -replace "html\[lang=ar\].+?\{.+?\}", "" `
             -replace "\[dir=rtl\].+?\{.+?\}", "" `
+            -replace "\[dir=str\]", "[dir=ltr]" `
             <# минификация css #>`
             -replace "[/]\*([^*]|[\r\n]|(\*([^/]|[\r\n])))*\*[/]", "" `
             -replace "[/][/]#\s.*", "" `

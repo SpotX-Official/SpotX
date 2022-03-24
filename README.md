@@ -74,16 +74,11 @@ If you are using Windows 7, there may be errors in the installation process due 
 </details>
 
  <details>
-<summary><small>After running Install.bat, the console window closes</small></summary><p>
+<summary><small>After running Install.bat, the message "Curl command line utility not found" appeared</small></summary><p>
 
-After launching Install.bat the console window closes immediately and nothing happens. Most likely the problem is related to the `curl` command line utility.
-`curl` is also shipped by Microsoft as part of Windows 10 and 11, if your Windows version is lower then you need to manually install this utility:
-  *  Click on the [link](http://www.confusedbycode.com/curl/#downloads) and download based on your OS bit depth.
+The curl command was not found in the system (in windows 10 and above it comes out of the box), you need to install it manually:
+  *  Follow the [link](http://www.confusedbycode.com/curl/#downloads) and download the installation file, depending on the bitness of the OS.
   *  We start the installation process, at the end we must restart the PC.
-  * We check that everything went right
-    * Opening the console `Win + R`, writing `cmd`, `Ok`
-    * in the console, we write the command `curl -V`
-    * In response, you should get the `curl version`, for example, I had version `7.79.1`
   
 </details>
 
@@ -110,4 +105,4 @@ After launching Install.bat the console window closes immediately and nothing ha
 * The repository is based on <a href="https://github.com/mrpond/BlockTheSpot">BlockTheSpot</a>, and also some tricks were taken from <a href="https://github.com/khanhas/spicetify-cli">spicetify-cli</a>, many thanks to the contributors
 * SpotX will only work correctly on the latest versions of Spotify, please make sure of this before asking a question.  
 * The modifiable files are replaced by the Spotify installer every time it is updated, so you will need to apply the patch again when this happens.
-* SpotX will be installed even if you are using Spicetify, but you may need to run Install.bat again after running the `spicetify apply` or other commands.
+* [SpotX will be installed even if you are using Spicetify](https://github.com/amd64fox/SpotX/discussions/28#discussioncomment-2389043), but you may need to run Install.bat again after running the `spicetify apply` or other commands.

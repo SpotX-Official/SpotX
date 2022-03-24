@@ -40,17 +40,17 @@ $win8 = $win_os -match "\windows 8\b"
 
 if ($win11 -or $win10 -or $win8_1 -or $win8) {
 
-
     # Удалить Spotify Windows Store если он есть
     if (Get-AppxPackage -Name SpotifyAB.SpotifyMusic) {
         Write-Host 'Обнаружена версия Spotify из Microsoft Store, которая не поддерживается.'`n
         $ch = Read-Host -Prompt "Хотите удалить Spotify Microsoft Store ? (Y/N) "
         if ($ch -eq 'y') {
+            $ProgressPreference = 'SilentlyContinue' # Скрывает Progress Bars
             Write-Host 'Удаление Spotify.'`n
             Get-AppxPackage -Name SpotifyAB.SpotifyMusic | Remove-AppxPackage
         }
         else {
-            Read-Host "Завершение работы скрипта...`nНажмите любую клавишу для выхода..." 
+            Read-Host "Завершение работы скрипта..." 
             exit
         }
     }

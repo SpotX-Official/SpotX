@@ -354,10 +354,15 @@ function OffAdsOnFullscreen {
 
     # Отключиние спонсорской рекламы в некоторых плейлистах
     $playlist_ad_off = "allSponsorships"
+
+    # Отключение в меню кнопки "Скачать"
+    $menu_download = 'return .\(\).createElement\(....,\{value:"download-playlist"\},.\(\).createElement\(..,.\)\)'
+
     if ($xpui_js -match $empty_block_ad[0]) { $xpui_js = $xpui_js -replace $empty_block_ad[0], $empty_block_ad[1] } else { Write-Host "Не нашел " -ForegroundColor red -NoNewline; Write-Host "переменную `$empty_block_ad[0] в xpui.js" }
     if ($xpui_js -match $full_screen_1[0]) { $xpui_js = $xpui_js -replace $full_screen_1[0], $full_screen_1[1] } else { Write-Host "Не нашел " -ForegroundColor red -NoNewline; Write-Host "переменную `$full_screen_1[0] в xpui.js" }
     if ($xpui_js -match $full_screen_2[0]) { $xpui_js = $xpui_js -replace $full_screen_2[0], $full_screen_2[1] } else { Write-Host "Не нашел " -ForegroundColor red -NoNewline; Write-Host "переменную `$full_screen_2[0] в xpui.js" }
     if ($xpui_js -match $playlist_ad_off) { $xpui_js = $xpui_js -replace $playlist_ad_off, "" } else { Write-Host "Не нашел " -ForegroundColor red -NoNewline; Write-Host "переменную `$playlist_ad_off в xpui.js" }
+    if ($xpui_js -match $menu_download) { $xpui_js = $xpui_js -replace $menu_download, "" } else { Write-Host "Не нашел " -ForegroundColor red -NoNewline; Write-Host "переменную `$menu_download в xpui.js" }
     $xpui_js
 }
 function OffRujs {
@@ -671,12 +676,25 @@ If (Test-Path $xpui_spa_patch) {
     $xpuiContents_vendor = $reader.ReadToEnd()
     $reader.Close()
     $xpuiContents_vendor = $xpuiContents_vendor `
-        <# Disable Sentry" #> -replace "prototype\.bindClient=function\(\w+\)\{", '${0}return;'
+        <# Отключение Sentry" #> -replace "prototype\.bindClient=function\(\w+\)\{", '${0}return;'
     $writer = New-Object System.IO.StreamWriter($entry_vendor_xpui.Open())
     $writer.BaseStream.SetLength(0)
     $writer.Write($xpuiContents_vendor)
     $writer.Close()
 
+    
+    # xpui.css
+    $entry_xpui_css = $zip.GetEntry('xpui.css')
+    $reader = New-Object System.IO.StreamReader($entry_xpui_css.Open())
+    $xpuiContents_xpui_css = $reader.ReadToEnd()
+    $reader.Close()
+        
+    $writer = New-Object System.IO.StreamWriter($entry_xpui_css.Open())
+    $writer.BaseStream.SetLength(0)
+    $writer.Write($xpuiContents_xpui_css)
+    # Скрыть иконку скачивание на разных страницах
+    $writer.Write([System.Environment]::NewLine + ' .BKsbV2Xl786X9a09XROH {display: none}')
+    $writer.Close()
 
 
     # минификация js 

@@ -355,10 +355,15 @@ function OffAdsOnFullscreen {
 
     # Disabling a playlist sponsor
     $playlist_ad_off = "allSponsorships"
+
+    # Remove the menu item "download"
+    $menu_download = 'return .\(\).createElement\(....,\{value:"download-playlist"\},.\(\).createElement\(..,.\)\)'
+
     if ($xpui_js -match $empty_block_ad[0]) { $xpui_js = $xpui_js -replace $empty_block_ad[0], $empty_block_ad[1] } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$empty_block_ad[0] in xpui.js" }
     if ($xpui_js -match $full_screen_1[0]) { $xpui_js = $xpui_js -replace $full_screen_1[0], $full_screen_1[1] } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$full_screen_1[0] in xpui.js" }
     if ($xpui_js -match $full_screen_2[0]) { $xpui_js = $xpui_js -replace $full_screen_2[0], $full_screen_2[1] } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$full_screen_2[0] in xpui.js" }
     if ($xpui_js -match $playlist_ad_off) { $xpui_js = $xpui_js -replace $playlist_ad_off, "" } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$playlist_ad_off in xpui.js" }
+    if ($xpui_js -match $menu_download) { $xpui_js = $xpui_js -replace $menu_download, "" } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$menu_download in xpui.js" }
     $xpui_js
 }
 function ExpFeature {
@@ -535,6 +540,19 @@ If (Test-Path $xpui_spa_patch) {
     $writer.Write($xpuiContents_vendor)
     $writer.Close()
 
+
+    # xpui.css
+    $entry_xpui_css = $zip.GetEntry('xpui.css')
+    $reader = New-Object System.IO.StreamReader($entry_xpui_css.Open())
+    $xpuiContents_xpui_css = $reader.ReadToEnd()
+    $reader.Close()
+        
+    $writer = New-Object System.IO.StreamWriter($entry_xpui_css.Open())
+    $writer.BaseStream.SetLength(0)
+    $writer.Write($xpuiContents_xpui_css)
+    # Hide download icon on different pages
+    $writer.Write([System.Environment]::NewLine + ' .BKsbV2Xl786X9a09XROH {display: none}')
+    $writer.Close()
 
 
     # js minification

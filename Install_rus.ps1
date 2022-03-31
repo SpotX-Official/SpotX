@@ -417,6 +417,7 @@ function RuTranslate {
     $ru_translate4 = '"other": "Enhanced with [{]0[}] recommended songs."', '"other": "Добавлено {0} рекомендованных трека."' 
     $ru_translate5 = '"To Enhance this playlist, you.ll need to go online."', '"Чтобы улучшить этот плейлист, вам нужно подключиться к интернету."'
     $ru_translate6 = '"Podcast & Shows"', '"Подкасты и Шоу"'
+    $ru_translate7 = '"All"', '"Все"'
     $ru_translate12 = '"Layout"', '"Расположение"' 
     $ru_translate13 = '"Confirm your age"', '"Подтвердите свой возраст"' 
     $ru_translate16 = '"%price%\/month after. Terms and conditions apply. One month free not available for users who have already tried Premium."', '"%price%/месяц спустя. Принять условия. Один месяц бесплатно, недоступно для пользователей, которые уже попробовали Premium."' 
@@ -462,6 +463,7 @@ function RuTranslate {
     if ($xpui_ru -match $ru_translate4[0]) { $xpui_ru = $xpui_ru -replace $ru_translate4[0], $ru_translate4[1] } else { Write-Host "Не нашел " -ForegroundColor red -NoNewline; Write-Host "переменную `$ru_translate4[0] в ru.json" }
     if ($xpui_ru -match $ru_translate5[0]) { $xpui_ru = $xpui_ru -replace $ru_translate5[0], $ru_translate5[1] } else { Write-Host "Не нашел " -ForegroundColor red -NoNewline; Write-Host "переменную `$ru_translate5[0] в ru.json" }
     if ($xpui_ru -match $ru_translate6[0]) { $xpui_ru = $xpui_ru -replace $ru_translate6[0], $ru_translate6[1] } else { Write-Host "Не нашел " -ForegroundColor red -NoNewline; Write-Host "переменную `$ru_translate6[0] в ru.json" }
+    if ($xpui_ru -match $ru_translate7[0]) { $xpui_ru = $xpui_ru -replace $ru_translate7[0], $ru_translate7[1] } else { Write-Host "Не нашел " -ForegroundColor red -NoNewline; Write-Host "переменную `$ru_translate7[0] в ru.json" }
     if ($xpui_ru -match $ru_translate12[0]) { $xpui_ru = $xpui_ru -replace $ru_translate12[0], $ru_translate12[1] } else { Write-Host "Не нашел " -ForegroundColor red -NoNewline; Write-Host "переменную `$ru_translate12[0] в ru.json" }
     if ($xpui_ru -match $ru_translate13[0]) { $xpui_ru = $xpui_ru -replace $ru_translate13[0], $ru_translate13[1] } else { Write-Host "Не нашел " -ForegroundColor red -NoNewline; Write-Host "переменную `$ru_translate13[0] в ru.json" }
     if ($xpui_ru -match $ru_translate16[0]) { $xpui_ru = $xpui_ru -replace $ru_translate16[0], $ru_translate16[1] } else { Write-Host "Не нашел " -ForegroundColor red -NoNewline; Write-Host "переменную `$ru_translate16[0] в ru.json" }

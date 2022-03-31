@@ -30,7 +30,7 @@
 * <strong>Blocks automatic updates (optional)</strong>
 * <strong>[Automatic cache clearing](https://github.com/amd64fox/SpotX/discussions/2) (optional)</strong>
 * <strong>Enabled Enhance playlist</strong>
-* <strong>Enabled the 2021 icons redraw</strong>
+* <strong>Enabled the new Search with chips experience</strong>
 * <strong>Enabled a condensed discography shelf on artist pages</strong>
 * <strong>Activated "Made For You" in the left sidebar</strong>
 * <strong>Disabled Sentry (Prevented Sentry from sending console log/error/warning to Spotify developers)</strong>

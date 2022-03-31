@@ -28,7 +28,7 @@ Stop-Process -Name Spotify
 Stop-Process -Name SpotifyWebHelper
 
 if ($PSVersionTable.PSVersion.Major -ge 7) {
-    Import-Module Appx -UseWindowsPowerShell
+    Import-Module Appx -UseWindowsPowerShell -WarningAction:SilentlyContinue
 }
 # Проверка версии Windows
 $win_os = (get-itemproperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion" -Name ProductName).ProductName

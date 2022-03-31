@@ -369,7 +369,6 @@ function OffAdsOnFullscreen {
 function ExpFeature {
     # Experimental Feature
     $exp_features1 = '(Show "Made For You" entry point in the left sidebar.,default:)(!1)', '$1!0' 
-    $exp_features2 = '(Enables the 2021 icons redraw which loads a different font asset for rendering icon glyphs.",default:)(!1)', '$1!0' 
     $exp_features3 = '(Enable Liked Songs section on Artist page",default:)(!1)', '$1!0' 
     $exp_features4 = '(Enable block users feature in clientX",default:)(!1)', '$1!0' 
     $exp_features5 = '(Enables quicksilver in-app messaging modal",default:)(!0)', '$1!1' 
@@ -378,7 +377,6 @@ function ExpFeature {
     $exp_features8 = '(Enable Enhance Playlist UI and functionality",default:)(!1)', '$1!0'
     $exp_features9 = '(Enable a condensed disography shelf on artist pages",default:)(!1)', '$1!0'
     if ($xpui_js -match $exp_features1[0]) { $xpui_js = $xpui_js -replace $exp_features1[0], $exp_features1[1] } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$exp_features1[0] in xpui.js" }
-    if ($xpui_js -match $exp_features2[0]) { $xpui_js = $xpui_js -replace $exp_features2[0], $exp_features2[1] } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$exp_features2[0] in xpui.js" }
     if ($xpui_js -match $exp_features3[0]) { $xpui_js = $xpui_js -replace $exp_features3[0], $exp_features3[1] } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$exp_features3[0] in xpui.js" }
     if ($xpui_js -match $exp_features4[0]) { $xpui_js = $xpui_js -replace $exp_features4[0], $exp_features4[1] } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$exp_features4[0] in xpui.js" }
     if ($xpui_js -match $exp_features5[0]) { $xpui_js = $xpui_js -replace $exp_features5[0], $exp_features5[1] } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$exp_features5[0] in xpui.js" }

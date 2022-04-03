@@ -8,6 +8,7 @@ Write-Host "@Amd64fox" -ForegroundColor DarkYellow
 Write-Host "*****************"`n
 
 $spotifyDirectory = "$env:APPDATA\Spotify"
+$spotifyDirectory2 = "$env:LOCALAPPDATA\Spotify"
 $spotifyExecutable = "$spotifyDirectory\Spotify.exe"
 $chrome_elf = "$spotifyDirectory\chrome_elf.dll"
 $chrome_elf_bak = "$spotifyDirectory\chrome_elf_bak.dll"
@@ -33,6 +34,7 @@ function incorrectValue {
 
 function downloadScripts($param1) {
 
+    $webClient = New-Object -TypeName System.Net.WebClient
     $web_Url_prev = "https://github.com/mrpond/BlockTheSpot/releases/latest/download/chrome_elf.zip", "https://download.scdn.co/SpotifySetup.exe"
     $local_Url_prev = "$PWD\chrome_elf.zip", "$PWD\SpotifySetup.exe"
     $web_name_file_prev = "chrome_elf.zip", "SpotifySetup.exe"
@@ -124,16 +126,12 @@ New-Item -Type Directory -Name "BlockTheSpot-$(Get-Date -UFormat '%Y-%m-%d_%H-%M
 
 Write-Host 'Загружаю последний патч BTS...'`n
 
-$webClient = New-Object -TypeName System.Net.WebClient
-
 downloadScripts -param1 "BTS"
 
 Add-Type -Assembly 'System.IO.Compression.FileSystem'
 $zip = [System.IO.Compression.ZipFile]::Open("$PWD\chrome_elf.zip", 'read')
 [System.IO.Compression.ZipFileExtensions]::ExtractToDirectory($zip, $PWD)
 $zip.Dispose()
-
-Remove-Item -LiteralPath "$PWD\chrome_elf.zip"
 
 downloadScripts -param1 "Desktop"
 
@@ -172,14 +170,14 @@ if (-not $spotifyInstalled -or $upgrade_client) {
     Write-Host  $version_client -ForegroundColor Green
     Write-Host "Пожалуйста подождите......"`n
     
-    # Попробовать удалить файлы chrome_elf если существует папка Spotify
-    if (Test-Path -LiteralPath $spotifyDirectory) {
-        $ErrorActionPreference = 'SilentlyContinue'  # Команда гасит легкие ошибки
-        Stop-Process -Name Spotify 
-        Start-Sleep -Seconds 1
-        Remove-Item $spotifyDirectory -Include *chrome_elf* -Recurse -Force
-    } 
-    
+    # Удалить файлы прошлой версии Spotify перед установкой, оставить только файлы профиля
+    $ErrorActionPreference = 'SilentlyContinue'  # Команда гасит легкие ошибки
+    Stop-Process -Name Spotify 
+    Start-Sleep -Milliseconds 600
+    Get-ChildItem $spotifyDirectory -Exclude 'Users', 'prefs' | Remove-Item -Recurse
+    Remove-Item $spotifyDirectory2  -Recurse -Force 
+    Start-Sleep -Milliseconds 200
+
     # Установка клиента
     Start-Process -FilePath explorer.exe -ArgumentList $PWD\SpotifySetup.exe
     while (-not (get-process | Where-Object { $_.ProcessName -eq 'SpotifySetup' })) {}
@@ -468,7 +466,6 @@ if ($spa_test -and $js_test) {
     Write-Host "Выполнение остановлено."
     exit
 }
-
 
 if (Test-Path $xpui_js_patch) {
     Write-Host "Обнаружен Spicetify"`n
@@ -786,11 +783,12 @@ If (!(Test-Path $env:USERPROFILE\Desktop\Spotify.lnk)) {
 
 # Блокировка обновлений
 $ErrorActionPreference = 'SilentlyContinue'
-$update_directory = Test-Path -Path $env:LOCALAPPDATA\Spotify
+$update_directory = Test-Path -Path $spotifyDirectory2
+$block_File_update = "$env:LOCALAPPDATA\Spotify\Update"
 $migrator_bak = Test-Path -Path $env:APPDATA\Spotify\SpotifyMigrator.bak  
 $migrator_exe = Test-Path -Path $env:APPDATA\Spotify\SpotifyMigrator.exe
-$Check_folder_file = Get-ItemProperty -Path $env:LOCALAPPDATA\Spotify\Update | Select-Object Attributes 
-$folder_update_access = Get-Acl $env:LOCALAPPDATA\Spotify\Update
+$Check_folder_file = Get-ItemProperty -Path $block_File_update | Select-Object Attributes 
+$folder_update_access = Get-Acl $block_File_update
 
 if ($block_update) {
 
@@ -801,17 +799,18 @@ if ($block_update) {
         New-Item -Path $env:LOCALAPPDATA -Name "Spotify" -ItemType "directory" | Out-Null
 
         # Создать файл Update
-        New-Item -Path $env:LOCALAPPDATA\Spotify\ -Name "Update" -ItemType "file" -Value "STOPIT" | Out-Null
-        $file_upd = Get-ItemProperty -Path $env:LOCALAPPDATA\Spotify\Update
+        New-Item -Path $spotifyDirectory2 -Name "Update" -ItemType "file" -Value "STOPIT" | Out-Null
+        $file_upd = Get-ItemProperty -Path $block_File_update
         $file_upd.Attributes = "ReadOnly", "System"
       
-        # Если оба файлав мигратора существуют то .bak удалить, а .exe переименовать в .bak
+        # Если существуют и SpotifyMigrator.exe и SpotifyMigrator.bak то SpotifyMigrator.bak удалить,
+        # а SpotifyMigrator.exe переименовать в SpotifyMigrator.bak
         If ($migrator_exe -and $migrator_bak) {
             Remove-item $env:APPDATA\Spotify\SpotifyMigrator.bak -Recurse -Force
             Rename-Item -path $env:APPDATA\Spotify\SpotifyMigrator.exe -NewName $env:APPDATA\Spotify\SpotifyMigrator.bak
         }
 
-        # Если есть только мигратор .exe то переименовать его в .bak
+        # Если есть только SpotifyMigrator.exe то переименовать его в SpotifyMigrator.bak
         if ($migrator_exe) {
             Rename-Item -path $env:APPDATA\Spotify\SpotifyMigrator.exe -NewName $env:APPDATA\Spotify\SpotifyMigrator.bak
         }
@@ -826,27 +825,29 @@ if ($block_update) {
             # Если у папки Update заблокированы права то разблокировать 
             if ($folder_update_access.AccessToString -match 'Deny') {
 
-        ($ACL = Get-Acl $env:LOCALAPPDATA\Spotify\Update).access | ForEach-Object {
+        ($ACL = Get-Acl $block_File_update).access | ForEach-Object {
                     $Users = $_.IdentityReference 
                     $ACL.PurgeAccessRules($Users) }
-                $ACL | Set-Acl $env:LOCALAPPDATA\Spotify\Update
+                $ACL | Set-Acl $block_File_update
             }
-            Remove-item $env:LOCALAPPDATA\Spotify\Update -Recurse -Force
+            Remove-item $block_File_update -Recurse -Force
         } 
 
         # Создать файл Update если его нет
         if (!($Check_folder_file -match '\bSystem\b' -and $Check_folder_file -match '\bReadOnly\b')) {  
-            New-Item -Path $env:LOCALAPPDATA\Spotify\ -Name "Update" -ItemType "file" -Value "STOPIT" | Out-Null
-            $file_upd = Get-ItemProperty -Path $env:LOCALAPPDATA\Spotify\Update
+            New-Item -Path $spotifyDirectory2 -Name "Update" -ItemType "file" -Value "STOPIT" | Out-Null
+            $file_upd = Get-ItemProperty -Path $block_File_update
             $file_upd.Attributes = "ReadOnly", "System"
         }
-        # Если оба файлав мигратора существуют то .bak удалить, а .exe переименовать в .bak
+
+        # Если существуют и SpotifyMigrator.exe и SpotifyMigrator.bak то SpotifyMigrator.bak удалить,
+        # а SpotifyMigrator.exe переименовать в SpotifyMigrator.bak
         If ($migrator_exe -and $migrator_bak) {
             Remove-item $env:APPDATA\Spotify\SpotifyMigrator.bak -Recurse -Force
             Rename-Item -path $env:APPDATA\Spotify\SpotifyMigrator.exe -NewName $env:APPDATA\Spotify\SpotifyMigrator.bak
         }
 
-        # Если есть только мигратор .exe то переименовать его в .bak
+        # Если есть только SpotifyMigrator.exe то переименовать его в SpotifyMigrator.bak
         if ($migrator_exe) {
             Rename-Item -path $env:APPDATA\Spotify\SpotifyMigrator.exe -NewName $env:APPDATA\Spotify\SpotifyMigrator.bak
         }

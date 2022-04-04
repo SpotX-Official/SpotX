@@ -866,6 +866,8 @@ if ($cache_install) {
     Start-Sleep -Milliseconds 200
 
     New-Item -Path $env:APPDATA\Spotify\ -Name "cache" -ItemType "directory" | Out-Null
+    
+    $webClient = New-Object -TypeName System.Net.WebClient
 
     # cache-spotify.ps1
     $webClient.DownloadFile('https://raw.githubusercontent.com/amd64fox/SpotX/main/Cache/cache_spotify_ru.ps1', "$env:APPDATA\Spotify\cache\cache-spotify.ps1")

@@ -1,7 +1,6 @@
 # Ignore errors from `Stop-Process`
 $PSDefaultParameterValues['Stop-Process:ErrorAction'] = [System.Management.Automation.ActionPreference]::SilentlyContinue
 
-
 Write-Host "*****************"
 Write-Host "Author: " -NoNewline
 Write-Host "@Amd64fox" -ForegroundColor DarkYellow
@@ -12,6 +11,7 @@ $spotifyDirectory2 = "$env:LOCALAPPDATA\Spotify"
 $spotifyExecutable = "$spotifyDirectory\Spotify.exe"
 $chrome_elf = "$spotifyDirectory\chrome_elf.dll"
 $chrome_elf_bak = "$spotifyDirectory\chrome_elf_bak.dll"
+$block_File_update = "$env:LOCALAPPDATA\Spotify\Update"
 $upgrade_client = $false
 $podcasts_off = $false
 $spotx_new = $false
@@ -32,28 +32,47 @@ function incorrectValue {
     Clear-Host
 }     
 
+function unlockFolder {
+
+    $ErrorActionPreference = 'SilentlyContinue'
+    $Check_folder = Get-ItemProperty -Path $block_File_update | Select-Object Attributes 
+    $folder_update_access = Get-Acl $block_File_update
+
+    # Check folder Update if it exists
+    if ($Check_folder -match '\bDirectory\b') {  
+
+        # If the rights of the Update folder are blocked, then unblock 
+        if ($folder_update_access.AccessToString -match 'Deny') {
+                ($ACL = Get-Acl $block_File_update).access | ForEach-Object {
+                $Users = $_.IdentityReference 
+                $ACL.PurgeAccessRules($Users) }
+            $ACL | Set-Acl $block_File_update
+        }
+    }
+}     
+
 function downloadScripts($param1) {
 
     $webClient = New-Object -TypeName System.Net.WebClient
-    $web_Url_prev = "https://github.com/mrpond/BlockTheSpot/releases/latest/download/chrome_elf.zip", "https://download.scdn.co/SpotifySetup.exe"
-    $local_Url_prev = "$PWD\chrome_elf.zip", "$PWD\SpotifySetup.exe"
-    $web_name_file_prev = "chrome_elf.zip", "SpotifySetup.exe"
+    $web_Url_prev = "https://github.com/mrpond/BlockTheSpot/releases/latest/download/chrome_elf.zip", "https://download.scdn.co/SpotifySetup.exe", `
+        "https://raw.githubusercontent.com/amd64fox/SpotX/main/Cache/cache_spotify.ps1", "https://raw.githubusercontent.com/amd64fox/SpotX/main/Cache/hide_window.vbs", `
+        "https://raw.githubusercontent.com/amd64fox/SpotX/main/Cache/run_ps.bat"
 
-    if ($param1 -eq "BTS") {
-        $web_Url = $web_Url_prev[0]
-        $local_Url = $local_Url_prev[0]
-        $web_name_file = $web_name_file_prev[0]
-    }
+    $local_Url_prev = "$PWD\chrome_elf.zip", "$PWD\SpotifySetup.exe", "$cache_folder\cache_spotify.ps1", "$cache_folder\hide_window.vbs", "$cache_folder\run_ps.bat"
+    $web_name_file_prev = "chrome_elf.zip", "SpotifySetup.exe", "cache_spotify.ps1", "hide_window.vbs", "run_ps.bat"
 
-    if ($param1 -eq "Desktop") {
-        $web_Url = $web_Url_prev[1]
-        $local_Url = $local_Url_prev[1]
-        $web_name_file = $web_name_file_prev[1]
+    switch ( $param1 ) {
+        "BTS" { $web_Url = $web_Url_prev[0]; $local_Url = $local_Url_prev[0]; $web_name_file = $web_name_file_prev[0] }
+        "Desktop" { $web_Url = $web_Url_prev[1]; $local_Url = $local_Url_prev[1]; $web_name_file = $web_name_file_prev[1] }
+        "cache-spotify" { $web_Url = $web_Url_prev[2]; $local_Url = $local_Url_prev[2]; $web_name_file = $web_name_file_prev[2] }
+        "hide_window" { $web_Url = $web_Url_prev[3]; $local_Url = $local_Url_prev[3]; $web_name_file = $web_name_file_prev[3] }
+        "run_ps" { $web_Url = $web_Url_prev[4]; $local_Url = $local_Url_prev[4]; $web_name_file = $web_name_file_prev[4] } 
     }
 
     try { $webClient.DownloadFile($web_Url, $local_Url) }
 
     catch [System.Management.Automation.MethodInvocationException] {
+        Write-Host ""
         Write-Host "Error downloading" $web_name_file -ForegroundColor RED
         $Error[0].Exception
         Write-Host ""
@@ -87,13 +106,13 @@ Stop-Process -Name SpotifyWebHelper
 if ($PSVersionTable.PSVersion.Major -ge 7) {
     Import-Module Appx -UseWindowsPowerShell -WarningAction:SilentlyContinue
 }
+
 # Check version Windows
 $win_os = (get-itemproperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion" -Name ProductName).ProductName
 $win11 = $win_os -match "\windows 11\b"
 $win10 = $win_os -match "\windows 10\b"
 $win8_1 = $win_os -match "\windows 8.1\b"
 $win8 = $win_os -match "\windows 8\b"
-
 
 if ($win11 -or $win10 -or $win8_1 -or $win8) {
 
@@ -125,7 +144,6 @@ Push-Location -LiteralPath $env:TEMP
 New-Item -Type Directory -Name "BlockTheSpot-$(Get-Date -UFormat '%Y-%m-%d_%H-%M-%S')" | Convert-Path | Set-Location
 
 Write-Host 'Downloading latest patch BTS...'`n
-
 downloadScripts -param1 "BTS"
 
 Add-Type -Assembly 'System.IO.Compression.FileSystem'
@@ -174,8 +192,10 @@ if (-not $spotifyInstalled -or $upgrade_client) {
       $ErrorActionPreference = 'SilentlyContinue'  # extinguishes light mistakes
     Stop-Process -Name Spotify 
     Start-Sleep -Milliseconds 600
-    Get-ChildItem $spotifyDirectory -Exclude 'Users', 'prefs' | Remove-Item -Recurse
-    Remove-Item $spotifyDirectory2  -Recurse -Force 
+    unlockFolder
+    Start-Sleep -Milliseconds 200
+    Get-ChildItem $spotifyDirectory -Exclude 'Users', 'prefs', 'cache' | Remove-Item -Recurse -Force 
+    Get-ChildItem $spotifyDirectory2 -Exclude 'Users' | Remove-Item -Recurse -Force 
     Start-Sleep -Milliseconds 200
 
     # Client installation
@@ -197,7 +217,6 @@ if (-not $spotifyInstalled -or $upgrade_client) {
     }
 }
 
-
 # Create backup chrome_elf.dll
 if (!(Test-Path -LiteralPath $chrome_elf_bak)) {
     Move-Item $chrome_elf $chrome_elf_bak 
@@ -205,31 +224,23 @@ if (!(Test-Path -LiteralPath $chrome_elf_bak)) {
 do {
     $ch = Read-Host -Prompt "Want to turn off podcasts ? (Y/N)"
     Write-Host ""
-    if (!($ch -eq 'n' -or $ch -eq 'y')) {
-        incorrectValue
-    }
+    if (!($ch -eq 'n' -or $ch -eq 'y')) { incorrectValue }
 }
 while ($ch -notmatch '^y$|^n$')
 if ($ch -eq 'y') { $podcasts_off = $true }
 
-
 do {
     $ch = Read-Host -Prompt "Want to block updates ? (Y/N)"
     Write-Host ""
-    if (!($ch -eq 'n' -or $ch -eq 'y')) {
-        incorrectValue
-    }
+    if (!($ch -eq 'n' -or $ch -eq 'y')) { incorrectValue } 
 }
 while ($ch -notmatch '^y$|^n$')
-
 if ($ch -eq 'y') { $block_update = $true }
 
 do {
     $ch = Read-Host -Prompt "Want to set up automatic cache cleanup? (Y/N)"
     Write-Host ""
-    if (!($ch -eq 'n' -or $ch -eq 'y')) {
-        incorrectValue
-    }
+    if (!($ch -eq 'n' -or $ch -eq 'y')) { incorrectValue }
 }
 while ($ch -notmatch '^y$|^n$')
 if ($ch -eq 'y') {
@@ -239,9 +250,7 @@ if ($ch -eq 'y') {
         $ch = Read-Host -Prompt "Cache files that have not been used for more than XX days will be deleted.
     Enter the number of days from 1 to 100"
         Write-Host ""
-        if (!($ch -match "^[1-9][0-9]?$|^100$")) {
-            incorrectValue
-        }
+        if (!($ch -match "^[1-9][0-9]?$|^100$")) { incorrectValue }
     }
     while ($ch -notmatch '^[1-9][0-9]?$|^100$')
 
@@ -255,6 +264,7 @@ function OffUpdStatus {
     if ($xpui_js -match $upgrade_status) { $xpui_js = $xpui_js -replace $upgrade_status, "" } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$upgrade_status in xpui.js" }
     $xpui_js
 }
+
 function OffPodcasts {
 
     # Turn off podcasts
@@ -264,6 +274,7 @@ function OffPodcasts {
     if ($xpui_js -match $podcasts_off2) { $xpui_js = $xpui_js -replace $podcasts_off2, "" } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$podcasts_off2 in xpui.js" }
     $xpui_js
 }
+
 function OffAdsOnFullscreen {
 
     # Removing an empty block
@@ -462,6 +473,19 @@ If (Test-Path $xpui_spa_patch) {
     $writer.Write($xpuiContents_vendor)
     $writer.Close()
 
+    # js minification
+    $zip.Entries | Where-Object FullName -like '*.js' | ForEach-Object {
+        $readerjs = New-Object System.IO.StreamReader($_.Open())
+        $xpuiContents_js = $readerjs.ReadToEnd()
+        $readerjs.Close()
+        $xpuiContents_js = $xpuiContents_js `
+            -replace "[/][/][#] sourceMappingURL=.*[.]map", "" -replace "\r?\n(?!\(1|\d)", ""
+        $writer = New-Object System.IO.StreamWriter($_.Open())
+        $writer.BaseStream.SetLength(0)
+        $writer.Write($xpuiContents_js)
+        $writer.Close()
+    }
+
     # xpui.css
     $entry_xpui_css = $zip.GetEntry('xpui.css')
     $reader = New-Object System.IO.StreamReader($entry_xpui_css.Open())
@@ -475,20 +499,6 @@ If (Test-Path $xpui_spa_patch) {
     $writer.Write([System.Environment]::NewLine + ' .BKsbV2Xl786X9a09XROH {display: none}')
     $writer.Close()
 
-    # js minification
-    $zip.Entries | Where-Object FullName -like '*.js' | ForEach-Object {
-        $readerjs = New-Object System.IO.StreamReader($_.Open())
-        $xpuiContents_js = $readerjs.ReadToEnd()
-        $readerjs.Close()
-        $xpuiContents_js = $xpuiContents_js `
-            -replace "[/][/][#] sourceMappingURL=.*[.]map", "" `
-            -replace "\r?\n(?!\(1|\d)", ""
-        $writer = New-Object System.IO.StreamWriter($_.Open())
-        $writer.BaseStream.SetLength(0)
-        $writer.Write($xpuiContents_js)
-        $writer.Close()
-    }
-
     # *.Css
     $zip.Entries | Where-Object FullName -like '*.css' | ForEach-Object {
         $readercss = New-Object System.IO.StreamReader($_.Open())
@@ -497,24 +507,13 @@ If (Test-Path $xpui_spa_patch) {
 
         $xpuiContents_css = $xpuiContents_css `
             <# Remove RTL #>`
-            -replace "}\[dir=ltr\]\s?([.a-zA-Z\d[_]+?,\[dir=ltr\])", '}[dir=str] $1' `
-            -replace "}\[dir=ltr\]\s?", "} " `
-            -replace "html\[dir=ltr\]", "html" `
-            -replace ",\s?\[dir=rtl\].+?(\{.+?\})", '$1' `
-            -replace "[\w\-\.]+\[dir=rtl\].+?\{.+?\}", "" `
-            -replace "\}\[lang=ar\].+?\{.+?\}", "}" `
-            -replace "\}\[dir=rtl\].+?\{.+?\}", "}" `
-            -replace "\}html\[dir=rtl\].+?\{.+?\}", "}" `
-            -replace "\}html\[lang=ar\].+?\{.+?\}", "}" `
-            -replace "\[lang=ar\].+?\{.+?\}", "" `
-            -replace "html\[dir=rtl\].+?\{.+?\}", "" `
-            -replace "html\[lang=ar\].+?\{.+?\}", "" `
-            -replace "\[dir=rtl\].+?\{.+?\}", "" `
-            -replace "\[dir=str\]", "[dir=ltr]" `
+            -replace "}\[dir=ltr\]\s?([.a-zA-Z\d[_]+?,\[dir=ltr\])", '}[dir=str] $1' -replace "}\[dir=ltr\]\s?", "} " -replace "html\[dir=ltr\]", "html" `
+            -replace ",\s?\[dir=rtl\].+?(\{.+?\})", '$1' -replace "[\w\-\.]+\[dir=rtl\].+?\{.+?\}", "" -replace "\}\[lang=ar\].+?\{.+?\}", "}" `
+            -replace "\}\[dir=rtl\].+?\{.+?\}", "}" -replace "\}html\[dir=rtl\].+?\{.+?\}", "}" -replace "\}html\[lang=ar\].+?\{.+?\}", "}" `
+            -replace "\[lang=ar\].+?\{.+?\}", "" -replace "html\[dir=rtl\].+?\{.+?\}", "" -replace "html\[lang=ar\].+?\{.+?\}", "" `
+            -replace "\[dir=rtl\].+?\{.+?\}", "" -replace "\[dir=str\]", "[dir=ltr]" `
             <# Css minification #>`
-            -replace "[/]\*([^*]|[\r\n]|(\*([^/]|[\r\n])))*\*[/]", "" `
-            -replace "[/][/]#\s.*", "" `
-            -replace "\r?\n(?!\(1|\d)", ""
+            -replace "[/]\*([^*]|[\r\n]|(\*([^/]|[\r\n])))*\*[/]", "" -replace "[/][/]#\s.*", "" -replace "\r?\n(?!\(1|\d)", ""
     
         $writer = New-Object System.IO.StreamWriter($_.Open())
         $writer.BaseStream.SetLength(0)
@@ -590,7 +589,6 @@ if (!(Test-Path "$env:USERPROFILE\Desktop")) {
 $ErrorActionPreference = 'SilentlyContinue' 
 
 If (!(Test-Path $env:USERPROFILE\Desktop\Spotify.lnk)) {
-  
     $source = "$env:APPDATA\Spotify\Spotify.exe"
     $target = "$desktop_folder\Spotify.lnk"
     $WorkingDir = "$env:APPDATA\Spotify"
@@ -601,20 +599,14 @@ If (!(Test-Path $env:USERPROFILE\Desktop\Spotify.lnk)) {
     $Shortcut.Save()      
 }
 
-
 # Block updates
 $ErrorActionPreference = 'SilentlyContinue'
 $update_directory = Test-Path -Path $spotifyDirectory2
-$block_File_update = "$env:LOCALAPPDATA\Spotify\Update"
-$migrator_bak = Test-Path -Path $env:APPDATA\Spotify\SpotifyMigrator.bak  
-$migrator_exe = Test-Path -Path $env:APPDATA\Spotify\SpotifyMigrator.exe
 $Check_folder_file = Get-ItemProperty -Path $block_File_update | Select-Object Attributes 
-$folder_update_access = Get-Acl $block_File_update
-
 
 if ($block_update) {
 
-    # If there was a client installation 
+    # If there is no Spotify folder in Local
     if (!($update_directory)) {
 
         # Create Spotify folder in Localappdata
@@ -625,35 +617,13 @@ if ($block_update) {
         $file_upd = Get-ItemProperty -Path $block_File_update
         $file_upd.Attributes = "ReadOnly", "System"
       
-        # If there are and SpotifyMigrator.exe and SpotifyMigrator.bak then SpotifyMigrator.bak delete,
-        # and SpotifyMigrator.exe rename to SpotifyMigrator.bak
-        If ($migrator_exe -and $migrator_bak) {
-            Remove-item $env:APPDATA\Spotify\SpotifyMigrator.bak -Recurse -Force
-            Rename-Item -path $env:APPDATA\Spotify\SpotifyMigrator.exe -NewName $env:APPDATA\Spotify\SpotifyMigrator.bak
-        }
-
-        # If only SpotifyMigrator.exe exists then rename it to SpotifyMigrator.bak
-        if ($migrator_exe) {
-            Rename-Item -path $env:APPDATA\Spotify\SpotifyMigrator.exe -NewName $env:APPDATA\Spotify\SpotifyMigrator.bak
-        }
     }
 
-    # If the client has already been
+    # If the Spotify folder in Local exists
     If ($update_directory) {
-
-        # Delete the Update folder if it exists
-        if ($Check_folder_file -match '\bDirectory\b') {  
-
-            # If the rights of the Update folder are blocked, then unblock 
-            if ($folder_update_access.AccessToString -match 'Deny') {
-
-        ($ACL = Get-Acl $block_File_update).access | ForEach-Object {
-                    $Users = $_.IdentityReference 
-                    $ACL.PurgeAccessRules($Users) }
-                $ACL | Set-Acl $block_File_update
-            }
-            Remove-item $block_File_update -Recurse -Force
-        } 
+        unlockFolder
+        Start-Sleep -Milliseconds 200
+        Remove-item $block_File_update -Recurse -Force
 
         # Create Update file if it doesn't exist
         if (!($Check_folder_file -match '\bSystem\b' -and $Check_folder_file -match '\bReadOnly\b')) {  
@@ -661,50 +631,24 @@ if ($block_update) {
             $file_upd = Get-ItemProperty -Path $block_File_update
             $file_upd.Attributes = "ReadOnly", "System"
         }
-        
-        # If there are and SpotifyMigrator.exe and SpotifyMigrator.bak then SpotifyMigrator.bak delete,
-        # and SpotifyMigrator.exe rename to SpotifyMigrator.bak
-        If ($migrator_exe -and $migrator_bak) {
-            Remove-item $env:APPDATA\Spotify\SpotifyMigrator.bak -Recurse -Force
-            Rename-Item -path $env:APPDATA\Spotify\SpotifyMigrator.exe -NewName $env:APPDATA\Spotify\SpotifyMigrator.bak
-        }
-
-        # If only SpotifyMigrator.exe exists then rename it to SpotifyMigrator.bak
-        if ($migrator_exe) {
-            Rename-Item -path $env:APPDATA\Spotify\SpotifyMigrator.exe -NewName $env:APPDATA\Spotify\SpotifyMigrator.bak
-        }
     }
 }
 
-
-# automatic cache clearing
+# Automatic cache clearing
 if ($cache_install) {
-
-    $test_cache_folder = Test-Path -Path $env:APPDATA\Spotify\cache
-
-    if ($test_cache_folder) {
-        Remove-item $env:APPDATA\Spotify\cache -Recurse -Force
-    }
-
+    $cache_folder = "$env:APPDATA\Spotify\cache"
     Start-Sleep -Milliseconds 200
-
     New-Item -Path $env:APPDATA\Spotify\ -Name "cache" -ItemType "directory" | Out-Null
 
-    $webClient = New-Object -TypeName System.Net.WebClient
-
-    # cache-spotify.ps1
-    $webClient.DownloadFile('https://raw.githubusercontent.com/amd64fox/SpotX/main/Cache/cache-spotify.ps1', "$env:APPDATA\Spotify\cache\cache-spotify.ps1")
-
-    # hide_window.vbs
-    $webClient.DownloadFile('https://raw.githubusercontent.com/amd64fox/SpotX/main/Cache/hide_window.vbs', "$env:APPDATA\Spotify\cache\hide_window.vbs")
-    
-    # run_ps.bat
-    $webClient.DownloadFile('https://raw.githubusercontent.com/amd64fox/SpotX/main/Cache/run_ps.bat', "$env:APPDATA\Spotify\cache\run_ps.bat")
+    # Download cache script
+    downloadScripts -param1 "cache-spotify"
+    downloadScripts -param1 "hide_window"
+    downloadScripts -param1 "run_ps"
 
     # Spotify.lnk
-    $source2 = "$env:APPDATA\Spotify\cache\hide_window.vbs"
+    $source2 = "$cache_folder\hide_window.vbs"
     $target2 = "$desktop_folder\Spotify.lnk"
-    $WorkingDir2 = "$env:APPDATA\Spotify\cache\"
+    $WorkingDir2 = "$cache_folder"
     $WshShell2 = New-Object -comObject WScript.Shell
     $Shortcut2 = $WshShell2.CreateShortcut($target2)
     $Shortcut2.WorkingDirectory = $WorkingDir2
@@ -713,15 +657,15 @@ if ($cache_install) {
     $Shortcut2.Save()
 
     if ($number_days -match "^[1-9][0-9]?$|^100$") {
-        $file_cache_spotify_ps1 = Get-Content $env:APPDATA\Spotify\cache\cache-spotify.ps1 -Raw
+        $file_cache_spotify_ps1 = Get-Content $cache_folder\cache_spotify.ps1 -Raw
         $new_file_cache_spotify_ps1 = $file_cache_spotify_ps1 -replace '7', $number_days
-        Set-Content -Path $env:APPDATA\Spotify\cache\cache-spotify.ps1 -Force -Value $new_file_cache_spotify_ps1
-        $contentcache_spotify_ps1 = [System.IO.File]::ReadAllText("$env:APPDATA\Spotify\cache\cache-spotify.ps1")
+        Set-Content -Path $cache_folder\cache_spotify.ps1 -Force -Value $new_file_cache_spotify_ps1
+        $contentcache_spotify_ps1 = [System.IO.File]::ReadAllText("$cache_folder\cache_spotify.ps1")
         $contentcache_spotify_ps1 = $contentcache_spotify_ps1.Trim()
-        [System.IO.File]::WriteAllText("$env:APPDATA\Spotify\cache\cache-spotify.ps1", $contentcache_spotify_ps1)
+        [System.IO.File]::WriteAllText("$cache_folder\cache_spotify.ps1", $contentcache_spotify_ps1)
 
-        $infile = "$env:APPDATA\Spotify\cache\cache-spotify.ps1"
-        $outfile = "$env:APPDATA\Spotify\cache\cache-spotify2.ps1"
+        $infile = "$cache_folder\cache_spotify.ps1"
+        $outfile = "$cache_folder\cache_spotify2.ps1"
 
         $sr = New-Object System.IO.StreamReader($infile) 
         $sw = New-Object System.IO.StreamWriter($outfile, $false, [System.Text.Encoding]::Default)
@@ -732,7 +676,6 @@ if ($cache_install) {
         $sr.Dispose()
 
         Start-Sleep -Milliseconds 200
-
         Remove-item $infile -Recurse -Force
         Rename-Item -path $outfile -NewName $infile
 

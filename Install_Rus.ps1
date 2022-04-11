@@ -283,12 +283,12 @@ function OffAdsOnFullscreen {
     # Активация полноэкранного режима, а также удаление кнопки и меню "Перейти на Premium"
     $ofline_version2 = (Get-Item $spotifyExecutable).VersionInfo.FileVersion
     
-    if ($ofline_version2 -ge "1.1.80.699") {
+    if ($ofline_version2 -eq "1.1.82.758" -or $ofline_version2 -eq "1.1.81.604" -or $ofline_version2 -eq "1.1.80.699") {
             
         $full_screen_1 = '({return ..session},.=function\(.\){var .,.,.;return)("free")', '$1"premium"'
         $full_screen_2 = '(toLowerCase\(\)\)},.=function\(.\){var .,.,.;return)("premium")', '$1"free"'
     }
-    if ($ofline_version2 -le "1.1.79.763") {
+    if ($ofline_version2 -le "1.1.79.763" -or $ofline_version2 -ge "1.1.83.954") {
             
         $full_screen_1 = '(session[,]{1}[a-z]{1}[=]{1}[a-z]{1}[=]{1}[>]{1}[{]{1}var [a-z]{1}[,]{1}[a-z]{1}[,]{1}[a-z]{1}[;]{1}[a-z]{6})(["]{1}free["]{1})', '$1"premium"'
         $full_screen_2 = '([a-z]{1}[.]{1}toLowerCase[(]{1}[)]{2}[}]{1}[,]{1}[a-z]{1}[=]{1}[a-z]{1}[=]{1}[>]{1}[{]{1}var [a-z]{1}[,]{1}[a-z]{1}[,]{1}[a-z]{1}[;]{1}return)(["]{1}premium["]{1})', '$1"free"'

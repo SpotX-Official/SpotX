@@ -116,8 +116,8 @@ $win8 = $win_os -match "\windows 8\b"
 
 if ($win11 -or $win10 -or $win8_1 -or $win8) {
 
-       # Remove Spotify Windows Store If Any
-       if (Get-AppxPackage -Name SpotifyAB.SpotifyMusic) {
+    # Remove Spotify Windows Store If Any
+    if (Get-AppxPackage -Name SpotifyAB.SpotifyMusic) {
         Write-Host 'The Microsoft Store version of Spotify has been detected which is not supported.'`n
         do {
             $ch = Read-Host -Prompt "Uninstall Spotify Windows Store edition (Y/N) "
@@ -189,7 +189,7 @@ if (-not $spotifyInstalled -or $upgrade_client) {
     Write-Host "Please wait..."`n
     
     # Delete the files of the previous version of Spotify before installing, leave only the profile files
-      $ErrorActionPreference = 'SilentlyContinue'  # extinguishes light mistakes
+    $ErrorActionPreference = 'SilentlyContinue'  # extinguishes light mistakes
     Stop-Process -Name Spotify 
     Start-Sleep -Milliseconds 600
     unlockFolder
@@ -268,7 +268,16 @@ function OffUpdStatus {
 function OffPodcasts {
 
     # Turn off podcasts
-    $podcasts_off1 = 'album,playlist,artist,show,station,episode', 'album,playlist,artist,station'
+    
+    $ofline_version2 = (Get-Item $spotifyExecutable).VersionInfo.FileVersion
+
+    if ($ofline_version2 -le "1.1.82.758") {
+        $podcasts_off1 = 'album,playlist,artist,show,station,episode', 'album,playlist,artist,station'
+    }
+    if ($ofline_version2 -ge "1.1.83.954") {
+        $podcasts_off1 = '"album","playlist","artist","show","station","episode"', '"album","playlist","artist","station"'
+    }
+
     $podcasts_off2 = ',this[.]enableShows=[a-z]'
     if ($xpui_js -match $podcasts_off1[0]) { $xpui_js = $xpui_js -replace $podcasts_off1[0], $podcasts_off1[1] } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$podcasts_off1[0] in xpui.js" }
     if ($xpui_js -match $podcasts_off2) { $xpui_js = $xpui_js -replace $podcasts_off2, "" } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$podcasts_off2 in xpui.js" }
@@ -281,30 +290,14 @@ function OffAdsOnFullscreen {
     $empty_block_ad = 'adsEnabled:!0', 'adsEnabled:!1'
 
     # Full screen mode activation and removing "Upgrade to premium" menu, upgrade button
-    $ofline_version2 = (Get-Item $spotifyExecutable).VersionInfo.FileVersion
-    
-    if ($ofline_version2 -eq "1.1.82.758" -or $ofline_version2 -eq "1.1.81.604" -or $ofline_version2 -eq "1.1.80.699") {
-        
-        $full_screen_1 = '({return ..session},.=function\(.\){var .,.,.;return)("free")', '$1"premium"'
-        $full_screen_2 = '(toLowerCase\(\)\)},.=function\(.\){var .,.,.;return)("premium")', '$1"free"'
-    }
-    if ($ofline_version2 -le "1.1.79.763" -or $ofline_version2 -ge "1.1.83.954") {
-        
-        $full_screen_1 = '(session[,]{1}[a-z]{1}[=]{1}[a-z]{1}[=]{1}[>]{1}[{]{1}var [a-z]{1}[,]{1}[a-z]{1}[,]{1}[a-z]{1}[;]{1}[a-z]{6})(["]{1}free["]{1})', '$1"premium"'
-        $full_screen_2 = '([a-z]{1}[.]{1}toLowerCase[(]{1}[)]{2}[}]{1}[,]{1}[a-z]{1}[=]{1}[a-z]{1}[=]{1}[>]{1}[{]{1}var [a-z]{1}[,]{1}[a-z]{1}[,]{1}[a-z]{1}[;]{1}return)(["]{1}premium["]{1})', '$1"free"'
-    }
+    $full_screen = 'return"free"===(.+?)return"premium"===', 'return"premium"===$1return"free"==='
 
     # Disabling a playlist sponsor
     $playlist_ad_off = "allSponsorships"
 
-    # Remove the menu item "download"
-    $menu_download = 'return .\(\).createElement\(....,\{value:"download-playlist"\},.\(\).createElement\(..,.\)\)'
-
     if ($xpui_js -match $empty_block_ad[0]) { $xpui_js = $xpui_js -replace $empty_block_ad[0], $empty_block_ad[1] } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$empty_block_ad[0] in xpui.js" }
-    if ($xpui_js -match $full_screen_1[0]) { $xpui_js = $xpui_js -replace $full_screen_1[0], $full_screen_1[1] } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$full_screen_1[0] in xpui.js" }
-    if ($xpui_js -match $full_screen_2[0]) { $xpui_js = $xpui_js -replace $full_screen_2[0], $full_screen_2[1] } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$full_screen_2[0] in xpui.js" }
+    if ($xpui_js -match $full_screen[0]) { $xpui_js = $xpui_js -replace $full_screen[0], $full_screen[1] } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$full_screen[0] in xpui.js" }
     if ($xpui_js -match $playlist_ad_off) { $xpui_js = $xpui_js -replace $playlist_ad_off, "" } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$playlist_ad_off in xpui.js" }
-    if ($xpui_js -match $menu_download) { $xpui_js = $xpui_js -replace $menu_download, "" } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$menu_download in xpui.js" }
     $xpui_js
 }
 function ExpFeature {
@@ -497,6 +490,12 @@ If (Test-Path $xpui_spa_patch) {
     $writer.Write($xpuiContents_xpui_css)
     # Hide download icon on different pages
     $writer.Write([System.Environment]::NewLine + ' .BKsbV2Xl786X9a09XROH {display: none}')
+    # Hide submenu item "download"
+    $writer.Write([System.Environment]::NewLine + ' button.wC9sIed7pfp47wZbmU6m.pzkhLqffqF_4hucrVVQA {display: none}')
+    # Hide broken podcast menu
+    if ($podcasts_off) { 
+        $writer.Write([System.Environment]::NewLine + ' li.OEFWODerafYHGp09iLlA [href="/collection/podcasts"] {display: none}')
+    }
     $writer.Close()
 
     # *.Css

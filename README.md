@@ -5,8 +5,8 @@
 
 
 <p align="center">        
-      <a href="https://t.me/amd64fox"><img src="https://img.shields.io/badge/%40Amd64fox-%40Amd64fox-blue.svg?style=flat&logo=telegram&label=Telegram"></a>
-      <a href="https://youtu.be/d2-bKw6yTjo"><img src="https://img.shields.io/badge/-red?style=flat&logo=youtube&label=Tutorial%20on%20Youtube"></a>
+      <a href="https://t.me/spotify_windows_mod"><img src="https://img.shields.io/badge/Telegram%20Channel-%20-blue?style=flat&logo=telegram"></a>
+      <a href="https://www.youtube.com/results?search_query=https%3A%2F%2Fgithub.com%2Famd64fox%2FSpotX"><img src="https://img.shields.io/badge/-red?style=flat&logo=youtube&label=Tutorial%20videos%20on%20YouTube"></a>
       <a href="https://4pda.to/forum/index.php?showtopic=715234&view=findpost&p=104279894"><img src="https://img.shields.io/badge/4PDA-Post-yellow"></a>
       </p>
      <h2> <div align="center"><b> Modified Spotify Client for Windows </b></div> </h2>

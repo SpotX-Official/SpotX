@@ -23,7 +23,7 @@ try {
 
         $count = $check
         $sum = $count | Measure-Object -Property Length -sum
-        if ($sum.Sum -ge 104434441824) {
+        if ($sum.Sum -ge 1044344824) {
             $gb = "{0:N2} Gb" -f (($check | Measure-Object Length -s).sum / 1Gb)
             "$(Get-Date -Format "dd/MM/yyyy HH:mm:ss") Удалено $gb устаревшего кеша" | Out-File log.txt -append
         }

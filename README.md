@@ -30,8 +30,9 @@
 * <strong>Blocks automatic updates (optional)</strong>
 * <strong>[Automatic cache clearing](https://github.com/amd64fox/SpotX/discussions/2) (optional)</strong>
 * <strong>Enabled Enhance playlist</strong>
-* <strong>Enabled the new Search with chips experience</strong>
-* <strong>Enabled a condensed discography shelf on artist pages</strong>
+* <strong>Enabled [new lyrics](https://www.reddit.com/r/truespotify/comments/uhj8ie/just_found_out_you_can_jump_to_a_lyrics_on/)</strong>
+* <strong>Enabled [new Search with chips experience](https://www.reddit.com/r/truespotify/comments/tt305m/new_search_with_chips_experience/)</strong>
+* <strong>Enabled [a condensed discography shelf on artist pages](https://www.reddit.com/r/truespotify/comments/svc77g/condensed_discography_shelf_on_artist_pages/)</strong>
 * <strong>Activated "Made For You" in the left sidebar</strong>
 * <strong>Disabled Sentry (Prevented Sentry from sending console log/error/warning to Spotify developers)</strong>
 * <strong>Disabled logging (Stopped various elements to log user interaction)</strong>
@@ -87,14 +88,6 @@ The curl command was not found in the system (in windows 10 and above it comes o
 <summary><small>How do I go back to the previous version of the client ?</small></summary><p>
 
   If you have problems with the patch after upgrading the client version, then use this [tool](https://github.com/amd64fox/Rollback-Spotify) to revert back to the working    version.
-
-</details>
-
-
- <details>
-<summary><small>I want to return old icons</small></summary><p>
-
-  [There is an answer here](https://github.com/amd64fox/SpotX/discussions/20#discussioncomment-1922206), if you do not like the new icons leave your comment there.
 
 </details>
 

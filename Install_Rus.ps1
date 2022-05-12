@@ -32,6 +32,19 @@ function incorrectValue {
     Clear-Host
 } 
 
+function Check_verison_clients($param2) {
+
+    # Проверить последнюю версию Spotify 
+    if ($param2 -eq "online") {
+        $check_online = (get-item $PWD\SpotifySetup.exe).VersionInfo.ProductVersion
+        return $check_online -split '.\w\w\w\w\w\w\w\w\w'
+    }
+    # Проверить текущую версию Spotify 
+    if ($param2 -eq "offline") {
+        $check_offline = (Get-Item $spotifyExecutable).VersionInfo.FileVersion
+        return $check_offline
+    }
+}
 function unlockFolder {
 
     $ErrorActionPreference = 'SilentlyContinue'
@@ -94,11 +107,8 @@ function downloadScripts($param1) {
     }
 } 
 
-# чек сертификата Tls12
-$tsl_check = [Net.ServicePointManager]::SecurityProtocol 
-if (!($tsl_check -match '^tls12$' )) {
-    [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
-}
+# добавить Tls12
+[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 
 Stop-Process -Name Spotify
 Stop-Process -Name SpotifyWebHelper
@@ -157,17 +167,15 @@ $spotifyInstalled = (Test-Path -LiteralPath $spotifyExecutable)
 
 if ($spotifyInstalled) {
 
-    # Проверка последней версии Spotify онлайн
-    $version_client_check = (get-item $PWD\SpotifySetup.exe).VersionInfo.ProductVersion
-    $online_version = $version_client_check -split '.\w\w\w\w\w\w\w\w\w'
+    # Проверить последнюю версию Spotify 
+    $online = Check_verison_clients -param2 "online"
 
+    # Проверить текущую версию Spotify
+    $offline = Check_verison_clients -param2 "offline"
 
-    # Проверка последней версии Spotify офлайн
-    $ofline_version = (Get-Item $spotifyExecutable).VersionInfo.FileVersion
-
-    if ($online_version -gt $ofline_version) {
+    if ($online -gt $offline) {
         do {
-            $ch = Read-Host -Prompt "Ваша версия Spotify $ofline_version устарела, рекомендуется обновиться до $online_version `nОбновить ? (Y/N)"
+            $ch = Read-Host -Prompt "Ваша версия Spotify $offline устарела, рекомендуется обновиться до $online `nОбновить ? (Y/N)"
             Write-Host ""
             if (!($ch -eq 'n' -or $ch -eq 'y')) {
                 incorrectValue
@@ -181,8 +189,7 @@ if ($spotifyInstalled) {
 # Если клиента нет или он устарел, то начинаем установку/обновление
 if (-not $spotifyInstalled -or $upgrade_client) {
 
-    $version_client_check = (get-item $PWD\SpotifySetup.exe).VersionInfo.ProductVersion
-    $version_client = $version_client_check -split '.\w\w\w\w\w\w\w\w\w'
+    $version_client = Check_verison_clients -param2 "online"
 
     Write-Host "Загружаю и устанавливаю Spotify " -NoNewline
     Write-Host  $version_client -ForegroundColor Green
@@ -257,30 +264,26 @@ if ($ch -eq 'y') {
     if ($ch -match "^[1-9][0-9]?$|^100$") { $number_days = $ch }
 }
 
-function OffUpdStatus {
-    
-    # Удалить надпись о новой версии
-    $upgrade_status = "sp://desktop/v1/upgrade/status"
-    if ($xpui_js -match $upgrade_status) { $xpui_js = $xpui_js -replace $upgrade_status, "" } else { Write-Host "Не нашел " -ForegroundColor red -NoNewline; Write-Host "переменную `$upgrade_status в xpui.js" }
-    $xpui_js
-}
 
 function OffPodcasts {
 
     # Отключить подкасты
-    
-    $ofline_version2 = (Get-Item $spotifyExecutable).VersionInfo.FileVersion
+    $ofline = Check_verison_clients -param2 "offline"
 
-    if ($ofline_version2 -le "1.1.82.758") {
+    if ($ofline -le "1.1.82.758") {
         $podcasts_off1 = 'album,playlist,artist,show,station,episode', 'album,playlist,artist,station'
     }
-    if ($ofline_version2 -ge "1.1.83.954") {
+    if ($ofline -eq "1.1.83.954" -or $ofline -eq "1.1.83.956" -or $ofline -eq "1.1.84.716" ) {
         $podcasts_off1 = '"album","playlist","artist","show","station","episode"', '"album","playlist","artist","station"'
     }
 
     $podcasts_off2 = ',this[.]enableShows=[a-z]'
-    if ($xpui_js -match $podcasts_off1[0]) { $xpui_js = $xpui_js -replace $podcasts_off1[0], $podcasts_off1[1] } else { Write-Host "Не нашел " -ForegroundColor red -NoNewline; Write-Host "переменную `$podcasts_off1[0] в xpui.js" }
-    if ($xpui_js -match $podcasts_off2) { $xpui_js = $xpui_js -replace $podcasts_off2, "" } else { Write-Host "Не нашел " -ForegroundColor red -NoNewline; Write-Host "переменную `$podcasts_off2 в xpui.js" }
+
+    if ($ofline -le "1.1.82.758" -or $ofline -eq "1.1.83.954" -or $ofline -eq "1.1.83.956" -or $ofline -eq "1.1.84.716" ) {
+        if ($xpui_js -match $podcasts_off1[0]) { $xpui_js = $xpui_js -replace $podcasts_off1[0], $podcasts_off1[1] } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$podcasts_off1[0] in xpui.js" }
+    }
+
+    if ($xpui_js -match $podcasts_off2) { $xpui_js = $xpui_js -replace $podcasts_off2, "" } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$podcasts_off2 in xpui.js" }
     $xpui_js
 }
 
@@ -322,18 +325,23 @@ function ExpFeature {
     $exp_features8 = '(Enable Enhance Playlist UI and functionality for end-users",default:)(!1)', '$1!0'
     $exp_features9 = '(Enable a condensed disography shelf on artist pages",default:)(!1)', '$1!0'
     $exp_features10 = '(Enable the new fullscreen lyrics page",default:)(!1)', '$1!0'
-    $exp_features11 = '(lyrics_format:)(.)', '$1"fullscreen"'
-    if ($xpui_js -match $exp_features1[0]) { $xpui_js = $xpui_js -replace $exp_features1[0], $exp_features1[1] } else { Write-Host "Не нашел " -ForegroundColor red -NoNewline; Write-Host "переменную `$exp_features1[0] в xpui.js" }
-    if ($xpui_js -match $exp_features2[0]) { $xpui_js = $xpui_js -replace $exp_features2[0], $exp_features2[1] } else { Write-Host "Не нашел " -ForegroundColor red -NoNewline; Write-Host "переменную `$exp_features2[0] в xpui.js" }
-    if ($xpui_js -match $exp_features3[0]) { $xpui_js = $xpui_js -replace $exp_features3[0], $exp_features3[1] } else { Write-Host "Не нашел " -ForegroundColor red -NoNewline; Write-Host "переменную `$exp_features3[0] в xpui.js" }
-    if ($xpui_js -match $exp_features4[0]) { $xpui_js = $xpui_js -replace $exp_features4[0], $exp_features4[1] } else { Write-Host "Не нашел " -ForegroundColor red -NoNewline; Write-Host "переменную `$exp_features4[0] в xpui.js" }
-    if ($xpui_js -match $exp_features5[0]) { $xpui_js = $xpui_js -replace $exp_features5[0], $exp_features5[1] } else { Write-Host "Не нашел " -ForegroundColor red -NoNewline; Write-Host "переменную `$exp_features5[0] в xpui.js" }
-    if ($xpui_js -match $exp_features6[0]) { $xpui_js = $xpui_js -replace $exp_features6[0], $exp_features6[1] } else { Write-Host "Не нашел " -ForegroundColor red -NoNewline; Write-Host "переменную `$exp_features6[0] в xpui.js" }
-    if ($xpui_js -match $exp_features7[0]) { $xpui_js = $xpui_js -replace $exp_features7[0], $exp_features7[1] } else { Write-Host "Не нашел " -ForegroundColor red -NoNewline; Write-Host "переменную `$exp_features7[0] в xpui.js" }
-    if ($xpui_js -match $exp_features8[0]) { $xpui_js = $xpui_js -replace $exp_features8[0], $exp_features8[1] } else { Write-Host "Не нашел " -ForegroundColor red -NoNewline; Write-Host "переменную `$exp_features8[0] в xpui.js" }
-    if ($xpui_js -match $exp_features9[0]) { $xpui_js = $xpui_js -replace $exp_features9[0], $exp_features9[1] } else { Write-Host "Не нашел " -ForegroundColor red -NoNewline; Write-Host "переменную `$exp_features9[0] в xpui.js" }
-    if ($xpui_js -match $exp_features10[0]) { $xpui_js = $xpui_js -replace $exp_features10[0], $exp_features10[1] } else { Write-Host "Не нашел " -ForegroundColor red -NoNewline; Write-Host "переменную `$exp_features10[0] в xpui.js" }
-    if ($xpui_js -match $exp_features11[0]) { $xpui_js = $xpui_js -replace $exp_features11[0], $exp_features11[1] } else { Write-Host "Не нашел " -ForegroundColor red -NoNewline; Write-Host "переменную `$exp_features11[0] в xpui.js" }
+    if ($ofline -eq "1.1.84.716") { 
+        $exp_features11 = '(lyrics_format:)(.)', '$1"fullscreen"'
+    }
+
+    if ($xpui_js -match $exp_features1[0]) { $xpui_js = $xpui_js -replace $exp_features1[0], $exp_features1[1] } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$exp_features1[0] in xpui.js" }
+    if ($xpui_js -match $exp_features2[0]) { $xpui_js = $xpui_js -replace $exp_features2[0], $exp_features2[1] } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$exp_features2[0] in xpui.js" }
+    if ($xpui_js -match $exp_features3[0]) { $xpui_js = $xpui_js -replace $exp_features3[0], $exp_features3[1] } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$exp_features3[0] in xpui.js" }
+    if ($xpui_js -match $exp_features4[0]) { $xpui_js = $xpui_js -replace $exp_features4[0], $exp_features4[1] } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$exp_features4[0] in xpui.js" }
+    if ($xpui_js -match $exp_features5[0]) { $xpui_js = $xpui_js -replace $exp_features5[0], $exp_features5[1] } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$exp_features5[0] in xpui.js" }
+    if ($xpui_js -match $exp_features6[0]) { $xpui_js = $xpui_js -replace $exp_features6[0], $exp_features6[1] } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$exp_features6[0] in xpui.js" }
+    if ($xpui_js -match $exp_features7[0]) { $xpui_js = $xpui_js -replace $exp_features7[0], $exp_features7[1] } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$exp_features7[0] in xpui.js" }
+    if ($xpui_js -match $exp_features8[0]) { $xpui_js = $xpui_js -replace $exp_features8[0], $exp_features8[1] } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$exp_features8[0] in xpui.js" }
+    if ($xpui_js -match $exp_features9[0]) { $xpui_js = $xpui_js -replace $exp_features9[0], $exp_features9[1] } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$exp_features9[0] in xpui.js" }
+    if ($xpui_js -match $exp_features10[0]) { $xpui_js = $xpui_js -replace $exp_features10[0], $exp_features10[1] } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$exp_features10[0] in xpui.js" }
+    if ($ofline -eq "1.1.84.716") { 
+        if ($xpui_js -match $exp_features11[0]) { $xpui_js = $xpui_js -replace $exp_features11[0], $exp_features11[1] } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$exp_features11[0] in xpui.js" }
+    }
     $xpui_js
 }
 
@@ -361,7 +369,6 @@ function RuTranslate {
     $ru_translate3 = '"many": "Enhanced with [{]0[}] recommended songs."', '"many": "Добавлено {0} рекомендованных треков."' 
     $ru_translate4 = '"other": "Enhanced with [{]0[}] recommended songs."', '"other": "Добавлено {0} рекомендованных трека."' 
     $ru_translate5 = '"To Enhance this playlist, you.ll need to go online."', '"Чтобы улучшить этот плейлист, вам нужно подключиться к интернету."'
-    $ru_translate6 = '"Podcasts & Shows"', '"Подкасты и Шоу"'
     $ru_translate13 = '"Confirm your age"', '"Подтвердите свой возраст"' 
     $ru_translate16 = '"%price%\/month after. Terms and conditions apply. One month free not available for users who have already tried Premium."', '"%price%/месяц спустя. Принять условия. Один месяц бесплатно, недоступно для пользователей, которые уже попробовали Premium."' 
     $ru_translate17 = '"Enjoy ad-free music listening, offline listening, and more. Cancel anytime."', '"Наслаждайтесь прослушиванием музыки без рекламы, прослушиванием в офлайн режиме и многим другим. Отменить можно в любое время."' 
@@ -403,7 +410,6 @@ function RuTranslate {
     if ($xpui_ru -match $ru_translate3[0]) { $xpui_ru = $xpui_ru -replace $ru_translate3[0], $ru_translate3[1] } else { Write-Host "Не нашел " -ForegroundColor red -NoNewline; Write-Host "переменную `$ru_translate3[0] в ru.json" }
     if ($xpui_ru -match $ru_translate4[0]) { $xpui_ru = $xpui_ru -replace $ru_translate4[0], $ru_translate4[1] } else { Write-Host "Не нашел " -ForegroundColor red -NoNewline; Write-Host "переменную `$ru_translate4[0] в ru.json" }
     if ($xpui_ru -match $ru_translate5[0]) { $xpui_ru = $xpui_ru -replace $ru_translate5[0], $ru_translate5[1] } else { Write-Host "Не нашел " -ForegroundColor red -NoNewline; Write-Host "переменную `$ru_translate5[0] в ru.json" }
-    if ($xpui_ru -match $ru_translate6[0]) { $xpui_ru = $xpui_ru -replace $ru_translate6[0], $ru_translate6[1] } else { Write-Host "Не нашел " -ForegroundColor red -NoNewline; Write-Host "переменную `$ru_translate6[0] в ru.json" }
     if ($xpui_ru -match $ru_translate13[0]) { $xpui_ru = $xpui_ru -replace $ru_translate13[0], $ru_translate13[1] } else { Write-Host "Не нашел " -ForegroundColor red -NoNewline; Write-Host "переменную `$ru_translate13[0] в ru.json" }
     if ($xpui_ru -match $ru_translate16[0]) { $xpui_ru = $xpui_ru -replace $ru_translate16[0], $ru_translate16[1] } else { Write-Host "Не нашел " -ForegroundColor red -NoNewline; Write-Host "переменную `$ru_translate16[0] в ru.json" }
     if ($xpui_ru -match $ru_translate17[0]) { $xpui_ru = $xpui_ru -replace $ru_translate17[0], $ru_translate17[1] } else { Write-Host "Не нашел " -ForegroundColor red -NoNewline; Write-Host "переменную `$ru_translate17[0] в ru.json" }
@@ -455,11 +461,13 @@ Start-Sleep -Milliseconds 200
 Remove-Item -Recurse -LiteralPath $tempDirectory 
 
 $xpui_spa_patch = "$env:APPDATA\Spotify\Apps\xpui.spa"
+$xpui_patch = "$env:APPDATA\Spotify\Apps\xpui\"
 $xpui_js_patch = "$env:APPDATA\Spotify\Apps\xpui\xpui.js"
-$spa_test = Test-Path -LiteralPath "$env:APPDATA\Spotify\Apps\xpui.spa"
-$js_test = Test-Path -LiteralPath "$env:APPDATA\Spotify\Apps\xpui\xpui.js"
 
-if ($spa_test -and $js_test) {
+$test_spa = Test-Path -Path $env:APPDATA\Spotify\Apps\xpui.spa
+$test_js = Test-Path -Path $env:APPDATA\Spotify\Apps\xpui\xpui.js
+
+if ($test_spa -and $test_js) {
     Write-Host "Ошибка" -ForegroundColor Red
     Write-Host "Расположение файлов Spotify нарушено, удалите клиент и снова запустите скрипт."
     Write-Host "Выполнение остановлено."
@@ -482,9 +490,6 @@ if (Test-Path $xpui_js_patch) {
         $spotx_new = $true
         Copy-Item $xpui_js_patch "$xpui_js_patch.bak"
     }
-
-    # Удалить надпись о новой версии
-    if ($block_update) { $xpui_js = OffUpdStatus }
 
     # Отключить подкасты
     if ($Podcasts_off) { $xpui_js = OffPodcasts }
@@ -514,6 +519,24 @@ if (Test-Path $xpui_js_patch) {
     $writer.BaseStream.SetLength(0)
     $writer.Write($xpui_ru)
     $writer.Close()  
+
+
+    # Отключить подкасты для 1.1.85.895 >=
+    $ofline = Check_verison_clients -param2 "offline"
+    if ($podcasts_off -and $ofline -le "1.1.85.895" ) {
+        Get-ChildItem $xpui_patch | Where-Object FullName -like '*.js' | ForEach-Object {
+            $readerjs = New-Object System.IO.StreamReader($_.FullName)
+            $xpuiContents_js = $readerjs.ReadToEnd()
+            $readerjs.Close()
+        
+            $xpuiContents_js = $xpuiContents_js -replace '"album","playlist","artist","show","station","episode"', '"album","playlist","artist","station"'
+        
+            $writer = New-Object System.IO.StreamWriter($_.FullName)
+            $writer.BaseStream.SetLength(0)
+            $writer.Write($xpuiContents_js)
+            $writer.Close()
+        }
+    }
 
     # Минификация licenses.html
     $file_licenses = get-item $env:APPDATA\Spotify\Apps\xpui\licenses.html
@@ -574,21 +597,16 @@ If (Test-Path $xpui_spa_patch) {
     $xpui_js = $reader.ReadToEnd()
     $reader.Close()
 
-    # Удалить надпись о новой версии в окне "О приложении"
-    if ($block_update) { $xpui_js = OffUpdStatus }
-
     # Отключить подкасты
     if ($podcasts_off) { $xpui_js = OffPodcasts }
     
-    # Активация полноэкранного режима, а также удаление кнопки и меню "Перейти на Premium", отключиние спонсорской рекламы в некоторых плейлистах, удаление пустого рекламного блока.
+    # Активация полноэкранного режима, а также удаление кнопки и меню "Перейти на Premium",
+    # отключиние спонсорской рекламы в некоторых плейлистах, удаление пустого рекламного блока.
     $xpui_js = OffAdsOnFullscreen
        
     # Экспереметальные функции
     $xpui_js = ExpFeature
-
-    # Удалить из xpui.js все языки кроме En и Ru
-    $xpui_js = OffRujs
-        
+   
     $writer = New-Object System.IO.StreamWriter($entry_xpui.Open())
     $writer.BaseStream.SetLength(0)
     $writer.Write($xpui_js)
@@ -607,13 +625,20 @@ If (Test-Path $xpui_spa_patch) {
     $writer.Write($xpuiContents_vendor)
     $writer.Close()
 
-    # минификация js 
+    # js 
     $zip.Entries | Where-Object FullName -like '*.js' | ForEach-Object {
         $readerjs = New-Object System.IO.StreamReader($_.Open())
         $xpuiContents_js = $readerjs.ReadToEnd()
         $readerjs.Close()
+        # Отключить подкасты для 1.1.85.895 >=
+        $ofline = Check_verison_clients -param2 "offline"
+        if ($podcasts_off -and $ofline -le "1.1.85.895" ) {
+            $xpuiContents_js = $xpuiContents_js -replace '"album","playlist","artist","show","station","episode"', '"album","playlist","artist","station"'
+        }
+        # минификация js 
         $xpuiContents_js = $xpuiContents_js `
             -replace "[/][/][#] sourceMappingURL=.*[.]map", "" -replace "\r?\n(?!\(1|\d)", ""
+
         $writer = New-Object System.IO.StreamWriter($_.Open())
         $writer.BaseStream.SetLength(0)
         $writer.Write($xpuiContents_js)
@@ -734,6 +759,7 @@ Remove-Item $patch_lang -Exclude *en*, *ru* -Recurse
 $ErrorActionPreference = 'SilentlyContinue' 
 
 if (Test-Path "$env:USERPROFILE\Desktop") {  
+
     $desktop_folder = "$env:USERPROFILE\Desktop"  
 }
 
@@ -760,36 +786,24 @@ If (!(Test-Path $env:USERPROFILE\Desktop\Spotify.lnk)) {
 
 # Блокировка обновлений
 $ErrorActionPreference = 'SilentlyContinue'
-$update_directory = Test-Path -Path $spotifyDirectory2
-$Check_folder_file = Get-ItemProperty -Path $block_File_update | Select-Object Attributes 
+$update_test_exe = Test-Path -Path $spotifyExecutable
 
 if ($block_update) {
 
-    # Если нет папки Spotify в Local
-    if (!($update_directory)) {
-
-        # то создать папку Spotify в Local
-        New-Item -Path $env:LOCALAPPDATA -Name "Spotify" -ItemType "directory" | Out-Null
-
-        # Создать файл Update
-        New-Item -Path $spotifyDirectory2 -Name "Update" -ItemType "file" -Value "STOPIT" | Out-Null
-        $file_upd = Get-ItemProperty -Path $block_File_update
-        $file_upd.Attributes = "ReadOnly", "System"
-      
-    }
-
-    # Если есть папка Spotify в Local
-    If ($update_directory) {
-        unlockFolder
-        Start-Sleep -Milliseconds 200
-        Remove-item $block_File_update -Recurse -Force
-
-        # Создать файл Update если его нет
-        if (!($Check_folder_file -match '\bSystem\b' -and $Check_folder_file -match '\bReadOnly\b')) {  
-            New-Item -Path $spotifyDirectory2 -Name "Update" -ItemType "file" -Value "STOPIT" | Out-Null
-            $file_upd = Get-ItemProperty -Path $block_File_update
-            $file_upd.Attributes = "ReadOnly", "System"
+    if ($update_test_exe) {
+        $exe = "$env:APPDATA\Spotify\spotify.exe"
+        $ANSI = [Text.Encoding]::GetEncoding(1251)
+        $old = [IO.File]::ReadAllText($exe, $ANSI)
+        if ($old -match "(?<=wg:\/\/desktop-update\/.)2(\/update)") {
+            $new = $old -replace "(?<=wg:\/\/desktop-update\/.)2(\/update)", '7/update'
+            [IO.File]::WriteAllText($exe, $new, $ANSI)
         }
+        else {
+            Write-Host "Не удалось заблокировать обновления"`n -ForegroundColor Red
+        }
+    }
+    else {
+        Write-Host "Spotify.exe не найден"`n -ForegroundColor Red 
     }
 }
 

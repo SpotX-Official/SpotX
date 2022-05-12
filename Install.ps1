@@ -32,6 +32,19 @@ function incorrectValue {
     Clear-Host
 }     
 
+function Check_verison_clients($param2) {
+
+    # Check last version Spotify online
+    if ($param2 -eq "online") {
+        $check_online = (get-item $PWD\SpotifySetup.exe).VersionInfo.ProductVersion
+        return $check_online -split '.\w\w\w\w\w\w\w\w\w'
+    }
+    # Check last version Spotify ofline
+    if ($param2 -eq "offline") {
+        $check_offline = (Get-Item $spotifyExecutable).VersionInfo.FileVersion
+        return $check_offline
+    }
+}
 function unlockFolder {
 
     $ErrorActionPreference = 'SilentlyContinue'
@@ -94,11 +107,8 @@ function downloadScripts($param1) {
     }
 } 
 
-# Check Tls12
-$tsl_check = [Net.ServicePointManager]::SecurityProtocol 
-if (!($tsl_check -match '^tls12$' )) {
-    [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
-}
+# add Tls12
+[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 
 Stop-Process -Name Spotify
 Stop-Process -Name SpotifyWebHelper
@@ -158,16 +168,14 @@ $spotifyInstalled = (Test-Path -LiteralPath $spotifyExecutable)
 if ($spotifyInstalled) {
 
     # Check last version Spotify online
-    $version_client_check = (get-item $PWD\SpotifySetup.exe).VersionInfo.ProductVersion
-    $online_version = $version_client_check -split '.\w\w\w\w\w\w\w\w\w'
+    $online = Check_verison_clients -param2 "online"
 
+    # Check last version Spotify offline
+    $offline = Check_verison_clients -param2 "offline"
 
-    # Check last version Spotify ofline
-    $ofline_version = (Get-Item $spotifyExecutable).VersionInfo.FileVersion
-
-    if ($online_version -gt $ofline_version) {
+    if ($online -gt $offline) {
         do {
-            $ch = Read-Host -Prompt "Your Spotify $ofline_version version is outdated, it is recommended to upgrade to $online_version `nWant to update ? (Y/N)"
+            $ch = Read-Host -Prompt "Your Spotify $offline version is outdated, it is recommended to upgrade to $online `nWant to update ? (Y/N)"
             Write-Host ""
             if (!($ch -eq 'n' -or $ch -eq 'y')) {
                 incorrectValue
@@ -181,8 +189,7 @@ if ($spotifyInstalled) {
 # If there is no client or it is outdated, then install
 if (-not $spotifyInstalled -or $upgrade_client) {
 
-    $version_client_check = (get-item $PWD\SpotifySetup.exe).VersionInfo.ProductVersion
-    $version_client = $version_client_check -split '.\w\w\w\w\w\w\w\w\w'
+    $version_client = Check_verison_clients -param2 "online"
 
     Write-Host "Downloading and installing Spotify " -NoNewline
     Write-Host  $version_client -ForegroundColor Green
@@ -257,29 +264,25 @@ if ($ch -eq 'y') {
     if ($ch -match "^[1-9][0-9]?$|^100$") { $number_days = $ch }
 }
 
-function OffUpdStatus {
-
-    # Remove the label about the new version
-    $upgrade_status = "sp://desktop/v1/upgrade/status"
-    if ($xpui_js -match $upgrade_status) { $xpui_js = $xpui_js -replace $upgrade_status, "" } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$upgrade_status in xpui.js" }
-    $xpui_js
-}
 
 function OffPodcasts {
 
     # Turn off podcasts
-    
-    $ofline_version2 = (Get-Item $spotifyExecutable).VersionInfo.FileVersion
+    $ofline = Check_verison_clients -param2 "offline"
 
-    if ($ofline_version2 -le "1.1.82.758") {
+    if ($ofline -le "1.1.82.758") {
         $podcasts_off1 = 'album,playlist,artist,show,station,episode', 'album,playlist,artist,station'
     }
-    if ($ofline_version2 -ge "1.1.83.954") {
+    if ($ofline -eq "1.1.83.954" -or $ofline -eq "1.1.83.956" -or $ofline -eq "1.1.84.716" ) {
         $podcasts_off1 = '"album","playlist","artist","show","station","episode"', '"album","playlist","artist","station"'
     }
 
     $podcasts_off2 = ',this[.]enableShows=[a-z]'
-    if ($xpui_js -match $podcasts_off1[0]) { $xpui_js = $xpui_js -replace $podcasts_off1[0], $podcasts_off1[1] } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$podcasts_off1[0] in xpui.js" }
+
+    if ($ofline -le "1.1.82.758" -or $ofline -eq "1.1.83.954" -or $ofline -eq "1.1.83.956" -or $ofline -eq "1.1.84.716" ) {
+        if ($xpui_js -match $podcasts_off1[0]) { $xpui_js = $xpui_js -replace $podcasts_off1[0], $podcasts_off1[1] } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$podcasts_off1[0] in xpui.js" }
+    }
+
     if ($xpui_js -match $podcasts_off2) { $xpui_js = $xpui_js -replace $podcasts_off2, "" } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$podcasts_off2 in xpui.js" }
     $xpui_js
 }
@@ -303,6 +306,9 @@ function OffAdsOnFullscreen {
 function ExpFeature {
 
     # Experimental Feature
+
+    $ofline = Check_verison_clients -param2 "offline"
+
     $exp_features1 = '(Show "Made For You" entry point in the left sidebar.,default:)(!1)', '$1!0'
     $exp_features2 = '(Enable the new Search with chips experience",default:)(!1)', '$1!0'  
     $exp_features3 = '(Enable Liked Songs section on Artist page",default:)(!1)', '$1!0' 
@@ -313,7 +319,10 @@ function ExpFeature {
     $exp_features8 = '(Enable Enhance Playlist UI and functionality for end-users",default:)(!1)', '$1!0'
     $exp_features9 = '(Enable a condensed disography shelf on artist pages",default:)(!1)', '$1!0'
     $exp_features10 = '(Enable the new fullscreen lyrics page",default:)(!1)', '$1!0'
-    $exp_features11 = '(lyrics_format:)(.)', '$1"fullscreen"'
+    if ($ofline -eq "1.1.84.716") { 
+        $exp_features11 = '(lyrics_format:)(.)', '$1"fullscreen"'
+    }
+
     if ($xpui_js -match $exp_features1[0]) { $xpui_js = $xpui_js -replace $exp_features1[0], $exp_features1[1] } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$exp_features1[0] in xpui.js" }
     if ($xpui_js -match $exp_features2[0]) { $xpui_js = $xpui_js -replace $exp_features2[0], $exp_features2[1] } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$exp_features2[0] in xpui.js" }
     if ($xpui_js -match $exp_features3[0]) { $xpui_js = $xpui_js -replace $exp_features3[0], $exp_features3[1] } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$exp_features3[0] in xpui.js" }
@@ -324,7 +333,9 @@ function ExpFeature {
     if ($xpui_js -match $exp_features8[0]) { $xpui_js = $xpui_js -replace $exp_features8[0], $exp_features8[1] } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$exp_features8[0] in xpui.js" }
     if ($xpui_js -match $exp_features9[0]) { $xpui_js = $xpui_js -replace $exp_features9[0], $exp_features9[1] } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$exp_features9[0] in xpui.js" }
     if ($xpui_js -match $exp_features10[0]) { $xpui_js = $xpui_js -replace $exp_features10[0], $exp_features10[1] } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$exp_features10[0] in xpui.js" }
-    if ($xpui_js -match $exp_features11[0]) { $xpui_js = $xpui_js -replace $exp_features11[0], $exp_features11[1] } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$exp_features11[0] in xpui.js" }
+    if ($ofline -eq "1.1.84.716") { 
+        if ($xpui_js -match $exp_features11[0]) { $xpui_js = $xpui_js -replace $exp_features11[0], $exp_features11[1] } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$exp_features11[0] in xpui.js" }
+    }
     $xpui_js
 }
 
@@ -358,6 +369,7 @@ Start-Sleep -Milliseconds 200
 Remove-Item -Recurse -LiteralPath $tempDirectory 
 
 $xpui_spa_patch = "$env:APPDATA\Spotify\Apps\xpui.spa"
+$xpui_patch = "$env:APPDATA\Spotify\Apps\xpui\"
 $xpui_js_patch = "$env:APPDATA\Spotify\Apps\xpui\xpui.js"
 
 $test_spa = Test-Path -Path $env:APPDATA\Spotify\Apps\xpui.spa
@@ -382,9 +394,6 @@ if (Test-Path $xpui_js_patch) {
         Copy-Item $xpui_js_patch "$xpui_js_patch.bak"
     }
 
-    # Remove the label about the new version
-    if ($block_update) { $xpui_js = OffUpdStatus }
-
     # Turn off podcasts
     if ($Podcasts_off) { $xpui_js = OffPodcasts }
     
@@ -400,6 +409,22 @@ if (Test-Path $xpui_js_patch) {
     if ($spotx_new) { $writer.Write([System.Environment]::NewLine + '// Patched by SpotX') }
     $writer.Close()  
 
+    # podcast off for 1.1.85.895 >=
+    $ofline = Check_verison_clients -param2 "offline"
+    if ($podcasts_off -and $ofline -le "1.1.85.895" ) {
+        Get-ChildItem $xpui_patch | Where-Object FullName -like '*.js' | ForEach-Object {
+            $readerjs = New-Object System.IO.StreamReader($_.FullName)
+            $xpuiContents_js = $readerjs.ReadToEnd()
+            $readerjs.Close()
+        
+            $xpuiContents_js = $xpuiContents_js -replace '"album","playlist","artist","show","station","episode"', '"album","playlist","artist","station"'
+        
+            $writer = New-Object System.IO.StreamWriter($_.FullName)
+            $writer.BaseStream.SetLength(0)
+            $writer.Write($xpuiContents_js)
+            $writer.Close()
+        }
+    }
 
     # licenses.html minification
     $file_licenses = get-item $env:APPDATA\Spotify\Apps\xpui\licenses.html
@@ -439,9 +464,6 @@ If (Test-Path $xpui_spa_patch) {
     $xpui_js = $reader.ReadToEnd()
     $reader.Close()
 
-    # Remove the label about the new version
-    if ($block_update) { $xpui_js = OffUpdStatus }
-
     # Turn off podcasts
     if ($podcasts_off) { $xpui_js = OffPodcasts }
     
@@ -470,13 +492,20 @@ If (Test-Path $xpui_spa_patch) {
     $writer.Write($xpuiContents_vendor)
     $writer.Close()
 
-    # js minification
+    # js 
     $zip.Entries | Where-Object FullName -like '*.js' | ForEach-Object {
         $readerjs = New-Object System.IO.StreamReader($_.Open())
         $xpuiContents_js = $readerjs.ReadToEnd()
         $readerjs.Close()
+        # podcast off for 1.1.85.895 >=
+        $ofline = Check_verison_clients -param2 "offline"
+        if ($podcasts_off -and $ofline -le "1.1.85.895" ) {
+            $xpuiContents_js = $xpuiContents_js -replace '"album","playlist","artist","show","station","episode"', '"album","playlist","artist","station"'
+        }
+        # js minification
         $xpuiContents_js = $xpuiContents_js `
             -replace "[/][/][#] sourceMappingURL=.*[.]map", "" -replace "\r?\n(?!\(1|\d)", ""
+
         $writer = New-Object System.IO.StreamWriter($_.Open())
         $writer.BaseStream.SetLength(0)
         $writer.Write($xpuiContents_js)
@@ -604,36 +633,24 @@ If (!(Test-Path $env:USERPROFILE\Desktop\Spotify.lnk)) {
 
 # Block updates
 $ErrorActionPreference = 'SilentlyContinue'
-$update_directory = Test-Path -Path $spotifyDirectory2
-$Check_folder_file = Get-ItemProperty -Path $block_File_update | Select-Object Attributes 
+$update_test_exe = Test-Path -Path $spotifyExecutable
 
 if ($block_update) {
 
-    # If there is no Spotify folder in Local
-    if (!($update_directory)) {
-
-        # Create Spotify folder in Localappdata
-        New-Item -Path $env:LOCALAPPDATA -Name "Spotify" -ItemType "directory" | Out-Null
-
-        # Create Update file
-        New-Item -Path $spotifyDirectory2 -Name "Update" -ItemType "file" -Value "STOPIT" | Out-Null
-        $file_upd = Get-ItemProperty -Path $block_File_update
-        $file_upd.Attributes = "ReadOnly", "System"
-      
-    }
-
-    # If the Spotify folder in Local exists
-    If ($update_directory) {
-        unlockFolder
-        Start-Sleep -Milliseconds 200
-        Remove-item $block_File_update -Recurse -Force
-
-        # Create Update file if it doesn't exist
-        if (!($Check_folder_file -match '\bSystem\b' -and $Check_folder_file -match '\bReadOnly\b')) {  
-            New-Item -Path $spotifyDirectory2 -Name "Update" -ItemType "file" -Value "STOPIT" | Out-Null
-            $file_upd = Get-ItemProperty -Path $block_File_update
-            $file_upd.Attributes = "ReadOnly", "System"
+    if ($update_test_exe) {
+        $exe = "$env:APPDATA\Spotify\spotify.exe"
+        $ANSI = [Text.Encoding]::GetEncoding(1251)
+        $old = [IO.File]::ReadAllText($exe, $ANSI)
+        if ($old -match "(?<=wg:\/\/desktop-update\/.)2(\/update)") {
+            $new = $old -replace "(?<=wg:\/\/desktop-update\/.)2(\/update)", '7/update'
+            [IO.File]::WriteAllText($exe, $new, $ANSI)
         }
+        else {
+            Write-Host "Failed to block updates"`n -ForegroundColor Red
+        }
+    }
+    else {
+        Write-Host "Could not find Spotify.exe"`n -ForegroundColor Red 
     }
 }
 

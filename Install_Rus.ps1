@@ -610,6 +610,9 @@ If (Test-Path $xpui_spa_patch) {
 
     # Удалить из xpui.js все языки кроме En и Ru
     $xpui_js = OffRujs
+
+    # Отключение логов
+    $xpui_js = $xpui_js -replace "sp://logging/v3/\w+", ""
    
     $writer = New-Object System.IO.StreamWriter($entry_xpui.Open())
     $writer.BaseStream.SetLength(0)
@@ -629,7 +632,7 @@ If (Test-Path $xpui_spa_patch) {
     $writer.Write($xpuiContents_vendor)
     $writer.Close()
 
-    # js 
+    # js all
     $zip.Entries | Where-Object FullName -like '*.js' | ForEach-Object {
         $readerjs = New-Object System.IO.StreamReader($_.Open())
         $xpuiContents_js = $readerjs.ReadToEnd()

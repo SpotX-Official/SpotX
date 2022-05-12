@@ -494,7 +494,8 @@ if (Test-Path $xpui_js_patch) {
     # Отключить подкасты
     if ($Podcasts_off) { $xpui_js = OffPodcasts }
     
-    # Активация полноэкранного режима, а также удаление кнопки и меню "Перейти на Premium", отключиние спонсорской рекламы в некоторых плейлистах, удаление пустого рекламного блока.
+    # Активация полноэкранного режима, а также удаление кнопки и меню "Перейти на Premium",
+    # отключиние спонсорской рекламы в некоторых плейлистах, удаление пустого рекламного блока.
     $xpui_js = OffAdsOnFullscreen
        
     # Экспереметальные функции
@@ -606,6 +607,9 @@ If (Test-Path $xpui_spa_patch) {
        
     # Экспереметальные функции
     $xpui_js = ExpFeature
+
+    # Удалить из xpui.js все языки кроме En и Ru
+    $xpui_js = OffRujs
    
     $writer = New-Object System.IO.StreamWriter($entry_xpui.Open())
     $writer.BaseStream.SetLength(0)

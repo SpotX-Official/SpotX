@@ -11,6 +11,11 @@ if exist "%Appdata%\Spotify\chrome_elf_bak.dll" (
     move "%Appdata%\Spotify\chrome_elf_bak.dll" "%Appdata%\Spotify\chrome_elf.dll" > NUL 2>&1
 ) 
 
+if exist "%Appdata%\Spotify\Spotify.bak" ( 
+    del /s /q "%Appdata%\Spotify.exe" > NUL 2>&1
+    move "%Appdata%\Spotify\Spotify.bak" "%Appdata%\Spotify\Spotify.exe" > NUL 2>&1
+)
+
 
 if exist "%Appdata%\Spotify\config.ini" (
     del /s /q "%Appdata%\Spotify\config.ini" > NUL 2>&1
@@ -31,21 +36,6 @@ if exist "%Appdata%\Spotify\Apps\xpui\xpui.js.bak" (
 
 if exist "%Appdata%\Spotify\blockthespot_log.txt" (
     del /s /q "%Appdata%\Spotify\blockthespot_log.txt" > NUL 2>&1
-)
-
-
-if exist "%localappdata%\Spotify\Update" (
-    del /A:sr %localappdata%\Spotify\Update > NUL 2>&1
-) 
-
-
-if exist "%Appdata%\Spotify\SpotifyMigrator.bak" (
-    rename %Appdata%\Spotify\SpotifyMigrator.bak SpotifyMigrator.exe > NUL 2>&1
-) 
-if exist "%Appdata%\Spotify\SpotifyMigrator.exe" (
-if exist "%Appdata%\Spotify\SpotifyMigrator.bak" (
-	del /f /s /q %Appdata%\Spotify\SpotifyMigrator.bak > NUL 2>&1
-) 
 )
 
 if exist "%Appdata%\Spotify\cache" (

@@ -798,10 +798,12 @@ $update_test_exe = Test-Path -Path $spotifyExecutable
 if ($block_update) {
 
     if ($update_test_exe) {
-        $exe = "$env:APPDATA\Spotify\spotify.exe"
+        $exe = "$env:APPDATA\Spotify\Spotify.exe"
+        $exe_bak = "$env:APPDATA\Spotify\Spotify.bak"
         $ANSI = [Text.Encoding]::GetEncoding(1251)
         $old = [IO.File]::ReadAllText($exe, $ANSI)
         if ($old -match "(?<=wg:\/\/desktop-update\/.)2(\/update)") {
+            copy-Item $exe $exe_bak
             $new = $old -replace "(?<=wg:\/\/desktop-update\/.)2(\/update)", '7/update'
             [IO.File]::WriteAllText($exe, $new, $ANSI)
         }

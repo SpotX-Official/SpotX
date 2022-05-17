@@ -315,8 +315,11 @@ function OffRujs {
 function ExpFeature {
 
     # Эксперементальные фишки
-    $exp_features1 = '(Show "Made For You" entry point in the left sidebar.,default:)(!1)', '$1!0' 
-    $exp_features2 = '(Enable the new Search with chips experience",default:)(!1)', '$1!0'
+
+    $ofline = Check_verison_clients -param2 "offline"
+
+    $exp_features1 = '(Show "Made For You" entry point in the left sidebar.,default:)(!1)', '$1!0'
+    $exp_features2 = '(Enable the new Search with chips experience",default:)(!1)', '$1!0'  
     $exp_features3 = '(Enable Liked Songs section on Artist page",default:)(!1)', '$1!0' 
     $exp_features4 = '(Enable block users feature in clientX",default:)(!1)', '$1!0' 
     $exp_features5 = '(Enables quicksilver in-app messaging modal",default:)(!0)', '$1!1' 
@@ -328,20 +331,22 @@ function ExpFeature {
     if ($ofline -eq "1.1.84.716") { 
         $exp_features11 = '(lyrics_format:)(.)', '$1"fullscreen"'
     }
+    $exp_features12 = '(Enable Playlist Permissions flows for Prod",default:)(!1)', '$1!0'
 
-    if ($xpui_js -match $exp_features1[0]) { $xpui_js = $xpui_js -replace $exp_features1[0], $exp_features1[1] } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$exp_features1[0] in xpui.js" }
-    if ($xpui_js -match $exp_features2[0]) { $xpui_js = $xpui_js -replace $exp_features2[0], $exp_features2[1] } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$exp_features2[0] in xpui.js" }
-    if ($xpui_js -match $exp_features3[0]) { $xpui_js = $xpui_js -replace $exp_features3[0], $exp_features3[1] } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$exp_features3[0] in xpui.js" }
-    if ($xpui_js -match $exp_features4[0]) { $xpui_js = $xpui_js -replace $exp_features4[0], $exp_features4[1] } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$exp_features4[0] in xpui.js" }
-    if ($xpui_js -match $exp_features5[0]) { $xpui_js = $xpui_js -replace $exp_features5[0], $exp_features5[1] } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$exp_features5[0] in xpui.js" }
-    if ($xpui_js -match $exp_features6[0]) { $xpui_js = $xpui_js -replace $exp_features6[0], $exp_features6[1] } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$exp_features6[0] in xpui.js" }
-    if ($xpui_js -match $exp_features7[0]) { $xpui_js = $xpui_js -replace $exp_features7[0], $exp_features7[1] } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$exp_features7[0] in xpui.js" }
-    if ($xpui_js -match $exp_features8[0]) { $xpui_js = $xpui_js -replace $exp_features8[0], $exp_features8[1] } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$exp_features8[0] in xpui.js" }
-    if ($xpui_js -match $exp_features9[0]) { $xpui_js = $xpui_js -replace $exp_features9[0], $exp_features9[1] } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$exp_features9[0] in xpui.js" }
-    if ($xpui_js -match $exp_features10[0]) { $xpui_js = $xpui_js -replace $exp_features10[0], $exp_features10[1] } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$exp_features10[0] in xpui.js" }
+    if ($xpui_js -match $exp_features1[0]) { $xpui_js = $xpui_js -replace $exp_features1[0], $exp_features1[1] } else { Write-Host "Не нашел " -ForegroundColor red -NoNewline; Write-Host "переменную `$exp_features1[0] в xpui.js" }
+    if ($xpui_js -match $exp_features2[0]) { $xpui_js = $xpui_js -replace $exp_features2[0], $exp_features2[1] } else { Write-Host "Не нашел " -ForegroundColor red -NoNewline; Write-Host "переменную `$exp_features2[0] в xpui.js" }
+    if ($xpui_js -match $exp_features3[0]) { $xpui_js = $xpui_js -replace $exp_features3[0], $exp_features3[1] } else { Write-Host "Не нашел " -ForegroundColor red -NoNewline; Write-Host "переменную `$exp_features3[0] в xpui.js" }
+    if ($xpui_js -match $exp_features4[0]) { $xpui_js = $xpui_js -replace $exp_features4[0], $exp_features4[1] } else { Write-Host "Не нашел " -ForegroundColor red -NoNewline; Write-Host "переменную `$exp_features4[0] в xpui.js" }
+    if ($xpui_js -match $exp_features5[0]) { $xpui_js = $xpui_js -replace $exp_features5[0], $exp_features5[1] } else { Write-Host "Не нашел " -ForegroundColor red -NoNewline; Write-Host "переменную `$exp_features5[0] в xpui.js" }
+    if ($xpui_js -match $exp_features6[0]) { $xpui_js = $xpui_js -replace $exp_features6[0], $exp_features6[1] } else { Write-Host "Не нашел " -ForegroundColor red -NoNewline; Write-Host "переменную `$exp_features6[0] в xpui.js" }
+    if ($xpui_js -match $exp_features7[0]) { $xpui_js = $xpui_js -replace $exp_features7[0], $exp_features7[1] } else { Write-Host "Не нашел " -ForegroundColor red -NoNewline; Write-Host "переменную `$exp_features7[0] в xpui.js" }
+    if ($xpui_js -match $exp_features8[0]) { $xpui_js = $xpui_js -replace $exp_features8[0], $exp_features8[1] } else { Write-Host "Не нашел " -ForegroundColor red -NoNewline; Write-Host "переменную `$exp_features8[0] в xpui.js" }
+    if ($xpui_js -match $exp_features9[0]) { $xpui_js = $xpui_js -replace $exp_features9[0], $exp_features9[1] } else { Write-Host "Не нашел " -ForegroundColor red -NoNewline; Write-Host "переменную `$exp_features9[0] в xpui.js" }
+    if ($xpui_js -match $exp_features10[0]) { $xpui_js = $xpui_js -replace $exp_features10[0], $exp_features10[1] } else { Write-Host "Не нашел " -ForegroundColor red -NoNewline; Write-Host "переменную `$exp_features10[0] в xpui.js" }
     if ($ofline -eq "1.1.84.716") { 
-        if ($xpui_js -match $exp_features11[0]) { $xpui_js = $xpui_js -replace $exp_features11[0], $exp_features11[1] } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$exp_features11[0] in xpui.js" }
+        if ($xpui_js -match $exp_features11[0]) { $xpui_js = $xpui_js -replace $exp_features11[0], $exp_features11[1] } else { Write-Host "Не нашел " -ForegroundColor red -NoNewline; Write-Host "переменную `$exp_features11[0] в xpui.js" }
     }
+    if ($xpui_js -match $exp_features12[0]) { $xpui_js = $xpui_js -replace $exp_features12[0], $exp_features12[1] } else { Write-Host "Не нашел " -ForegroundColor red -NoNewline; Write-Host "переменную `$exp_features12[0] в xpui.js" }
     $xpui_js
 }
 
@@ -463,6 +468,7 @@ Remove-Item -Recurse -LiteralPath $tempDirectory
 $xpui_spa_patch = "$env:APPDATA\Spotify\Apps\xpui.spa"
 $xpui_patch = "$env:APPDATA\Spotify\Apps\xpui\"
 $xpui_js_patch = "$env:APPDATA\Spotify\Apps\xpui\xpui.js"
+$xpui_css_patch = "$env:APPDATA\Spotify\Apps\xpui\xpui.css"
 
 $test_spa = Test-Path -Path $env:APPDATA\Spotify\Apps\xpui.spa
 $test_js = Test-Path -Path $env:APPDATA\Spotify\Apps\xpui\xpui.js
@@ -489,6 +495,7 @@ if (Test-Path $xpui_js_patch) {
     If (!($xpui_js -match 'patched by spotx')) {
         $spotx_new = $true
         Copy-Item $xpui_js_patch "$xpui_js_patch.bak"
+        Copy-Item $xpui_css_patch "$xpui_css_patch.bak"
     }
 
     # Отключить подкасты
@@ -538,6 +545,27 @@ if (Test-Path $xpui_js_patch) {
             $writer.Close()
         }
     }
+
+    # xpui.css
+    $file_xpui_css = get-item $env:APPDATA\Spotify\Apps\xpui\xpui.css
+    $reader = New-Object -TypeName System.IO.StreamReader -ArgumentList $file_xpui_css
+    $xpuiContents_xpui_css = $reader.ReadToEnd()
+    $reader.Close()
+
+    $writer = New-Object System.IO.StreamWriter -ArgumentList $file_xpui_css
+    $writer.BaseStream.SetLength(0)
+    $writer.Write($xpuiContents_xpui_css)
+    # Скрыть иконку скачивание на разных страницах
+    $writer.Write([System.Environment]::NewLine + ' .BKsbV2Xl786X9a09XROH{display:none}')
+    # Скрыть подменю "загрузка"
+    $writer.Write([System.Environment]::NewLine + ' button.wC9sIed7pfp47wZbmU6m.pzkhLqffqF_4hucrVVQA{display:none}')
+    # Скрыть иконку соавторов
+    $writer.Write([System.Environment]::NewLine + ' .X1lXSiVj0pzhQCUo_72A{display:none}')
+    # Скрыть сломанное меню подкастов
+    if ($podcasts_off) { 
+        $writer.Write([System.Environment]::NewLine + ' li.OEFWODerafYHGp09iLlA [href="/collection/podcasts"]{display:none}')
+    }
+    $writer.Close()
 
     # Минификация licenses.html
     $file_licenses = get-item $env:APPDATA\Spotify\Apps\xpui\licenses.html
@@ -665,6 +693,8 @@ If (Test-Path $xpui_spa_patch) {
     $writer.Write([System.Environment]::NewLine + ' .BKsbV2Xl786X9a09XROH {display: none}')
     # Скрыть подменю "загрузка"
     $writer.Write([System.Environment]::NewLine + ' button.wC9sIed7pfp47wZbmU6m.pzkhLqffqF_4hucrVVQA {display: none}')
+    # Скрыть иконку соавторов
+    $writer.Write([System.Environment]::NewLine + ' .X1lXSiVj0pzhQCUo_72A{display:none}')
     # Скрыть сломанное меню подкастов
     if ($podcasts_off) { 
         $writer.Write([System.Environment]::NewLine + ' li.OEFWODerafYHGp09iLlA [href="/collection/podcasts"] {display: none}')

@@ -322,6 +322,7 @@ function ExpFeature {
     if ($ofline -eq "1.1.84.716") { 
         $exp_features11 = '(lyrics_format:)(.)', '$1"fullscreen"'
     }
+    $exp_features12 = '(Enable Playlist Permissions flows for Prod",default:)(!1)', '$1!0'
 
     if ($xpui_js -match $exp_features1[0]) { $xpui_js = $xpui_js -replace $exp_features1[0], $exp_features1[1] } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$exp_features1[0] in xpui.js" }
     if ($xpui_js -match $exp_features2[0]) { $xpui_js = $xpui_js -replace $exp_features2[0], $exp_features2[1] } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$exp_features2[0] in xpui.js" }
@@ -336,6 +337,7 @@ function ExpFeature {
     if ($ofline -eq "1.1.84.716") { 
         if ($xpui_js -match $exp_features11[0]) { $xpui_js = $xpui_js -replace $exp_features11[0], $exp_features11[1] } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$exp_features11[0] in xpui.js" }
     }
+    if ($xpui_js -match $exp_features12[0]) { $xpui_js = $xpui_js -replace $exp_features12[0], $exp_features12[1] } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$exp_features12[0] in xpui.js" }
     $xpui_js
 }
 
@@ -371,6 +373,7 @@ Remove-Item -Recurse -LiteralPath $tempDirectory
 $xpui_spa_patch = "$env:APPDATA\Spotify\Apps\xpui.spa"
 $xpui_patch = "$env:APPDATA\Spotify\Apps\xpui\"
 $xpui_js_patch = "$env:APPDATA\Spotify\Apps\xpui\xpui.js"
+$xpui_css_patch = "$env:APPDATA\Spotify\Apps\xpui\xpui.css"
 
 $test_spa = Test-Path -Path $env:APPDATA\Spotify\Apps\xpui.spa
 $test_js = Test-Path -Path $env:APPDATA\Spotify\Apps\xpui\xpui.js
@@ -392,6 +395,7 @@ if (Test-Path $xpui_js_patch) {
     If (!($xpui_js -match 'patched by spotx')) {
         $spotx_new = $true
         Copy-Item $xpui_js_patch "$xpui_js_patch.bak"
+        Copy-Item $xpui_css_patch "$xpui_css_patch.bak"
     }
 
     # Turn off podcasts
@@ -425,6 +429,27 @@ if (Test-Path $xpui_js_patch) {
             $writer.Close()
         }
     }
+
+    # xpui.css
+    $file_xpui_css = get-item $env:APPDATA\Spotify\Apps\xpui\xpui.css
+    $reader = New-Object -TypeName System.IO.StreamReader -ArgumentList $file_xpui_css
+    $xpuiContents_xpui_css = $reader.ReadToEnd()
+    $reader.Close()
+
+    $writer = New-Object System.IO.StreamWriter -ArgumentList $file_xpui_css
+    $writer.BaseStream.SetLength(0)
+    $writer.Write($xpuiContents_xpui_css)
+    # Hide download icon on different pages
+    $writer.Write([System.Environment]::NewLine + ' .BKsbV2Xl786X9a09XROH{display:none}')
+    # Hide submenu item "download"
+    $writer.Write([System.Environment]::NewLine + ' button.wC9sIed7pfp47wZbmU6m.pzkhLqffqF_4hucrVVQA{display:none}')
+    # Hide Collaborators icon
+    $writer.Write([System.Environment]::NewLine + ' .X1lXSiVj0pzhQCUo_72A{display:none}')
+    # Hide broken podcast menu
+    if ($podcasts_off) { 
+        $writer.Write([System.Environment]::NewLine + ' li.OEFWODerafYHGp09iLlA [href="/collection/podcasts"]{display:none}')
+    }
+    $writer.Close()
 
     # licenses.html minification
     $file_licenses = get-item $env:APPDATA\Spotify\Apps\xpui\licenses.html
@@ -525,12 +550,14 @@ If (Test-Path $xpui_spa_patch) {
     $writer.BaseStream.SetLength(0)
     $writer.Write($xpuiContents_xpui_css)
     # Hide download icon on different pages
-    $writer.Write([System.Environment]::NewLine + ' .BKsbV2Xl786X9a09XROH {display: none}')
+    $writer.Write([System.Environment]::NewLine + ' .BKsbV2Xl786X9a09XROH{display:none}')
     # Hide submenu item "download"
-    $writer.Write([System.Environment]::NewLine + ' button.wC9sIed7pfp47wZbmU6m.pzkhLqffqF_4hucrVVQA {display: none}')
+    $writer.Write([System.Environment]::NewLine + ' button.wC9sIed7pfp47wZbmU6m.pzkhLqffqF_4hucrVVQA{display:none}')
+    # Hide Collaborators icon
+    $writer.Write([System.Environment]::NewLine + ' .X1lXSiVj0pzhQCUo_72A{display:none}')
     # Hide broken podcast menu
     if ($podcasts_off) { 
-        $writer.Write([System.Environment]::NewLine + ' li.OEFWODerafYHGp09iLlA [href="/collection/podcasts"] {display: none}')
+        $writer.Write([System.Environment]::NewLine + ' li.OEFWODerafYHGp09iLlA [href="/collection/podcasts"]{display:none}')
     }
     $writer.Close()
 

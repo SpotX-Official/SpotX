@@ -70,4 +70,4 @@ if %STATUS_CODE% GTR 100 if not %STATUS_CODE% EQU 200 (
     )
 )
 pause
-exit
+exit /b

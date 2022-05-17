@@ -224,6 +224,14 @@ if (-not $spotifyInstalled -or $upgrade_client) {
     }
 }
 
+# Удалите папку leveldb (исправляет баг неверных эксперементальных фишек для некотрых аккаунтов)
+$leveldb = (Test-Path -LiteralPath "$spotifyDirectory2\Browser\Local Storage\leveldb")
+
+if ($leveldb) {
+    $ErrorActionPreference = 'SilentlyContinue'
+    remove-item "$spotifyDirectory2\Browser\Local Storage\leveldb" -Recurse -Force
+}
+
 # Создать резервную копию chrome_elf.dll
 if (!(Test-Path -LiteralPath $chrome_elf_bak)) {
     Move-Item $chrome_elf $chrome_elf_bak 

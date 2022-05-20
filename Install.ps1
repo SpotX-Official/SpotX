@@ -6,15 +6,17 @@ Write-Host "Author: " -NoNewline
 Write-Host "@Amd64fox" -ForegroundColor DarkYellow
 Write-Host "*****************"`n
 
+
 $spotifyDirectory = "$env:APPDATA\Spotify"
 $spotifyDirectory2 = "$env:LOCALAPPDATA\Spotify"
 $spotifyExecutable = "$spotifyDirectory\Spotify.exe"
 $chrome_elf = "$spotifyDirectory\chrome_elf.dll"
 $chrome_elf_bak = "$spotifyDirectory\chrome_elf_bak.dll"
 $block_File_update = "$env:LOCALAPPDATA\Spotify\Update"
+$cache_folder = "$env:APPDATA\Spotify\cache"
+$verPS = $PSVersionTable.PSVersion.major
 $upgrade_client = $false
 $podcasts_off = $false
-$spotx_new = $false
 $block_update = $false
 $cache_install = $false
 
@@ -34,12 +36,16 @@ function incorrectValue {
 
 function Check_verison_clients($param2) {
 
-    # Check last version Spotify online
+    # checking the recommended version for spotx
     if ($param2 -eq "online") {
-        $check_online = (get-item $PWD\SpotifySetup.exe).VersionInfo.ProductVersion
-        return $check_online -split '.\w\w\w\w\w\w\w\w\w'
+        $ProgressPreference = 'SilentlyContinue' # Hiding Progress Bars
+        $readme = Invoke-WebRequest -UseBasicParsing -Uri https://raw.githubusercontent.com/amd64fox/SpotX/main/README.md
+        $v = $readme.RawContent | Select-String "Recommended official version \[\d+\.\d+\.\d+\.\d+\]" -AllMatches
+        $ver = $v.Matches.Value
+        $ver = $ver -replace 'Recommended official version \[(\d+\.\d+\.\d+\.\d+)\]', '$1'
+        return $ver
     }
-    # Check last version Spotify ofline
+    # Check version Spotify offline
     if ($param2 -eq "offline") {
         $check_offline = (Get-Item $spotifyExecutable).VersionInfo.FileVersion
         return $check_offline
@@ -67,12 +73,23 @@ function unlockFolder {
 function downloadScripts($param1) {
 
     $webClient = New-Object -TypeName System.Net.WebClient
-    $web_Url_prev = "https://github.com/mrpond/BlockTheSpot/releases/latest/download/chrome_elf.zip", "https://download.scdn.co/SpotifySetup.exe", `
-        "https://raw.githubusercontent.com/amd64fox/SpotX/main/Cache/cache_spotify.ps1", "https://raw.githubusercontent.com/amd64fox/SpotX/main/Cache/hide_window.vbs", `
-        "https://raw.githubusercontent.com/amd64fox/SpotX/main/Cache/run_ps.bat"
 
-    $local_Url_prev = "$PWD\chrome_elf.zip", "$PWD\SpotifySetup.exe", "$cache_folder\cache_spotify.ps1", "$cache_folder\hide_window.vbs", "$cache_folder\run_ps.bat"
-    $web_name_file_prev = "chrome_elf.zip", "SpotifySetup.exe", "cache_spotify.ps1", "hide_window.vbs", "run_ps.bat"
+    if ($param1 -eq "Desktop") {
+        Import-Module BitsTransfer
+        
+        $ver = Check_verison_clients -param2 "online"
+        $l = "$PWD\links.tsv"
+        $old = [IO.File]::ReadAllText($l)
+        $links = $old -match "https:\/\/upgrade.scdn.co\/upgrade\/client\/win32-x86\/spotify_installer-$ver\.g[0-9a-f]{8}-[0-9]{1,3}\.exe" 
+        $links = $Matches.Values
+    }
+    
+    $web_Url_prev = "https://github.com/mrpond/BlockTheSpot/releases/latest/download/chrome_elf.zip", $links, `
+        "https://raw.githubusercontent.com/amd64fox/SpotX/main/Cache/cache_spotify.ps1", "https://raw.githubusercontent.com/amd64fox/SpotX/main/Cache/hide_window.vbs", `
+        "https://raw.githubusercontent.com/amd64fox/SpotX/main/Cache/run_ps.bat", "https://docs.google.com/spreadsheets/d/e/2PACX-1vSFN2hWu4UO-ZWyVe8wlP9c0JsrduA49xBnRmSLOt8SWaOfIpCwjDLKXMTWJQ5aKj3WakQv6-Hnv9rz/pub?gid=0&single=true&output=tsv"
+
+    $local_Url_prev = "$PWD\chrome_elf.zip", "$PWD\SpotifySetup.exe", "$cache_folder\cache_spotify.ps1", "$cache_folder\hide_window.vbs", "$cache_folder\run_ps.bat", "$PWD\links.tsv"
+    $web_name_file_prev = "chrome_elf.zip", "SpotifySetup.exe", "cache_spotify.ps1", "hide_window.vbs", "run_ps.bat", "links.tsv"
 
     switch ( $param1 ) {
         "BTS" { $web_Url = $web_Url_prev[0]; $local_Url = $local_Url_prev[0]; $web_name_file = $web_name_file_prev[0] }
@@ -80,9 +97,29 @@ function downloadScripts($param1) {
         "cache-spotify" { $web_Url = $web_Url_prev[2]; $local_Url = $local_Url_prev[2]; $web_name_file = $web_name_file_prev[2] }
         "hide_window" { $web_Url = $web_Url_prev[3]; $local_Url = $local_Url_prev[3]; $web_name_file = $web_name_file_prev[3] }
         "run_ps" { $web_Url = $web_Url_prev[4]; $local_Url = $local_Url_prev[4]; $web_name_file = $web_name_file_prev[4] } 
+        "links.tsv" { $web_Url = $web_Url_prev[5]; $local_Url = $local_Url_prev[5]; $web_name_file = $web_name_file_prev[5] }
     }
 
-    try { $webClient.DownloadFile($web_Url, $local_Url) }
+    if ($param1 -eq "Desktop") {
+        try { if (curl.exe -V) { $curl_check = $true } }
+        catch { $curl_check = $false }
+        $vernew = Check_verison_clients -param2 "online"
+    }
+    try { 
+        if ($param1 -eq "Desktop" -and $curl_check) {
+            curl.exe $web_Url -o $local_Url --progress-bar
+        }
+        if ($param1 -eq "Desktop" -and $null -ne (Get-Module -Name BitsTransfer -ListAvailable) -and !($curl_check )) {
+            Start-BitsTransfer -Source  $web_Url -Destination $local_Url  -DisplayName "Downloading Spotify" -Description "$vernew "
+        }
+        if ($param1 -eq "Desktop" -and $null -eq (Get-Module -Name BitsTransfer -ListAvailable) -and !($curl_check )) {
+            $webClient.DownloadFile($web_Url, $local_Url) 
+        }
+        if ($param1 -ne "Desktop") {
+            $ProgressPreference = 'SilentlyContinue' # Hiding Progress Bars
+            $webClient.DownloadFile($web_Url, $local_Url) 
+        }
+    }
 
     catch [System.Management.Automation.MethodInvocationException] {
         Write-Host ""
@@ -91,7 +128,23 @@ function downloadScripts($param1) {
         Write-Host ""
         Write-Host "Will re-request in 5 seconds..."`n
         Start-Sleep -Milliseconds 5000 
-        try { $webClient.DownloadFile($web_Url, $local_Url) }
+        try { 
+
+            if ($param1 -eq "Desktop" -and $curl_check) {
+                curl.exe $web_Url -o $local_Url --progress-bar
+            }
+            if ($param1 -eq "Desktop" -and $null -ne (Get-Module -Name BitsTransfer -ListAvailable) -and !($curl_check )) {
+                Start-BitsTransfer -Source  $web_Url -Destination $local_Url  -DisplayName "Downloading Spotify" -Description "$vernew "
+            }
+            if ($param1 -eq "Desktop" -and $null -eq (Get-Module -Name BitsTransfer -ListAvailable) -and !($curl_check )) {
+                $webClient.DownloadFile($web_Url, $local_Url) 
+            }
+            if ($param1 -ne "Desktop") {
+                $ProgressPreference = 'SilentlyContinue' # Hiding Progress Bars
+                $webClient.DownloadFile($web_Url, $local_Url) 
+            }
+
+        }
         
         catch [System.Management.Automation.MethodInvocationException] {
             Write-Host "Error again, script stopped" -ForegroundColor RED
@@ -107,13 +160,50 @@ function downloadScripts($param1) {
     }
 } 
 
+function DesktopFolder {
+
+    # If the default Dekstop folder does not exist, then try to find it through the registry.
+    
+    $ErrorActionPreference = 'SilentlyContinue' 
+
+    if (Test-Path "$env:USERPROFILE\Desktop") {  
+        $desktop_folder = "$env:USERPROFILE\Desktop"  
+    }
+
+    $regedit_desktop_folder = Get-ItemProperty -Path "Registry::HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders\"
+    $regedit_desktop = $regedit_desktop_folder.'{754AC886-DF64-4CBA-86B5-F7FBF4FBCEF5}'
+ 
+    if (!(Test-Path "$env:USERPROFILE\Desktop")) {
+        $desktop_folder = $regedit_desktop
+    }
+    return $desktop_folder
+}
+
 # add Tls12
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 
 Stop-Process -Name Spotify
 Stop-Process -Name SpotifyWebHelper
 
-if ($PSVersionTable.PSVersion.Major -ge 7) {
+if ($verPS -lt 3) {
+    do {
+        Write-Host "Your version of PowerShell $verPS is not supported"`n
+        $ch = Read-Host -Prompt "Please read the instruction 'Outdated versions of PowerShell' `nOpen a page with instructions ? (Y/N)"
+        Write-Host ""
+        if (!($ch -eq 'n' -or $ch -eq 'y')) { incorrectValue }
+    }
+    while ($ch -notmatch '^y$|^n$')
+    if ($ch -eq 'y') {
+        Start-Process "https://github.com/amd64fox/SpotX#possible-problems"
+        Write-Host "script is stopped" 
+        exit
+    }
+    if ($ch -eq 'n') {
+        Write-Host "script is stopped" 
+        exit
+    }
+}
+if ($verPS -ge 7) {
     Import-Module Appx -UseWindowsPowerShell -WarningAction:SilentlyContinue
 }
 
@@ -143,7 +233,7 @@ if ($win11 -or $win10 -or $win8_1 -or $win8) {
             Get-AppxPackage -Name SpotifyAB.SpotifyMusic | Remove-AppxPackage
         }
         if ($ch -eq 'n') {
-            Read-Host "Exiting..." 
+            Write-Host "script is stopped" 
             exit
         }
     }
@@ -151,26 +241,23 @@ if ($win11 -or $win10 -or $win8_1 -or $win8) {
 
 # Unique directory name based on time
 Push-Location -LiteralPath $env:TEMP
-New-Item -Type Directory -Name "BlockTheSpot-$(Get-Date -UFormat '%Y-%m-%d_%H-%M-%S')" | Convert-Path | Set-Location
+New-Item -Type Directory -Name "SpotX_Temp-$(Get-Date -UFormat '%Y-%m-%d_%H-%M-%S')" | Convert-Path | Set-Location
 
 Write-Host 'Downloading latest patch BTS...'`n
 downloadScripts -param1 "BTS"
+downloadScripts -param1 "links.tsv"
 
 Add-Type -Assembly 'System.IO.Compression.FileSystem'
 $zip = [System.IO.Compression.ZipFile]::Open("$PWD\chrome_elf.zip", 'read')
 [System.IO.Compression.ZipFileExtensions]::ExtractToDirectory($zip, $PWD)
 $zip.Dispose()
 
-downloadScripts -param1 "Desktop"
+$online = Check_verison_clients -param2 "online"
 
 $spotifyInstalled = (Test-Path -LiteralPath $spotifyExecutable)
 
 if ($spotifyInstalled) {
 
-    # Check last version Spotify online
-    $online = Check_verison_clients -param2 "online"
-
-    # Check last version Spotify offline
     $offline = Check_verison_clients -param2 "offline"
 
     if ($online -gt $offline) {
@@ -184,15 +271,41 @@ if ($spotifyInstalled) {
         while ($ch -notmatch '^y$|^n$')
         if ($ch -eq 'y') { $upgrade_client = $true }
     }
-}
 
+    if ($online -lt $offline) {
+        do {
+            $ch = Read-Host -Prompt "Your Spotify $offline version hasn't been tested yet, currently it's a stable $online version. `nDo you want to continue with $offline  version (errors possible) ? (Y/N)"
+            Write-Host ""
+            if (!($ch -eq 'n' -or $ch -eq 'y')) {
+                incorrectValue
+            }
+        }
+        while ($ch -notmatch '^y$|^n$')
+        if ($ch -eq 'y') { $upgrade_client = $false }
+        if ($ch -eq 'n') {
+            do {
+                $ch = Read-Host -Prompt "Do you want to install the recommended $online version ? (Y/N)"
+                Write-Host ""
+                if (!($ch -eq 'n' -or $ch -eq 'y')) {
+                    incorrectValue
+                }
+            }
+            while ($ch -notmatch '^y$|^n$')
+            if ($ch -eq 'y') {
+                $upgrade_client = $true
+            }
+            if ($ch -eq 'n') {
+                Write-Host "script is stopped"
+                Exit
+            }
+        }
+    }
+}
 # If there is no client or it is outdated, then install
 if (-not $spotifyInstalled -or $upgrade_client) {
 
-    $version_client = Check_verison_clients -param2 "online"
-
     Write-Host "Downloading and installing Spotify " -NoNewline
-    Write-Host  $version_client -ForegroundColor Green
+    Write-Host  $online -ForegroundColor Green
     Write-Host "Please wait..."`n
     
     # Delete the files of the previous version of Spotify before installing, leave only the profile files
@@ -205,6 +318,12 @@ if (-not $spotifyInstalled -or $upgrade_client) {
     Get-ChildItem $spotifyDirectory2 -Exclude 'Users' | Remove-Item -Recurse -Force 
     Start-Sleep -Milliseconds 200
 
+    # Client download
+    downloadScripts -param1 "Desktop"
+    Write-Host ""
+
+    Start-Sleep -Milliseconds 200
+
     # Client installation
     Start-Process -FilePath explorer.exe -ArgumentList $PWD\SpotifySetup.exe
     while (-not (get-process | Where-Object { $_.ProcessName -eq 'SpotifySetup' })) {}
@@ -214,14 +333,6 @@ if (-not $spotifyInstalled -or $upgrade_client) {
     Stop-Process -Name SpotifyWebHelper 
     Stop-Process -Name SpotifyFullSetup 
 
-    # Remove Spotify installer
-    $ErrorActionPreference = 'SilentlyContinue'  # extinguishes light mistakes
-    if (test-path "$env:LOCALAPPDATA\Microsoft\Windows\Temporary Internet Files\") {
-        get-childitem -path "$env:LOCALAPPDATA\Microsoft\Windows\Temporary Internet Files\" -Recurse -Force -Filter  "SpotifyFullSetup*" | remove-item  -Force
-    }
-    if (test-path $env:LOCALAPPDATA\Microsoft\Windows\INetCache\) {
-        get-childitem -path "$env:LOCALAPPDATA\Microsoft\Windows\INetCache\" -Recurse -Force -Filter  "SpotifyFullSetup*" | remove-item  -Force
-    }
 }
 
 # Delete the leveldb folder (Fixes bug with incorrect experimental features for some accounts)
@@ -271,7 +382,14 @@ if ($ch -eq 'y') {
 
     if ($ch -match "^[1-9][0-9]?$|^100$") { $number_days = $ch }
 }
-
+if ($ch -eq 'n') {
+    $ErrorActionPreference = 'SilentlyContinue'
+    $desktop_folder = DesktopFolder
+    if (Test-Path -LiteralPath $cache_folder) {
+        remove-item $cache_folder -Recurse -Force
+        remove-item $desktop_folder\Spotify.lnk -Recurse -Force
+    }
+}
 
 function OffPodcasts {
 
@@ -382,14 +500,18 @@ $xpui_spa_patch = "$env:APPDATA\Spotify\Apps\xpui.spa"
 $xpui_patch = "$env:APPDATA\Spotify\Apps\xpui\"
 $xpui_js_patch = "$env:APPDATA\Spotify\Apps\xpui\xpui.js"
 $xpui_css_patch = "$env:APPDATA\Spotify\Apps\xpui\xpui.css"
-
+$xpui_lic_patch = "$env:APPDATA\Spotify\Apps\xpui\licenses.html"
 $test_spa = Test-Path -Path $env:APPDATA\Spotify\Apps\xpui.spa
-$test_js = Test-Path -Path $env:APPDATA\Spotify\Apps\xpui\xpui.js
+$test_js = Test-Path -Path $xpui_js_patch
+$xpui_js_bak_patch = "$env:APPDATA\Spotify\Apps\xpui\xpui.js.bak"
+$xpui_css_bak_patch = "$env:APPDATA\Spotify\Apps\xpui\xpui.css.bak"
+$xpui_lic_bak_patch = "$env:APPDATA\Spotify\Apps\xpui\licenses.html.bak"
+
 
 if ($test_spa -and $test_js) {
     Write-Host "Error" -ForegroundColor Red
     Write-Host "The location of Spotify files is broken, uninstall the client and run the script again."
-    Write-Host "The script is stopped."
+    Write-Host "script is stopped."`n
     exit
 }
 
@@ -397,14 +519,38 @@ if (Test-Path $xpui_js_patch) {
     Write-Host "Spicetify detected"`n
 
     $reader = New-Object -TypeName System.IO.StreamReader -ArgumentList $xpui_js_patch
-    $xpui_js = $reader.ReadToEnd()
+    $xpui_test_js = $reader.ReadToEnd()
     $reader.Close()
         
-    If (!($xpui_js -match 'patched by spotx')) {
-        $spotx_new = $true
-        Copy-Item $xpui_js_patch "$xpui_js_patch.bak"
-        Copy-Item $xpui_css_patch "$xpui_css_patch.bak"
+    If ($xpui_test_js -match 'patched by spotx') {
+
+        $test_xpui_js_bak = Test-Path -Path $xpui_js_bak_patch
+        $test_xpui_css_bak = Test-Path -Path $xpui_css_bak_patch
+        $test_xpui_lic_bak = Test-Path -Path $xpui_lic_bak_patch
+
+        if ($test_xpui_js_bak -and $test_xpui_css_bak -and $test_xpui_lic_bak) {
+            Write-Host "SpotX has already been installed, xpui.js and xpui.css restore..."`n
+            Remove-Item $xpui_js_patch -Recurse -Force
+            Remove-Item $xpui_css_patch -Recurse -Force
+            Remove-Item $xpui_lic_patch -Recurse -Force
+            Rename-Item $xpui_js_bak_patch $xpui_js_patch
+            Rename-Item $xpui_css_bak_patch $xpui_css_patch
+            Rename-Item $xpui_lic_bak_patch $xpui_lic_patch
+        }
+        else {
+            Write-Host "SpotX has already been installed, xpui.js and xpui.css not found. `nPlease uninstall Spotify client and run Install.bat again, script is stopped."`n
+            exit
+        }
+
     }
+
+    Copy-Item $xpui_js_patch $xpui_js_bak_patch
+    Copy-Item $xpui_css_patch $xpui_css_bak_patch
+    Copy-Item $xpui_lic_patch $xpui_lic_bak_patch
+
+    $reader = New-Object -TypeName System.IO.StreamReader -ArgumentList $xpui_js_patch
+    $xpui_js = $reader.ReadToEnd()
+    $reader.Close()
 
     # Turn off podcasts
     if ($Podcasts_off) { $xpui_js = OffPodcasts }
@@ -418,7 +564,7 @@ if (Test-Path $xpui_js_patch) {
     $writer = New-Object System.IO.StreamWriter -ArgumentList $xpui_js_patch
     $writer.BaseStream.SetLength(0)
     $writer.Write($xpui_js)
-    if ($spotx_new) { $writer.Write([System.Environment]::NewLine + '// Patched by SpotX') }
+    $writer.Write([System.Environment]::NewLine + '// Patched by SpotX') 
     $writer.Close()  
 
     # podcast off for 1.1.85.895 >=
@@ -473,6 +619,9 @@ if (Test-Path $xpui_js_patch) {
 
 If (Test-Path $xpui_spa_patch) {
 
+    $bak_spa = "$env:APPDATA\Spotify\Apps\xpui.bak"
+    $test_bak_spa = Test-Path -Path $bak_spa
+
     # Make a backup copy of xpui.spa if it is original
     Add-Type -Assembly 'System.IO.Compression.FileSystem'
     $zip = [System.IO.Compression.ZipFile]::Open($xpui_spa_patch, 'update')
@@ -481,13 +630,22 @@ If (Test-Path $xpui_spa_patch) {
     $patched_by_spotx = $reader.ReadToEnd()
     $reader.Close()
 
-    If (!($patched_by_spotx -match 'patched by spotx')) {
-        $spotx_new = $true 
-        $zip.Dispose()    
-        Copy-Item $xpui_spa_patch $env:APPDATA\Spotify\Apps\xpui.bak
+    If ($patched_by_spotx -match 'patched by spotx') {
+        $zip.Dispose()  
+        
+        if ($test_bak_spa) {
+            Write-Host "SpotX has already been installed, xpui.spa restore..."`n
+            Remove-Item $xpui_spa_patch -Recurse -Force
+            Rename-Item $bak_spa $xpui_spa_patch
+        }
+        else {
+            Write-Host "SpotX has already been installed, xpui.bak not found, please uninstall Spotify client and run Install.bat again, script is stopped."`n
+            exit
+        }
     }
-    else { $zip.Dispose() }
-    
+    $zip.Dispose()
+    Copy-Item $xpui_spa_patch $env:APPDATA\Spotify\Apps\xpui.bak
+
     Add-Type -Assembly 'System.IO.Compression.FileSystem'
     $zip = [System.IO.Compression.ZipFile]::Open($xpui_spa_patch, 'update')
     
@@ -512,7 +670,7 @@ If (Test-Path $xpui_spa_patch) {
     $writer = New-Object System.IO.StreamWriter($entry_xpui.Open())
     $writer.BaseStream.SetLength(0)
     $writer.Write($xpui_js)
-    if ($spotx_new) { $writer.Write([System.Environment]::NewLine + '// Patched by SpotX') }
+    $writer.Write([System.Environment]::NewLine + '// Patched by SpotX') 
     $writer.Close()
 
     # vendor~xpui.js
@@ -628,7 +786,7 @@ If (Test-Path $xpui_spa_patch) {
         $xpuiContents_json = $readerjson.ReadToEnd()
         $readerjson.Close()
 
-        # Json minification
+        # json minification
         $xpuiContents_json = $xpuiContents_json `
             -replace "  ", "" -replace "    ", "" -replace '": ', '":' -replace "\r?\n(?!\(1|\d)", "" 
 
@@ -640,25 +798,13 @@ If (Test-Path $xpui_spa_patch) {
     $zip.Dispose()   
 }
 
-# If the default Dekstop folder does not exist, then try to find it through the registry.
+
+# Shortcut Spotify.lnk
 $ErrorActionPreference = 'SilentlyContinue' 
 
-if (Test-Path "$env:USERPROFILE\Desktop") {  
+$desktop_folder = DesktopFolder
 
-    $desktop_folder = "$env:USERPROFILE\Desktop"  
-}
-
-$regedit_desktop_folder = Get-ItemProperty -Path "Registry::HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders\"
-$regedit_desktop = $regedit_desktop_folder.'{754AC886-DF64-4CBA-86B5-F7FBF4FBCEF5}'
- 
-if (!(Test-Path "$env:USERPROFILE\Desktop")) {
-    $desktop_folder = $regedit_desktop
-}
-
-# Shortcut bug
-$ErrorActionPreference = 'SilentlyContinue' 
-
-If (!(Test-Path $env:USERPROFILE\Desktop\Spotify.lnk)) {
+If (!(Test-Path $desktop_folder\Spotify.lnk)) {
     $source = "$env:APPDATA\Spotify\Spotify.exe"
     $target = "$desktop_folder\Spotify.lnk"
     $WorkingDir = "$env:APPDATA\Spotify"
@@ -680,7 +826,11 @@ if ($block_update) {
         $exe_bak = "$env:APPDATA\Spotify\Spotify.bak"
         $ANSI = [Text.Encoding]::GetEncoding(1251)
         $old = [IO.File]::ReadAllText($exe, $ANSI)
-        if ($old -match "(?<=wg:\/\/desktop-update\/.)2(\/update)") {
+
+        if ($old -match "(?<=wg:\/\/desktop-update\/.)7(\/update)") {
+            Write-Host "Spotify updates are already blocked"`n
+        }
+        elseif ($old -match "(?<=wg:\/\/desktop-update\/.)2(\/update)") {
             copy-Item $exe $exe_bak
             $new = $old -replace "(?<=wg:\/\/desktop-update\/.)2(\/update)", '7/update'
             [IO.File]::WriteAllText($exe, $new, $ANSI)
@@ -696,7 +846,6 @@ if ($block_update) {
 
 # Automatic cache clearing
 if ($cache_install) {
-    $cache_folder = "$env:APPDATA\Spotify\cache"
     Start-Sleep -Milliseconds 200
     New-Item -Path $env:APPDATA\Spotify\ -Name "cache" -ItemType "directory" | Out-Null
 

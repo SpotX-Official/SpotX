@@ -48,7 +48,7 @@ if exist "%Appdata%\Spotify\Apps\xpui\licenses.html.bak" (
 
 if exist "%Appdata%\Spotify\Apps\xpui\i18n\ru.json.bak" (
     del /s /q "%Appdata%\Spotify\Apps\xpui\i18n\ru.json" > NUL 2>&1
-	move "%Appdata%\Spotify\Apps\xpui\ru.json.bak" "%Appdata%\Spotify\Apps\xpui\i18n\ru.json" > NUL 2>&1
+	move "%Appdata%\Spotify\Apps\xpui\i18n\ru.json.bak" "%Appdata%\Spotify\Apps\xpui\i18n\ru.json" > NUL 2>&1
 )
 
 

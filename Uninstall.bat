@@ -40,6 +40,18 @@ if exist "%Appdata%\Spotify\Apps\xpui\xpui.css.bak" (
 )
 
 
+if exist "%Appdata%\Spotify\Apps\xpui\licenses.html.bak" (
+    del /s /q "%Appdata%\Spotify\Apps\xpui\licenses.html" > NUL 2>&1
+	move "%Appdata%\Spotify\Apps\xpui\licenses.html.bak" "%Appdata%\Spotify\Apps\xpui\licenses.html" > NUL 2>&1
+)
+
+
+if exist "%Appdata%\Spotify\Apps\xpui\i18n\ru.json.bak" (
+    del /s /q "%Appdata%\Spotify\Apps\xpui\i18n\ru.json" > NUL 2>&1
+	move "%Appdata%\Spotify\Apps\xpui\ru.json.bak" "%Appdata%\Spotify\Apps\xpui\i18n\ru.json" > NUL 2>&1
+)
+
+
 if exist "%Appdata%\Spotify\blockthespot_log.txt" (
     del /s /q "%Appdata%\Spotify\blockthespot_log.txt" > NUL 2>&1
 )

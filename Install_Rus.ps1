@@ -591,6 +591,7 @@ $xpui_js_bak_patch = "$env:APPDATA\Spotify\Apps\xpui\xpui.js.bak"
 $xpui_css_bak_patch = "$env:APPDATA\Spotify\Apps\xpui\xpui.css.bak"
 $xpui_lic_bak_patch = "$env:APPDATA\Spotify\Apps\xpui\licenses.html.bak"
 $xpui_ru_bak_patch = "$env:APPDATA\Spotify\Apps\xpui\i18n\ru.json.bak"
+$spotify_exe_bak_patch = "$env:APPDATA\Spotify\Spotify.bak"
 
 
 if ($test_spa -and $test_js) {
@@ -618,17 +619,31 @@ if (Test-Path $xpui_js_patch) {
         $test_xpui_css_bak = Test-Path -Path $xpui_css_bak_patch
         $test_xpui_lic_bak = Test-Path -Path $xpui_lic_bak_patch
         $test_xpui_ru_bak = Test-Path -Path $xpui_ru_bak_patch
+        $test_spotify_exe_bak = Test-Path -Path $spotify_exe_bak_patch
 
-        if ($test_xpui_js_bak -and $test_xpui_css_bak -and $test_xpui_lic_bak -and $test_xpui_ru_bak) {
-            Write-Host "SpotX уже был установлен, xpui.js и xpui.css будут восстановлены..."`n
-            Remove-Item $xpui_js_patch -Recurse -Force
-            Remove-Item $xpui_css_patch -Recurse -Force
-            Remove-Item $xpui_lic_patch -Recurse -Force
-            Remove-Item $xpui_ru_patch -Recurse -Force
-            Rename-Item $xpui_js_bak_patch $xpui_js_patch
-            Rename-Item $xpui_css_bak_patch $xpui_css_patch
-            Rename-Item $xpui_lic_bak_patch $xpui_lic_patch
-            Rename-Item $xpui_ru_bak_patch $xpui_ru_patch
+        if ($test_xpui_js_bak -or $test_xpui_css_bak) {
+            
+            if ($test_xpui_js_bak) { 
+                Remove-Item $xpui_js_patch -Recurse -Force
+                Rename-Item $xpui_js_bak_patch $xpui_js_patch
+            }
+            if ($test_xpui_css_bak) {
+                Remove-Item $xpui_css_patch -Recurse -Force
+                Rename-Item $xpui_css_bak_patch $xpui_css_patch
+            }
+            if ($test_xpui_lic_bak) {
+                Remove-Item $xpui_lic_patch -Recurse -Force
+                Rename-Item $xpui_lic_bak_patch $xpui_lic_patch
+            }
+            if ($test_xpui_ru_bak) {
+                Remove-Item $xpui_ru_patch -Recurse -Force
+                Rename-Item $xpui_ru_bak_patch $xpui_ru_patch
+            }
+            if ($test_spotify_exe_bak) {
+                Remove-Item $spotifyExecutable -Recurse -Force
+                Rename-Item $spotify_exe_bak_patch $spotifyExecutable
+            }
+
         }
         else {
             Write-Host "SpotX уже был установлен, xpui.js.bak и xpui.css.bak не найдены. `nУдалите клиент Spotify и снова запустите Install_Rus.bat, скрипт остановлен."`n
@@ -726,9 +741,16 @@ If (Test-Path $xpui_spa_patch) {
         $zip.Dispose()    
 
         if ($test_bak_spa) {
-            Write-Host "SpotX уже был установлен, xpui.spa будет восстановлен..."`n
+
             Remove-Item $xpui_spa_patch -Recurse -Force
             Rename-Item $bak_spa $xpui_spa_patch
+
+            $spotify_exe_bak_patch = "$env:APPDATA\Spotify\Spotify.bak"
+            $test_spotify_exe_bak = Test-Path -Path $spotify_exe_bak_patch
+            if ($test_spotify_exe_bak) {
+                Remove-Item $spotifyExecutable -Recurse -Force
+                Rename-Item $spotify_exe_bak_patch $spotifyExecutable
+            }
         }
         else {
             Write-Host "SpotX уже был установлен, xpui.bak не найден. `nУдалите клиент Spotify и снова запустите Install_Rus.bat, скрипт остановлен."`n

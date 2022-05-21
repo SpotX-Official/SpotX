@@ -394,21 +394,10 @@ if ($ch -eq 'n') {
 function OffPodcasts {
 
     # Turn off podcasts
-    $ofline = Check_verison_clients -param2 "offline"
-
-    if ($ofline -le "1.1.82.758") {
-        $podcasts_off1 = 'album,playlist,artist,show,station,episode', 'album,playlist,artist,station'
-    }
-    if ($ofline -eq "1.1.83.954" -or $ofline -eq "1.1.83.956" -or $ofline -eq "1.1.84.716" ) {
-        $podcasts_off1 = '"album","playlist","artist","show","station","episode"', '"album","playlist","artist","station"'
-    }
-
+    $podcasts_off1 = '(return this\.queryParameters=(.),)', '$2.types=["album","playlist","artist","station"];$1'
     $podcasts_off2 = ',this[.]enableShows=[a-z]'
 
-    if ($ofline -le "1.1.82.758" -or $ofline -eq "1.1.83.954" -or $ofline -eq "1.1.83.956" -or $ofline -eq "1.1.84.716" ) {
-        if ($xpui_js -match $podcasts_off1[0]) { $xpui_js = $xpui_js -replace $podcasts_off1[0], $podcasts_off1[1] } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$podcasts_off1[0] in xpui.js" }
-    }
-
+    if ($xpui_js -match $podcasts_off1[0]) { $xpui_js = $xpui_js -replace $podcasts_off1[0], $podcasts_off1[1] } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$podcasts_off1[0] in xpui.js" }
     if ($xpui_js -match $podcasts_off2) { $xpui_js = $xpui_js -replace $podcasts_off2, "" } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$podcasts_off2 in xpui.js" }
     $xpui_js
 }
@@ -497,7 +486,6 @@ Start-Sleep -Milliseconds 200
 Remove-Item -Recurse -LiteralPath $tempDirectory 
 
 $xpui_spa_patch = "$env:APPDATA\Spotify\Apps\xpui.spa"
-$xpui_patch = "$env:APPDATA\Spotify\Apps\xpui\"
 $xpui_js_patch = "$env:APPDATA\Spotify\Apps\xpui\xpui.js"
 $xpui_css_patch = "$env:APPDATA\Spotify\Apps\xpui\xpui.css"
 $xpui_lic_patch = "$env:APPDATA\Spotify\Apps\xpui\licenses.html"
@@ -566,23 +554,6 @@ if (Test-Path $xpui_js_patch) {
     $writer.Write($xpui_js)
     $writer.Write([System.Environment]::NewLine + '// Patched by SpotX') 
     $writer.Close()  
-
-    # podcast off for 1.1.85.895 >=
-    $ofline = Check_verison_clients -param2 "offline"
-    if ($podcasts_off -and $ofline -le "1.1.85.895" ) {
-        Get-ChildItem $xpui_patch | Where-Object FullName -like '*.js' | ForEach-Object {
-            $readerjs = New-Object System.IO.StreamReader($_.FullName)
-            $xpuiContents_js = $readerjs.ReadToEnd()
-            $readerjs.Close()
-        
-            $xpuiContents_js = $xpuiContents_js -replace '"album","playlist","artist","show","station","episode"', '"album","playlist","artist","station"'
-        
-            $writer = New-Object System.IO.StreamWriter($_.FullName)
-            $writer.BaseStream.SetLength(0)
-            $writer.Write($xpuiContents_js)
-            $writer.Close()
-        }
-    }
 
     # xpui.css
     $file_xpui_css = get-item $env:APPDATA\Spotify\Apps\xpui\xpui.css
@@ -691,11 +662,7 @@ If (Test-Path $xpui_spa_patch) {
         $readerjs = New-Object System.IO.StreamReader($_.Open())
         $xpuiContents_js = $readerjs.ReadToEnd()
         $readerjs.Close()
-        # podcast off for 1.1.85.895 >=
-        $ofline = Check_verison_clients -param2 "offline"
-        if ($podcasts_off -and $ofline -le "1.1.85.895" ) {
-            $xpuiContents_js = $xpuiContents_js -replace '"album","playlist","artist","show","station","episode"', '"album","playlist","artist","station"'
-        }
+
         # js minification
         $xpuiContents_js = $xpuiContents_js `
             -replace "[/][/][#] sourceMappingURL=.*[.]map", "" -replace "\r?\n(?!\(1|\d)", ""

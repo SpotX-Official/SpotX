@@ -11,8 +11,6 @@
       </p>
      <h2> <div align="center"><b> Modified Spotify Client for Windows </b></div> </h2>
 
-❗❗❗ [Search Type (Voting)](https://github.com/amd64fox/SpotX/discussions/46)
-
 <h1>System requirements:</h1>
 
 

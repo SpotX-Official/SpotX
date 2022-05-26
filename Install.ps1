@@ -183,7 +183,6 @@ function DesktopFolder {
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 
 Stop-Process -Name Spotify
-Stop-Process -Name SpotifyWebHelper
 
 if ($verPS -lt 3) {
     do {
@@ -269,7 +268,30 @@ if ($spotifyInstalled) {
             }
         }
         while ($ch -notmatch '^y$|^n$')
-        if ($ch -eq 'y') { $upgrade_client = $true }
+        if ($ch -eq 'y') { 
+            $upgrade_client = $true 
+
+            do {
+                $ch = Read-Host -Prompt "Do you want to uninstall the current version of $offline or install over it? Y [Uninstall] / N [Install Over]"
+                Write-Host ""
+                if (!($ch -eq 'n' -or $ch -eq 'y')) {
+                    incorrectValue
+                }
+            }
+            while ($ch -notmatch '^y$|^n$')
+                
+            if ($ch -eq 'y') {
+                Write-Host "Uninstall Spotify..."
+                Write-Host ""
+                cmd /c $spotifyExecutable /UNINSTALL /SILENT
+                wait-process -name SpotifyUninstall
+                Start-Sleep -Milliseconds 200
+            }
+            if ($ch -eq 'n') { $ch = $null }
+        }
+        if ($ch -eq 'n') { 
+            $downgrading = $true
+        }
     }
 
     if ($online -lt $offline) {
@@ -293,9 +315,32 @@ if ($spotifyInstalled) {
             while ($ch -notmatch '^y$|^n$')
             if ($ch -eq 'y') {
                 $upgrade_client = $true
+                $downgrading = $true
+                do {
+                    $ch = Read-Host -Prompt "Do you want to uninstall the current version of $offline or install over it? Y [Uninstall] / N [Install Over]"
+                    Write-Host ""
+                    if (!($ch -eq 'n' -or $ch -eq 'y')) {
+                        incorrectValue
+                    }
+                }
+                while ($ch -notmatch '^y$|^n$')
+                
+                if ($ch -eq 'y') {
+                    Write-Host "Uninstall Spotify..."
+                    Write-Host ""
+                    cmd /c $spotifyExecutable /UNINSTALL /SILENT
+                    wait-process -name SpotifyUninstall
+                    Start-Sleep -Milliseconds 200
+                }
+                if ($ch -eq 'n') { $ch = $null }
             }
+
             if ($ch -eq 'n') {
                 Write-Host "script is stopped"
+                $tempDirectory = $PWD
+                Pop-Location
+                Start-Sleep -Milliseconds 200
+                Remove-Item -Recurse -LiteralPath $tempDirectory 
                 Exit
             }
         }
@@ -329,9 +374,9 @@ if (-not $spotifyInstalled -or $upgrade_client) {
     while (-not (get-process | Where-Object { $_.ProcessName -eq 'SpotifySetup' })) {}
     wait-process -name SpotifySetup
 
+
+    wait-process -name SpotifySetup
     Stop-Process -Name Spotify 
-    Stop-Process -Name SpotifyWebHelper 
-    Stop-Process -Name SpotifyFullSetup 
 
 }
 
@@ -355,8 +400,14 @@ do {
 while ($ch -notmatch '^y$|^n$')
 if ($ch -eq 'y') { $podcasts_off = $true }
 
+
+if ($downgrading) { $upd = "`nYou have had a downgrade of Spotify, it is recommended to block" }
+
+else { $upd = "" }
+
 do {
-    $ch = Read-Host -Prompt "Want to block updates ? (Y/N)"
+    $ch = Read-Host -Prompt "Want to block updates ? (Y/N)$upd"
+    
     Write-Host ""
     if (!($ch -eq 'n' -or $ch -eq 'y')) { incorrectValue } 
 }
@@ -408,7 +459,7 @@ function OffAdsOnFullscreen {
     $empty_block_ad = 'adsEnabled:!0', 'adsEnabled:!1'
 
     # Full screen mode activation and removing "Upgrade to premium" menu, upgrade button
-    $full_screen = 'return"free"===(.+?)return"premium"===', 'return"premium"===$1return"free"==='
+    $full_screen = '(return|.=.=>)"free"===(.+?)(return|.=.=>)"premium"===', '$1"premium"===$2$3"free"==='
 
     # Disabling a playlist sponsor
     $playlist_ad_off = "allSponsorships"
@@ -434,10 +485,12 @@ function ExpFeature {
     $exp_features8 = '(Enable Enhance Playlist UI and functionality for end-users",default:)(!1)', '$1!0'
     $exp_features9 = '(Enable a condensed disography shelf on artist pages",default:)(!1)', '$1!0'
     $exp_features10 = '(Enable the new fullscreen lyrics page",default:)(!1)', '$1!0'
+    
     if ($ofline -eq "1.1.84.716") { 
         $exp_features11 = '(lyrics_format:)(.)', '$1"fullscreen"'
     }
     $exp_features12 = '(Enable Playlist Permissions flows for Prod",default:)(!1)', '$1!0'
+    $exp_features13 = '(Enable Enhance Liked Songs UI and functionality",default:)(!1)', '$1!0'
 
     if ($xpui_js -match $exp_features1[0]) { $xpui_js = $xpui_js -replace $exp_features1[0], $exp_features1[1] } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$exp_features1[0] in xpui.js" }
     if ($xpui_js -match $exp_features2[0]) { $xpui_js = $xpui_js -replace $exp_features2[0], $exp_features2[1] } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$exp_features2[0] in xpui.js" }
@@ -453,6 +506,7 @@ function ExpFeature {
         if ($xpui_js -match $exp_features11[0]) { $xpui_js = $xpui_js -replace $exp_features11[0], $exp_features11[1] } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$exp_features11[0] in xpui.js" }
     }
     if ($xpui_js -match $exp_features12[0]) { $xpui_js = $xpui_js -replace $exp_features12[0], $exp_features12[1] } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$exp_features12[0] in xpui.js" }
+    if ($xpui_js -match $exp_features13[0]) { $xpui_js = $xpui_js -replace $exp_features13[0], $exp_features13[1] } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$exp_features13[0] in xpui.js" }
     $xpui_js
 }
 

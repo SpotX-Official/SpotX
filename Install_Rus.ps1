@@ -183,7 +183,6 @@ function DesktopFolder {
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 
 Stop-Process -Name Spotify
-Stop-Process -Name SpotifyWebHelper
 
 if ($verPS -lt 3) {
     do {
@@ -269,7 +268,30 @@ if ($spotifyInstalled) {
             }
         }
         while ($ch -notmatch '^y$|^n$')
-        if ($ch -eq 'y') { $upgrade_client = $true }
+        if ($ch -eq 'y') { 
+            $upgrade_client = $true 
+
+            do {
+                $ch = Read-Host -Prompt "Вы хотите удалить текущую версию $offline или установить поверх нее? Y [Удалить] / N [Поверх]"
+                Write-Host ""
+                if (!($ch -eq 'n' -or $ch -eq 'y')) {
+                    incorrectValue
+                }
+            }
+            while ($ch -notmatch '^y$|^n$')
+                
+            if ($ch -eq 'y') {
+                Write-Host "Удаление Spotify..."
+                Write-Host ""
+                cmd /c $spotifyExecutable /UNINSTALL /SILENT
+                wait-process -name SpotifyUninstall
+                Start-Sleep -Milliseconds 200
+            }
+            if ($ch -eq 'n') { $ch = $null }
+        }
+        if ($ch -eq 'n') { 
+            $downgrading = $true
+        }
     }
 
     if ($online -lt $offline) {
@@ -293,8 +315,31 @@ if ($spotifyInstalled) {
             while ($ch -notmatch '^y$|^n$')
             if ($ch -eq 'y') {
                 $upgrade_client = $true
+                $downgrading = $true
+                do {
+                    $ch = Read-Host -Prompt "Вы хотите удалить текущую версию $offline или установить поверх нее? Y [Удалить] / N [Поверх]"
+                    Write-Host ""
+                    if (!($ch -eq 'n' -or $ch -eq 'y')) {
+                        incorrectValue
+                    }
+                }
+                while ($ch -notmatch '^y$|^n$')
+                
+                if ($ch -eq 'y') {
+                    Write-Host "Удаление Spotify..."
+                    Write-Host ""
+                    cmd /c $spotifyExecutable /UNINSTALL /SILENT
+                    wait-process -name SpotifyUninstall
+                    Start-Sleep -Milliseconds 200
+                }
+                if ($ch -eq 'n') { $ch = $null }
             }
+
             if ($ch -eq 'n') {
+                $tempDirectory = $PWD
+                Pop-Location
+                Start-Sleep -Milliseconds 200
+                Remove-Item -Recurse -LiteralPath $tempDirectory 
                 Write-Host "скрипт остановлен"
                 Exit
             }
@@ -328,10 +373,10 @@ if (-not $spotifyInstalled -or $upgrade_client) {
     Start-Process -FilePath explorer.exe -ArgumentList $PWD\SpotifySetup.exe
     while (-not (get-process | Where-Object { $_.ProcessName -eq 'SpotifySetup' })) {}
     wait-process -name SpotifySetup
-   
+
+
+    wait-process -name SpotifySetup
     Stop-Process -Name Spotify 
-    Stop-Process -Name SpotifyWebHelper 
-    Stop-Process -Name SpotifyFullSetup 
 
 }
 
@@ -355,8 +400,13 @@ do {
 while ($ch -notmatch '^y$|^n$')
 if ($ch -eq 'y') { $podcasts_off = $true }
 
+
+if ($downgrading) { $upd = "`nУ вас было понижение версии Spotify, рекомендуется заблокировать" }
+
+else { $upd = "" }
+
 do {
-    $ch = Read-Host -Prompt "Хотите заблокировать обновления ? (Y/N)"
+    $ch = Read-Host -Prompt "Хотите заблокировать обновления ? (Y/N)$upd"
     Write-Host ""
     if (!($ch -eq 'n' -or $ch -eq 'y')) { incorrectValue } 
 }
@@ -408,7 +458,7 @@ function OffAdsOnFullscreen {
     $empty_block_ad = 'adsEnabled:!0', 'adsEnabled:!1'
 
     # Активация полноэкранного режима, а также удаление кнопки и меню "Перейти на Premium"
-    $full_screen = 'return"free"===(.+?)return"premium"===', 'return"premium"===$1return"free"==='
+    $full_screen = '(return|.=.=>)"free"===(.+?)(return|.=.=>)"premium"===', '$1"premium"===$2$3"free"==='
 
     # Отключиние спонсорской рекламы в некоторых плейлистах
     $playlist_ad_off = "allSponsorships"
@@ -447,6 +497,7 @@ function ExpFeature {
         $exp_features11 = '(lyrics_format:)(.)', '$1"fullscreen"'
     }
     $exp_features12 = '(Enable Playlist Permissions flows for Prod",default:)(!1)', '$1!0'
+    $exp_features13 = '(Enable Enhance Liked Songs UI and functionality",default:)(!1)', '$1!0'
 
     if ($xpui_js -match $exp_features1[0]) { $xpui_js = $xpui_js -replace $exp_features1[0], $exp_features1[1] } else { Write-Host "Не нашел " -ForegroundColor red -NoNewline; Write-Host "переменную `$exp_features1[0] в xpui.js" }
     if ($xpui_js -match $exp_features2[0]) { $xpui_js = $xpui_js -replace $exp_features2[0], $exp_features2[1] } else { Write-Host "Не нашел " -ForegroundColor red -NoNewline; Write-Host "переменную `$exp_features2[0] в xpui.js" }
@@ -461,7 +512,8 @@ function ExpFeature {
     if ($ofline -eq "1.1.84.716") { 
         if ($xpui_js -match $exp_features11[0]) { $xpui_js = $xpui_js -replace $exp_features11[0], $exp_features11[1] } else { Write-Host "Не нашел " -ForegroundColor red -NoNewline; Write-Host "переменную `$exp_features11[0] в xpui.js" }
     }
-    if ($xpui_js -match $exp_features12[0]) { $xpui_js = $xpui_js -replace $exp_features12[0], $exp_features12[1] } else { Write-Host "Не нашел " -ForegroundColor red -NoNewline; Write-Host "переменную `$exp_features12[0] в xpui.js" }
+    if ($xpui_js -match $exp_features12[0]) { $xpui_js = $xpui_js -replace $exp_features12[0], $exp_features12[1] } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$exp_features12[0] in xpui.js" }
+    if ($xpui_js -match $exp_features13[0]) { $xpui_js = $xpui_js -replace $exp_features13[0], $exp_features13[1] } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$exp_features13[0] in xpui.js" }
     $xpui_js
 }
 

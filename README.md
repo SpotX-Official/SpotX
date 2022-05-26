@@ -11,7 +11,6 @@
       </p>
      <h2> <div align="center"><b> Modified Spotify Client for Windows </b></div> </h2>
 
-
 <h1>System requirements:</h1>
 
 

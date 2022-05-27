@@ -9,7 +9,8 @@ assignees: ''
 
 ## ℹ Computer information
 
-- Spotify version: 
+- Spotify version:
+- Plan Spotify: free or premium 
 - Windows version: 
 - PowerShell version:
 

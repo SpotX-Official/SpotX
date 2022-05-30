@@ -57,7 +57,7 @@ or
 
 or
 
-* Reinstall Spotify    
+* Reinstall Spotify ([Full uninstall](https://github.com/amd64fox/Uninstall-Spotify) recommended)
 
 
 

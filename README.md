@@ -1,13 +1,13 @@
   <p align="center">
-  <a href="https://github.com/amd64fox/SpotX/releases"><img src="https://user-images.githubusercontent.com/62529699/145750769-3d74b068-2d87-4292-9f21-ddd4bcea6d50.png" />
+  <a href="https://github.com/amd64fox/SpotX/releases"><img src="https://github.com/amd64fox/SpotX/raw/main/.github/Pic/logo.png" />
 </p>
 
 
 
 <p align="center">        
-      <a href="https://t.me/spotify_windows_mod"><img src="https://img.shields.io/badge/Telegram%20Channel-%20-blue?style=flat&logo=telegram"></a>
-      <a href="https://www.youtube.com/results?search_query=https%3A%2F%2Fgithub.com%2Famd64fox%2FSpotX"><img src="https://img.shields.io/badge/-red?style=flat&logo=youtube&label=Tutorial%20videos%20on%20YouTube"></a>
-      <a href="https://cutt.ly/8EH6NuH"><img src="https://img.shields.io/badge/Excel%20table--brightgreen.svg?style=flat&logo=microsoftexcel&label=Download official installer"></a>
+      <a href="https://t.me/spotify_windows_mod"><img src="https://raw.githubusercontent.com/amd64fox/SpotX/main/.github/Pic/Shields/tg.svg"></a>
+      <a href="https://www.youtube.com/results?search_query=https%3A%2F%2Fgithub.com%2Famd64fox%2FSpotX"><img src="https://raw.githubusercontent.com/amd64fox/SpotX/main/.github/Pic/Shields/youtube.svg"></a>
+      <a href="https://cutt.ly/8EH6NuH"><img src="https://raw.githubusercontent.com/amd64fox/SpotX/main/.github/Pic/Shields/excel.svg"></a>
       </p>
      <h2> <div align="center"><b> Modified Spotify Client for Windows </b></div> </h2>
 

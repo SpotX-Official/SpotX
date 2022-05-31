@@ -28,12 +28,12 @@
 * <strong>Hidden podcasts and episodes from the homepage (optional)</strong>
 * <strong>Blocks automatic updates (optional)</strong>
 * <strong>Automatic [cache clearing](https://github.com/amd64fox/SpotX/discussions/2) (optional)</strong>
-* <strong>Enabled [enhance playlist](https://user-images.githubusercontent.com/62529699/166843349-f544e354-3ce2-439b-9ac6-06010c9d7f9b.jpg)</strong>
-* <strong>Enabled [enhance liked songs UI](https://user-images.githubusercontent.com/62529699/170522581-d060ed8f-a508-4fbc-921f-98e3ece22c91.jpg)</strong>
-* <strong>Enabled [new lyrics](https://www.reddit.com/r/truespotify/comments/uhj8ie/just_found_out_you_can_jump_to_a_lyrics_on/)</strong>
-* <strong>Enabled [new search with chips experience](https://www.reddit.com/r/truespotify/comments/tt305m/new_search_with_chips_experience/)</strong>
-* <strong>Enabled [a condensed discography shelf on artist pages](https://www.reddit.com/r/truespotify/comments/svc77g/condensed_discography_shelf_on_artist_pages/)</strong>
-* <strong>Activated ["Made For You" in the left sidebar](https://user-images.githubusercontent.com/62529699/166842838-6309f168-3ff1-4559-a087-82cc9ea12b4b.jpg)</strong>
+* <strong>Enabled [enhance playlist](https://github.com/amd64fox/SpotX/discussions/50#discussion-4108773)</strong>
+* <strong>Enabled [enhance liked songs UI](https://github.com/amd64fox/SpotX/discussions/50#discussioncomment-2851482)</strong>
+* <strong>Enabled [new lyrics](https://github.com/amd64fox/SpotX/discussions/50#discussioncomment-2851485)</strong>
+* <strong>Enabled [new search with chips experience](https://github.com/amd64fox/SpotX/discussions/50#discussioncomment-2851545)</strong>
+* <strong>Enabled [a condensed discography shelf on artist pages](https://github.com/amd64fox/SpotX/discussions/50#discussioncomment-2851591)</strong>
+* <strong>Activated ["Made For You" in the left sidebar](https://github.com/amd64fox/SpotX/discussions/50#discussioncomment-2853981)</strong>
 * <strong>Disabled Sentry (Prevented Sentry from sending console log/error/warning to Spotify developers)</strong>
 * <strong>Disabled logging (Stopped various elements to log user interaction)</strong>
 * <strong>Removed RTL rules (Removed all right-to-left CSS rules to simplify CSS files)</strong>

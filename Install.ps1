@@ -445,7 +445,7 @@ if ($ch -eq 'n') {
 function OffPodcasts {
 
     # Turn off podcasts
-    $podcasts_off1 = '(return this\.queryParameters=(.),)', '$2.types=["album","playlist","artist","station"];$1'
+    $podcasts_off1 = 'withQueryParameters\(e\){return this.queryParameters=e,this}', 'withQueryParameters(e){return this.queryParameters=(e.types?{...e, types: e.types.split(",").filter(_ => !["episode","show"].includes(_)).join(",")}:e),this}'
     $podcasts_off2 = ',this[.]enableShows=[a-z]'
 
     if ($xpui_js -match $podcasts_off1[0]) { $xpui_js = $xpui_js -replace $podcasts_off1[0], $podcasts_off1[1] } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$podcasts_off1[0] in xpui.js" }
@@ -473,8 +473,6 @@ function ExpFeature {
 
     # Experimental Feature
 
-    $ofline = Check_verison_clients -param2 "offline"
-
     $exp_features1 = '(Show "Made For You" entry point in the left sidebar.,default:)(!1)', '$1!0'
     $exp_features2 = '(Enable the new Search with chips experience",default:)(!1)', '$1!0'  
     $exp_features3 = '(Enable Liked Songs section on Artist page",default:)(!1)', '$1!0' 
@@ -484,13 +482,10 @@ function ExpFeature {
     $exp_features7 = '(Enables new playlist creation flow in Web Player and DesktopX",default:)(!1)', '$1!0' 
     $exp_features8 = '(Enable Enhance Playlist UI and functionality for end-users",default:)(!1)', '$1!0'
     $exp_features9 = '(Enable a condensed disography shelf on artist pages",default:)(!1)', '$1!0'
-    $exp_features10 = '(Enable the new fullscreen lyrics page",default:)(!1)', '$1!0'
-    
-    if ($ofline -eq "1.1.84.716") { 
-        $exp_features11 = '(lyrics_format:)(.)', '$1"fullscreen"'
-    }
+    $exp_features10 = '(Enable Lyrics match labels in search results",default:)(!1)', '$1!0'
+    $exp_features11 = '(Enable Ignore In Recommendations for desktop and web",default:)(!1)', '$1!0'
     $exp_features12 = '(Enable Playlist Permissions flows for Prod",default:)(!1)', '$1!0'
-    $exp_features13 = '(Enable Enhance Liked Songs UI and functionality",default:)(!1)', '$1!0'
+    #$exp_features13 = '(Enable Enhance Liked Songs UI and functionality",default:)(!1)', '$1!0'
 
     if ($xpui_js -match $exp_features1[0]) { $xpui_js = $xpui_js -replace $exp_features1[0], $exp_features1[1] } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$exp_features1[0] in xpui.js" }
     if ($xpui_js -match $exp_features2[0]) { $xpui_js = $xpui_js -replace $exp_features2[0], $exp_features2[1] } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$exp_features2[0] in xpui.js" }
@@ -502,11 +497,9 @@ function ExpFeature {
     if ($xpui_js -match $exp_features8[0]) { $xpui_js = $xpui_js -replace $exp_features8[0], $exp_features8[1] } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$exp_features8[0] in xpui.js" }
     if ($xpui_js -match $exp_features9[0]) { $xpui_js = $xpui_js -replace $exp_features9[0], $exp_features9[1] } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$exp_features9[0] in xpui.js" }
     if ($xpui_js -match $exp_features10[0]) { $xpui_js = $xpui_js -replace $exp_features10[0], $exp_features10[1] } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$exp_features10[0] in xpui.js" }
-    if ($ofline -eq "1.1.84.716") { 
-        if ($xpui_js -match $exp_features11[0]) { $xpui_js = $xpui_js -replace $exp_features11[0], $exp_features11[1] } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$exp_features11[0] in xpui.js" }
-    }
+    if ($xpui_js -match $exp_features11[0]) { $xpui_js = $xpui_js -replace $exp_features11[0], $exp_features11[1] } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$exp_features11[0] in xpui.js" }
     if ($xpui_js -match $exp_features12[0]) { $xpui_js = $xpui_js -replace $exp_features12[0], $exp_features12[1] } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$exp_features12[0] in xpui.js" }
-    if ($xpui_js -match $exp_features13[0]) { $xpui_js = $xpui_js -replace $exp_features13[0], $exp_features13[1] } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$exp_features13[0] in xpui.js" }
+    #if ($xpui_js -match $exp_features13[0]) { $xpui_js = $xpui_js -replace $exp_features13[0], $exp_features13[1] } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$exp_features13[0] in xpui.js" }
     $xpui_js
 }
 

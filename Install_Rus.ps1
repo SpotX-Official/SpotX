@@ -444,11 +444,11 @@ if ($ch -eq 'n') {
 function OffPodcasts {
 
     # Отключить подкасты
-    $podcasts_off1 = '(return this\.queryParameters=(.),)', '$2.types=["album","playlist","artist","station"];$1'
+    $podcasts_off1 = 'withQueryParameters\(e\){return this.queryParameters=e,this}', 'withQueryParameters(e){return this.queryParameters=(e.types?{...e, types: e.types.split(",").filter(_ => !["episode","show"].includes(_)).join(",")}:e),this}'
     $podcasts_off2 = ',this[.]enableShows=[a-z]'
 
-    if ($xpui_js -match $podcasts_off1[0]) { $xpui_js = $xpui_js -replace $podcasts_off1[0], $podcasts_off1[1] } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$podcasts_off1[0] in xpui.js" }
-    if ($xpui_js -match $podcasts_off2) { $xpui_js = $xpui_js -replace $podcasts_off2, "" } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$podcasts_off2 in xpui.js" }
+    if ($xpui_js -match $podcasts_off1[0]) { $xpui_js = $xpui_js -replace $podcasts_off1[0], $podcasts_off1[1] } else { Write-Host "Не нашел " -ForegroundColor red -NoNewline; Write-Host "переменную `$podcasts_off1[0] в xpui.js" }
+    if ($xpui_js -match $podcasts_off2) { $xpui_js = $xpui_js -replace $podcasts_off2, "" } else { Write-Host "Не нашел " -ForegroundColor red -NoNewline; Write-Host "переменную `$podcasts_off2 в xpui.js" }
     $xpui_js
 }
 
@@ -481,8 +481,6 @@ function ExpFeature {
 
     # Эксперементальные фишки
 
-    $ofline = Check_verison_clients -param2 "offline"
-
     $exp_features1 = '(Show "Made For You" entry point in the left sidebar.,default:)(!1)', '$1!0'
     $exp_features2 = '(Enable the new Search with chips experience",default:)(!1)', '$1!0'  
     $exp_features3 = '(Enable Liked Songs section on Artist page",default:)(!1)', '$1!0' 
@@ -492,12 +490,10 @@ function ExpFeature {
     $exp_features7 = '(Enables new playlist creation flow in Web Player and DesktopX",default:)(!1)', '$1!0' 
     $exp_features8 = '(Enable Enhance Playlist UI and functionality for end-users",default:)(!1)', '$1!0'
     $exp_features9 = '(Enable a condensed disography shelf on artist pages",default:)(!1)', '$1!0'
-    $exp_features10 = '(Enable the new fullscreen lyrics page",default:)(!1)', '$1!0'
-    if ($ofline -eq "1.1.84.716") { 
-        $exp_features11 = '(lyrics_format:)(.)', '$1"fullscreen"'
-    }
+    $exp_features10 = '(Enable Lyrics match labels in search results",default:)(!1)', '$1!0'
+    $exp_features11 = '(Enable Ignore In Recommendations for desktop and web",default:)(!1)', '$1!0'
     $exp_features12 = '(Enable Playlist Permissions flows for Prod",default:)(!1)', '$1!0'
-    $exp_features13 = '(Enable Enhance Liked Songs UI and functionality",default:)(!1)', '$1!0'
+    #$exp_features13 = '(Enable Enhance Liked Songs UI and functionality",default:)(!1)', '$1!0'
 
     if ($xpui_js -match $exp_features1[0]) { $xpui_js = $xpui_js -replace $exp_features1[0], $exp_features1[1] } else { Write-Host "Не нашел " -ForegroundColor red -NoNewline; Write-Host "переменную `$exp_features1[0] в xpui.js" }
     if ($xpui_js -match $exp_features2[0]) { $xpui_js = $xpui_js -replace $exp_features2[0], $exp_features2[1] } else { Write-Host "Не нашел " -ForegroundColor red -NoNewline; Write-Host "переменную `$exp_features2[0] в xpui.js" }
@@ -509,11 +505,9 @@ function ExpFeature {
     if ($xpui_js -match $exp_features8[0]) { $xpui_js = $xpui_js -replace $exp_features8[0], $exp_features8[1] } else { Write-Host "Не нашел " -ForegroundColor red -NoNewline; Write-Host "переменную `$exp_features8[0] в xpui.js" }
     if ($xpui_js -match $exp_features9[0]) { $xpui_js = $xpui_js -replace $exp_features9[0], $exp_features9[1] } else { Write-Host "Не нашел " -ForegroundColor red -NoNewline; Write-Host "переменную `$exp_features9[0] в xpui.js" }
     if ($xpui_js -match $exp_features10[0]) { $xpui_js = $xpui_js -replace $exp_features10[0], $exp_features10[1] } else { Write-Host "Не нашел " -ForegroundColor red -NoNewline; Write-Host "переменную `$exp_features10[0] в xpui.js" }
-    if ($ofline -eq "1.1.84.716") { 
-        if ($xpui_js -match $exp_features11[0]) { $xpui_js = $xpui_js -replace $exp_features11[0], $exp_features11[1] } else { Write-Host "Не нашел " -ForegroundColor red -NoNewline; Write-Host "переменную `$exp_features11[0] в xpui.js" }
-    }
-    if ($xpui_js -match $exp_features12[0]) { $xpui_js = $xpui_js -replace $exp_features12[0], $exp_features12[1] } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$exp_features12[0] in xpui.js" }
-    if ($xpui_js -match $exp_features13[0]) { $xpui_js = $xpui_js -replace $exp_features13[0], $exp_features13[1] } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$exp_features13[0] in xpui.js" }
+    if ($xpui_js -match $exp_features11[0]) { $xpui_js = $xpui_js -replace $exp_features11[0], $exp_features11[1] } else { Write-Host "Не нашел " -ForegroundColor red -NoNewline; Write-Host "переменную `$exp_features11[0] в xpui.js" }
+    if ($xpui_js -match $exp_features12[0]) { $xpui_js = $xpui_js -replace $exp_features12[0], $exp_features12[1] } else { Write-Host "Не нашел " -ForegroundColor red -NoNewline; Write-Host "переменную `$exp_features12[0] в xpui.js" }
+    #if ($xpui_js -match $exp_features13[0]) { $xpui_js = $xpui_js -replace $exp_features13[0], $exp_features13[1] } else { Write-Host "Не нашел " -ForegroundColor red -NoNewline; Write-Host "переменную `$exp_features13[0] в xpui.js" }
     $xpui_js
 }
 
@@ -551,7 +545,6 @@ function RuTranslate {
     $ru_translate27 = '"Line breaks aren.t supported in the description."', '"В описании не поддерживаются разрывы строк."' 
     $ru_translate29 = '"Press save to keep changes you.ve made."', '"Нажмите «Сохранить», чтобы сохранить внесенные изменения."' 
     $ru_translate30 = '"No internet connection found. Changes to description and image will not be saved."', '"Подключение к интернету не найдено. Изменения в описании и изображении не будут сохранены."' 
-    $ru_translate31 = '"Image too large. Please select an image below 4MB."', '"Изображение слишком большое. Пожалуйста, выберите изображение размером менее 4 МБ."' 
     $ru_translate32 = '"Image too small. Images must be at least [{]0[}]x[{]1[}]."', '"Изображение слишком маленькое. Изображения должны быть не менее {0}x{1}."' 
     $ru_translate33 = '"Failed to upload image. Please try again."', '"Не удалось загрузить изображение. Пожалуйста, попробуйте снова."' 
     $ru_translate36 = '"Description"', '"Описание"' 
@@ -592,7 +585,6 @@ function RuTranslate {
     if ($xpui_ru -match $ru_translate27[0]) { $xpui_ru = $xpui_ru -replace $ru_translate27[0], $ru_translate27[1] } else { Write-Host "Не нашел " -ForegroundColor red -NoNewline; Write-Host "переменную `$ru_translate27[0] в ru.json" }
     if ($xpui_ru -match $ru_translate29[0]) { $xpui_ru = $xpui_ru -replace $ru_translate29[0], $ru_translate29[1] } else { Write-Host "Не нашел " -ForegroundColor red -NoNewline; Write-Host "переменную `$ru_translate29[0] в ru.json" }
     if ($xpui_ru -match $ru_translate30[0]) { $xpui_ru = $xpui_ru -replace $ru_translate30[0], $ru_translate30[1] } else { Write-Host "Не нашел " -ForegroundColor red -NoNewline; Write-Host "переменную `$ru_translate30[0] в ru.json" }
-    if ($xpui_ru -match $ru_translate31[0]) { $xpui_ru = $xpui_ru -replace $ru_translate31[0], $ru_translate31[1] } else { Write-Host "Не нашел " -ForegroundColor red -NoNewline; Write-Host "переменную `$ru_translate31[0] в ru.json" }
     if ($xpui_ru -match $ru_translate32[0]) { $xpui_ru = $xpui_ru -replace $ru_translate32[0], $ru_translate32[1] } else { Write-Host "Не нашел " -ForegroundColor red -NoNewline; Write-Host "переменную `$ru_translate32[0] в ru.json" }
     if ($xpui_ru -match $ru_translate33[0]) { $xpui_ru = $xpui_ru -replace $ru_translate33[0], $ru_translate33[1] } else { Write-Host "Не нашел " -ForegroundColor red -NoNewline; Write-Host "переменную `$ru_translate33[0] в ru.json" }
     if ($xpui_ru -match $ru_translate36[0]) { $xpui_ru = $xpui_ru -replace $ru_translate36[0], $ru_translate36[1] } else { Write-Host "Не нашел " -ForegroundColor red -NoNewline; Write-Host "переменную `$ru_translate36[0] в ru.json" }

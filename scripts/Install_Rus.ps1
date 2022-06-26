@@ -249,7 +249,8 @@ Stop-Process -Name Spotify
 if ($verPS -lt 3) {
     do {
         Write-Host "Ваша версия PowerShell $verPS не поддерживается"`n
-        $ch = Read-Host -Prompt "Пожалуйста прочтите 'Outdated versions of PowerShell' `nОткрыть страницу с инструкцией ? (Y/N)"`n
+        $ch = Read-Host -Prompt "Пожалуйста прочтите 'Outdated versions of PowerShell' `nОткрыть страницу с инструкцией ? (Y/N)"
+        Write-Host ""
         if (!($ch -eq 'n' -or $ch -eq 'y')) { incorrectValue }
     }
     while ($ch -notmatch '^y$|^n$')
@@ -282,7 +283,8 @@ if ($win11 -or $win10 -or $win8_1 -or $win8) {
         
         if (!($confirm_uninstall_ms_spoti)) {
             do {
-                $ch = Read-Host -Prompt "Хотите удалить Spotify Microsoft Store ? (Y/N) "`n
+                $ch = Read-Host -Prompt "Хотите удалить Spotify Microsoft Store ? (Y/N) "
+                Write-Host ""
                 if (!($ch -eq 'n' -or $ch -eq 'y')) {
                     incorrectValue
                 }
@@ -336,7 +338,8 @@ if ($spotifyInstalled) {
         }
         if (!($confirm_spoti_recomended_over) -and !($confirm_spoti_recomended_unistall)) {
             do {
-                $ch = Read-Host -Prompt "Ваша версия Spotify $offline устарела, рекомендуется обновиться до $online `nОбновить ? (Y/N)"`n
+                $ch = Read-Host -Prompt "Ваша версия Spotify $offline устарела, рекомендуется обновиться до $online `nОбновить ? (Y/N)"
+                Write-Host ""
                 if (!($ch -eq 'n' -or $ch -eq 'y')) {
                     incorrectValue
                 }
@@ -352,7 +355,8 @@ if ($spotifyInstalled) {
 
             if (!($confirm_spoti_recomended_over) -and !($confirm_spoti_recomended_unistall)) {
                 do {
-                    $ch = Read-Host -Prompt "Вы хотите удалить текущую версию $offline или установить поверх нее? Y [Удалить] / N [Поверх]"`n
+                    $ch = Read-Host -Prompt "Вы хотите удалить текущую версию $offline или установить поверх нее? Y [Удалить] / N [Поверх]"
+                    Write-Host ""
                     if (!($ch -eq 'n' -or $ch -eq 'y')) {
                         incorrectValue
                     }
@@ -385,7 +389,8 @@ if ($spotifyInstalled) {
         }
         if (!($confirm_spoti_recomended_over) -and !($confirm_spoti_recomended_unistall)) {
             do {
-                $ch = Read-Host -Prompt "Ваша версия Spotify $offline еще не тестировалась, стабильная версия сейчас $online. `nХотите продолжить с $offline (возможны ошибки) ? (Y/N)"`n
+                $ch = Read-Host -Prompt "Ваша версия Spotify $offline еще не тестировалась, стабильная версия сейчас $online. `nХотите продолжить с $offline (возможны ошибки) ? (Y/N)"
+                Write-Host ""
                 if (!($ch -eq 'n' -or $ch -eq 'y')) {
                     incorrectValue
                 }
@@ -397,7 +402,8 @@ if ($spotifyInstalled) {
         if ($ch -eq 'n') {
             if (!($confirm_spoti_recomended_over) -or !($confirm_spoti_recomended_unistall)) {
                 do {
-                    $ch = Read-Host -Prompt "Хотите установить рекомендуемую $online версию ? (Y/N)"`n
+                    $ch = Read-Host -Prompt "Хотите установить рекомендуемую $online версию ? (Y/N)"
+                    Write-Host ""
                     if (!($ch -eq 'n' -or $ch -eq 'y')) {
                         incorrectValue
                     }
@@ -413,7 +419,8 @@ if ($spotifyInstalled) {
                 $downgrading = $true
                 if (!($confirm_spoti_recomended_over) -and !($confirm_spoti_recomended_unistall)) {
                     do {
-                        $ch = Read-Host -Prompt "Вы хотите удалить текущую версию $offline или установить поверх нее? Y [Удалить] / N [Поверх]"`n
+                        $ch = Read-Host -Prompt "Вы хотите удалить текущую версию $offline или установить поверх нее? Y [Удалить] / N [Поверх]"
+                        Write-Host ""
                         if (!($ch -eq 'n' -or $ch -eq 'y')) {
                             incorrectValue
                         }
@@ -505,7 +512,8 @@ if ($podcasts_on) {
 if (!($podcasts_off) -and !($podcasts_on)) {
 
     do {
-        $ch = Read-Host -Prompt "Хотите отключить подкасты ? (Y/N)"`n
+        $ch = Read-Host -Prompt "Хотите отключить подкасты ? (Y/N)"
+        Write-Host ""
         if (!($ch -eq 'n' -or $ch -eq 'y')) { incorrectValue }
     }
     while ($ch -notmatch '^y$|^n$')
@@ -528,7 +536,8 @@ if ($block_update_off) {
 }
 if (!($block_update_on) -and !($block_update_off)) {
     do {
-        $ch = Read-Host -Prompt "Хотите заблокировать обновления ? (Y/N)$upd"`n
+        $ch = Read-Host -Prompt "Хотите заблокировать обновления ? (Y/N)$upd"
+        Write-Host ""
         if (!($ch -eq 'n' -or $ch -eq 'y')) { incorrectValue } 
     }
     while ($ch -notmatch '^y$|^n$')
@@ -553,7 +562,8 @@ if ($cache_off) {
 if (!($cache_on) -and !($cache_off)) {
 
     do {
-        $ch = Read-Host -Prompt "Хотите установить автоматическую очистку кеша ? (Y/N)"`n
+        $ch = Read-Host -Prompt "Хотите установить автоматическую очистку кеша ? (Y/N)"
+        Write-Host ""
         if (!($ch -eq 'n' -or $ch -eq 'y')) { incorrectValue }
     }
     while ($ch -notmatch '^y$|^n$')
@@ -563,7 +573,8 @@ if (!($cache_on) -and !($cache_off)) {
 
         do {
             $ch = Read-Host -Prompt "Файлы кэша, которые не использовались более XX дней, будут удалены.
-    Пожалуйста, введите количество дней от 1 до 100"`n
+    Пожалуйста, введите количество дней от 1 до 100"
+    Write-Host ""
             if (!($ch -match "^[1-9][0-9]?$|^100$")) { incorrectValue }
         }
         while ($ch -notmatch '^[1-9][0-9]?$|^100$')

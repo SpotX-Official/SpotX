@@ -104,7 +104,7 @@ or
 
 * Запустите следующую строку напрямую в терминале PowerShell:
 ```ps1
-  [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; iwr -useb 'https://raw.githubusercontent.com/amd64fox/SpotX/main/Install_Rus.ps1' | iex
+  [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; iwr -useb 'https://raw.githubusercontent.com/amd64fox/SpotX/main/scripts/Install_Rus.ps1' | iex
 ```
 
 </details>

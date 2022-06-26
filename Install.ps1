@@ -1,3 +1,68 @@
+param (
+    [Parameter()]
+    [switch]
+    $podcasts_off = $false,
+    [Parameter()]
+    [switch]
+    $podcasts_on = $false,
+    [Parameter()]
+    [switch]
+    $block_update_on = $false,
+    [Parameter()]
+    [switch]
+    $block_update_off = $false,
+    [Parameter()]
+    [switch]
+    $cache_on = $false,
+    [int] $number_days = 7,
+    [Parameter()]
+    [switch]
+    $cache_off = $false,
+    [Parameter()]
+    [switch]
+    $confirm_uninstall_ms_spoti = $false,
+    [Parameter()]
+    [switch]
+    $confirm_spoti_recomended_over = $false,
+    [Parameter()]
+    [switch]
+    $confirm_spoti_recomended_unistall = $false,
+    [Parameter()]
+    [switch]
+    $premium = $false,
+    [Parameter()]
+    [switch]
+    $start_spoti = $false,
+    [Parameter()]
+    [switch]
+    $exp_off = $false,
+    [Parameter()]
+    [switch]
+    $hide_col_icon_off = $false,
+    [Parameter()]
+    [switch]
+    $made_for_you_off = $false,
+    [Parameter()]
+    [switch]
+    $new_search_off = $false,
+    [Parameter()]
+    [switch]
+    $enhance_playlist_off = $false,
+    [Parameter()]
+    [switch]
+    $enhance_like_off = $false,
+    [Parameter()]
+    [switch]
+    $new_artist_pages_off = $false,
+    [Parameter()]
+    [switch]
+    $new_lyrics_off = $false,
+    [Parameter()]
+    [switch]
+    $ignore_in_recommendations_off = $false
+    
+)
+
 # Ignore errors from `Stop-Process`
 $PSDefaultParameterValues['Stop-Process:ErrorAction'] = [System.Management.Automation.ActionPreference]::SilentlyContinue
 
@@ -12,13 +77,10 @@ $spotifyDirectory2 = "$env:LOCALAPPDATA\Spotify"
 $spotifyExecutable = "$spotifyDirectory\Spotify.exe"
 $chrome_elf = "$spotifyDirectory\chrome_elf.dll"
 $chrome_elf_bak = "$spotifyDirectory\chrome_elf_bak.dll"
-$block_File_update = "$env:LOCALAPPDATA\Spotify\Update"
 $cache_folder = "$env:APPDATA\Spotify\cache"
+$spotifyUninstall = "$env:TEMP\SpotifyUninstall.exe"
 $verPS = $PSVersionTable.PSVersion.major
 $upgrade_client = $false
-$podcasts_off = $false
-$block_update = $false
-$cache_install = $false
 
 function incorrectValue {
 
@@ -54,6 +116,7 @@ function Check_verison_clients($param2) {
 function unlockFolder {
 
     $ErrorActionPreference = 'SilentlyContinue'
+    $block_File_update = "$env:LOCALAPPDATA\Spotify\Update"
     $Check_folder = Get-ItemProperty -Path $block_File_update | Select-Object Attributes 
     $folder_update_access = Get-Acl $block_File_update
 
@@ -147,9 +210,8 @@ function downloadScripts($param1) {
         }
         
         catch [System.Management.Automation.MethodInvocationException] {
-            Write-Host "Error again, script stopped" -ForegroundColor RED
+            Write-Host "Error again, script stopped"`n -ForegroundColor RED
             $Error[0].Exception
-            Write-Host ""
             Write-Host "Try to check your internet connection and run the installation again."`n
             $tempDirectory = $PWD
             Pop-Location
@@ -187,8 +249,7 @@ Stop-Process -Name Spotify
 if ($verPS -lt 3) {
     do {
         Write-Host "Your version of PowerShell $verPS is not supported"`n
-        $ch = Read-Host -Prompt "Please read the instruction 'Outdated versions of PowerShell' `nOpen a page with instructions ? (Y/N)"
-        Write-Host ""
+        $ch = Read-Host -Prompt "Please read the instruction 'Outdated versions of PowerShell' `nOpen a page with instructions ? (Y/N)"`n
         if (!($ch -eq 'n' -or $ch -eq 'y')) { incorrectValue }
     }
     while ($ch -notmatch '^y$|^n$')
@@ -218,17 +279,22 @@ if ($win11 -or $win10 -or $win8_1 -or $win8) {
     # Remove Spotify Windows Store If Any
     if (Get-AppxPackage -Name SpotifyAB.SpotifyMusic) {
         Write-Host 'The Microsoft Store version of Spotify has been detected which is not supported.'`n
-        do {
-            $ch = Read-Host -Prompt "Uninstall Spotify Windows Store edition (Y/N) "
-            Write-Host ""
-            if (!($ch -eq 'n' -or $ch -eq 'y')) {
-                incorrectValue
+        
+        if (!($confirm_uninstall_ms_spoti)) {
+            do {
+                $ch = Read-Host -Prompt "Uninstall Spotify Windows Store edition (Y/N) "`n
+                if (!($ch -eq 'n' -or $ch -eq 'y')) {
+                    incorrectValue
+                }
             }
+    
+            while ($ch -notmatch '^y$|^n$')
         }
-        while ($ch -notmatch '^y$|^n$')
+        if ($confirm_uninstall_ms_spoti) { $ch = 'y' }
         if ($ch -eq 'y') {      
             $ProgressPreference = 'SilentlyContinue' # Hiding Progress Bars
-            Write-Host 'Uninstalling Spotify...'`n
+            if ($confirm_uninstall_ms_spoti) { Write-Host 'Automatic uninstalling Spotify MS...'`n }
+            if (!($confirm_uninstall_ms_spoti)) { Write-Host 'Uninstalling Spotify MS...'`n }
             Get-AppxPackage -Name SpotifyAB.SpotifyMusic | Remove-AppxPackage
         }
         if ($ch -eq 'n') {
@@ -242,14 +308,19 @@ if ($win11 -or $win10 -or $win8_1 -or $win8) {
 Push-Location -LiteralPath $env:TEMP
 New-Item -Type Directory -Name "SpotX_Temp-$(Get-Date -UFormat '%Y-%m-%d_%H-%M-%S')" | Convert-Path | Set-Location
 
-Write-Host 'Downloading latest patch BTS...'`n
-downloadScripts -param1 "BTS"
+if ($premium) {
+    Write-Host 'Modification for premium account...'`n
+}
+if (!($premium)) {
+    Write-Host 'Downloading latest patch BTS...'`n
+    downloadScripts -param1 "BTS"
+    Add-Type -Assembly 'System.IO.Compression.FileSystem'
+    $zip = [System.IO.Compression.ZipFile]::Open("$PWD\chrome_elf.zip", 'read')
+    [System.IO.Compression.ZipFileExtensions]::ExtractToDirectory($zip, $PWD)
+    $zip.Dispose()
+}
 downloadScripts -param1 "links.tsv"
 
-Add-Type -Assembly 'System.IO.Compression.FileSystem'
-$zip = [System.IO.Compression.ZipFile]::Open("$PWD\chrome_elf.zip", 'read')
-[System.IO.Compression.ZipFileExtensions]::ExtractToDirectory($zip, $PWD)
-$zip.Dispose()
 
 $online = Check_verison_clients -param2 "online"
 
@@ -260,32 +331,45 @@ if ($spotifyInstalled) {
     $offline = Check_verison_clients -param2 "offline"
 
     if ($online -gt $offline) {
-        do {
-            $ch = Read-Host -Prompt "Your Spotify $offline version is outdated, it is recommended to upgrade to $online `nWant to update ? (Y/N)"
-            Write-Host ""
-            if (!($ch -eq 'n' -or $ch -eq 'y')) {
-                incorrectValue
-            }
+        if ($confirm_spoti_recomended_over -or $confirm_spoti_recomended_unistall) {
+            Write-Host "Found outdated version of Spotify"`n
         }
-        while ($ch -notmatch '^y$|^n$')
-        if ($ch -eq 'y') { 
-            $upgrade_client = $true 
-
+        if (!($confirm_spoti_recomended_over) -and !($confirm_spoti_recomended_unistall)) {
             do {
-                $ch = Read-Host -Prompt "Do you want to uninstall the current version of $offline or install over it? Y [Uninstall] / N [Install Over]"
-                Write-Host ""
+                $ch = Read-Host -Prompt "Your Spotify $offline version is outdated, it is recommended to upgrade to $online `nWant to update ? (Y/N)"`n
                 if (!($ch -eq 'n' -or $ch -eq 'y')) {
                     incorrectValue
                 }
             }
             while ($ch -notmatch '^y$|^n$')
-                
+        }
+        if ($confirm_spoti_recomended_over -or $confirm_spoti_recomended_unistall) { 
+            $ch = 'y' 
+            Write-Host "Automatic update to the recommended version"`n
+        }
+        if ($ch -eq 'y') { 
+            $upgrade_client = $true 
+
+            if (!($confirm_spoti_recomended_over) -and !($confirm_spoti_recomended_unistall)) {
+                do {
+                    $ch = Read-Host -Prompt "Do you want to uninstall the current version of $offline or install over it? Y [Uninstall] / N [Install Over]"`n
+                    if (!($ch -eq 'n' -or $ch -eq 'y')) {
+                        incorrectValue
+                    }
+                }
+                while ($ch -notmatch '^y$|^n$')
+            }
+            if ($confirm_spoti_recomended_unistall) { $ch = 'y' }
+            if ($confirm_spoti_recomended_over) { $ch = 'n' }
             if ($ch -eq 'y') {
-                Write-Host "Uninstall Spotify..."
-                Write-Host ""
+                Write-Host "Uninstalling old Spotify..."`n
+                unlockFolder
                 cmd /c $spotifyExecutable /UNINSTALL /SILENT
                 wait-process -name SpotifyUninstall
                 Start-Sleep -Milliseconds 200
+                if (Test-Path $spotifyDirectory) { Remove-Item -Recurse -Force -LiteralPath $spotifyDirectory }
+                if (Test-Path $spotifyDirectory2) { Remove-Item -Recurse -Force -LiteralPath $spotifyDirectory2 }
+                if (Test-Path $spotifyUninstall ) { Remove-Item -Recurse -Force -LiteralPath $spotifyUninstall }
             }
             if ($ch -eq 'n') { $ch = $null }
         }
@@ -295,42 +379,58 @@ if ($spotifyInstalled) {
     }
 
     if ($online -lt $offline) {
-        do {
-            $ch = Read-Host -Prompt "Your Spotify $offline version hasn't been tested yet, currently it's a stable $online version. `nDo you want to continue with $offline  version (errors possible) ? (Y/N)"
-            Write-Host ""
-            if (!($ch -eq 'n' -or $ch -eq 'y')) {
-                incorrectValue
-            }
+
+        if ($confirm_spoti_recomended_over -or $confirm_spoti_recomended_unistall) {
+            Write-Host "Unsupported version of Spotify found"`n
         }
-        while ($ch -notmatch '^y$|^n$')
-        if ($ch -eq 'y') { $upgrade_client = $false }
-        if ($ch -eq 'n') {
+        if (!($confirm_spoti_recomended_over) -and !($confirm_spoti_recomended_unistall)) {
             do {
-                $ch = Read-Host -Prompt "Do you want to install the recommended $online version ? (Y/N)"
-                Write-Host ""
+                $ch = Read-Host -Prompt "Your Spotify $offline version hasn't been tested yet, currently it's a stable $online version. `nDo you want to continue with $offline  version (errors possible) ? (Y/N)"`n
                 if (!($ch -eq 'n' -or $ch -eq 'y')) {
                     incorrectValue
                 }
             }
             while ($ch -notmatch '^y$|^n$')
-            if ($ch -eq 'y') {
-                $upgrade_client = $true
-                $downgrading = $true
+        }
+        if ($confirm_spoti_recomended_over -or $confirm_spoti_recomended_unistall) { $ch = 'n' }
+        if ($ch -eq 'y') { $upgrade_client = $false }
+        if ($ch -eq 'n') {
+            if (!($confirm_spoti_recomended_over) -or !($confirm_spoti_recomended_unistall)) {
                 do {
-                    $ch = Read-Host -Prompt "Do you want to uninstall the current version of $offline or install over it? Y [Uninstall] / N [Install Over]"
-                    Write-Host ""
+                    $ch = Read-Host -Prompt "Do you want to install the recommended $online version ? (Y/N)"`n
                     if (!($ch -eq 'n' -or $ch -eq 'y')) {
                         incorrectValue
                     }
                 }
                 while ($ch -notmatch '^y$|^n$')
-                
+            }
+            if ($confirm_spoti_recomended_over -or $confirm_spoti_recomended_unistall) { 
+                $ch = 'y' 
+                Write-Host "Automatic update to the recommended version"`n
+            }
+            if ($ch -eq 'y') {
+                $upgrade_client = $true
+                $downgrading = $true
+                if (!($confirm_spoti_recomended_over) -and !($confirm_spoti_recomended_unistall)) {
+                    do {
+                        $ch = Read-Host -Prompt "Do you want to uninstall the current version of $offline or install over it? Y [Uninstall] / N [Install Over]"`n
+                        if (!($ch -eq 'n' -or $ch -eq 'y')) {
+                            incorrectValue
+                        }
+                    }
+                    while ($ch -notmatch '^y$|^n$')
+                }
+                if ($confirm_spoti_recomended_unistall) { $ch = 'y' }
+                if ($confirm_spoti_recomended_over) { $ch = 'n' }
                 if ($ch -eq 'y') {
-                    Write-Host "Uninstall Spotify..."
-                    Write-Host ""
+                    Write-Host "Uninstalling an untested Spotify..."`n
+                    unlockFolder
                     cmd /c $spotifyExecutable /UNINSTALL /SILENT
                     wait-process -name SpotifyUninstall
                     Start-Sleep -Milliseconds 200
+                    if (Test-Path $spotifyDirectory) { Remove-Item -Recurse -Force -LiteralPath $spotifyDirectory }
+                    if (Test-Path $spotifyDirectory2) { Remove-Item -Recurse -Force -LiteralPath $spotifyDirectory2 }
+                    if (Test-Path $spotifyUninstall ) { Remove-Item -Recurse -Force -LiteralPath $spotifyUninstall }
                 }
                 if ($ch -eq 'n') { $ch = $null }
             }
@@ -360,7 +460,6 @@ if (-not $spotifyInstalled -or $upgrade_client) {
     unlockFolder
     Start-Sleep -Milliseconds 200
     Get-ChildItem $spotifyDirectory -Exclude 'Users', 'prefs', 'cache' | Remove-Item -Recurse -Force 
-    Get-ChildItem $spotifyDirectory2 -Exclude 'Users' | Remove-Item -Recurse -Force 
     Start-Sleep -Milliseconds 200
 
     # Client download
@@ -389,56 +488,95 @@ if ($leveldb) {
 }
 
 # Create backup chrome_elf.dll
-if (!(Test-Path -LiteralPath $chrome_elf_bak)) {
+if (!(Test-Path -LiteralPath $chrome_elf_bak) -and !($premium)) {
     Move-Item $chrome_elf $chrome_elf_bak 
 }
-do {
-    $ch = Read-Host -Prompt "Want to turn off podcasts ? (Y/N)"
-    Write-Host ""
-    if (!($ch -eq 'n' -or $ch -eq 'y')) { incorrectValue }
-}
-while ($ch -notmatch '^y$|^n$')
-if ($ch -eq 'y') { $podcasts_off = $true }
 
+$ch = $null
+
+if ($podcasts_off) { 
+    Write-Host "Off Podcasts"`n 
+    $ch = 'y'
+}
+if ($podcasts_on) {
+    Write-Host "On Podcasts"`n
+    $ch = 'n'
+}
+if (!($podcasts_off) -and !($podcasts_on)) {
+
+    do {
+        $ch = Read-Host -Prompt "Want to turn off podcasts ? (Y/N)"`n
+        if (!($ch -eq 'n' -or $ch -eq 'y')) { incorrectValue }
+    }
+    while ($ch -notmatch '^y$|^n$')
+}
+if ($ch -eq 'y') { $podcast_off = $true }
+
+$ch = $null
 
 if ($downgrading) { $upd = "`nYou have had a downgrade of Spotify, it is recommended to block" }
 
 else { $upd = "" }
 
-do {
-    $ch = Read-Host -Prompt "Want to block updates ? (Y/N)$upd"
-    
-    Write-Host ""
-    if (!($ch -eq 'n' -or $ch -eq 'y')) { incorrectValue } 
+if ($block_update_on) { 
+    Write-Host "Updates blocked"`n
+    $ch = 'y'
 }
-while ($ch -notmatch '^y$|^n$')
+if ($block_update_off) {
+    Write-Host "Updates are not blocked"`n
+    $ch = 'n'
+}
+if (!($block_update_on) -and !($block_update_off)) {
+    do {
+        $ch = Read-Host -Prompt "Want to block updates ? (Y/N)$upd"`n
+        if (!($ch -eq 'n' -or $ch -eq 'y')) { incorrectValue } 
+    }
+    while ($ch -notmatch '^y$|^n$')
+}
 if ($ch -eq 'y') { $block_update = $true }
 
-do {
-    $ch = Read-Host -Prompt "Want to set up automatic cache cleanup? (Y/N)"
-    Write-Host ""
-    if (!($ch -eq 'n' -or $ch -eq 'y')) { incorrectValue }
-}
-while ($ch -notmatch '^y$|^n$')
-if ($ch -eq 'y') {
-    $cache_install = $true 
+$ch = $null
 
-    do {
-        $ch = Read-Host -Prompt "Cache files that have not been used for more than XX days will be deleted.
-    Enter the number of days from 1 to 100"
-        Write-Host ""
-        if (!($ch -match "^[1-9][0-9]?$|^100$")) { incorrectValue }
-    }
-    while ($ch -notmatch '^[1-9][0-9]?$|^100$')
-
-    if ($ch -match "^[1-9][0-9]?$|^100$") { $number_days = $ch }
+if ($cache_on) { 
+    Write-Host "Clear cache enabled ($number_days)"`n
+    $cache_install = $true
 }
-if ($ch -eq 'n') {
+if ($cache_off) { 
+    Write-Host "Clearing the cache is not enabled"`n
     $ErrorActionPreference = 'SilentlyContinue'
     $desktop_folder = DesktopFolder
     if (Test-Path -LiteralPath $cache_folder) {
         remove-item $cache_folder -Recurse -Force
         remove-item $desktop_folder\Spotify.lnk -Recurse -Force
+    } 
+}
+if (!($cache_on) -and !($cache_off)) {
+
+    do {
+        $ch = Read-Host -Prompt "Want to set up automatic cache cleanup? (Y/N)"`n
+        if (!($ch -eq 'n' -or $ch -eq 'y')) { incorrectValue }
+    }
+    while ($ch -notmatch '^y$|^n$')
+
+    if ($ch -eq 'y') {
+        $cache_install = $true 
+
+        do {
+            $ch = Read-Host -Prompt "Cache files that have not been used for more than XX days will be deleted.
+    Enter the number of days from 1 to 100"`n
+            if (!($ch -match "^[1-9][0-9]?$|^100$")) { incorrectValue }
+        }
+        while ($ch -notmatch '^[1-9][0-9]?$|^100$')
+
+        if ($ch -match "^[1-9][0-9]?$|^100$") { $number_days = $ch }
+    }
+    if ($ch -eq 'n') {
+        $ErrorActionPreference = 'SilentlyContinue'
+        $desktop_folder = DesktopFolder
+        if (Test-Path -LiteralPath $cache_folder) {
+            remove-item $cache_folder -Recurse -Force
+            remove-item $desktop_folder\Spotify.lnk -Recurse -Force
+        }
     }
 }
 
@@ -473,39 +611,53 @@ function ExpFeature {
 
     # Experimental Feature
 
-    $exp_features1 = '(Show "Made For You" entry point in the left sidebar.,default:)(!1)', '$1!0'
-    $exp_features2 = '(Enable the new Search with chips experience",default:)(!1)', '$1!0'  
+    if (!($made_for_you_off)) { $exp_features1 = '(Show "Made For You" entry point in the left sidebar.,default:)(!1)', '$1!0' }
+    if (!($new_search_off)) { $exp_features2 = '(Enable the new Search with chips experience",default:)(!1)', '$1!0' }
     $exp_features3 = '(Enable Liked Songs section on Artist page",default:)(!1)', '$1!0' 
     $exp_features4 = '(Enable block users feature in clientX",default:)(!1)', '$1!0' 
     $exp_features5 = '(Enables quicksilver in-app messaging modal",default:)(!0)', '$1!1' 
     $exp_features6 = '(With this enabled, clients will check whether tracks have lyrics available",default:)(!1)', '$1!0' 
     $exp_features7 = '(Enables new playlist creation flow in Web Player and DesktopX",default:)(!1)', '$1!0' 
-    $exp_features8 = '(Enable Enhance Playlist UI and functionality for end-users",default:)(!1)', '$1!0'
-    $exp_features9 = '(Enable a condensed disography shelf on artist pages",default:)(!1)', '$1!0'
-    $exp_features10 = '(Enable Lyrics match labels in search results",default:)(!1)', '$1!0'
-    $exp_features11 = '(Enable Ignore In Recommendations for desktop and web",default:)(!1)', '$1!0'
+    if (!($enhance_playlist_off)) { $exp_features8 = '(Enable Enhance Playlist UI and functionality for end-users",default:)(!1)', '$1!0' }
+    if (!($new_artist_pages_off)) { $exp_features9 = '(Enable a condensed disography shelf on artist pages",default:)(!1)', '$1!0' }
+    if (!($new_lyrics_off)) { $exp_features10 = '(Enable Lyrics match labels in search results",default:)(!1)', '$1!0' }
+    if (!($ignore_in_recommendations_off)) { $exp_features11 = '(Enable Ignore In Recommendations for desktop and web",default:)(!1)', '$1!0' }
     $exp_features12 = '(Enable Playlist Permissions flows for Prod",default:)(!1)', '$1!0'
-    #$exp_features13 = '(Enable Enhance Liked Songs UI and functionality",default:)(!1)', '$1!0'
+    #if (!($enhance_like_off)) {$exp_features13 = '(Enable Enhance Liked Songs UI and functionality",default:)(!1)', '$1!0'}
 
-    if ($xpui_js -match $exp_features1[0]) { $xpui_js = $xpui_js -replace $exp_features1[0], $exp_features1[1] } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$exp_features1[0] in xpui.js" }
-    if ($xpui_js -match $exp_features2[0]) { $xpui_js = $xpui_js -replace $exp_features2[0], $exp_features2[1] } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$exp_features2[0] in xpui.js" }
+    if (!($made_for_you_off)) {
+        if ($xpui_js -match $exp_features1[0]) { $xpui_js = $xpui_js -replace $exp_features1[0], $exp_features1[1] } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$exp_features1[0] in xpui.js" }
+    }
+    if (!($new_search_off)) {
+        if ($xpui_js -match $exp_features2[0]) { $xpui_js = $xpui_js -replace $exp_features2[0], $exp_features2[1] } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$exp_features2[0] in xpui.js" }
+    }
     if ($xpui_js -match $exp_features3[0]) { $xpui_js = $xpui_js -replace $exp_features3[0], $exp_features3[1] } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$exp_features3[0] in xpui.js" }
     if ($xpui_js -match $exp_features4[0]) { $xpui_js = $xpui_js -replace $exp_features4[0], $exp_features4[1] } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$exp_features4[0] in xpui.js" }
     if ($xpui_js -match $exp_features5[0]) { $xpui_js = $xpui_js -replace $exp_features5[0], $exp_features5[1] } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$exp_features5[0] in xpui.js" }
     if ($xpui_js -match $exp_features6[0]) { $xpui_js = $xpui_js -replace $exp_features6[0], $exp_features6[1] } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$exp_features6[0] in xpui.js" }
     if ($xpui_js -match $exp_features7[0]) { $xpui_js = $xpui_js -replace $exp_features7[0], $exp_features7[1] } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$exp_features7[0] in xpui.js" }
-    if ($xpui_js -match $exp_features8[0]) { $xpui_js = $xpui_js -replace $exp_features8[0], $exp_features8[1] } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$exp_features8[0] in xpui.js" }
-    if ($xpui_js -match $exp_features9[0]) { $xpui_js = $xpui_js -replace $exp_features9[0], $exp_features9[1] } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$exp_features9[0] in xpui.js" }
-    if ($xpui_js -match $exp_features10[0]) { $xpui_js = $xpui_js -replace $exp_features10[0], $exp_features10[1] } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$exp_features10[0] in xpui.js" }
-    if ($xpui_js -match $exp_features11[0]) { $xpui_js = $xpui_js -replace $exp_features11[0], $exp_features11[1] } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$exp_features11[0] in xpui.js" }
+    if (!($enhance_playlist_off)) {
+        if ($xpui_js -match $exp_features8[0]) { $xpui_js = $xpui_js -replace $exp_features8[0], $exp_features8[1] } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$exp_features8[0] in xpui.js" }
+    }
+    if (!($new_artist_pages_off)) {
+        if ($xpui_js -match $exp_features9[0]) { $xpui_js = $xpui_js -replace $exp_features9[0], $exp_features9[1] } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$exp_features9[0] in xpui.js" }
+    }
+    if (!($new_lyrics_off)) {
+        if ($xpui_js -match $exp_features10[0]) { $xpui_js = $xpui_js -replace $exp_features10[0], $exp_features10[1] } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$exp_features10[0] in xpui.js" }
+    }
+    if (!($ignore_in_recommendations_off)) {
+        if ($xpui_js -match $exp_features11[0]) { $xpui_js = $xpui_js -replace $exp_features11[0], $exp_features11[1] } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$exp_features11[0] in xpui.js" }
+    }
     if ($xpui_js -match $exp_features12[0]) { $xpui_js = $xpui_js -replace $exp_features12[0], $exp_features12[1] } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$exp_features12[0] in xpui.js" }
+    #if(!($enhance_like_off)){
     #if ($xpui_js -match $exp_features13[0]) { $xpui_js = $xpui_js -replace $exp_features13[0], $exp_features13[1] } else { Write-Host "Didn't find variable " -ForegroundColor red -NoNewline; Write-Host "`$exp_features13[0] in xpui.js" }
+    #}
     $xpui_js
 }
 
 function ContentsHtml {
 
-    # licenses.html minification
+    # Minification
     $html_lic_min1 = '<li><a href="#6eef7">zlib<\/a><\/li>\n(.|\n)*<\/p><!-- END CONTAINER DEPS LICENSES -->(<\/div>)'
     $html_lic_min2 = "	"
     $html_lic_min3 = "  "
@@ -522,10 +674,10 @@ function ContentsHtml {
 Write-Host 'Patching Spotify...'`n
 
 # Patching files
-
-$patchFiles = "$PWD\chrome_elf.dll", "$PWD\config.ini"
-Copy-Item -LiteralPath $patchFiles -Destination "$spotifyDirectory"
-
+if (!($premium)) {
+    $patchFiles = "$PWD\chrome_elf.dll", "$PWD\config.ini"
+    Copy-Item -LiteralPath $patchFiles -Destination "$spotifyDirectory"
+}
 $tempDirectory = $PWD
 Pop-Location
 
@@ -600,13 +752,15 @@ if (Test-Path $xpui_js_patch) {
     $reader.Close()
 
     # Turn off podcasts
-    if ($Podcasts_off) { $xpui_js = OffPodcasts }
+    if ($Podcast_off) { $xpui_js = OffPodcasts }
     
     # Full screen mode activation and removing "Upgrade to premium" menu, upgrade button, disabling a playlist sponsor
-    $xpui_js = OffAdsOnFullscreen
-       
+    if (!($premium)) {
+        $xpui_js = OffAdsOnFullscreen
+    }
     # Experimental Feature
-    $xpui_js = ExpFeature
+    if ($exp_off) { Write-Host "Experimental features disabled"`n }
+    if (!($exp_off)) { $xpui_js = ExpFeature }
 
     $writer = New-Object System.IO.StreamWriter -ArgumentList $xpui_js_patch
     $writer.BaseStream.SetLength(0)
@@ -623,14 +777,18 @@ if (Test-Path $xpui_js_patch) {
     $writer = New-Object System.IO.StreamWriter -ArgumentList $file_xpui_css
     $writer.BaseStream.SetLength(0)
     $writer.Write($xpuiContents_xpui_css)
-    # Hide download icon on different pages
-    $writer.Write([System.Environment]::NewLine + ' .BKsbV2Xl786X9a09XROH{display:none}')
-    # Hide submenu item "download"
-    $writer.Write([System.Environment]::NewLine + ' button.wC9sIed7pfp47wZbmU6m.pzkhLqffqF_4hucrVVQA{display:none}')
+    if (!($premium)) {
+        # Hide download icon on different pages
+        $writer.Write([System.Environment]::NewLine + ' .BKsbV2Xl786X9a09XROH{display:none}')
+        # Hide submenu item "download"
+        $writer.Write([System.Environment]::NewLine + ' button.wC9sIed7pfp47wZbmU6m.pzkhLqffqF_4hucrVVQA{display:none}')
+    }
     # Hide Collaborators icon
-    $writer.Write([System.Environment]::NewLine + ' .X1lXSiVj0pzhQCUo_72A{display:none}')
+    if (!($hide_col_icon_off) -and !($exp_off)) {
+        $writer.Write([System.Environment]::NewLine + ' .X1lXSiVj0pzhQCUo_72A{display:none}')
+    }
     # Hide broken podcast menu
-    if ($podcasts_off) { 
+    if ($podcast_off) { 
         $writer.Write([System.Environment]::NewLine + ' li.OEFWODerafYHGp09iLlA [href="/collection/podcasts"]{display:none}')
     }
     $writer.Close()
@@ -698,13 +856,15 @@ If (Test-Path $xpui_spa_patch) {
     $reader.Close()
 
     # Turn off podcasts
-    if ($podcasts_off) { $xpui_js = OffPodcasts }
-    
-    # Full screen mode activation and removing "Upgrade to premium" menu, upgrade button, disabling a playlist sponsor
-    $xpui_js = OffAdsOnFullscreen
-       
+    if ($podcast_off) { $xpui_js = OffPodcasts }
+        
+    if (!($premium)) {
+        # Full screen mode activation and removing "Upgrade to premium" menu, upgrade button, disabling a playlist sponsor
+        $xpui_js = OffAdsOnFullscreen
+    }
     # Experimental Feature
-    $xpui_js = ExpFeature
+    if ($exp_off) { Write-Host "Experimental features disabled"`n }
+    if (!($exp_off)) { $xpui_js = ExpFeature }
 
     # Disabled logging
     $xpui_js = $xpui_js -replace "sp://logging/v3/\w+", ""
@@ -753,14 +913,18 @@ If (Test-Path $xpui_spa_patch) {
     $writer = New-Object System.IO.StreamWriter($entry_xpui_css.Open())
     $writer.BaseStream.SetLength(0)
     $writer.Write($xpuiContents_xpui_css)
-    # Hide download icon on different pages
-    $writer.Write([System.Environment]::NewLine + ' .BKsbV2Xl786X9a09XROH{display:none}')
-    # Hide submenu item "download"
-    $writer.Write([System.Environment]::NewLine + ' button.wC9sIed7pfp47wZbmU6m.pzkhLqffqF_4hucrVVQA{display:none}')
+    if (!($premium)) {
+        # Hide download icon on different pages
+        $writer.Write([System.Environment]::NewLine + ' .BKsbV2Xl786X9a09XROH{display:none}')
+        # Hide submenu item "download"
+        $writer.Write([System.Environment]::NewLine + ' button.wC9sIed7pfp47wZbmU6m.pzkhLqffqF_4hucrVVQA{display:none}')
+    }
     # Hide Collaborators icon
-    $writer.Write([System.Environment]::NewLine + ' .X1lXSiVj0pzhQCUo_72A{display:none}')
+    if (!($hide_col_icon_off) -and !($exp_off)) {
+        $writer.Write([System.Environment]::NewLine + ' .X1lXSiVj0pzhQCUo_72A{display:none}')
+    }
     # Hide broken podcast menu
-    if ($podcasts_off) { 
+    if ($podcast_off) { 
         $writer.Write([System.Environment]::NewLine + ' li.OEFWODerafYHGp09iLlA [href="/collection/podcasts"]{display:none}')
     }
     $writer.Close()
@@ -835,7 +999,6 @@ If (Test-Path $xpui_spa_patch) {
     }
     $zip.Dispose()   
 }
-
 
 # Shortcut Spotify.lnk
 $ErrorActionPreference = 'SilentlyContinue' 
@@ -925,11 +1088,10 @@ if ($cache_install) {
         Start-Sleep -Milliseconds 200
         Remove-item $infile -Recurse -Force
         Rename-Item -path $outfile -NewName $infile
-
-        Write-Host "installation completed"`n -ForegroundColor Green
-        exit
     }
 }
+
+if ($start_spoti) { Start-Process -WorkingDirectory $spotifyDirectory -FilePath $spotifyExecutable }
 
 Write-Host "installation completed"`n -ForegroundColor Green
 exit

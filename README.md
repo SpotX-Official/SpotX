@@ -43,6 +43,11 @@
 
 <h1>Fast installation / Update:</h1>
 
+<details>
+<summary><small>Usual installation</small></summary><p>
+  
+  <h4>During installation, you need to confirm some actions</h4>
+  
 * Just download and run [Install.bat](https://cutt.ly/PErptD8)
 
 or
@@ -51,6 +56,60 @@ or
 ```ps1
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; iwr -useb 'https://raw.githubusercontent.com/amd64fox/SpotX/main/Install.ps1' | iex
 ```
+
+</details>
+  
+  
+<details>
+<summary><small>Automatic installation</small></summary><p>
+  
+  <h4>Automatic installation without confirmation (remove Spotify MS, install over recommended version, remove podcasts from homepage, block updates, no cache clear installation)</h4>
+  
+  * Just download and run [Install_Auto.bat](https://raw.githack.com/amd64fox/SpotX/blob/main/Cache/Install_Auto.bat)
+
+or
+  
+```ps1
+  [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; iex "& { $(iwr -useb 'https://raw.githubusercontent.com/amd64fox/SpotX/main/Install.ps1') } -confirm_uninstall_ms_spoti -confirm_spoti_recomended_over -podcasts_off -cache_off -block_update_on"
+```
+
+
+</details>
+
+
+<details>
+<summary><small>Installation for premium</small></summary><p>
+  
+  <h4>Usual installation only without ad blocking, for those who have a premium account</h4>
+  
+* Just download and run [Install_Prem.bat]([https://cutt.ly/PErptD8](https://raw.githack.com/amd64fox/SpotX/blob/main/Cache/Install_Prem.bat)
+
+or
+
+* Run The following command in PowerShell:
+```ps1
+  [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; iex "& { $(iwr -useb 'https://raw.githubusercontent.com/amd64fox/SpotX/main/Install.ps1') } -premium"
+```
+
+</details>
+
+
+<details>
+<summary><small>Русский установщик</small></summary><p>
+  
+  <h4>Обычный установщик с подтверждениями на русском языке</h4>
+  
+* Скачайте и запустите [Install_Rus.bat](https://cutt.ly/ZEnk1qf)
+
+или
+
+* Запустите следующую строку напрямую в терминале PowerShell:
+```ps1
+  [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; iwr -useb 'https://raw.githubusercontent.com/amd64fox/SpotX/main/Install_Rus.ps1' | iex
+```
+
+</details>
+
 
 <h1>Uninstall:</h1>
 

@@ -573,7 +573,8 @@ if (!($cache_on) -and !($cache_off)) {
 
         do {
             $ch = Read-Host -Prompt "Cache files that have not been used for more than XX days will be deleted.
-    Enter the number of days from 1 to 100"`n
+    Enter the number of days from 1 to 100"
+    Write-Host ""
             if (!($ch -match "^[1-9][0-9]?$|^100$")) { incorrectValue }
         }
         while ($ch -notmatch '^[1-9][0-9]?$|^100$')

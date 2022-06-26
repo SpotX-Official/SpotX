@@ -65,7 +65,7 @@ or
   
   <h4>Automatic installation without confirmation (remove Spotify MS, install over recommended version, remove podcasts from homepage, block updates, no cache clear installation)</h4>
   
-  * Just download and run [Install_Auto.bat](https://raw.githack.com/amd64fox/SpotX/blob/main/Cache/Install_Auto.bat)
+  * Just download and run [Install_Auto.bat](https://cutt.ly/TKO7fnW)
 
 or
   
@@ -82,7 +82,7 @@ or
   
   <h4>Usual installation only without ad blocking, for those who have a premium account</h4>
   
-* Just download and run [Install_Prem.bat]([https://cutt.ly/PErptD8](https://raw.githack.com/amd64fox/SpotX/blob/main/Cache/Install_Prem.bat)
+* Just download and run [Install_Prem.bat](https://cutt.ly/dKO7ep2)
 
 or
 

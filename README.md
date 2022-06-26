@@ -69,7 +69,7 @@ or
 or
   
 ```ps1
-  [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; iex "& { $(iwr -useb 'https://raw.githubusercontent.com/amd64fox/SpotX/main/Install.ps1') } -confirm_uninstall_ms_spoti -confirm_spoti_recomended_over -podcasts_off -cache_off -block_update_on"
+[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; iex "& { $(iwr -useb 'https://raw.githubusercontent.com/amd64fox/SpotX/main/Install.ps1') } -confirm_uninstall_ms_spoti -confirm_spoti_recomended_over -podcasts_off -cache_off -block_update_on"
 ```
 
 
@@ -87,7 +87,7 @@ or
 
 * Run The following command in PowerShell:
 ```ps1
-  [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; iex "& { $(iwr -useb 'https://raw.githubusercontent.com/amd64fox/SpotX/main/Install.ps1') } -premium"
+[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; iex "& { $(iwr -useb 'https://raw.githubusercontent.com/amd64fox/SpotX/main/Install.ps1') } -premium"
 ```
 
 </details>
@@ -104,7 +104,7 @@ or
 
 * Запустите следующую строку напрямую в терминале PowerShell:
 ```ps1
-    [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; (iwr -useb 'https://raw.githubusercontent.com/amd64fox/SpotX/main/scripts/Install_Rus.ps1').Content | iex
+[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; (iwr -useb 'https://raw.githubusercontent.com/amd64fox/SpotX/main/scripts/Install_Rus.ps1').Content | iex
 ```
 
 </details>

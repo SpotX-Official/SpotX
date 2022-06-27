@@ -94,6 +94,14 @@ or
 
 
 <details>
+<summary><small>Installing with parameters</small></summary><p>
+
+You can specify various parameters for a more flexible installation, more [details here](https://github.com/amd64fox/SpotX/discussions/60)
+
+</details>
+
+
+<details>
 <summary><small>Русский установщик</small></summary><p>
   
   <h4>Обычный установщик с подтверждениями на русском языке</h4>

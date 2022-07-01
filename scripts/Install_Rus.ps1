@@ -183,7 +183,7 @@ function downloadScripts($param1) {
     }
     try { 
         if ($param1 -eq "Desktop" -and $curl_check) {
-            curl.exe $web_Url -o $local_Url --progress-bar
+            curl.exe $web_Url -o $local_Url --progress-bar --retry 3 --ssl-no-revoke
         }
         if ($param1 -eq "Desktop" -and $null -ne (Get-Module -Name BitsTransfer -ListAvailable) -and !($curl_check )) {
             Start-BitsTransfer -Source  $web_Url -Destination $local_Url  -DisplayName "Downloading Spotify" -Description "$vernew "
@@ -207,7 +207,7 @@ function downloadScripts($param1) {
         try { 
 
             if ($param1 -eq "Desktop" -and $curl_check) {
-                curl.exe $web_Url -o $local_Url --progress-bar
+                curl.exe $web_Url -o $local_Url --progress-bar --retry 3 --ssl-no-revoke
             }
             if ($param1 -eq "Desktop" -and $null -ne (Get-Module -Name BitsTransfer -ListAvailable) -and !($curl_check )) {
                 Start-BitsTransfer -Source  $web_Url -Destination $local_Url  -DisplayName "Downloading Spotify" -Description "$vernew "

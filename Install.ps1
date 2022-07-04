@@ -549,7 +549,7 @@ if ($spotifyInstalled) {
         if ($confirm_spoti_recomended_over -or $confirm_spoti_recomended_unistall) { $ch = 'n' }
         if ($ch -eq 'y') { $upgrade_client = $false }
         if ($ch -eq 'n') {
-            if (!($confirm_spoti_recomended_over) -or !($confirm_spoti_recomended_unistall)) {
+            if (!($confirm_spoti_recomended_over) -and !($confirm_spoti_recomended_unistall)) {
                 do {
                     $ch = Read-Host -Prompt (($lang).Recom -f $online)
                     Write-Host ""

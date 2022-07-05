@@ -1,5 +1,5 @@
 ---
-name: To suggest an idea
+name: 💡 To suggest an idea
 about: Suggest an idea for this project
 title: ''
 labels: enhancement

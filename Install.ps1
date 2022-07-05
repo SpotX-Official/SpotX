@@ -94,7 +94,7 @@ function langRu() {
     OldV3              = Обновить ? [Y/N]
     AutoUpd            = Автоматическое обновление до рекомендуемой версии
     DelOrOver          = Вы хотите удалить текущую версию {0} или установить поверх нее? Y [Удалить] / N [Поверх]
-    delOld             = Удаление устаревшего Spotify...
+    DelOld             = Удаление устаревшего Spotify...
     NewV               = Найдена неподдерживаемая версия Spotify
     NewV2              = Ваша версия Spotify {0} еще не тестировалась, стабильная версия сейчас {1}
     NewV3              = Хотите продолжить с {0} (возможны ошибки) ? [Y/N]
@@ -161,7 +161,7 @@ function langEn() {
     OldV3              = Want to update ? [Y/N]
     AutoUpd            = Automatic update to the recommended version
     DelOrOver          = Do you want to uninstall the current version of {0} or install over it? Y [Uninstall] / N [Install Over]
-    delOld             = Uninstalling old Spotify...
+    DelOld             = Uninstalling old Spotify...
     NewV               = Unsupported version of Spotify found
     NewV2              = Your Spotify {0} version hasn't been tested yet, currently it's a stable {1} version
     NewV3              = Do you want to continue with {0} version (errors possible) ? [Y/N]
@@ -514,7 +514,7 @@ if ($spotifyInstalled) {
             if ($confirm_spoti_recomended_unistall) { $ch = 'y' }
             if ($confirm_spoti_recomended_over) { $ch = 'n' }
             if ($ch -eq 'y') {
-                Write-Host ($lang).delOld`n 
+                Write-Host ($lang).DelOld`n 
                 unlockFolder
                 cmd /c $spotifyExecutable /UNINSTALL /SILENT
                 wait-process -name SpotifyUninstall

@@ -15,7 +15,7 @@
 
 
 * <strong>OS: Windows 7-11</strong>
-* <strong>Spotify: Recommended official version [1.1.89.854](https://cutt.ly/8EH6NuH)</strong>
+* <strong>Spotify: Recommended official version [1.1.89.858](https://cutt.ly/8EH6NuH)</strong>
 * <strong>For Windows Desktop only (Microsoft store version is not suitable).</strong>
 * <strong>PowerShell: 3 or higher</strong>
 
@@ -28,7 +28,7 @@
 * <strong>Blocks automatic updates (optional)</strong>
 * <strong>Automatic [cache clearing](https://github.com/amd64fox/SpotX/discussions/2) (optional)</strong>
 * <strong>Enabled [enhance playlist](https://github.com/amd64fox/SpotX/discussions/50#discussion-4108773)</strong>
-* <strong>Enabled [enhance liked songs UI](https://github.com/amd64fox/SpotX/discussions/50#discussioncomment-2851482)</strong> ([temporarily disabled](https://github.com/amd64fox/SpotX/discussions/49#discussioncomment-2997178))
+* <strong>Enabled [enhance liked songs UI](https://github.com/amd64fox/SpotX/discussions/50#discussioncomment-2851482)</strong>
 * <strong>Enabled [new lyrics](https://github.com/amd64fox/SpotX/discussions/50#discussioncomment-2851485)</strong>
 * <strong>Enabled [new search with chips experience](https://github.com/amd64fox/SpotX/discussions/50#discussioncomment-2851545)</strong>
 * <strong>Enabled [a condensed discography shelf on artist pages](https://github.com/amd64fox/SpotX/discussions/50#discussioncomment-2851591)</strong>

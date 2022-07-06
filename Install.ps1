@@ -786,7 +786,7 @@ function ExpFeature {
     if (!($new_lyrics_off)) { $exp_features10 = '(Enable Lyrics match labels in search results",default:)(!1)', '$1!0' }
     if (!($ignore_in_recommendations_off)) { $exp_features11 = '(Enable Ignore In Recommendations for desktop and web",default:)(!1)', '$1!0' }
     $exp_features12 = '(Enable Playlist Permissions flows for Prod",default:)(!1)', '$1!0'
-    #if (!($enhance_like_off)) {$exp_features13 = '(Enable Enhance Liked Songs UI and functionality",default:)(!1)', '$1!0'}
+    if (!($enhance_like_off)) {$exp_features13 = '(Enable Enhance Liked Songs UI and functionality",default:)(!1)', '$1!0'}
 
     if (!($made_for_you_off)) {
         if ($xpui_js -match $exp_features1[0]) { $xpui_js = $xpui_js -replace $exp_features1[0], $exp_features1[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$exp_features1[0] "($lang).NoVariable2 }
@@ -812,9 +812,9 @@ function ExpFeature {
         if ($xpui_js -match $exp_features11[0]) { $xpui_js = $xpui_js -replace $exp_features11[0], $exp_features11[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$exp_features11[0] "($lang).NoVariable2 }
     }
     if ($xpui_js -match $exp_features12[0]) { $xpui_js = $xpui_js -replace $exp_features12[0], $exp_features12[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$exp_features12[0] "($lang).NoVariable2 }
-    #if(!($enhance_like_off)){
-    #if ($xpui_js -match $exp_features13[0]) { $xpui_js = $xpui_js -replace $exp_features13[0], $exp_features13[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$exp_features13[0] "($lang).NoVariable2 }
-    #}
+    if(!($enhance_like_off)){
+    if ($xpui_js -match $exp_features13[0]) { $xpui_js = $xpui_js -replace $exp_features13[0], $exp_features13[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$exp_features13[0] "($lang).NoVariable2 }
+    }
     $xpui_js
 }
 

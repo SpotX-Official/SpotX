@@ -79,9 +79,6 @@ function langRu() {
     Download3          = Опять ошибка
     Download4          = Попробуйте проверить подключение к интернету и снова запустить установку
     Download5          = Загрузка Spotify
-    UnsupPs            = Ваша версия PowerShell {0} не поддерживается
-    UnsupPs2           = Пожалуйста прочтите 'Outdated versions of PowerShell'
-    UnsupPs3           = Открыть страницу с инструкцией ? [Y/N]
     StopScrpit         = Cкрипт остановлен
     MsSpoti            = Обнаружена версия Spotify из Microsoft Store, которая не поддерживается
     MsSpoti2           = Хотите удалить Spotify Microsoft Store ? [Y/N]
@@ -146,9 +143,6 @@ function langEn() {
     Download3          = Error again
     Download4          = Try to check your internet connection and run the installation again
     Download5          = Downloading Spotify
-    UnsupPs            = Your version of PowerShell {0} is not supported
-    UnsupPs2           = Please read the instruction 'Outdated versions of PowerShell'
-    UnsupPs3           = Open a page with instructions ? [Y/N]
     StopScrpit         = Script is stopped
     MsSpoti            = The Microsoft Store version of Spotify has been detected which is not supported
     MsSpoti2           = Uninstall Spotify Windows Store edition [Y/N]

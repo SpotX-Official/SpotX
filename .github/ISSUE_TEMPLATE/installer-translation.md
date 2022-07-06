@@ -37,9 +37,6 @@ Good luck to you.
     Download3          = Error again
     Download4          = Try to check your internet connection and run the installation again
     Download5          = Downloading Spotify
-    UnsupPs            = Your version of PowerShell {0} is not supported
-    UnsupPs2           = Please read the instruction 'Outdated versions of PowerShell'
-    UnsupPs3           = Open a page with instructions ? [Y/N]
     StopScrpit         = Script is stopped
     MsSpoti            = The Microsoft Store version of Spotify has been detected which is not supported
     MsSpoti2           = Uninstall Spotify Windows Store edition [Y/N]

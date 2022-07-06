@@ -114,8 +114,8 @@ function langRu() {
     NoVariable         = Не нашел переменную
     NoVariable2        = в xpui.js
     NoVariable3        = в licenses.html
-    NoVariable4        = в ru.json
-    NoVariable5        = в html
+    NoVariable4        = в html
+    NoVariable5        = в ru.json
     ModSpoti           = Модифицирую Spotify...
     Error              = Ошибка
     FileLocBroken      = Расположение файлов Spotify нарушено, удалите клиент и снова запустите скрипт
@@ -178,8 +178,7 @@ function langEn() {
     NoVariable         = Didn't find variable
     NoVariable2        = in xpui.js
     NoVariable3        = in licenses.html
-    NoVariable4        = in ru.json
-    NoVariable5        = in html
+    NoVariable4        = in html
     ModSpoti           = Patching Spotify...
     Error              = Error
     FileLocBroken      = Location of Spotify files is broken, uninstall the client and run the script again
@@ -220,7 +219,7 @@ catch {
         Invoke-WebRequest -Uri $cutt_url | Out-Null
     }
     catch {
-        Write-Host ($lang).CuttError -ForegroundColor RED
+        Write-Host ($lang).CuttError`n -ForegroundColor RED
     }
 }
 
@@ -878,45 +877,45 @@ function RuTranslate {
     $ru_translate59 = '"No"', '"Нет"' 
     $ru_translate62 = '"Your Location"', '"Ваше местоположение"'  
 
-    if ($xpui_ru -match $ru_translate1[0]) { $xpui_ru = $xpui_ru -replace $ru_translate1[0], $ru_translate1[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$ru_translate1[0] "($lang).NoVariable4 }
-    if ($xpui_ru -match $ru_translate2[0]) { $xpui_ru = $xpui_ru -replace $ru_translate2[0], $ru_translate2[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$ru_translate2[0] "($lang).NoVariable4 }
-    if ($xpui_ru -match $ru_translate3[0]) { $xpui_ru = $xpui_ru -replace $ru_translate3[0], $ru_translate3[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$ru_translate3[0] "($lang).NoVariable4 }
-    if ($xpui_ru -match $ru_translate4[0]) { $xpui_ru = $xpui_ru -replace $ru_translate4[0], $ru_translate4[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$ru_translate4[0] "($lang).NoVariable4 }
-    if ($xpui_ru -match $ru_translate5[0]) { $xpui_ru = $xpui_ru -replace $ru_translate5[0], $ru_translate5[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$ru_translate5[0] "($lang).NoVariable4 }
-    if ($xpui_ru -match $ru_translate13[0]) { $xpui_ru = $xpui_ru -replace $ru_translate13[0], $ru_translate13[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$ru_translate13[0] "($lang).NoVariable4 }
-    if ($xpui_ru -match $ru_translate16[0]) { $xpui_ru = $xpui_ru -replace $ru_translate16[0], $ru_translate16[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$ru_translate16[0] "($lang).NoVariable4 }
-    if ($xpui_ru -match $ru_translate17[0]) { $xpui_ru = $xpui_ru -replace $ru_translate17[0], $ru_translate17[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$ru_translate17[0] "($lang).NoVariable4 }
-    if ($xpui_ru -match $ru_translate20[0]) { $xpui_ru = $xpui_ru -replace $ru_translate20[0], $ru_translate20[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$ru_translate20[0] "($lang).NoVariable4 }
-    if ($xpui_ru -match $ru_translate24[0]) { $xpui_ru = $xpui_ru -replace $ru_translate24[0], $ru_translate24[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$ru_translate24[0] "($lang).NoVariable4 }
-    if ($xpui_ru -match $ru_translate25[0]) { $xpui_ru = $xpui_ru -replace $ru_translate25[0], $ru_translate25[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$ru_translate25[0] "($lang).NoVariable4 }
-    if ($xpui_ru -match $ru_translate26[0]) { $xpui_ru = $xpui_ru -replace $ru_translate26[0], $ru_translate26[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$ru_translate26[0] "($lang).NoVariable4 }
-    if ($xpui_ru -match $ru_translate27[0]) { $xpui_ru = $xpui_ru -replace $ru_translate27[0], $ru_translate27[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$ru_translate27[0] "($lang).NoVariable4 }
-    if ($xpui_ru -match $ru_translate29[0]) { $xpui_ru = $xpui_ru -replace $ru_translate29[0], $ru_translate29[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$ru_translate29[0] "($lang).NoVariable4 }
-    if ($xpui_ru -match $ru_translate30[0]) { $xpui_ru = $xpui_ru -replace $ru_translate30[0], $ru_translate30[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$ru_translate30[0] "($lang).NoVariable4 }
-    if ($xpui_ru -match $ru_translate32[0]) { $xpui_ru = $xpui_ru -replace $ru_translate32[0], $ru_translate32[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$ru_translate32[0] "($lang).NoVariable4 }
-    if ($xpui_ru -match $ru_translate33[0]) { $xpui_ru = $xpui_ru -replace $ru_translate33[0], $ru_translate33[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$ru_translate33[0] "($lang).NoVariable4 }
-    if ($xpui_ru -match $ru_translate36[0]) { $xpui_ru = $xpui_ru -replace $ru_translate36[0], $ru_translate36[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$ru_translate36[0] "($lang).NoVariable4 }
-    if ($xpui_ru -match $ru_translate38[0]) { $xpui_ru = $xpui_ru -replace $ru_translate38[0], $ru_translate38[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$ru_translate38[0] "($lang).NoVariable4 }
-    if ($xpui_ru -match $ru_translate39[0]) { $xpui_ru = $xpui_ru -replace $ru_translate39[0], $ru_translate39[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$ru_translate39[0] "($lang).NoVariable4 }
-    if ($xpui_ru -match $ru_translate40[0]) { $xpui_ru = $xpui_ru -replace $ru_translate40[0], $ru_translate40[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$ru_translate40[0] "($lang).NoVariable4 }
-    if ($xpui_ru -match $ru_translate42[0]) { $xpui_ru = $xpui_ru -replace $ru_translate42[0], $ru_translate42[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$ru_translate42[0] "($lang).NoVariable4 }
-    if ($xpui_ru -match $ru_translate43[0]) { $xpui_ru = $xpui_ru -replace $ru_translate43[0], $ru_translate43[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$ru_translate43[0] "($lang).NoVariable4 }
-    if ($xpui_ru -match $ru_translate45[0]) { $xpui_ru = $xpui_ru -replace $ru_translate45[0], $ru_translate45[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$ru_translate45[0] "($lang).NoVariable4 }
-    if ($xpui_ru -match $ru_translate46[0]) { $xpui_ru = $xpui_ru -replace $ru_translate46[0], $ru_translate46[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$ru_translate46[0] "($lang).NoVariable4 }
-    if ($xpui_ru -match $ru_translate47[0]) { $xpui_ru = $xpui_ru -replace $ru_translate47[0], $ru_translate47[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$ru_translate47[0] "($lang).NoVariable4 }
-    if ($xpui_ru -match $ru_translate48[0]) { $xpui_ru = $xpui_ru -replace $ru_translate48[0], $ru_translate48[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$ru_translate48[0] "($lang).NoVariable4 }
-    if ($xpui_ru -match $ru_translate49[0]) { $xpui_ru = $xpui_ru -replace $ru_translate49[0], $ru_translate49[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$ru_translate49[0] "($lang).NoVariable4 }
-    if ($xpui_ru -match $ru_translate50[0]) { $xpui_ru = $xpui_ru -replace $ru_translate50[0], $ru_translate50[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$ru_translate50[0] "($lang).NoVariable4 }
-    if ($xpui_ru -match $ru_translate51[0]) { $xpui_ru = $xpui_ru -replace $ru_translate51[0], $ru_translate51[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$ru_translate51[0] "($lang).NoVariable4 }
-    if ($xpui_ru -match $ru_translate52[0]) { $xpui_ru = $xpui_ru -replace $ru_translate52[0], $ru_translate52[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$ru_translate52[0] "($lang).NoVariable4 }
-    if ($xpui_ru -match $ru_translate53[0]) { $xpui_ru = $xpui_ru -replace $ru_translate53[0], $ru_translate53[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$ru_translate53[0] "($lang).NoVariable4 }
-    if ($xpui_ru -match $ru_translate54[0]) { $xpui_ru = $xpui_ru -replace $ru_translate54[0], $ru_translate54[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$ru_translate54[0] "($lang).NoVariable4 }
-    if ($xpui_ru -match $ru_translate55[0]) { $xpui_ru = $xpui_ru -replace $ru_translate55[0], $ru_translate55[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$ru_translate55[0] "($lang).NoVariable4 }
-    if ($xpui_ru -match $ru_translate56[0]) { $xpui_ru = $xpui_ru -replace $ru_translate56[0], $ru_translate56[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$ru_translate56[0] "($lang).NoVariable4 }
-    if ($xpui_ru -match $ru_translate57[0]) { $xpui_ru = $xpui_ru -replace $ru_translate57[0], $ru_translate57[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$ru_translate57[0] "($lang).NoVariable4 }
-    if ($xpui_ru -match $ru_translate58[0]) { $xpui_ru = $xpui_ru -replace $ru_translate58[0], $ru_translate58[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$ru_translate58[0] "($lang).NoVariable4 }
-    if ($xpui_ru -match $ru_translate59[0]) { $xpui_ru = $xpui_ru -replace $ru_translate59[0], $ru_translate59[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$ru_translate59[0] "($lang).NoVariable4 }
-    if ($xpui_ru -match $ru_translate62[0]) { $xpui_ru = $xpui_ru -replace $ru_translate62[0], $ru_translate62[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$ru_translate62[0] "($lang).NoVariable4 }
+    if ($xpui_ru -match $ru_translate1[0]) { $xpui_ru = $xpui_ru -replace $ru_translate1[0], $ru_translate1[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$ru_translate1[0] "($lang).NoVariable5 }
+    if ($xpui_ru -match $ru_translate2[0]) { $xpui_ru = $xpui_ru -replace $ru_translate2[0], $ru_translate2[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$ru_translate2[0] "($lang).NoVariable5 }
+    if ($xpui_ru -match $ru_translate3[0]) { $xpui_ru = $xpui_ru -replace $ru_translate3[0], $ru_translate3[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$ru_translate3[0] "($lang).NoVariable5 }
+    if ($xpui_ru -match $ru_translate4[0]) { $xpui_ru = $xpui_ru -replace $ru_translate4[0], $ru_translate4[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$ru_translate4[0] "($lang).NoVariable5 }
+    if ($xpui_ru -match $ru_translate5[0]) { $xpui_ru = $xpui_ru -replace $ru_translate5[0], $ru_translate5[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$ru_translate5[0] "($lang).NoVariable5 }
+    if ($xpui_ru -match $ru_translate13[0]) { $xpui_ru = $xpui_ru -replace $ru_translate13[0], $ru_translate13[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$ru_translate13[0] "($lang).NoVariable5 }
+    if ($xpui_ru -match $ru_translate16[0]) { $xpui_ru = $xpui_ru -replace $ru_translate16[0], $ru_translate16[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$ru_translate16[0] "($lang).NoVariable5 }
+    if ($xpui_ru -match $ru_translate17[0]) { $xpui_ru = $xpui_ru -replace $ru_translate17[0], $ru_translate17[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$ru_translate17[0] "($lang).NoVariable5 }
+    if ($xpui_ru -match $ru_translate20[0]) { $xpui_ru = $xpui_ru -replace $ru_translate20[0], $ru_translate20[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$ru_translate20[0] "($lang).NoVariable5 }
+    if ($xpui_ru -match $ru_translate24[0]) { $xpui_ru = $xpui_ru -replace $ru_translate24[0], $ru_translate24[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$ru_translate24[0] "($lang).NoVariable5 }
+    if ($xpui_ru -match $ru_translate25[0]) { $xpui_ru = $xpui_ru -replace $ru_translate25[0], $ru_translate25[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$ru_translate25[0] "($lang).NoVariable5 }
+    if ($xpui_ru -match $ru_translate26[0]) { $xpui_ru = $xpui_ru -replace $ru_translate26[0], $ru_translate26[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$ru_translate26[0] "($lang).NoVariable5 }
+    if ($xpui_ru -match $ru_translate27[0]) { $xpui_ru = $xpui_ru -replace $ru_translate27[0], $ru_translate27[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$ru_translate27[0] "($lang).NoVariable5 }
+    if ($xpui_ru -match $ru_translate29[0]) { $xpui_ru = $xpui_ru -replace $ru_translate29[0], $ru_translate29[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$ru_translate29[0] "($lang).NoVariable5 }
+    if ($xpui_ru -match $ru_translate30[0]) { $xpui_ru = $xpui_ru -replace $ru_translate30[0], $ru_translate30[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$ru_translate30[0] "($lang).NoVariable5 }
+    if ($xpui_ru -match $ru_translate32[0]) { $xpui_ru = $xpui_ru -replace $ru_translate32[0], $ru_translate32[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$ru_translate32[0] "($lang).NoVariable5 }
+    if ($xpui_ru -match $ru_translate33[0]) { $xpui_ru = $xpui_ru -replace $ru_translate33[0], $ru_translate33[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$ru_translate33[0] "($lang).NoVariable5 }
+    if ($xpui_ru -match $ru_translate36[0]) { $xpui_ru = $xpui_ru -replace $ru_translate36[0], $ru_translate36[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$ru_translate36[0] "($lang).NoVariable5 }
+    if ($xpui_ru -match $ru_translate38[0]) { $xpui_ru = $xpui_ru -replace $ru_translate38[0], $ru_translate38[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$ru_translate38[0] "($lang).NoVariable5 }
+    if ($xpui_ru -match $ru_translate39[0]) { $xpui_ru = $xpui_ru -replace $ru_translate39[0], $ru_translate39[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$ru_translate39[0] "($lang).NoVariable5 }
+    if ($xpui_ru -match $ru_translate40[0]) { $xpui_ru = $xpui_ru -replace $ru_translate40[0], $ru_translate40[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$ru_translate40[0] "($lang).NoVariable5 }
+    if ($xpui_ru -match $ru_translate42[0]) { $xpui_ru = $xpui_ru -replace $ru_translate42[0], $ru_translate42[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$ru_translate42[0] "($lang).NoVariable5 }
+    if ($xpui_ru -match $ru_translate43[0]) { $xpui_ru = $xpui_ru -replace $ru_translate43[0], $ru_translate43[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$ru_translate43[0] "($lang).NoVariable5 }
+    if ($xpui_ru -match $ru_translate45[0]) { $xpui_ru = $xpui_ru -replace $ru_translate45[0], $ru_translate45[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$ru_translate45[0] "($lang).NoVariable5 }
+    if ($xpui_ru -match $ru_translate46[0]) { $xpui_ru = $xpui_ru -replace $ru_translate46[0], $ru_translate46[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$ru_translate46[0] "($lang).NoVariable5 }
+    if ($xpui_ru -match $ru_translate47[0]) { $xpui_ru = $xpui_ru -replace $ru_translate47[0], $ru_translate47[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$ru_translate47[0] "($lang).NoVariable5 }
+    if ($xpui_ru -match $ru_translate48[0]) { $xpui_ru = $xpui_ru -replace $ru_translate48[0], $ru_translate48[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$ru_translate48[0] "($lang).NoVariable5 }
+    if ($xpui_ru -match $ru_translate49[0]) { $xpui_ru = $xpui_ru -replace $ru_translate49[0], $ru_translate49[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$ru_translate49[0] "($lang).NoVariable5 }
+    if ($xpui_ru -match $ru_translate50[0]) { $xpui_ru = $xpui_ru -replace $ru_translate50[0], $ru_translate50[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$ru_translate50[0] "($lang).NoVariable5 }
+    if ($xpui_ru -match $ru_translate51[0]) { $xpui_ru = $xpui_ru -replace $ru_translate51[0], $ru_translate51[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$ru_translate51[0] "($lang).NoVariable5 }
+    if ($xpui_ru -match $ru_translate52[0]) { $xpui_ru = $xpui_ru -replace $ru_translate52[0], $ru_translate52[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$ru_translate52[0] "($lang).NoVariable5 }
+    if ($xpui_ru -match $ru_translate53[0]) { $xpui_ru = $xpui_ru -replace $ru_translate53[0], $ru_translate53[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$ru_translate53[0] "($lang).NoVariable5 }
+    if ($xpui_ru -match $ru_translate54[0]) { $xpui_ru = $xpui_ru -replace $ru_translate54[0], $ru_translate54[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$ru_translate54[0] "($lang).NoVariable5 }
+    if ($xpui_ru -match $ru_translate55[0]) { $xpui_ru = $xpui_ru -replace $ru_translate55[0], $ru_translate55[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$ru_translate55[0] "($lang).NoVariable5 }
+    if ($xpui_ru -match $ru_translate56[0]) { $xpui_ru = $xpui_ru -replace $ru_translate56[0], $ru_translate56[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$ru_translate56[0] "($lang).NoVariable5 }
+    if ($xpui_ru -match $ru_translate57[0]) { $xpui_ru = $xpui_ru -replace $ru_translate57[0], $ru_translate57[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$ru_translate57[0] "($lang).NoVariable5 }
+    if ($xpui_ru -match $ru_translate58[0]) { $xpui_ru = $xpui_ru -replace $ru_translate58[0], $ru_translate58[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$ru_translate58[0] "($lang).NoVariable5 }
+    if ($xpui_ru -match $ru_translate59[0]) { $xpui_ru = $xpui_ru -replace $ru_translate59[0], $ru_translate59[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$ru_translate59[0] "($lang).NoVariable5 }
+    if ($xpui_ru -match $ru_translate62[0]) { $xpui_ru = $xpui_ru -replace $ru_translate62[0], $ru_translate62[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$ru_translate62[0] "($lang).NoVariable5 }
     $xpui_ru
 }
 
@@ -1278,9 +1277,9 @@ If (Test-Path $xpui_spa_patch) {
     $html_min1 = "  "
     $html_min2 = "(?m)(^\s*\r?\n)"
     $html_min3 = "\r?\n(?!\(1|\d)"
-    if ($xpuiContents_html_blank -match $html_min1) { $xpuiContents_html_blank = $xpuiContents_html_blank -replace $html_min1, "" } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$html_min1 "($lang).NoVariable5 }
-    if ($xpuiContents_html_blank -match $html_min2) { $xpuiContents_html_blank = $xpuiContents_html_blank -replace $html_min2, "" } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$html_min2 "($lang).NoVariable5 }
-    if ($xpuiContents_html_blank -match $html_min3) { $xpuiContents_html_blank = $xpuiContents_html_blank -replace $html_min3, "" } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$html_min3 "($lang).NoVariable5 }
+    if ($xpuiContents_html_blank -match $html_min1) { $xpuiContents_html_blank = $xpuiContents_html_blank -replace $html_min1, "" } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$html_min1 "($lang).NoVariable4 }
+    if ($xpuiContents_html_blank -match $html_min2) { $xpuiContents_html_blank = $xpuiContents_html_blank -replace $html_min2, "" } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$html_min2 "($lang).NoVariable4 }
+    if ($xpuiContents_html_blank -match $html_min3) { $xpuiContents_html_blank = $xpuiContents_html_blank -replace $html_min3, "" } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$html_min3 "($lang).NoVariable4 }
 
     $xpuiContents_html_blank = $xpuiContents_html_blank
     $writer = New-Object System.IO.StreamWriter($entry_blank_html.Open())

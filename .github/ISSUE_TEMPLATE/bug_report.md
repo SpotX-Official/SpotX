@@ -13,6 +13,7 @@ assignees: ''
 - Plan Spotify: free or premium 
 - Windows version: 
 - PowerShell version:
+- Spicetify installed: yes or no
 
 ## 📝 Description of the problem
 

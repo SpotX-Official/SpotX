@@ -72,8 +72,7 @@ Good luck to you.
     NoVariable         = Didn't find variable
     NoVariable2        = in xpui.js
     NoVariable3        = in licenses.html
-    NoVariable4        = in ru.json
-    NoVariable5        = in html
+    NoVariable4        = in html
     ModSpoti           = Patching Spotify...
     Error              = Error
     FileLocBroken      = Location of Spotify files is broken, uninstall the client and run the script again

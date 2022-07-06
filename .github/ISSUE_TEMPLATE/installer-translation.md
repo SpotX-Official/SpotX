@@ -2,7 +2,7 @@
 name: 🌏 Installer translation
 about: Translate the installer into your language
 title: Translation for [Write here your translation language]
-labels: New translation
+labels: 🌏 New translation
 assignees: ''
 
 ---

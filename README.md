@@ -15,7 +15,7 @@
 
 
 * <strong>OS: Windows 7-11</strong>
-* <strong>Spotify: Recommended official version [1.1.89.858](https://cutt.ly/8EH6NuH)</strong>
+* <strong>Spotify: Recommended official version [1.1.89.862](https://cutt.ly/8EH6NuH)</strong>
 * <strong>For Windows Desktop only (Microsoft store version is not suitable).</strong>
 * <strong>PowerShell: 3 or higher</strong>
 

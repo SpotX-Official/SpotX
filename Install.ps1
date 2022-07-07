@@ -231,29 +231,32 @@ function Set-ScriptLanguage
             '^en'
             {
                 $langStrings = $langStringsEN
+                $IsRussian = $false
                 break
             }
             '^(ru|py)'
             {
                 $langStrings = $langStringsRU
+                $IsRussian = $true
                 break
             }
             Default
             {
                 # Default to English if unable to find a match.
                 $langStrings = $langStringsEN
+                $IsRussian = $false
                 break
             }
         }
     }
     end
     {
-        return $langStrings
+        return @($langStrings, $IsRussian)
     }
 }
 
 # Set script language strings.
-$lang = Set-ScriptLanguage
+$lang, $ru = Set-ScriptLanguage
 
 
 Write-Host "*****************"

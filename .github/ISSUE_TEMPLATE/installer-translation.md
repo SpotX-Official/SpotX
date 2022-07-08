@@ -12,7 +12,7 @@ assignees: ''
 Before you start translating, you need to know how your language is called in powershell, for this you need Windows with this default language, enter the following command in the powershell terminal :
 
 ```ps1
-[CultureInfo]::InstalleduICulture.Name
+$PSUICulture.Remove(2)
 ```
 
 - Translation language powershell: *Enter here what you received in powershell*

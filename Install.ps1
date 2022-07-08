@@ -1,100 +1,167 @@
-param (
-    [Parameter()]
-    [switch]
-    $podcasts_off = $false,
-    [Parameter()]
-    [switch]
-    $podcasts_on = $false,
-    [Parameter()]
-    [switch]
-    $block_update_on = $false,
-    [Parameter()]
-    [switch]
-    $block_update_off = $false,
-    [Parameter()]
-    [switch]
-    $cache_on = $false,
-    [int] $number_days = 7,
-    [Parameter()]
-    [switch]
-    $cache_off = $false,
-    [Parameter()]
-    [switch]
-    $confirm_uninstall_ms_spoti = $false,
-    [Parameter()]
-    [switch]
-    $confirm_spoti_recomended_over = $false,
-    [Parameter()]
-    [switch]
-    $confirm_spoti_recomended_unistall = $false,
-    [Parameter()]
-    [switch]
-    $premium = $false,
-    [Parameter()]
-    [switch]
-    $start_spoti = $false,
-    [Parameter()]
-    [switch]
-    $exp_off = $false,
-    [Parameter()]
-    [switch]
-    $hide_col_icon_off = $false,
-    [Parameter()]
-    [switch]
-    $made_for_you_off = $false,
-    [Parameter()]
-    [switch]
-    $new_search_off = $false,
-    [Parameter()]
-    [switch]
-    $enhance_playlist_off = $false,
-    [Parameter()]
-    [switch]
-    $enhance_like_off = $false,
-    [Parameter()]
-    [switch]
-    $new_artist_pages_off = $false,
-    [Parameter()]
-    [switch]
-    $new_lyrics_off = $false,
-    [Parameter()]
-    [switch]
-    $ignore_in_recommendations_off = $false
+param
+(
+    [Parameter(HelpMessage = 'Remove podcasts from homepage.')]
+    [switch]$podcasts_off,
     
+    [Parameter(HelpMessage = 'Do not remove podcasts from homepage.')]
+    [switch]$podcasts_on,
+    
+    [Parameter(HelpMessage = 'Block Spotify automatic updates.')]
+    [switch]$block_update_on,
+    
+    [Parameter(HelpMessage = 'Do not block Spotify automatic updates.')]
+    [switch]$block_update_off,
+    
+    [Parameter(HelpMessage = 'Enable clear cache.')]
+    [switch]$cache_on,
+    
+    [Parameter(HelpMessage = 'Specify the number of days. Default is 7 days.')]
+    [int16]$number_days = 7,
+    
+    [Parameter(HelpMessage = 'Do not enable cache clearing.')]
+    [switch]$cache_off,
+    
+    [Parameter(HelpMessage = 'Automatic uninstallation of Spotify MS if it was found.')]
+    [switch]$confirm_uninstall_ms_spoti,
+    
+    [Parameter(HelpMessage = 'Overwrite outdated or unsupported version of Spotify with the recommended version.')]
+    [switch]$confirm_spoti_recomended_over,
+    
+    [Parameter(HelpMessage = 'Uninstall outdated or unsupported version of Spotify and install the recommended version.')]
+    [switch]$confirm_spoti_recomended_unistall,
+    
+    [Parameter(HelpMessage = 'Installation without ad blocking for premium accounts.')]
+    [switch]$premium,
+    
+    [Parameter(HelpMessage = 'Automatic launch of Spotify after installation is complete.')]
+    [switch]$start_spoti,
+    
+    [Parameter(HelpMessage = 'Disable all experimental features.')]
+    [switch]$exp_off,
+    
+    [Parameter(HelpMessage = 'Do not hide the icon of collaborations in playlists.')]
+    [switch]$hide_col_icon_off,
+    
+    [Parameter(HelpMessage = 'Do not enable the made for you button on the left sidebar.')]
+    [switch]$made_for_you_off,
+    
+    [Parameter(HelpMessage = 'Do not enable new search.')]
+    [switch]$new_search_off,
+    
+    [Parameter(HelpMessage = 'Do not enable enhance playlist.')]
+    [switch]$enhance_playlist_off,
+    
+    [Parameter(HelpMessage = 'Do not enable enhance liked songs.')]
+    [switch]$enhance_like_off,
+    
+    [Parameter(HelpMessage = 'Do not enable new discography on artist.')]
+    [switch]$new_artist_pages_off,
+    
+    [Parameter(HelpMessage = 'Do not enable new lyrics.')]
+    [switch]$new_lyrics_off,
+    
+    [Parameter(HelpMessage = 'Do not enable exception playlists from recommendations.')]
+    [switch]$ignore_in_recommendations_off,
+    
+    [Parameter(HelpMessage = 'Select the desired language to use for installation. Default is the detected system language.')]
+    [ValidateScript({ $_ -match '^(en|py|ru)' })]
+    [Alias('l')]
+    [string]$Language
 )
 
 # Ignore errors from `Stop-Process`
 $PSDefaultParameterValues['Stop-Process:ErrorAction'] = [System.Management.Automation.ActionPreference]::SilentlyContinue
 
-function Set-ScriptLanguage
+function Format-LanguageCode
+{
+    <#
+    .SYNOPSIS
+        Normalizes and confirms support of the selected language.
+    
+    .DESCRIPTION
+        Normalizes the language code to the two letter form and verifies that the language is supported by the script. If the language is unsupported by the script, it defaults to English.
+    
+    .PARAMETER LanguageCode
+        Enter the desired language, language code, or culture code.
+#>
+    
+    [CmdletBinding()]
+    [OutputType([string])]
+    param
+    (
+        [string]$LanguageCode
+    )
+    
+    begin
+    {
+        $supportLanguages = @(
+            'en',
+            'ru'
+        )
+    }
+    
+    process
+    {
+        # Trim the language code down to two letter code.
+        switch -Regex ($LanguageCode)
+        {
+            '^en'
+            {
+                $returnCode = 'en'
+                break
+            }
+            '^(ru|py)'
+            {
+                $returnCode = 'ru'
+                break
+            }
+            Default
+            {
+                $returnCode = $PSUICulture.Remove(2)
+                break
+            }
+        }
+        
+        # Confirm that the language code is supported by this script.
+        if ($returnCode -NotIn $supportLanguages)
+        {
+            # If the language code is not supported default to English.
+            $returnCode = 'en'
+        }
+    }
+    
+    end
+    {
+        return $returnCode
+    }
+}
+
+function Set-ScriptLanguageStrings
 {
     <#
     .SYNOPSIS
         Sets the language strings to be used.
-
+    
     .DESCRIPTION
-        Returns an object with language strings. Use the 'LangCode' switch to specify a language, or use without parameters to detect the system language.
-
-    .PARAMETER LangCode
-        Specify the language to be used. Two letter language codes (ex: 'en' or 'ru') and four letter language culture codes accepted (ex:  'en-US' or  'ru-RU').
-        Default is to attempt to detect system language.
-
+        Returns an object with language strings. Use the 'LanguageCode' switch to specify a language.
+    
+    .PARAMETER LanguageCode
+        Specify the language to be used. Two letter language codes (ex: 'en' or 'ru').
+    
     .EXAMPLE
-        		PS C:\> Set-ScriptLanguage
-
-    .EXAMPLE
-                PS C:\> Set-ScriptLanguage -LangCode 'en'
+        PS C:\> Set-ScriptLanguage -LanguageCode 'en'
 #>
-
+    
     [CmdletBinding()]
     [OutputType([object])]
     param
     (
-        [Parameter(HelpMessage = 'Two, three, or four letter language names accepted.')]
-        [ValidateScript({ $_ -match '^(en|ru|py)' })]
-        [string]$LangCode
+        [Parameter(Mandatory = $true,
+            HelpMessage = 'Two letter language code.')]
+        [string]$LanguageCode
     )
-    BEGIN
+    
+    begin
     {
         # Define language strings.
         $langStringsEN = [PSCustomObject]@{
@@ -155,7 +222,7 @@ function Set-ScriptLanguage
             NoSpotifyExe    = "Could not find Spotify.exe"
             InstallComplete = "installation completed"
         }
-
+        
         $langStringsRU = [PSCustomObject]@{
             Author          = "Автор:"
             Incorrect       = "Ой, некорректное значение,"
@@ -216,47 +283,44 @@ function Set-ScriptLanguage
             InstallComplete = "Установка завершена"
         }
     }
-
+    
     process
     {
-        # If a language code was not specified, detect system language.
-        if (-not $LangCode)
-        {
-            $LangCode = [CultureInfo]::InstalledUICulture.TwoLetterISOLanguageName
-        }
-
         # Assign language strings.
-        switch -regex ($LangCode)
+        switch ($LangCode)
         {
-            '^en'
+            'en'
             {
                 $langStrings = $langStringsEN
-                $IsRussian = $false
                 break
             }
-            '^(ru|py)'
+            'ru'
             {
                 $langStrings = $langStringsRU
-                $IsRussian = $true
                 break
             }
             Default
             {
                 # Default to English if unable to find a match.
                 $langStrings = $langStringsEN
-                $IsRussian = $false
                 break
             }
         }
     }
     end
     {
-        return @($langStrings, $IsRussian)
+        return $langStrings
     }
 }
 
+# Set language code for script.
+$langCode = Format-LanguageCode -LanguageCode $Language
+
 # Set script language strings.
-$lang, $ru = Set-ScriptLanguage
+$lang = Set-ScriptLanguageStrings -LanguageCode $langCode
+
+# Set variable 'ru'.
+if ($langCode -eq 'ru') { $ru = $true }
 
 
 Write-Host "*****************"

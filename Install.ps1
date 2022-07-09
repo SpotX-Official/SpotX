@@ -64,7 +64,6 @@ param
     [switch]$ignore_in_recommendations_off,
     
     [Parameter(HelpMessage = 'Select the desired language to use for installation. Default is the detected system language.')]
-    [ValidateScript({ $_ -match '^(en|py|ru)' })]
     [Alias('l')]
     [string]$Language
 )

@@ -62,12 +62,21 @@ or
 <details>
 <summary><small>Automatic installation</small></summary><p>
   
-  <h4>Automatic installation without confirmation (remove Spotify MS, install over recommended version, remove podcasts from homepage, block updates, no cache clear installation)</h4>
+  <h4>Automatic installation without confirmation, what does it do?</h4> 
   
-  * Just download and run [Install_Auto.bat](https://raw.githack.com/amd64fox/SpotX/main/scripts/Install_Auto.bat)
+  - Automatic removal of Spotify MS if it was found 
+  - Automatic installation of the recommended version of Spotify (if another client has already been found, it will be installed over) 
+  - Removal of podcasts from the main page 
+  - Automatic blocking of Spotify updates
+  - Without clearing the cache
+  - After the installation is completed, the client will autorun.
+  
+<h4> </h4>
 
-or
-  
+* Just download and run [Install_Auto.bat](https://raw.githack.com/amd64fox/SpotX/main/scripts/Install_Auto.bat)
+
+or 
+  - Run The following command in PowerShell:
 ```ps1
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; iex "& { $((iwr -useb 'https://raw.githubusercontent.com/amd64fox/SpotX/main/Install.ps1').Content) } -confirm_uninstall_ms_spoti -confirm_spoti_recomended_over -podcasts_off -cache_off -block_update_on -start_spoti"
 ```
@@ -120,6 +129,20 @@ or
 
 
 <h1>Possible problems</h1>
+
+
+ <details>
+<summary><small>In most cases, this helps solve problems.</small></summary><p>
+
+If you notice an error or other malfunction in the mod or in its installation, then do not rush to create a problem report, try this couple of simple steps, this helps to solve a large number of different bugs:
+   * Completely remove Spotify so that there are no tails from the old versions of the client, [this patch](https://github.com/amd64fox/Uninstall-Spotify) will do it for you in one click.
+   * Also, as an additional measure, look at your host file, it should not contain different URLs that can cause the client to work incorrectly, even if you are sure that you did not add anything to it, then go into it anyway and check it for sure, since Some ad blockers that you may have used in the past may have added entries to the host file automatically without your consent.
+   To quickly open the host file, press `Win + R` and enter `%WinDir%\System32\Drivers\Etc\hosts`, in order for the system to allow you to edit the file, you need to open it as an administrator.
+   * If you still see errors, then install the original client and check this error there, if the error is present in the original client, then here you need to wait for a fix from the Spotify developers.
+    To expedite resolution of a problem in the original client, please create a problem report on their [support forum](https://community.spotify.com/t5/Desktop-Windows/bd-p/desktop_windows).
+    In the meantime, you are waiting for a fix, you can temporarily return to the previous version of Spotify that worked for you and block updates in it, [this instruction](https://github.com/amd64fox/[Rollback-Spotify](https://github.com/amd64fox/Rollback-Spotify)) will help you with this.
+
+</details>
 
  <details>
 <summary><small>Outdated versions of PowerShell</small></summary><p>

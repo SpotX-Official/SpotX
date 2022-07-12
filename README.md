@@ -61,7 +61,8 @@ or
   <h4>Automated basic installation without confirmation, what does it do?</h4> 
   
   - Automatic removal of Spotify MS if it was found 
-  - Automatic installation of the recommended version of Spotify (if another client has already been found, it will be installed over) 
+  - Automatic installation of the recommended version of Spotify (if another client has already been found, it will be installed over)
+  - After the installation is completed, the client will autorun
   
 <h4> </h4>
 
@@ -72,7 +73,7 @@ or
 - Run The following command in PowerShell:
 
 ```ps1
-[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; iex "& { $((iwr -useb 'https://raw.githubusercontent.com/amd64fox/SpotX/main/Install.ps1').Content) } -confirm_uninstall_ms_spoti -confirm_spoti_recomended_over -podcasts_on -cache_on -block_update_off -start_spoti"
+[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; iex "& { $((iwr -useb 'https://raw.githubusercontent.com/amd64fox/SpotX/main/Install.ps1').Content) } -confirm_uninstall_ms_spoti -confirm_spoti_recomended_over -podcasts_on -cache_off -block_update_off -exp_off -start_spoti"
 ```
 
 </details>
@@ -86,7 +87,7 @@ or
   - Automatic installation of the recommended version of Spotify (if another client has already been found, it will be installed over) 
   - Removal of podcasts from the main page 
   - Automatic blocking of Spotify updates
-  - Without clearing the cache
+  - All [experimental features](https://github.com/amd64fox/SpotX/discussions/50) included
   - After the installation is completed, the client will autorun.
   
 <h4> </h4>

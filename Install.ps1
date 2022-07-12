@@ -71,8 +71,7 @@ param
 # Ignore errors from `Stop-Process`
 $PSDefaultParameterValues['Stop-Process:ErrorAction'] = [System.Management.Automation.ActionPreference]::SilentlyContinue
 
-function Format-LanguageCode
-{
+function Format-LanguageCode {
     <#
     .SYNOPSIS
         Normalizes and confirms support of the selected language.
@@ -91,52 +90,43 @@ function Format-LanguageCode
         [string]$LanguageCode
     )
     
-    begin
-    {
+    begin {
         $supportLanguages = @(
             'en',
             'ru'
         )
     }
     
-    process
-    {
+    process {
         # Trim the language code down to two letter code.
-        switch -Regex ($LanguageCode)
-        {
-            '^en'
-            {
+        switch -Regex ($LanguageCode) {
+            '^en' {
                 $returnCode = 'en'
                 break
             }
-            '^(ru|py)'
-            {
+            '^(ru|py)' {
                 $returnCode = 'ru'
                 break
             }
-            Default
-            {
+            Default {
                 $returnCode = $PSUICulture.Remove(2)
                 break
             }
         }
         
         # Confirm that the language code is supported by this script.
-        if ($returnCode -NotIn $supportLanguages)
-        {
+        if ($returnCode -NotIn $supportLanguages) {
             # If the language code is not supported default to English.
             $returnCode = 'en'
         }
     }
     
-    end
-    {
+    end {
         return $returnCode
     }
 }
 
-function Set-ScriptLanguageStrings
-{
+function Set-ScriptLanguageStrings {
     <#
     .SYNOPSIS
         Sets the language strings to be used.
@@ -160,8 +150,7 @@ function Set-ScriptLanguageStrings
         [string]$LanguageCode
     )
     
-    begin
-    {
+    begin {
         # Define language strings.
         $langStringsEN = [PSCustomObject]@{
             Author          = "Author:"
@@ -283,31 +272,25 @@ function Set-ScriptLanguageStrings
         }
     }
     
-    process
-    {
+    process {
         # Assign language strings.
-        switch ($LangCode)
-        {
-            'en'
-            {
+        switch ($LangCode) {
+            'en' {
                 $langStrings = $langStringsEN
                 break
             }
-            'ru'
-            {
+            'ru' {
                 $langStrings = $langStringsRU
                 break
             }
-            Default
-            {
+            Default {
                 # Default to English if unable to find a match.
                 $langStrings = $langStringsEN
                 break
             }
         }
     }
-    end
-    {
+    end {
         return $langStrings
     }
 }
@@ -901,13 +884,15 @@ function ExpFeature {
     $exp_features4 = '(Enable block users feature in clientX",default:)(!1)', '$1!0' 
     $exp_features5 = '(Enables quicksilver in-app messaging modal",default:)(!0)', '$1!1' 
     $exp_features6 = '(With this enabled, clients will check whether tracks have lyrics available",default:)(!1)', '$1!0' 
-    $exp_features7 = '(Enables new playlist creation flow in Web Player and DesktopX",default:)(!1)', '$1!0' 
+    $exp_features7 = '(Enables new playlist creation flow in Web Player and DesktopX",default:)(!1)', '$1!0'
+    $exp_features14 = '(Adds a search box so users are able to filter playlists when trying to add songs to a playlist using the contextmenu",default:)(!1)', '$1!0'
+     
     if (!($enhance_playlist_off)) { $exp_features8 = '(Enable Enhance Playlist UI and functionality for end-users",default:)(!1)', '$1!0' }
     if (!($new_artist_pages_off)) { $exp_features9 = '(Enable a condensed disography shelf on artist pages",default:)(!1)', '$1!0' }
     if (!($new_lyrics_off)) { $exp_features10 = '(Enable Lyrics match labels in search results",default:)(!1)', '$1!0' }
     if (!($ignore_in_recommendations_off)) { $exp_features11 = '(Enable Ignore In Recommendations for desktop and web",default:)(!1)', '$1!0' }
     $exp_features12 = '(Enable Playlist Permissions flows for Prod",default:)(!1)', '$1!0'
-    if (!($enhance_like_off)) {$exp_features13 = '(Enable Enhance Liked Songs UI and functionality",default:)(!1)', '$1!0'}
+    if (!($enhance_like_off)) { $exp_features13 = '(Enable Enhance Liked Songs UI and functionality",default:)(!1)', '$1!0' }
 
     if (!($made_for_you_off)) {
         if ($xpui_js -match $exp_features1[0]) { $xpui_js = $xpui_js -replace $exp_features1[0], $exp_features1[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$exp_features1[0] "($lang).NoVariable2 }
@@ -933,9 +918,10 @@ function ExpFeature {
         if ($xpui_js -match $exp_features11[0]) { $xpui_js = $xpui_js -replace $exp_features11[0], $exp_features11[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$exp_features11[0] "($lang).NoVariable2 }
     }
     if ($xpui_js -match $exp_features12[0]) { $xpui_js = $xpui_js -replace $exp_features12[0], $exp_features12[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$exp_features12[0] "($lang).NoVariable2 }
-    if(!($enhance_like_off)){
-    if ($xpui_js -match $exp_features13[0]) { $xpui_js = $xpui_js -replace $exp_features13[0], $exp_features13[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$exp_features13[0] "($lang).NoVariable2 }
+    if (!($enhance_like_off)) {
+        if ($xpui_js -match $exp_features13[0]) { $xpui_js = $xpui_js -replace $exp_features13[0], $exp_features13[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$exp_features13[0] "($lang).NoVariable2 }
     }
+    if ($xpui_js -match $exp_features14[0]) { $xpui_js = $xpui_js -replace $exp_features14[0], $exp_features14[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$exp_features14[0] "($lang).NoVariable2 }
     $xpui_js
 }
 

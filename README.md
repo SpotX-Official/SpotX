@@ -140,7 +140,7 @@ If you notice an error or other malfunction in the mod or in its installation, t
    To quickly open the host file, press `Win + R` and enter `%WinDir%\System32\Drivers\Etc\hosts`, in order for the system to allow you to edit the file, you need to open it as an administrator.
    * If you still see errors, then install the original client and check this error there, if the error is present in the original client, then here you need to wait for a fix from the Spotify developers.
     To expedite resolution of a problem in the original client, please create a problem report on their [support forum](https://community.spotify.com/t5/Desktop-Windows/bd-p/desktop_windows).
-    In the meantime, you are waiting for a fix, you can temporarily return to the previous version of Spotify that worked for you and block updates in it, [this instruction](https://github.com/amd64fox/[Rollback-Spotify](https://github.com/amd64fox/Rollback-Spotify)) will help you with this.
+    In the meantime, you are waiting for a fix, you can temporarily return to the previous version of Spotify that worked for you and block updates in it, [this instruction](https://github.com/amd64fox/Rollback-Spotify) will help you with this.
 
 </details>
 

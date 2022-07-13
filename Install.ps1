@@ -479,8 +479,9 @@ function downloadScripts($param1) {
             $tempDirectory = $PWD
             Pop-Location
             Start-Sleep -Milliseconds 200
-            Remove-Item -Recurse -LiteralPath $tempDirectory 
-            exit
+            Remove-Item -Recurse -LiteralPath $tempDirectory
+            Pause
+            Exit
         }
     }
 } 
@@ -545,7 +546,8 @@ if ($win11 -or $win10 -or $win8_1 -or $win8) {
         }
         if ($ch -eq 'n') {
             Read-Host ($lang).StopScrpit 
-            exit
+            Pause
+            Exit
         }
     }
 }
@@ -694,6 +696,7 @@ if ($spotifyInstalled) {
                 Pop-Location
                 Start-Sleep -Milliseconds 200
                 Remove-Item -Recurse -LiteralPath $tempDirectory 
+                Pause
                 Exit
             }
         }
@@ -1057,7 +1060,8 @@ if ($test_spa -and $test_js) {
     Write-Host ($lang).Error -ForegroundColor Red
     Write-Host ($lang).FileLocBroken
     Write-Host ($lang).StopScrpit
-    exit
+    pause
+    Exit
 }
 
 if (Test-Path $xpui_js_patch) {
@@ -1107,7 +1111,8 @@ if (Test-Path $xpui_js_patch) {
         }
         else {
             Write-Host ($lang).NoRestore`n
-            exit
+            Pause
+            Exit
         }
 
     }
@@ -1219,7 +1224,8 @@ If (Test-Path $xpui_spa_patch) {
         }
         else {
             Write-Host ($lang).NoRestore2`n
-            exit
+            Pause
+            Exit
         }
         $spotify_exe_bak_patch = "$env:APPDATA\Spotify\Spotify.bak"
         $test_spotify_exe_bak = Test-Path -Path $spotify_exe_bak_patch
@@ -1527,4 +1533,3 @@ if ($cache_install) {
 if ($start_spoti) { Start-Process -WorkingDirectory $spotifyDirectory -FilePath $spotifyExecutable }
 
 Write-Host ($lang).InstallComplete`n -ForegroundColor Green
-exit

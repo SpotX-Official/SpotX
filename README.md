@@ -41,7 +41,7 @@
 <details>
 <summary><small>Usual installation</small></summary><p>
   
-  <h4>During installation, you need to confirm some actions, what does it do?</h4>
+  <h4>During installation, you need to confirm some actions, also contains:</h4>
 
   - All [experimental features](https://github.com/amd64fox/SpotX/discussions/50) included
 
@@ -111,7 +111,7 @@ or
 <details>
 <summary><small>Installation for premium</small></summary><p>
   
-  <h4>Usual installation only without ad blocking, for those who have a premium account, what does it do?</h4>
+  <h4>Usual installation only without ad blocking, for those who have a premium account, also contains:</h4>
 
   - All [experimental features](https://github.com/amd64fox/SpotX/discussions/50) included
 

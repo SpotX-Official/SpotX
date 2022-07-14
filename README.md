@@ -41,7 +41,11 @@
 <details>
 <summary><small>Usual installation</small></summary><p>
   
-  <h4>During installation, you need to confirm some actions</h4>
+  <h4>During installation, you need to confirm some actions, what does it do?</h4>
+
+  - All [experimental features](https://github.com/amd64fox/SpotX/discussions/50) included
+
+  <h4> </h4>
   
 * Just download and run [Install.bat](https://raw.githack.com/amd64fox/SpotX/main/Install.bat)
 
@@ -107,7 +111,11 @@ or
 <details>
 <summary><small>Installation for premium</small></summary><p>
   
-  <h4>Usual installation only without ad blocking, for those who have a premium account</h4>
+  <h4>Usual installation only without ad blocking, for those who have a premium account, what does it do?</h4>
+
+  - All [experimental features](https://github.com/amd64fox/SpotX/discussions/50) included
+
+  <h4> </h4>
   
 * Just download and run [Install_Prem.bat](https://raw.githack.com/amd64fox/SpotX/main/scripts/Install_Prem.bat)
 
@@ -125,13 +133,6 @@ or
 <summary><small>Installing with parameters</small></summary><p>
 
 You can specify various parameters for a more flexible installation, more [details here](https://github.com/amd64fox/SpotX/discussions/60)
-
-</details>
-
-<details>
-<summary><small>Установка на русском</small></summary><p>
-  
-Теперь установка на русском языке доступна в основном скрипте, просто скачайте и запустите `Install.bat` или выполните другие типы установки указанные выше.
 
 </details>
 
@@ -168,16 +169,6 @@ Do the following:
 - Upgrade to [NET Framework 4.8](https://go.microsoft.com/fwlink/?linkid=2088631)
 - Upgrade to [WMF 5.1](https://www.microsoft.com/en-us/download/details.aspx?id=54616)
 - Reboot your PC
-
-</details>
-
- <details>
-<summary><small>After running Install.bat, the message "Curl command line utility not found" appeared</small></summary><p>
-
-The curl command was not found in the system (in windows 10 and above it comes out of the box), you need to install it manually:
-
-- Follow the [link](http://www.confusedbycode.com/curl/#downloads) and download the installation file, depending on the bitness of the OS.
-- We start the installation process, at the end we must restart the PC.
 
 </details>
 

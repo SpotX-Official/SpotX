@@ -209,6 +209,8 @@ function Set-ScriptLanguageStrings {
             UpdateError     = "Failed to block updates"
             NoSpotifyExe    = "Could not find Spotify.exe"
             InstallComplete = "installation completed"
+            HostDel         = "Unwanted URLs found in hosts file, trying to remove them..."
+            HostError       = "Something went wrong while editing the hosts file, edit it manually"
         }
         
         $langStringsRU = [PSCustomObject]@{
@@ -269,6 +271,8 @@ function Set-ScriptLanguageStrings {
             UpdateError     = "Не удалось заблокировать обновления"
             NoSpotifyExe    = "Spotify.exe не найден"
             InstallComplete = "Установка завершена"
+            HostDel         = "В файле hosts найдены нежелательные Url-адреса, попытка их удалить..."
+            HostError       = "Что-то пошло не так при редактировании файла hosts, отредактируйте его вручную"
         }
     }
     
@@ -548,6 +552,28 @@ if ($win11 -or $win10 -or $win8_1 -or $win8) {
             Read-Host ($lang).StopScrpit 
             Pause
             Exit
+        }
+    }
+}
+
+# Attempt to fix the hosts file
+$pathHosts = "$Env:windir\System32\Drivers\Etc\hosts"
+$ErrorActionPreference = 'SilentlyContinue'
+$testHosts = Test-Path -Path $pathHosts
+
+if ($testHosts) {
+    $hosts = Get-Content -Path $pathHosts
+
+    if ($hosts -match '.+scdn.+' -or $hosts -match '.+spotify.+' ) {
+        Write-Host ($lang).HostDel`n
+
+        try {
+            $hosts = $hosts -replace '.+scdn.+', '' -replace '.+spotify.+', ''
+            Set-Content -Path $pathHosts -Value $hosts -Force
+            $hosts | Where-Object { $_.trim() -ne "" } | Set-Content -Path $pathHosts -Force
+        }
+        catch {
+            Write-Host ($lang).HostError`n -ForegroundColor Red
         }
     }
 }

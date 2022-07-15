@@ -84,4 +84,6 @@ Good luck to you.
     UpdateError     = "Failed to block updates"
     NoSpotifyExe    = "Could not find Spotify.exe"
     InstallComplete = "installation completed"
+    HostDel         = "Unwanted URLs found in hosts file, trying to remove them..."
+    HostError       = "Something went wrong while editing the hosts file, edit it manually"
 ```

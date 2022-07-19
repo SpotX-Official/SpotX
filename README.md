@@ -27,7 +27,6 @@
 - <strong>Enabled [enhance playlist](https://github.com/amd64fox/SpotX/discussions/50#discussion-4108773)</strong>
 - <strong>Enabled [enhance liked songs UI](https://github.com/amd64fox/SpotX/discussions/50#discussioncomment-2851482)</strong>
 - <strong>Enabled [new lyrics](https://github.com/amd64fox/SpotX/discussions/50#discussioncomment-2851485)</strong>
-- <strong>Enabled [new search with chips experience](https://github.com/amd64fox/SpotX/discussions/50#discussioncomment-2851545)</strong>
 - <strong>Enabled [a condensed discography shelf on artist pages](https://github.com/amd64fox/SpotX/discussions/50#discussioncomment-2851591)</strong>
 - <strong>Enabled [Ignore In Recommendations](https://github.com/amd64fox/SpotX/discussions/50#discussioncomment-2996165)</strong>
 - <strong>Enabled [Equalizer](https://github.com/amd64fox/SpotX/discussions/50#discussioncomment-3179778)</strong>

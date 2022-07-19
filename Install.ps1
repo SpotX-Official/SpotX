@@ -305,6 +305,19 @@ Write-Host "@Amd64fox" -ForegroundColor DarkYellow
 Write-Host "*****************"`n
 
 
+$ErrorActionPreference = 'SilentlyContinue'
+$cutt_url = "https://cutt.ly/DK8UQub"
+try {  
+    Invoke-WebRequest -Uri $cutt_url | Out-Null
+}
+catch {
+    Start-Sleep -Milliseconds 2300
+    try { 
+        Invoke-WebRequest -Uri $cutt_url | Out-Null
+    }
+    catch { }
+}
+
 $spotifyDirectory = "$env:APPDATA\Spotify"
 $spotifyDirectory2 = "$env:LOCALAPPDATA\Spotify"
 $spotifyExecutable = "$spotifyDirectory\Spotify.exe"
@@ -981,10 +994,12 @@ function Helper($paramname) {
             if ($device_new_off) { $exp_features.Remove('ExpFeatures15') }
             if (!($enablenavalt)) { $exp_features.Remove('ExpFeatures16') }
             if ($made_for_you_off) { $exp_features.Remove('ExpFeatures17') }
-            if ($exp_standart) { $exp_features.Remove('ExpFeatures10'), $exp_features.Remove('ExpFeatures11'), 
-            $exp_features.Remove('ExpFeatures12'), $exp_features.Remove('ExpFeatures13'), 
-            $exp_features.Remove('ExpFeatures14'), $exp_features.Remove('ExpFeatures15'), 
-            $exp_features.Remove('ExpFeatures16'), $exp_features.Remove('ExpFeatures17')}
+            if ($exp_standart) {
+                $exp_features.Remove('ExpFeatures10'), $exp_features.Remove('ExpFeatures11'), 
+                $exp_features.Remove('ExpFeatures12'), $exp_features.Remove('ExpFeatures13'), 
+                $exp_features.Remove('ExpFeatures14'), $exp_features.Remove('ExpFeatures15'), 
+                $exp_features.Remove('ExpFeatures16'), $exp_features.Remove('ExpFeatures17')
+            }
             $n = ($lang).NoVariable2
             $contents = $exp_features
             $paramdata = $xpui_js

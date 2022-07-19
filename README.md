@@ -12,7 +12,7 @@
 <h1>System requirements</h1>
 
 - <strong>OS: Windows 7-11</strong>
-- <strong>Spotify: Recommended official version [1.1.89.862](https://cutt.ly/8EH6NuH)</strong>
+- <strong>Spotify: Recommended official version [1.1.90.855](https://cutt.ly/8EH6NuH)</strong>
 - <strong>For Windows Desktop only (Microsoft store version is not suitable).</strong>
 - <strong>PowerShell: 3 or higher</strong>
 
@@ -30,6 +30,8 @@
 - <strong>Enabled [new search with chips experience](https://github.com/amd64fox/SpotX/discussions/50#discussioncomment-2851545)</strong>
 - <strong>Enabled [a condensed discography shelf on artist pages](https://github.com/amd64fox/SpotX/discussions/50#discussioncomment-2851591)</strong>
 - <strong>Enabled [Ignore In Recommendations](https://github.com/amd64fox/SpotX/discussions/50#discussioncomment-2996165)</strong>
+- <strong>Enabled [Equalizer](https://github.com/amd64fox/SpotX/discussions/50#discussioncomment-3179778)</strong>
+- <strong>Enabled [new device picker panel](https://github.com/amd64fox/SpotX/discussions/50#discussioncomment-3179782)</strong>
 - <strong>Activated ["Made For You" in the left sidebar](https://github.com/amd64fox/SpotX/discussions/50#discussioncomment-2853981)</strong>
 - <strong>Disabled Sentry (Prevented Sentry from sending console log/error/warning to Spotify developers)</strong>
 - <strong>Disabled logging (Stopped various elements to log user interaction)</strong>

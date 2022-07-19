@@ -38,15 +38,15 @@ param
     
     [Parameter(HelpMessage = 'Disable all experimental features.')]
     [switch]$exp_off,
+
+    [Parameter(HelpMessage = 'Experimental features standart.')]
+    [switch]$exp_standart,
     
     [Parameter(HelpMessage = 'Do not hide the icon of collaborations in playlists.')]
     [switch]$hide_col_icon_off,
     
     [Parameter(HelpMessage = 'Do not enable the made for you button on the left sidebar.')]
     [switch]$made_for_you_off,
-    
-    [Parameter(HelpMessage = 'Do not enable new search.')]
-    [switch]$new_search_off,
     
     [Parameter(HelpMessage = 'Do not enable enhance playlist.')]
     [switch]$enhance_playlist_off,
@@ -62,6 +62,15 @@ param
     
     [Parameter(HelpMessage = 'Do not enable exception playlists from recommendations.')]
     [switch]$ignore_in_recommendations_off,
+
+    [Parameter(HelpMessage = 'Enable audio equalizer for Desktop.')]
+    [switch]$equalizer_off,
+    
+    [Parameter(HelpMessage = 'Enable showing a new and improved device picker UI.')]
+    [switch]$device_new_off,
+
+    [Parameter(HelpMessage = 'Enabled the new home structure and navigation.')]
+    [switch]$enablenavalt,
     
     [Parameter(HelpMessage = 'Select the desired language to use for installation. Default is the detected system language.')]
     [Alias('l')]
@@ -72,17 +81,9 @@ param
 $PSDefaultParameterValues['Stop-Process:ErrorAction'] = [System.Management.Automation.ActionPreference]::SilentlyContinue
 
 function Format-LanguageCode {
-    <#
-    .SYNOPSIS
-        Normalizes and confirms support of the selected language.
     
-    .DESCRIPTION
-        Normalizes the language code to the two letter form and verifies that the language is supported by the script. If the language is unsupported by the script, it defaults to English.
-    
-    .PARAMETER LanguageCode
-        Enter the desired language, language code, or culture code.
-#>
-    
+    # Normalizes and confirms support of the selected language.
+
     [CmdletBinding()]
     [OutputType([string])]
     param
@@ -127,19 +128,8 @@ function Format-LanguageCode {
 }
 
 function Set-ScriptLanguageStrings {
-    <#
-    .SYNOPSIS
-        Sets the language strings to be used.
     
-    .DESCRIPTION
-        Returns an object with language strings. Use the 'LanguageCode' switch to specify a language.
-    
-    .PARAMETER LanguageCode
-        Specify the language to be used. Two letter language codes (ex: 'en' or 'ru').
-    
-    .EXAMPLE
-        PS C:\> Set-ScriptLanguage -LanguageCode 'en'
-#>
+    #Sets the language strings to be used.
     
     [CmdletBinding()]
     [OutputType([object])]
@@ -313,23 +303,6 @@ Write-Host "*****************"
 Write-Host ($lang).Author"" -NoNewline
 Write-Host "@Amd64fox" -ForegroundColor DarkYellow
 Write-Host "*****************"`n
-
-
-
-$ErrorActionPreference = 'SilentlyContinue'
-$cutt_url = "https://cutt.ly/DK8UQub"
-try {  
-    Invoke-WebRequest -Uri $cutt_url | Out-Null
-}
-catch {
-    Start-Sleep -Milliseconds 2000
-    try { 
-        Invoke-WebRequest -Uri $cutt_url | Out-Null
-    }
-    catch {
-        Write-Host ($lang).CuttError`n -ForegroundColor RED
-    }
-}
 
 
 $spotifyDirectory = "$env:APPDATA\Spotify"
@@ -867,192 +840,168 @@ if (!($cache_on) -and !($cache_off)) {
     }
 }
 
-function OffPodcasts {
+function Helper($paramname) {
 
-    # Turn off podcasts
-    $podcasts_off1 = 'withQueryParameters\(e\){return this.queryParameters=e,this}', 'withQueryParameters(e){return this.queryParameters=(e.types?{...e, types: e.types.split(",").filter(_ => !["episode","show"].includes(_)).join(",")}:e),this}'
-    $podcasts_off2 = ',this[.]enableShows=[a-z]' 
+    switch ( $paramname ) {
+        "HtmlLicMin" { 
+            # licenses.html minification
+            $html_lic_min = @{
+                HtmlLicMin1 = '\r?\n(?!\(1|\d)', ''
+                HtmlLicMin2 = '(?m)(^\s*\r?\n)', ''
+                HtmlLicMin3 = '  ', ''
+                HtmlLicMin4 = '	', ''
+                HtmlLicMin5 = '<li><a href="#6eef7">zlib<\/a><\/li>\n(.|\n)*<\/p><!-- END CONTAINER DEPS LICENSES -->(<\/div>)', ''
+            }
+            $n = ($lang).NoVariable3
+            $contents = $html_lic_min
+            $paramdata = $xpuiContents_html
+        }
+        "OffadsonFullscreen" { 
+            $offadson_fullscreen = @{
+                EmptyBlockAd        = 'adsEnabled:!0', 'adsEnabled:!1' # Removing an empty block
+                FullScreenAd        = '(return|.=.=>)"free"===(.+?)(return|.=.=>)"premium"===', '$1"premium"===$2$3"free"===' # Fullscreen act., removing upgrade menu, button
+                PlaylistSponsorsOff = 'allSponsorships' , '' # Disabling a playlist sponsor
+            }
+            $n = ($lang).NoVariable2
+            $contents = $offadson_fullscreen
+            $paramdata = $xpui_js
+        }
+        "OffPodcasts" {  
+            # Turn off podcasts
+            $podcasts_off = @{
+                PodcastsOff1 = 'withQueryParameters\(e\){return this.queryParameters=e,this}', 'withQueryParameters(e){return this.queryParameters=(e.types?{...e, types: e.types.split(",").filter(_ => !["episode","show"].includes(_)).join(",")}:e),this}'
+                PodcastsOff2 = ',this[.]enableShows=[a-z]', ''
+            }
+            $n = ($lang).NoVariable2
+            $contents = $podcasts_off
+            $paramdata = $xpui_js
+        }
+        "OffRujs" { 
+            # Remove all languages except En and Ru from xpui.js
+            $rus_js = @{
+                OffRujs = '(en:{displayName:"English",displayNameEn:"English"}).*"Vietnamese"', '$1,ru:{displayName:"Русский",displayNameEn:"Russian"'
+            }
+            $n = ($lang).NoVariable2
+            $contents = $rus_js
+            $paramdata = $xpui_js
 
-    if ($xpui_js -match $podcasts_off1[0]) { $xpui_js = $xpui_js -replace $podcasts_off1[0], $podcasts_off1[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$podcasts_off1[0] "($lang).NoVariable2 }
-    if ($xpui_js -match $podcasts_off2) { $xpui_js = $xpui_js -replace $podcasts_off2, "" } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$podcasts_off2 "($lang).NoVariable2 }
-    $xpui_js
-}
+        }
+        "RuTranslate" { 
+            # Additional translation of some words for the Russian language
+            $ru_translate = @{
+                One                = '"one": "Enhanced with [{]0[}] recommended song."', '"one": "Добавлен {0} рекомендованный трек."' 
+                Few                = '"few": "Enhanced with [{]0[}] recommended songs."', '"few": "Добавлено {0} рекомендованных трека."' 
+                Many               = '"many": "Enhanced with [{]0[}] recommended songs."', '"many": "Добавлено {0} рекомендованных треков."' 
+                Other              = '"other": "Enhanced with [{]0[}] recommended songs."', '"other": "Добавлено {0} рекомендованных трека."' 
+                EnhancePlaylist    = '"To Enhance this playlist, you.ll need to go online."', '"Чтобы улучшить этот плейлист, вам нужно подключиться к интернету."'
+                ConfirmAge         = '"Confirm your age"', '"Подтвердите свой возраст"' 
+                Premium            = '"%price%\/month after. Terms and conditions apply. One month free not available for users who have already tried Premium."', '"%price%/месяц спустя. Принять условия. Один месяц бесплатно, недоступно для пользователей, которые уже попробовали Premium."' 
+                AdFreeMusic        = '"Enjoy ad-free music listening, offline listening, and more. Cancel anytime."', '"Наслаждайтесь прослушиванием музыки без рекламы, прослушиванием в офлайн режиме и многим другим. Отменить можно в любое время."' 
+                LyricsBy           = '"Lyrics provided by [{]0[}]"', '"Тексты песен предоставлены {0}"' 
+                AddPlaylist        = '"Add to another playlist"', '"Добавить в другой плейлист"' 
+                OfflineStorage     = '"Offline storage location"', '"Хранилище скачанных треков"' 
+                ChangeLocation     = '"Change location"', '"Изменить место"' 
+                Linebreaks         = '"Line breaks aren.t supported in the description."', '"В описании не поддерживаются разрывы строк."' 
+                PressSave          = '"Press save to keep changes you.ve made."', '"Нажмите «Сохранить», чтобы сохранить внесенные изменения."' 
+                NoInternet         = '"No internet connection found. Changes to description and image will not be saved."', '"Подключение к интернету не найдено. Изменения в описании и изображении не будут сохранены."' 
+                ImageSmall         = '"Image too small. Images must be at least [{]0[}]x[{]1[}]."', '"Изображение слишком маленькое. Изображения должны быть не менее {0}x{1}."' 
+                FailedUpload       = '"Failed to upload image. Please try again."', '"Не удалось загрузить изображение. Пожалуйста, попробуйте снова."' 
+                Description        = '"Description"', '"Описание"' 
+                ChangePhoto        = '"Change photo"', '"Сменить изображение"' 
+                RemovePhoto        = '"Remove photo"', '"Удалить изображение"' 
+                Name               = '"Name"', '"Имя"' 
+                ChangeSpeed        = '"Change speed"', '"Изменение скорости"' 
+                Years19            = '"You need to be at least 19 years old to listen to explicit content marked with"', '"Вам должно быть не менее 19 лет, чтобы слушать непристойный контент, помеченный значком"' 
+                AddPlaylist2       = '"Add to this playlist"', '"Добавить в этот плейлист"' 
+                Retrying           = '"Retrying in [{]0[}]..."', '"Повторная попытка в {0}..."' 
+                NoConnect          = '"Couldn.t connect to Spotify."', '"Не удалось подключиться к Spotify."' 
+                Reconnecting       = '"Reconnecting..."', '"Повторное подключение..."' 
+                NoConnection       = '"No connection"', '"Нет соединения"' 
+                CharacterCounter   = '"Character counter"', '"Счетчик символов"' 
+                Lightsaber         = '"Toggle lightsaber hilt. Current is [{]0[}]."', '"Переключить рукоять светового меча. Текущий {0}."' 
+                SongAvailable      = '"Song not available"', '"Песня недоступна"' 
+                HiFi               = '"The song you.re trying to listen to is not available in HiFi at this time."', '"Песня, которую вы пытаетесь прослушать, в настоящее время недоступна в HiFi."' 
+                Quality            = '"Current audio quality:"', '"Текущее качество звука:"' 
+                Network            = '"Network connection"', '"Подключение к сети"' 
+                Good               = '"Good"', '"Хорошее"' 
+                Poor               = '"Poor"', '"Плохое"' 
+                Yes                = '"Yes"', '"Да"' 
+                No                 = '"No"', '"Нет"' 
+                Location           = '"Your Location"', '"Ваше местоположение"'
+                NetworkConnection  = '"Network connection failed while playing this content."', '"Сбой сетевого подключения при воспроизведении этого контента."'
+                ContentLocation    = '"We.re not able to play this content in your current location."', '"Мы не можем воспроизвести этот контент в вашем текущем местоположении."'
+                ContentUnavailable = '"This content is unavailable. Try another\?"', '"Этот контент недоступен. Попробуете другой?"'
+                NoContent          = '"Sorry, we.re not able to play this content."', '"К сожалению, мы не можем воспроизвести этот контент."'
+                NoContent2         = '"Hmm... we can.t seem to play this content. Try installing the latest version of Spotify."', '"Хм... похоже, мы не можем воспроизвести этот контент. Попробуйте установить последнюю версию Spotify."'
+                NoContent3         = '"Please upgrade Spotify to play this content."', '"Пожалуйста, обновите Spotify, чтобы воспроизвести этот контент."'
+                NoContent4         = '"This content cannot be played on your operating system version."', '"Этот контент нельзя воспроизвести в вашей версии операционной системы."'
+                DevLang            = '"Override certain user attributes to test regionalized content programming. The overrides are only active in this app."', '"Переопределите определенные атрибуты пользователя, чтобы протестировать региональное программирование контента. Переопределения активны только в этом приложении."'
+                AlbumRelease       = '"...name... was released this week!"', '"\"%name%\" был выпущен на этой неделе!"'
+                AlbumReleaseOne    = '"one": "\\"%name%\\" was released %years% year ago this week!"', '"one": "\"%name%\" был выпущен %years% год назад на этой неделе!"'
+                AlbumReleaseFew    = '"few": "\\"%name%\\" was released %years% years ago this week!"', '"few": "\"%name%\" был выпущен %years% года назад на этой неделе!"'
+                AlbumReleaseMany   = '"many": "\\"%name%\\" was released %years% years ago this week!"', '"many": "\"%name%\" был выпущен %years% лет назад на этой неделе!"'
+                AlbumReleaseOther  = '"other": "\\"%name%\\" was released %years% years ago this week!"', '"other": "\"%name%\" был выпущен %years% года назад на этой неделе!"'
+                Speed              = '"Speed [{]0[}]×"', '"Скорость {0}×"'
+                SearchEmpty        = '(\")(No \{1\} found for)( \\\"\{0\}\\\"\")', '$1{1} не найдено для$3'
+                AudiobookFree      = '"This audiobook is free"', '"Эта аудиокнига бесплатна"'
+                AudiobookGet       = '"Get"', '"Получить"'
+                AudiobookBy        = '"Buy"', '"Купить"'
+            }
+            $n = ($lang).NoVariable5
+            $contents = $ru_translate
+            $paramdata = $xpui_ru
+        }
 
-function OffAdsOnFullscreen {
-    
-    # Removing an empty block
-    $empty_block_ad = 'adsEnabled:!0', 'adsEnabled:!1'
-
-    # Full screen mode activation and removing "Upgrade to premium" menu, upgrade button
-    $full_screen = '(return|.=.=>)"free"===(.+?)(return|.=.=>)"premium"===', '$1"premium"===$2$3"free"==='
-
-    # Disabling a playlist sponsor
-    $playlist_ad_off = "allSponsorships"
-
-    if ($xpui_js -match $empty_block_ad[0]) { $xpui_js = $xpui_js -replace $empty_block_ad[0], $empty_block_ad[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$empty_block_ad[0] "($lang).NoVariable2 }
-    if ($xpui_js -match $full_screen[0]) { $xpui_js = $xpui_js -replace $full_screen[0], $full_screen[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$full_screen[0] "($lang).NoVariable2 }
-    if ($xpui_js -match $playlist_ad_off) { $xpui_js = $xpui_js -replace $playlist_ad_off, "" } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$playlist_ad_off "($lang).NoVariable2 }
-    $xpui_js
-}
-
-function OffRujs {
-    
-    # Remove all languages except En and Ru from xpui.js
-    $rus_js = '(JSON.parse\(.{)("en":"English \(English\)".*\(Vietnamese\)"})', '$1"en":"English (English)","ru":"Русский (Russian)"}'
-    if ($xpui_js -match $rus_js[0]) { $xpui_js = $xpui_js -replace $rus_js[0], $rus_js[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$rus_js[0] "($lang).NoVariable2 }
-    $xpui_js
-}
-
-function ExpFeature {
-
-    # Experimental Feature
-
-    if (!($made_for_you_off)) { $exp_features1 = '(Show "Made For You" entry point in the left sidebar.,default:)(!1)', '$1!0' }
-    if (!($new_search_off)) { $exp_features2 = '(Enable the new Search with chips experience",default:)(!1)', '$1!0' }
-    $exp_features3 = '(Enable Liked Songs section on Artist page",default:)(!1)', '$1!0' 
-    $exp_features4 = '(Enable block users feature in clientX",default:)(!1)', '$1!0' 
-    $exp_features5 = '(Enables quicksilver in-app messaging modal",default:)(!0)', '$1!1' 
-    $exp_features6 = '(With this enabled, clients will check whether tracks have lyrics available",default:)(!1)', '$1!0' 
-    $exp_features7 = '(Enables new playlist creation flow in Web Player and DesktopX",default:)(!1)', '$1!0'
-    $exp_features14 = '(Adds a search box so users are able to filter playlists when trying to add songs to a playlist using the contextmenu",default:)(!1)', '$1!0'
-     
-    if (!($enhance_playlist_off)) { $exp_features8 = '(Enable Enhance Playlist UI and functionality for end-users",default:)(!1)', '$1!0' }
-    if (!($new_artist_pages_off)) { $exp_features9 = '(Enable a condensed disography shelf on artist pages",default:)(!1)', '$1!0' }
-    if (!($new_lyrics_off)) { $exp_features10 = '(Enable Lyrics match labels in search results",default:)(!1)', '$1!0' }
-    if (!($ignore_in_recommendations_off)) { $exp_features11 = '(Enable Ignore In Recommendations for desktop and web",default:)(!1)', '$1!0' }
-    $exp_features12 = '(Enable Playlist Permissions flows for Prod",default:)(!1)', '$1!0'
-    if (!($enhance_like_off)) { $exp_features13 = '(Enable Enhance Liked Songs UI and functionality",default:)(!1)', '$1!0' }
-
-    if (!($made_for_you_off)) {
-        if ($xpui_js -match $exp_features1[0]) { $xpui_js = $xpui_js -replace $exp_features1[0], $exp_features1[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$exp_features1[0] "($lang).NoVariable2 }
+        "ExpFeature" { 
+            # Experimental Feature Standart
+            $exp_features = @{
+                ExpFeatures1  = '(Enable Liked Songs section on Artist page",default:)(!1)', '$1!0' 
+                ExpFeatures2  = '(Enable block users feature in clientX",default:)(!1)', '$1!0' 
+                ExpFeatures3  = '(Enables quicksilver in-app messaging modal",default:)(!0)', '$1!1' 
+                ExpFeatures4  = '(With this enabled, clients will check whether tracks have lyrics available",default:)(!1)', '$1!0' 
+                ExpFeatures5  = '(Enables new playlist creation flow in Web Player and DesktopX",default:)(!1)', '$1!0'
+                ExpFeatures6  = '(Adds a search box so users are able to filter playlists when trying to add songs to a playlist using the contextmenu",default:)(!1)', '$1!0'
+                ExpFeatures7  = '(Enable Ignore In Recommendations for desktop and web",default:)(!1)', '$1!0'
+                ExpFeatures8  = '(Enable Playlist Permissions flows for Prod",default:)(!1)', '$1!0'
+                ExpFeatures9  = '(Enable showing balloons on album release date anniversaries",default:)(!1)', '$1!0'
+                ExpFeatures10 = '(Enable Enhance Liked Songs UI and functionality",default:)(!1)', '$1!0'
+                ExpFeatures11 = '(Enable Enhance Playlist UI and functionality for end-users",default:)(!1)', '$1!0' 
+                ExpFeatures12 = '(Enable a condensed disography shelf on artist pages",default:)(!1)', '$1!0' 
+                ExpFeatures13 = '(Enable Lyrics match labels in search results",default:)(!1)', '$1!0'  
+                ExpFeatures14 = '(Enable audio equalizer for Desktop and Web Player",default:)(!1)', '$1!0' 
+                ExpFeatures15 = '(Enable showing a new and improved device picker UI",default:)(!1)', '$1!0'
+                ExpFeatures16 = '(Enable the new home structure and navigation:)(!1)', '$1!0'
+                ExpFeatures17 = '(Show "Made For You" entry point in the left sidebar.,default:)(!1)', '$1!0'
+            }
+            if ($enhance_like_off) { $exp_features.Remove('ExpFeatures10') }
+            if ($enhance_playlist_off) { $exp_features.Remove('ExpFeatures11') }
+            if ($new_artist_pages_off) { $exp_features.Remove('ExpFeatures12') }
+            if ($new_lyrics_off) { $exp_features.Remove('ExpFeatures13') }
+            if ($equalizer_off) { $exp_features.Remove('ExpFeatures14') }
+            if ($device_new_off) { $exp_features.Remove('ExpFeatures15') }
+            if (!($enablenavalt)) { $exp_features.Remove('ExpFeatures16') }
+            if ($made_for_you_off) { $exp_features.Remove('ExpFeatures17') }
+            if ($exp_standart) { $exp_features.Remove('ExpFeatures10'), $exp_features.Remove('ExpFeatures11'), 
+            $exp_features.Remove('ExpFeatures12'), $exp_features.Remove('ExpFeatures13'), 
+            $exp_features.Remove('ExpFeatures14'), $exp_features.Remove('ExpFeatures15'), 
+            $exp_features.Remove('ExpFeatures16'), $exp_features.Remove('ExpFeatures17')}
+            $n = ($lang).NoVariable2
+            $contents = $exp_features
+            $paramdata = $xpui_js
+        }
     }
-    if (!($new_search_off)) {
-        if ($xpui_js -match $exp_features2[0]) { $xpui_js = $xpui_js -replace $exp_features2[0], $exp_features2[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$exp_features2[0] "($lang).NoVariable2 }
-    }
-    if ($xpui_js -match $exp_features3[0]) { $xpui_js = $xpui_js -replace $exp_features3[0], $exp_features3[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$exp_features3[0] "($lang).NoVariable2 }
-    if ($xpui_js -match $exp_features4[0]) { $xpui_js = $xpui_js -replace $exp_features4[0], $exp_features4[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$exp_features4[0] "($lang).NoVariable2 }
-    if ($xpui_js -match $exp_features5[0]) { $xpui_js = $xpui_js -replace $exp_features5[0], $exp_features5[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$exp_features5[0] "($lang).NoVariable2 }
-    if ($xpui_js -match $exp_features6[0]) { $xpui_js = $xpui_js -replace $exp_features6[0], $exp_features6[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$exp_features6[0] "($lang).NoVariable2 }
-    if ($xpui_js -match $exp_features7[0]) { $xpui_js = $xpui_js -replace $exp_features7[0], $exp_features7[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$exp_features7[0] "($lang).NoVariable2 }
-    if (!($enhance_playlist_off)) {
-        if ($xpui_js -match $exp_features8[0]) { $xpui_js = $xpui_js -replace $exp_features8[0], $exp_features8[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$exp_features8[0] "($lang).NoVariable2 }
-    }
-    if (!($new_artist_pages_off)) {
-        if ($xpui_js -match $exp_features9[0]) { $xpui_js = $xpui_js -replace $exp_features9[0], $exp_features9[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$exp_features9[0] "($lang).NoVariable2 }
-    }
-    if (!($new_lyrics_off)) {
-        if ($xpui_js -match $exp_features10[0]) { $xpui_js = $xpui_js -replace $exp_features10[0], $exp_features10[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$exp_features10[0] "($lang).NoVariable2 }
-    }
-    if (!($ignore_in_recommendations_off)) {
-        if ($xpui_js -match $exp_features11[0]) { $xpui_js = $xpui_js -replace $exp_features11[0], $exp_features11[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$exp_features11[0] "($lang).NoVariable2 }
-    }
-    if ($xpui_js -match $exp_features12[0]) { $xpui_js = $xpui_js -replace $exp_features12[0], $exp_features12[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$exp_features12[0] "($lang).NoVariable2 }
-    if (!($enhance_like_off)) {
-        if ($xpui_js -match $exp_features13[0]) { $xpui_js = $xpui_js -replace $exp_features13[0], $exp_features13[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$exp_features13[0] "($lang).NoVariable2 }
-    }
-    if ($xpui_js -match $exp_features14[0]) { $xpui_js = $xpui_js -replace $exp_features14[0], $exp_features14[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$exp_features14[0] "($lang).NoVariable2 }
-    $xpui_js
-}
 
-function ContentsHtml {
-
-    # Минификация html
-    $html_lic_min1 = '<li><a href="#6eef7">zlib<\/a><\/li>\n(.|\n)*<\/p><!-- END CONTAINER DEPS LICENSES -->(<\/div>)'
-    $html_lic_min2 = "	"
-    $html_lic_min3 = "  "
-    $html_lic_min4 = "(?m)(^\s*\r?\n)"
-    $html_lic_min5 = "\r?\n(?!\(1|\d)"
-    if ($xpuiContents_html -match $html_lic_min1) { $xpuiContents_html = $xpuiContents_html -replace $html_lic_min1, '$2' } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$html_lic_min1 "($lang).NoVariable3 }
-    if ($xpuiContents_html -match $html_lic_min2) { $xpuiContents_html = $xpuiContents_html -replace $html_lic_min2, "" } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$html_lic_min2 "($lang).NoVariable3 }
-    if ($xpuiContents_html -match $html_lic_min3) { $xpuiContents_html = $xpuiContents_html -replace $html_lic_min3, "" } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$html_lic_min3 "($lang).NoVariable3 }
-    if ($xpuiContents_html -match $html_lic_min4) { $xpuiContents_html = $xpuiContents_html -replace $html_lic_min4, "" } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$html_lic_min4 "($lang).NoVariable3 }
-    if ($xpuiContents_html -match $html_lic_min5) { $xpuiContents_html = $xpuiContents_html -replace $html_lic_min5, "" } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$html_lic_min5 "($lang).NoVariable3 }
-    $xpuiContents_html
-}
-
-function RuTranslate {
-
-    #Additional translation of some words for the Russian language
-    $ru_translate1 = '"one": "Enhanced with [{]0[}] recommended song."', '"one": "Добавлен {0} рекомендованный трек."' 
-    $ru_translate2 = '"few": "Enhanced with [{]0[}] recommended songs."', '"few": "Добавлено {0} рекомендованных трека."' 
-    $ru_translate3 = '"many": "Enhanced with [{]0[}] recommended songs."', '"many": "Добавлено {0} рекомендованных треков."' 
-    $ru_translate4 = '"other": "Enhanced with [{]0[}] recommended songs."', '"other": "Добавлено {0} рекомендованных трека."' 
-    $ru_translate5 = '"To Enhance this playlist, you.ll need to go online."', '"Чтобы улучшить этот плейлист, вам нужно подключиться к интернету."'
-    $ru_translate13 = '"Confirm your age"', '"Подтвердите свой возраст"' 
-    $ru_translate16 = '"%price%\/month after. Terms and conditions apply. One month free not available for users who have already tried Premium."', '"%price%/месяц спустя. Принять условия. Один месяц бесплатно, недоступно для пользователей, которые уже попробовали Premium."' 
-    $ru_translate17 = '"Enjoy ad-free music listening, offline listening, and more. Cancel anytime."', '"Наслаждайтесь прослушиванием музыки без рекламы, прослушиванием в офлайн режиме и многим другим. Отменить можно в любое время."' 
-    $ru_translate20 = '"Lyrics provided by [{]0[}]"', '"Тексты песен предоставлены {0}"' 
-    $ru_translate24 = '"Add to another playlist"', '"Добавить в другой плейлист"' 
-    $ru_translate25 = '"Offline storage location"', '"Хранилище скачанных треков"' 
-    $ru_translate26 = '"Change location"', '"Изменить место"' 
-    $ru_translate27 = '"Line breaks aren.t supported in the description."', '"В описании не поддерживаются разрывы строк."' 
-    $ru_translate29 = '"Press save to keep changes you.ve made."', '"Нажмите «Сохранить», чтобы сохранить внесенные изменения."' 
-    $ru_translate30 = '"No internet connection found. Changes to description and image will not be saved."', '"Подключение к интернету не найдено. Изменения в описании и изображении не будут сохранены."' 
-    $ru_translate32 = '"Image too small. Images must be at least [{]0[}]x[{]1[}]."', '"Изображение слишком маленькое. Изображения должны быть не менее {0}x{1}."' 
-    $ru_translate33 = '"Failed to upload image. Please try again."', '"Не удалось загрузить изображение. Пожалуйста, попробуйте снова."' 
-    $ru_translate36 = '"Description"', '"Описание"' 
-    $ru_translate38 = '"Change photo"', '"Сменить изображение"' 
-    $ru_translate39 = '"Remove photo"', '"Удалить изображение"' 
-    $ru_translate40 = '"Name"', '"Имя"' 
-    $ru_translate42 = '"Change speed"', '"Изменение скорости"' 
-    $ru_translate43 = '"You need to be at least 19 years old to listen to explicit content marked with"', '"Вам должно быть не менее 19 лет, чтобы слушать непристойный контент, помеченный значком"' 
-    $ru_translate45 = '"Add to this playlist"', '"Добавить в этот плейлист"' 
-    $ru_translate46 = '"Retrying in [{]0[}]..."', '"Повторная попытка в {0}..."' 
-    $ru_translate47 = '"Couldn.t connect to Spotify."', '"Не удалось подключиться к Spotify."' 
-    $ru_translate48 = '"Reconnecting..."', '"Повторное подключение..."' 
-    $ru_translate49 = '"No connection"', '"Нет соединения"' 
-    $ru_translate50 = '"Character counter"', '"Счетчик символов"' 
-    $ru_translate51 = '"Toggle lightsaber hilt. Current is [{]0[}]."', '"Переключить рукоять светового меча. Текущий {0}."' 
-    $ru_translate52 = '"Song not available"', '"Песня недоступна"' 
-    $ru_translate53 = '"The song you.re trying to listen to is not available in HiFi at this time."', '"Песня, которую вы пытаетесь прослушать, в настоящее время недоступна в HiFi."' 
-    $ru_translate54 = '"Current audio quality:"', '"Текущее качество звука:"' 
-    $ru_translate55 = '"Network connection"', '"Подключение к сети"' 
-    $ru_translate56 = '"Good"', '"Хорошее"' 
-    $ru_translate57 = '"Poor"', '"Плохое"' 
-    $ru_translate58 = '"Yes"', '"Да"' 
-    $ru_translate59 = '"No"', '"Нет"' 
-    $ru_translate62 = '"Your Location"', '"Ваше местоположение"'  
-
-    if ($xpui_ru -match $ru_translate1[0]) { $xpui_ru = $xpui_ru -replace $ru_translate1[0], $ru_translate1[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$ru_translate1[0] "($lang).NoVariable5 }
-    if ($xpui_ru -match $ru_translate2[0]) { $xpui_ru = $xpui_ru -replace $ru_translate2[0], $ru_translate2[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$ru_translate2[0] "($lang).NoVariable5 }
-    if ($xpui_ru -match $ru_translate3[0]) { $xpui_ru = $xpui_ru -replace $ru_translate3[0], $ru_translate3[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$ru_translate3[0] "($lang).NoVariable5 }
-    if ($xpui_ru -match $ru_translate4[0]) { $xpui_ru = $xpui_ru -replace $ru_translate4[0], $ru_translate4[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$ru_translate4[0] "($lang).NoVariable5 }
-    if ($xpui_ru -match $ru_translate5[0]) { $xpui_ru = $xpui_ru -replace $ru_translate5[0], $ru_translate5[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$ru_translate5[0] "($lang).NoVariable5 }
-    if ($xpui_ru -match $ru_translate13[0]) { $xpui_ru = $xpui_ru -replace $ru_translate13[0], $ru_translate13[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$ru_translate13[0] "($lang).NoVariable5 }
-    if ($xpui_ru -match $ru_translate16[0]) { $xpui_ru = $xpui_ru -replace $ru_translate16[0], $ru_translate16[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$ru_translate16[0] "($lang).NoVariable5 }
-    if ($xpui_ru -match $ru_translate17[0]) { $xpui_ru = $xpui_ru -replace $ru_translate17[0], $ru_translate17[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$ru_translate17[0] "($lang).NoVariable5 }
-    if ($xpui_ru -match $ru_translate20[0]) { $xpui_ru = $xpui_ru -replace $ru_translate20[0], $ru_translate20[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$ru_translate20[0] "($lang).NoVariable5 }
-    if ($xpui_ru -match $ru_translate24[0]) { $xpui_ru = $xpui_ru -replace $ru_translate24[0], $ru_translate24[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$ru_translate24[0] "($lang).NoVariable5 }
-    if ($xpui_ru -match $ru_translate25[0]) { $xpui_ru = $xpui_ru -replace $ru_translate25[0], $ru_translate25[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$ru_translate25[0] "($lang).NoVariable5 }
-    if ($xpui_ru -match $ru_translate26[0]) { $xpui_ru = $xpui_ru -replace $ru_translate26[0], $ru_translate26[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$ru_translate26[0] "($lang).NoVariable5 }
-    if ($xpui_ru -match $ru_translate27[0]) { $xpui_ru = $xpui_ru -replace $ru_translate27[0], $ru_translate27[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$ru_translate27[0] "($lang).NoVariable5 }
-    if ($xpui_ru -match $ru_translate29[0]) { $xpui_ru = $xpui_ru -replace $ru_translate29[0], $ru_translate29[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$ru_translate29[0] "($lang).NoVariable5 }
-    if ($xpui_ru -match $ru_translate30[0]) { $xpui_ru = $xpui_ru -replace $ru_translate30[0], $ru_translate30[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$ru_translate30[0] "($lang).NoVariable5 }
-    if ($xpui_ru -match $ru_translate32[0]) { $xpui_ru = $xpui_ru -replace $ru_translate32[0], $ru_translate32[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$ru_translate32[0] "($lang).NoVariable5 }
-    if ($xpui_ru -match $ru_translate33[0]) { $xpui_ru = $xpui_ru -replace $ru_translate33[0], $ru_translate33[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$ru_translate33[0] "($lang).NoVariable5 }
-    if ($xpui_ru -match $ru_translate36[0]) { $xpui_ru = $xpui_ru -replace $ru_translate36[0], $ru_translate36[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$ru_translate36[0] "($lang).NoVariable5 }
-    if ($xpui_ru -match $ru_translate38[0]) { $xpui_ru = $xpui_ru -replace $ru_translate38[0], $ru_translate38[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$ru_translate38[0] "($lang).NoVariable5 }
-    if ($xpui_ru -match $ru_translate39[0]) { $xpui_ru = $xpui_ru -replace $ru_translate39[0], $ru_translate39[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$ru_translate39[0] "($lang).NoVariable5 }
-    if ($xpui_ru -match $ru_translate40[0]) { $xpui_ru = $xpui_ru -replace $ru_translate40[0], $ru_translate40[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$ru_translate40[0] "($lang).NoVariable5 }
-    if ($xpui_ru -match $ru_translate42[0]) { $xpui_ru = $xpui_ru -replace $ru_translate42[0], $ru_translate42[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$ru_translate42[0] "($lang).NoVariable5 }
-    if ($xpui_ru -match $ru_translate43[0]) { $xpui_ru = $xpui_ru -replace $ru_translate43[0], $ru_translate43[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$ru_translate43[0] "($lang).NoVariable5 }
-    if ($xpui_ru -match $ru_translate45[0]) { $xpui_ru = $xpui_ru -replace $ru_translate45[0], $ru_translate45[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$ru_translate45[0] "($lang).NoVariable5 }
-    if ($xpui_ru -match $ru_translate46[0]) { $xpui_ru = $xpui_ru -replace $ru_translate46[0], $ru_translate46[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$ru_translate46[0] "($lang).NoVariable5 }
-    if ($xpui_ru -match $ru_translate47[0]) { $xpui_ru = $xpui_ru -replace $ru_translate47[0], $ru_translate47[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$ru_translate47[0] "($lang).NoVariable5 }
-    if ($xpui_ru -match $ru_translate48[0]) { $xpui_ru = $xpui_ru -replace $ru_translate48[0], $ru_translate48[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$ru_translate48[0] "($lang).NoVariable5 }
-    if ($xpui_ru -match $ru_translate49[0]) { $xpui_ru = $xpui_ru -replace $ru_translate49[0], $ru_translate49[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$ru_translate49[0] "($lang).NoVariable5 }
-    if ($xpui_ru -match $ru_translate50[0]) { $xpui_ru = $xpui_ru -replace $ru_translate50[0], $ru_translate50[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$ru_translate50[0] "($lang).NoVariable5 }
-    if ($xpui_ru -match $ru_translate51[0]) { $xpui_ru = $xpui_ru -replace $ru_translate51[0], $ru_translate51[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$ru_translate51[0] "($lang).NoVariable5 }
-    if ($xpui_ru -match $ru_translate52[0]) { $xpui_ru = $xpui_ru -replace $ru_translate52[0], $ru_translate52[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$ru_translate52[0] "($lang).NoVariable5 }
-    if ($xpui_ru -match $ru_translate53[0]) { $xpui_ru = $xpui_ru -replace $ru_translate53[0], $ru_translate53[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$ru_translate53[0] "($lang).NoVariable5 }
-    if ($xpui_ru -match $ru_translate54[0]) { $xpui_ru = $xpui_ru -replace $ru_translate54[0], $ru_translate54[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$ru_translate54[0] "($lang).NoVariable5 }
-    if ($xpui_ru -match $ru_translate55[0]) { $xpui_ru = $xpui_ru -replace $ru_translate55[0], $ru_translate55[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$ru_translate55[0] "($lang).NoVariable5 }
-    if ($xpui_ru -match $ru_translate56[0]) { $xpui_ru = $xpui_ru -replace $ru_translate56[0], $ru_translate56[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$ru_translate56[0] "($lang).NoVariable5 }
-    if ($xpui_ru -match $ru_translate57[0]) { $xpui_ru = $xpui_ru -replace $ru_translate57[0], $ru_translate57[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$ru_translate57[0] "($lang).NoVariable5 }
-    if ($xpui_ru -match $ru_translate58[0]) { $xpui_ru = $xpui_ru -replace $ru_translate58[0], $ru_translate58[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$ru_translate58[0] "($lang).NoVariable5 }
-    if ($xpui_ru -match $ru_translate59[0]) { $xpui_ru = $xpui_ru -replace $ru_translate59[0], $ru_translate59[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$ru_translate59[0] "($lang).NoVariable5 }
-    if ($xpui_ru -match $ru_translate62[0]) { $xpui_ru = $xpui_ru -replace $ru_translate62[0], $ru_translate62[1] } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$ru_translate62[0] "($lang).NoVariable5 }
-    $xpui_ru
+    $contents.Keys | ForEach-Object { 
+ 
+        if ($paramdata -match $contents.$PSItem[0]) { 
+            $paramdata = $paramdata -replace $contents.$PSItem[0], $contents.$PSItem[1] 
+        }
+        else { 
+            Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline 
+            Write-Host "`$contents.$PSItem"$n
+        }    
+    }
+    $paramdata
 }
 
 Write-Host ($lang).ModSpoti`n
@@ -1073,7 +1022,7 @@ $xpui_js_patch = "$env:APPDATA\Spotify\Apps\xpui\xpui.js"
 $xpui_css_patch = "$env:APPDATA\Spotify\Apps\xpui\xpui.css"
 $xpui_lic_patch = "$env:APPDATA\Spotify\Apps\xpui\licenses.html"
 if ($ru) { $xpui_ru_patch = "$env:APPDATA\Spotify\Apps\xpui\i18n\ru.json" }
-$test_spa = Test-Path -Path $env:APPDATA\Spotify\Apps\xpui.spa
+$test_spa = Test-Path -Path $xpui_spa_patch
 $test_js = Test-Path -Path $xpui_js_patch
 $xpui_js_bak_patch = "$env:APPDATA\Spotify\Apps\xpui\xpui.js.bak"
 $xpui_css_bak_patch = "$env:APPDATA\Spotify\Apps\xpui\xpui.css.bak"
@@ -1153,17 +1102,17 @@ if (Test-Path $xpui_js_patch) {
     $reader.Close()
 
     # Turn off podcasts
-    if ($Podcast_off) { $xpui_js = OffPodcasts }
+    if ($Podcast_off) { $xpui_js = Helper -paramname "OffPodcasts" }
     
     # Full screen mode activation and removing "Upgrade to premium" menu, upgrade button, disabling a playlist sponsor
-    if (!($premium)) { $xpui_js = OffAdsOnFullscreen } 
+    if (!($premium)) { $xpui_js = Helper -paramname "OffadsonFullscreen" } 
 
     # Experimental Feature
     if ($exp_off) { Write-Host ($lang).ExpOff`n }
-    if (!($exp_off)) { $xpui_js = ExpFeature }
+    if (!($exp_off)) { $xpui_js = Helper -paramname "ExpFeature" }
 
     # Remove all languages except En and Ru from xpui.js
-    if ($ru) { $xpui_js = OffRujs }
+    if ($ru) { $xpui_js = Helper -paramname "OffRujs" }
 
     $writer = New-Object System.IO.StreamWriter -ArgumentList $xpui_js_patch
     $writer.BaseStream.SetLength(0)
@@ -1177,7 +1126,7 @@ if (Test-Path $xpui_js_patch) {
         $reader = New-Object -TypeName System.IO.StreamReader -ArgumentList $file_ru
         $xpui_ru = $reader.ReadToEnd()
         $reader.Close()
-        $xpui_ru = RuTranslate
+        $xpui_ru = Helper -paramname "RuTranslate"
         $writer = New-Object System.IO.StreamWriter -ArgumentList $file_ru
         $writer.BaseStream.SetLength(0)
         $writer.Write($xpui_ru)
@@ -1214,7 +1163,7 @@ if (Test-Path $xpui_js_patch) {
     $reader = New-Object -TypeName System.IO.StreamReader -ArgumentList $file_licenses
     $xpuiContents_html = $reader.ReadToEnd()
     $reader.Close()
-    $xpuiContents_html = ContentsHtml
+    $xpuiContents_html = Helper -paramname "HtmlLicMin" 
     $writer = New-Object System.IO.StreamWriter -ArgumentList $file_licenses
     $writer.BaseStream.SetLength(0)
     $writer.Write($xpuiContents_html)
@@ -1297,19 +1246,19 @@ If (Test-Path $xpui_spa_patch) {
     $reader.Close()
 
     # Turn off podcasts
-    if ($podcast_off) { $xpui_js = OffPodcasts }
+    if ($podcast_off) { $xpui_js = Helper -paramname "OffPodcasts" }
     
     if (!($premium)) {
         # Full screen mode activation and removing "Upgrade to premium" menu, upgrade button, disabling a playlist sponsor
-        $xpui_js = OffAdsOnFullscreen
+        $xpui_js = Helper -paramname "OffadsonFullscreen"
     }
 
     # Experimental Feature
     if ($exp_off) { Write-Host ($lang).ExpOff`n }
-    if (!($exp_off)) { $xpui_js = ExpFeature }
+    if (!($exp_off)) { $xpui_js = Helper -paramname "ExpFeature" }
 
     # Remove all languages except En and Ru from xpui.js
-    if ($ru) { $xpui_js = OffRujs }
+    if ($ru) { $xpui_js = Helper -paramname "OffRujs" }
 
     # Disabled logging
     $xpui_js = $xpui_js -replace "sp://logging/v3/\w+", ""
@@ -1400,7 +1349,7 @@ If (Test-Path $xpui_spa_patch) {
         $reader = New-Object System.IO.StreamReader($_.Open())
         $xpuiContents_html = $reader.ReadToEnd()
         $reader.Close()      
-        $xpuiContents_html = ContentsHtml
+        $xpuiContents_html = Helper -paramname "HtmlLicMin"
         $writer = New-Object System.IO.StreamWriter($_.Open())
         $writer.BaseStream.SetLength(0)
         $writer.Write($xpuiContents_html)
@@ -1434,7 +1383,7 @@ If (Test-Path $xpui_spa_patch) {
             $readerjson.Close()
 
     
-            $xpui_ru = RuTranslate
+            $xpui_ru = Helper -paramname "RuTranslate"
             $writer = New-Object System.IO.StreamWriter($_.Open())
             $writer.BaseStream.SetLength(0)
             $writer.Write($xpui_ru)

@@ -171,7 +171,7 @@ You can specify various parameters for a more flexible installation, more [detai
 
 <h1>Uninstall</h1>
 
-- Just run [Uninstall.bat](https://cutt.ly/dErpPEK)
+- Just run [Uninstall.bat](https://raw.githack.com/amd64fox/SpotX/main/Uninstall.bat)
 
 or
 

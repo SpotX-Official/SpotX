@@ -146,7 +146,6 @@ function Set-ScriptLanguageStrings {
             Author          = "Author:"
             Incorrect       = "Oops, an incorrect value,"
             Incorrect2      = "enter again through "
-            CuttError       = "Request error in cutt"
             Download        = "Error downloading"
             Download2       = "Will re-request in 5 seconds..."
             Download3       = "Error again"
@@ -207,7 +206,6 @@ function Set-ScriptLanguageStrings {
             Author          = "Автор:"
             Incorrect       = "Ой, некорректное значение,"
             Incorrect2      = "повторите ввод через"
-            CuttError       = "Ошибка запроса в cutt"
             Download        = "Ошибка загрузки"
             Download2       = "Повторный запрос через 5 секунд..."
             Download3       = "Опять ошибка"
@@ -304,7 +302,7 @@ Write-Host ($lang).Author"" -NoNewline
 Write-Host "@Amd64fox" -ForegroundColor DarkYellow
 Write-Host "*****************"`n
 
-
+# Sending a statistical web query to cutt.ly
 $ErrorActionPreference = 'SilentlyContinue'
 $cutt_url = "https://cutt.ly/DK8UQub"
 try {  

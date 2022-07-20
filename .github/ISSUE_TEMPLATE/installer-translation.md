@@ -31,7 +31,6 @@ Good luck to you.
     Author          = "Author:"
     Incorrect       = "Oops, an incorrect value,"
     Incorrect2      = "enter again through "
-    CuttError       = "Request error in cutt"
     Download        = "Error downloading"
     Download2       = "Will re-request in 5 seconds..."
     Download3       = "Error again"

@@ -1483,8 +1483,10 @@ if ($block_update) {
             Write-Host ($lang).UpdateBlocked`n
         }
         elseif ($old -match "(?<=wg:\/\/desktop-update\/.)2(\/update)") {
-            Remove-Item $exe_bak -Recurse -Force
-            Start-Sleep -Milliseconds 150
+            if (Test-Path -LiteralPath $exe_bak) { 
+                Remove-Item $exe_bak -Recurse -Force
+                Start-Sleep -Milliseconds 150
+            }
             copy-Item $exe $exe_bak
             $new = $old -replace "(?<=wg:\/\/desktop-update\/.)2(\/update)", '7/update'
             [IO.File]::WriteAllText($exe, $new, $ANSI)

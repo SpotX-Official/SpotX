@@ -199,7 +199,9 @@ function Set-ScriptLanguageStrings {
             UpdateError     = "Failed to block updates"
             NoSpotifyExe    = "Could not find Spotify.exe"
             InstallComplete = "installation completed"
-            HostDel         = "Unwanted URLs found in hosts file, trying to remove them..."
+            HostInfo        = "Unwanted URLs found in hosts file"
+            HostBak         = "Backing up hosts.bak......"
+            HostDel         = "Trying to remove unwanted URLs from the original hosts file..."
             HostError       = "Something went wrong while editing the hosts file, edit it manually"
         }
         
@@ -261,7 +263,9 @@ function Set-ScriptLanguageStrings {
             UpdateError     = "Не удалось заблокировать обновления"
             NoSpotifyExe    = "Spotify.exe не найден"
             InstallComplete = "Установка завершена"
-            HostDel         = "В файле hosts найдены нежелательные Url-адреса, попытка их удалить..."
+            HostInfo        = "В файле hosts найдены нежелательные Url-адреса"
+            HostBak         = "Создаю резервную кописю hosts.bak..."
+            HostDel         = "Попытка удалить нежелательные Url-адреса из оригинального файла hosts..."
             HostError       = "Что-то пошло не так при редактировании файла hosts, отредактируйте его вручную"
         }
     }
@@ -544,6 +548,7 @@ if ($win11 -or $win10 -or $win8_1 -or $win8) {
 
 # Attempt to fix the hosts file
 $pathHosts = "$Env:windir\System32\Drivers\Etc\hosts"
+$pathHosts_bak = "$Env:windir\System32\Drivers\Etc\hosts.bak"
 $ErrorActionPreference = 'SilentlyContinue'
 $testHosts = Test-Path -Path $pathHosts
 
@@ -551,7 +556,10 @@ if ($testHosts) {
     $hosts = Get-Content -Path $pathHosts
 
     if ($hosts -match '^[^\#|].+scdn.+|^[^\#|].+spotify.+') {
-        Write-Host ($lang).HostDel`n
+        Write-Host ($lang).HostInfo
+        Write-Host ($lang).HostBak
+        copy-Item $pathHosts $pathHosts_bak
+        Write-Host ($lang).HostDel`n       
 
         try {
             $hosts = $hosts -replace '^[^\#|].+scdn.+|^[^\#|].+spotify.+', ''

@@ -12,7 +12,7 @@
 <h1>System requirements</h1>
 
 - <strong>OS: Windows 7-11</strong>
-- <strong>Spotify: Recommended official version [1.1.90.855](https://cutt.ly/8EH6NuH)</strong>
+- <strong>Spotify: Recommended official version [1.1.90.859](https://cutt.ly/8EH6NuH)</strong>
 - <strong>For Windows Desktop only (Microsoft store version is not suitable).</strong>
 - <strong>PowerShell: 3 or higher</strong>
 
@@ -42,17 +42,17 @@
 <details>
 <summary><small>Usual installation</small></summary><p>
   
-  <h4>During installation, you need to confirm some actions, also contains:</h4>
+  #### During installation, you need to confirm some actions, also contains:
 
   - All [experimental features](https://github.com/amd64fox/SpotX/discussions/50) included
 
   <h4> </h4>
   
-* Just download and run [Install.bat](https://raw.githack.com/amd64fox/SpotX/main/Install.bat)
+#### Just download and run [Install.bat](https://raw.githack.com/amd64fox/SpotX/main/Install.bat)
 
 or
 
-- Run The following command in PowerShell:
+#### Run The following command in PowerShell:
 
 ```ps1
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; (iwr -useb 'https://raw.githubusercontent.com/amd64fox/SpotX/main/Install.ps1').Content | iex
@@ -63,7 +63,7 @@ or
 <details>
 <summary><small>Automated basic installation</small></summary><p>
   
-  <h4>Automated basic installation without confirmation, what does it do?</h4> 
+  #### Automated basic installation without confirmation, what does it do? 
   
   - Automatic removal of Spotify MS if it was found 
   - Automatic installation of the recommended version of Spotify (if another client has already been found, it will be installed over)
@@ -71,11 +71,11 @@ or
   
 <h4> </h4>
 
-- Just download and run [Install_Basic.bat](https://raw.githack.com/amd64fox/SpotX/main/scripts/Install_Basic.bat)
+#### Just download and run [Install_Basic.bat](https://raw.githack.com/amd64fox/SpotX/main/scripts/Install_Basic.bat)
 
 or
 
-- Run The following command in PowerShell:
+#### Run The following command in PowerShell:
 
 ```ps1
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; iex "& { $((iwr -useb 'https://raw.githubusercontent.com/amd64fox/SpotX/main/Install.ps1').Content) } -confirm_uninstall_ms_spoti -confirm_spoti_recomended_over -podcasts_on -cache_off -block_update_off -exp_standart -hide_col_icon_off -start_spoti"
@@ -97,11 +97,11 @@ or
   
 <h4> </h4>
 
-- Just download and run [Install_Auto.bat](https://raw.githack.com/amd64fox/SpotX/main/scripts/Install_Auto.bat)
+#### Just download and run [Install_Auto.bat](https://raw.githack.com/amd64fox/SpotX/main/scripts/Install_Auto.bat)
 
 or
 
-- Run The following command in PowerShell:
+#### Run The following command in PowerShell:
 
 ```ps1
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; iex "& { $((iwr -useb 'https://raw.githubusercontent.com/amd64fox/SpotX/main/Install.ps1').Content) } -confirm_uninstall_ms_spoti -confirm_spoti_recomended_over -podcasts_off -cache_off -block_update_on -start_spoti"
@@ -111,7 +111,7 @@ or
 <details>
 <summary><small>Installing with Scoop</small></summary><p>
   
-  <h4>Installing SpotX via the Scoop package manager includes:</h4>
+  #### Installing SpotX via the Scoop package manager includes:
 
   - Automatic removal of Spotify MS if it was found 
   - Automatic installation of the recommended version of Spotify (if another client has already been found, it will be installed over) 
@@ -121,19 +121,19 @@ or
   
   <h4> </h4>
   
-<h4>Installing SpotX with Scoop</h4>
+#### Installing SpotX with Scoop
 Just run these commands in the command prompt or powershell:
-
+<br>
 <br>```scoop bucket add nonportable```
 <br>```scoop install spotx-np```
 
-<h4>Updating SpotX with Scoop</h4>
+#### Updating SpotX with Scoop
 
 To update SpotX or check for updates run this command in the command prompt or powershell:
 
 ```scoop update spotx-np```
 
-<h4>Uninstalling SpotX with Scoop</h4>
+#### Uninstalling SpotX with Scoop
 
 To fully uninstall SpotX and Spotify run this command in the command prompt or powershell:
 
@@ -144,17 +144,17 @@ To fully uninstall SpotX and Spotify run this command in the command prompt or p
 <details>
 <summary><small>Installation for premium</small></summary><p>
   
-  <h4>Usual installation only without ad blocking, for those who have a premium account, also contains:</h4>
+  #### Usual installation only without ad blocking, for those who have a premium account, also contains:
 
   - All [experimental features](https://github.com/amd64fox/SpotX/discussions/50) included
 
   <h4> </h4>
   
-* Just download and run [Install_Prem.bat](https://raw.githack.com/amd64fox/SpotX/main/scripts/Install_Prem.bat)
+#### Just download and run [Install_Prem.bat](https://raw.githack.com/amd64fox/SpotX/main/scripts/Install_Prem.bat)
 
 or
 
-- Run The following command in PowerShell:
+#### Run The following command in PowerShell:
 
 ```ps1
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; iex "& { $((iwr -useb 'https://raw.githubusercontent.com/amd64fox/SpotX/main/Install.ps1').Content) } -premium"

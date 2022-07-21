@@ -325,6 +325,7 @@ catch {
 $spotifyDirectory = "$env:APPDATA\Spotify"
 $spotifyDirectory2 = "$env:LOCALAPPDATA\Spotify"
 $spotifyExecutable = "$spotifyDirectory\Spotify.exe"
+$exe_bak = "$spotifyDirectory\Spotify.bak"
 $chrome_elf = "$spotifyDirectory\chrome_elf.dll"
 $chrome_elf_bak = "$spotifyDirectory\chrome_elf_bak.dll"
 $cache_folder = "$env:APPDATA\Spotify\cache"
@@ -360,6 +361,11 @@ function Check_verison_clients($param2) {
     if ($param2 -eq "offline") {
         $check_offline = (Get-Item $spotifyExecutable).VersionInfo.FileVersion
         return $check_offline
+    }
+    # Check version Spotify.bak
+    if ($param2 -eq "Spotify.bak") {
+        $check_offline_bak = (Get-Item $exe_bak).VersionInfo.FileVersion
+        return $check_offline_bak
     }
 }
 function unlockFolder {
@@ -813,6 +819,16 @@ if (!($block_update_on) -and !($block_update_off)) {
     while ($ch -notmatch '^y$|^n$')
 }
 if ($ch -eq 'y') { $block_update = $true }
+
+if ($ch -eq 'n') {
+    $ErrorActionPreference = 'SilentlyContinue'
+    $exe_onl_fn = Check_verison_clients -param2 "offline"
+    $exe_bak_fn = Check_verison_clients -param2 'Spotify.bak'
+    if ((Test-Path -LiteralPath $exe_bak) -and $exe_onl_fn -eq $exe_bak_fn) {
+        Remove-Item $spotifyExecutable -Recurse -Force
+        Rename-Item $exe_bak $spotifyExecutable
+    }
+}
 
 $ch = $null
 
@@ -1460,7 +1476,6 @@ if ($block_update) {
 
     if ($update_test_exe) {
         $exe = "$env:APPDATA\Spotify\Spotify.exe"
-        $exe_bak = "$env:APPDATA\Spotify\Spotify.bak"
         $ANSI = [Text.Encoding]::GetEncoding(1251)
         $old = [IO.File]::ReadAllText($exe, $ANSI)
 
@@ -1468,6 +1483,8 @@ if ($block_update) {
             Write-Host ($lang).UpdateBlocked`n
         }
         elseif ($old -match "(?<=wg:\/\/desktop-update\/.)2(\/update)") {
+            Remove-Item $exe_bak -Recurse -Force
+            Start-Sleep -Milliseconds 150
             copy-Item $exe $exe_bak
             $new = $old -replace "(?<=wg:\/\/desktop-update\/.)2(\/update)", '7/update'
             [IO.File]::WriteAllText($exe, $new, $ANSI)

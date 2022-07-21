@@ -1073,16 +1073,14 @@ if (Test-Path $xpui_js_patch) {
         if ($ru) { $test_xpui_ru_bak = Test-Path -Path $xpui_ru_bak_patch }
         $test_spotify_exe_bak = Test-Path -Path $spotify_exe_bak_patch
 
-        if ($test_xpui_js_bak -or $test_xpui_css_bak) {
+        if ($test_xpui_js_bak -and $test_xpui_css_bak) {
             
-            if ($test_xpui_js_bak) { 
-                Remove-Item $xpui_js_patch -Recurse -Force
-                Rename-Item $xpui_js_bak_patch $xpui_js_patch
-            }
-            if ($test_xpui_css_bak) {
-                Remove-Item $xpui_css_patch -Recurse -Force
-                Rename-Item $xpui_css_bak_patch $xpui_css_patch
-            }
+            Remove-Item $xpui_js_patch -Recurse -Force
+            Rename-Item $xpui_js_bak_patch $xpui_js_patch
+            
+            Remove-Item $xpui_css_patch -Recurse -Force
+            Rename-Item $xpui_css_bak_patch $xpui_css_patch
+            
             if ($test_xpui_lic_bak) {
                 Remove-Item $xpui_lic_patch -Recurse -Force
                 Rename-Item $xpui_lic_bak_patch $xpui_lic_patch

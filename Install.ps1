@@ -550,11 +550,11 @@ $testHosts = Test-Path -Path $pathHosts
 if ($testHosts) {
     $hosts = Get-Content -Path $pathHosts
 
-    if ($hosts -match '^[^\#| ].+scdn.+|^[^\#].+spotify.+') {
+    if ($hosts -match '^[^\#|].+scdn.+|^[^\#|].+spotify.+') {
         Write-Host ($lang).HostDel`n
 
         try {
-            $hosts = $hosts -replace '^[^\#| ].+scdn.+|^[^\#| ].+spotify.+', ''
+            $hosts = $hosts -replace '^[^\#|].+scdn.+|^[^\#|].+spotify.+', ''
             Set-Content -Path $pathHosts -Value $hosts -Force
             $hosts | Where-Object { $_.trim() -ne "" } | Set-Content -Path $pathHosts -Force
         }

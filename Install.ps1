@@ -36,10 +36,10 @@ param
     [Parameter(HelpMessage = 'Automatic launch of Spotify after installation is complete.')]
     [switch]$start_spoti,
     
-    [Parameter(HelpMessage = 'Disable all experimental features.')]
-    [switch]$exp_off,
+    [Parameter(HelpMessage = 'Experimental features operated by Spotify.')]
+    [switch]$exp_spotify,
 
-    [Parameter(HelpMessage = 'Experimental features standart.')]
+    [Parameter(HelpMessage = 'Experimental features of SpotX are not included')]
     [switch]$exp_standart,
     
     [Parameter(HelpMessage = 'Do not hide the icon of collaborations in playlists.')]
@@ -192,7 +192,8 @@ function Set-ScriptLanguageStrings {
             FileLocBroken   = "Location of Spotify files is broken, uninstall the client and run the script again"
             Spicetify       = "Spicetify detected"
             NoRestore       = "SpotX has already been installed, xpui.js and xpui.css not found. `nPlease uninstall Spotify client and run Install.bat again"
-            ExpOff          = "Experimental features disabled"
+            ExpSpotify      = "Experimental features operated by Spotify"
+            ExpStandart     = "Experimental features of SpotX are not included"
             NoRestore2      = "SpotX has already been installed, xpui.bak not found. `nPlease uninstall Spotify client and run Install.bat again"
             UpdateBlocked   = "Spotify updates are already blocked"
             UpdateError     = "Failed to block updates"
@@ -253,7 +254,8 @@ function Set-ScriptLanguageStrings {
             FileLocBroken   = "Расположение файлов Spotify нарушено, удалите клиент и снова запустите скрипт"
             Spicetify       = "Обнаружен Spicetify"
             NoRestore       = "SpotX уже был установлен, но файлы для восстановления xpui.js.bak и xpui.css.bak не найдены. `nУдалите клиент Spotify и снова запустите Install.bat"
-            ExpOff          = "Экспереметальные функции отключены"
+            ExpSpotify      = "Экспериментальные функции управляются Spotify"
+            ExpStandart     = "Экспериментальные функции SpotX не включены"
             NoRestore2      = "SpotX уже был установлен, но файл для восстановления xpui.bak не найден. `nУдалите клиент Spotify и снова запустите Install.bat"
             UpdateBlocked   = "Обновления Spotify уже заблокированы"
             UpdateError     = "Не удалось заблокировать обновления"
@@ -993,6 +995,7 @@ function Helper($paramname) {
             if (!($enablenavalt)) { $exp_features.Remove('ExpFeatures16') }
             if ($made_for_you_off) { $exp_features.Remove('ExpFeatures17') }
             if ($exp_standart) {
+                Write-Host ($lang).ExpStandart`n 
                 $exp_features.Remove('ExpFeatures10'), $exp_features.Remove('ExpFeatures11'), 
                 $exp_features.Remove('ExpFeatures12'), $exp_features.Remove('ExpFeatures13'), 
                 $exp_features.Remove('ExpFeatures14'), $exp_features.Remove('ExpFeatures15'), 
@@ -1119,8 +1122,8 @@ if (Test-Path $xpui_js_patch) {
     if (!($premium)) { $xpui_js = Helper -paramname "OffadsonFullscreen" } 
 
     # Experimental Feature
-    if ($exp_off) { Write-Host ($lang).ExpOff`n }
-    if (!($exp_off)) { $xpui_js = Helper -paramname "ExpFeature" }
+    if ($exp_spotify) { Write-Host ($lang).ExpSpotify`n }
+    if (!($exp_spotify)) { $xpui_js = Helper -paramname "ExpFeature" }
 
     # Remove all languages except En and Ru from xpui.js
     if ($ru) { $xpui_js = Helper -paramname "OffRujs" }
@@ -1160,7 +1163,7 @@ if (Test-Path $xpui_js_patch) {
         $writer.Write([System.Environment]::NewLine + ' button.wC9sIed7pfp47wZbmU6m.pzkhLqffqF_4hucrVVQA{display:none}')
     }
     # Hide Collaborators icon
-    if (!($hide_col_icon_off) -and !($exp_off)) {
+    if (!($hide_col_icon_off) -and !($exp_spotify)) {
         $writer.Write([System.Environment]::NewLine + ' .X1lXSiVj0pzhQCUo_72A{display:none}')
     }
     # Hide broken podcast menu
@@ -1265,8 +1268,8 @@ If (Test-Path $xpui_spa_patch) {
     }
 
     # Experimental Feature
-    if ($exp_off) { Write-Host ($lang).ExpOff`n }
-    if (!($exp_off)) { $xpui_js = Helper -paramname "ExpFeature" }
+    if ($exp_spotify) { Write-Host ($lang).ExpSpotify`n }
+    if (!($exp_spotify)) { $xpui_js = Helper -paramname "ExpFeature" }
 
     # Remove all languages except En and Ru from xpui.js
     if ($ru) { $xpui_js = Helper -paramname "OffRujs" }
@@ -1324,7 +1327,7 @@ If (Test-Path $xpui_spa_patch) {
         $writer.Write([System.Environment]::NewLine + ' button.wC9sIed7pfp47wZbmU6m.pzkhLqffqF_4hucrVVQA {display: none}')
     }
     # Hide Collaborators icon
-    if (!($hide_col_icon_off) -and !($exp_off)) {
+    if (!($hide_col_icon_off) -and !($exp_spotify)) {
         $writer.Write([System.Environment]::NewLine + ' .X1lXSiVj0pzhQCUo_72A{display:none}')
     }
     # Hide broken podcast menu

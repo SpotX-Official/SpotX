@@ -528,7 +528,7 @@ if ($win11 -or $win10 -or $win8_1 -or $win8) {
         
         if (!($confirm_uninstall_ms_spoti)) {
             do {
-                $ch = Read-Host -Prompt ($lang).MsSpoti2""
+                $ch = Read-Host -Prompt ($lang).MsSpoti2
                 Write-Host ""
                 if (!($ch -eq 'n' -or $ch -eq 'y')) {
                     incorrectValue

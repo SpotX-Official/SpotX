@@ -1007,7 +1007,7 @@ function Helper($paramname) {
                 ExpFeatures13 = '(Enable Lyrics match labels in search results",default:)(!1)', '$1!0'  
                 ExpFeatures14 = '(Enable audio equalizer for Desktop and Web Player",default:)(!1)', '$1!0' 
                 ExpFeatures15 = '(Enable showing a new and improved device picker UI",default:)(!1)', '$1!0'
-                ExpFeatures16 = '(Enable the new home structure and navigation:)(!1)', '$1!0'
+                ExpFeatures16 = '(Enable the new home structure and navigation",default:)(!1)', '$1!0'
                 ExpFeatures17 = '(Show "Made For You" entry point in the left sidebar.,default:)(!1)', '$1!0'
             }
             if ($enhance_like_off) { $exp_features.Remove('ExpFeatures10') }

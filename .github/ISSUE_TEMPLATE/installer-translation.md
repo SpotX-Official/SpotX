@@ -88,5 +88,5 @@ Good luck to you.
     HostInfo        = "Unwanted URLs found in hosts file"
     HostBak         = "Backing up hosts.bak..."
     HostDel         = "Trying to remove unwanted URLs from the original hosts file..."
-    HostError       = "Something went wrong while editing the hosts file, edit it manually"
+    HostError       = "Something went wrong while editing the hosts file, edit it manually or run the script as administrator"
 ```

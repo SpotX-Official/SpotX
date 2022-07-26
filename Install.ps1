@@ -149,8 +149,9 @@ function Set-ScriptLanguageStrings {
             Download        = "Error downloading"
             Download2       = "Will re-request in 5 seconds..."
             Download3       = "Error again"
-            Download4       = "Try to check your internet connection and run the installation again"
+            Download4       = "Check your network settings and run the installation again"
             Download5       = "Downloading Spotify"
+            Download6       = "Failed web request via curl"
             StopScrpit      = "Script is stopped"
             MsSpoti         = "The Microsoft Store version of Spotify has been detected which is not supported"
             MsSpoti2        = "Uninstall Spotify Windows Store edition [Y/N]"
@@ -173,11 +174,11 @@ function Set-ScriptLanguageStrings {
             DownSpoti2      = "Please wait..."
             PodcatsOff      = "Off Podcasts"
             PodcastsOn      = "On Podcasts"
-            PodcatsSelect   = "Want to turn off podcasts ? [Y/N]"
+            PodcatsSelect   = "Do you want to disable podcasts from the main page? [Y/N]"
             DowngradeNote   = "It is recommended to block because there was a downgrade of Spotify"
-            UpdBlock        = "Updates blocked"
-            UpdUnblock      = "Updates are not blocked"
-            UpdSelect       = "Want to block updates ? [Y/N]"
+            UpdBlock        = "Spotify updates blocked"
+            UpdUnblock      = "Spotify updates are not blocked"
+            UpdSelect       = "Want to block Spotify updates? [Y/N]"
             CacheOn         = "Clear cache enabled ({0})"
             CacheOff        = "Clearing the cache is not enabled"
             CacheSelect     = "Want to set up automatic cache cleanup? [Y/N]"
@@ -212,8 +213,9 @@ function Set-ScriptLanguageStrings {
             Download        = "Ошибка загрузки"
             Download2       = "Повторный запрос через 5 секунд..."
             Download3       = "Опять ошибка"
-            Download4       = "Попробуйте проверить подключение к интернету и снова запустить установку"
+            Download4       = "Проверьте настройки вашей сети и снова запустите установку"
             Download5       = "Загрузка Spotify"
+            Download6       = "Неудачный веб-запрос через curl"
             StopScrpit      = "Cкрипт остановлен"
             MsSpoti         = "Обнаружена версия Spotify из Microsoft Store, которая не поддерживается"
             MsSpoti2        = "Хотите удалить Spotify Microsoft Store ? [Y/N]"
@@ -236,11 +238,11 @@ function Set-ScriptLanguageStrings {
             DownSpoti2      = "Пожалуйста подождите..."
             PodcatsOff      = "Подкасты отключены"
             PodcastsOn      = "Подкасты не отключены"
-            PodcatsSelect   = "Хотите отключить подкасты ? [Y/N]"
+            PodcatsSelect   = "Хотите отключить подкасты c главной страницы ? [Y/N]"
             DowngradeNote   = "Рекомендуется заблокировать т.к. было понижение версии Spotify"
-            UpdBlock        = "Обновления заблокированы"
-            UpdUnblock      = "Обновления не заблокированы"
-            UpdSelect       = "Хотите заблокировать обновления ? [Y/N]"
+            UpdBlock        = "Обновления Spotify заблокированы"
+            UpdUnblock      = "Обновления Spotify не заблокированы"
+            UpdSelect       = "Хотите заблокировать обновления Spotify ? [Y/N]"
             CacheOn         = "Очистка кеша включена ({0})"
             CacheOff        = "Очистка кеша не включена"
             CacheSelect     = "Хотите установить автоматическую очистку кеша ? [Y/N]"
@@ -431,6 +433,8 @@ function downloadScripts($param1) {
     }
     try { 
         if ($param1 -eq "Desktop" -and $curl_check) {
+            $stcode = curl.exe -I -s $web_Url
+            if (!($stcode -match "200 OK")) { throw ($lang).Download6 }
             curl.exe $web_Url -o $local_Url --progress-bar --retry 3 --ssl-no-revoke
         }
         if ($param1 -eq "Desktop" -and $null -ne (Get-Module -Name BitsTransfer -ListAvailable) -and !($curl_check )) {
@@ -445,7 +449,7 @@ function downloadScripts($param1) {
         }
     }
 
-    catch [System.Management.Automation.MethodInvocationException] {
+    catch {
         Write-Host ""
         Write-Host ($lang).Download $web_name_file -ForegroundColor RED
         $Error[0].Exception
@@ -455,6 +459,8 @@ function downloadScripts($param1) {
         try { 
 
             if ($param1 -eq "Desktop" -and $curl_check) {
+                $stcode = curl.exe -I -s $web_Url
+                if (!($stcode -match "200 OK")) { throw ($lang).Download6 }
                 curl.exe $web_Url -o $local_Url --progress-bar --retry 3 --ssl-no-revoke
             }
             if ($param1 -eq "Desktop" -and $null -ne (Get-Module -Name BitsTransfer -ListAvailable) -and !($curl_check )) {
@@ -470,7 +476,7 @@ function downloadScripts($param1) {
 
         }
         
-        catch [System.Management.Automation.MethodInvocationException] {
+        catch {
             Write-Host ($lang).Download3 -ForegroundColor RED
             $Error[0].Exception
             Write-Host ""

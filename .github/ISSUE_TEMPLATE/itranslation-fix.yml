@@ -1,0 +1,31 @@
+name: "🌐 Localization/Translation issue"
+description: Report incorrect translations.
+labels: 🌐 Fix translation 
+body:
+- type: dropdown
+  id: langselect
+  attributes:
+    label: 🌐 Select language
+    options:
+      - English
+      - Russian
+  validations:
+    required: true
+- type: textarea
+  attributes: 
+    label: ❌ Actual phrase(s)
+    placeholder: What is there?  Please include a screenshot as that is extremely helpful. 
+  validations:
+    required: true
+- type: textarea
+  attributes: 
+    label: ✔️ Expected phrase(s)
+    placeholder: What was expected?
+  validations:
+    required: true
+- type: textarea
+  attributes:
+    label: ℹ Why is the current translation wrong
+    placeholder: Why do you feel this is incorrect?
+  validations:
+    required: true

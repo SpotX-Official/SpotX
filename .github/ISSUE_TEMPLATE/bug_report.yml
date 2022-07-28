@@ -1,0 +1,82 @@
+name: ❌ Bug report
+description: Report errors or unexpected behavior
+labels: ❌ bug
+body:
+- type: checkboxes
+  attributes:
+      label: 🧐 Have you read the FAQ and viewed similar issues?
+      description: Please read the <a href="https://github.com/amd64fox/SpotX/blob/main/.github/Doc/FAQ.md">FAQ</a>. Also check the open and closed <a href="https://github.com/amd64fox/SpotX/issues">issue</a> because your issue may have already been fixed.
+      options:
+        - label: I have read the FAQ
+          required: true
+        - label: I have checked older issues, open and closed
+          required: true
+        - label: I did a clean install of SpotX as described in the FAQ
+          required: true  
+- type: markdown
+  attributes:
+    value: "###"          
+- type: dropdown
+  id: plan
+  attributes:
+    label: What is your Spotify Plan?
+    description: You can view your plan on your account page, under <a href="https://www.spotify.com/account/">Your plan</a>.
+    options:
+      - Free
+      - Premium
+  validations:
+    required: true
+- type: markdown
+  attributes:
+    value: "###"        
+- type: dropdown
+  id: spicetify
+  attributes:
+    label: Do you have Spicetify installed?
+    description: <a href="https://spicetify.app/">Spicetify</a> is a command line tool to customize Spotify client.
+    options:
+      - "Yes"
+      - "No"
+  validations:
+    required: true
+- type: markdown
+  attributes:
+    value: "###"       
+- type: textarea
+  attributes:
+    label: ℹ Computer information
+    description: |
+      - Spotify: e.g. <kbd>1.1.90.859.gf1bb1e36</kbd>
+        - In the open Spotify client in the upper left corner, click <kbd>•••</kbd> → <kbd>Help</kbd> → <kbd>About Spotify</kbd>
+      - Windows: e.g. <kbd>Windows 11 21H2 22000.527</kbd> 
+        - Press <kbd>Win</kbd> + <kbd>Pause/Break</kbd> to open the page to copy from.
+      - PowerShell: e.g. <kbd>5.1.19041.1200</kbd>
+        - In the Windows PowerShell console, type the following command <kbd>Get-Host | Select-Object Version</kbd>
+    placeholder: |
+        - Spotify: 
+        - Windows: 
+        - PowerShell:  
+    value: |
+        - Spotify: 
+        - Windows: 
+        - PowerShell: 
+    render: markdown   
+  validations:
+    required: true    
+- type: textarea
+  attributes:
+    label: 📝 Description
+    description: List steps to reproduce the error and details on what happens and what you expected to happen.
+    value: |
+      1.
+      2.
+      3.
+      ...
+  validations:
+    required: true
+- type: textarea
+  attributes:
+    label: 📸 Screenshots
+    description: Place any screenshots of the issue here if needed
+  validations:
+    required: false    

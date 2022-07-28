@@ -7,9 +7,9 @@
       <a href="https://www.youtube.com/results?search_query=https%3A%2F%2Fgithub.com%2Famd64fox%2FSpotX"><img src="https://raw.githubusercontent.com/amd64fox/SpotX/main/.github/Pic/Shields/youtube.svg"></a>
       <a href="https://cutt.ly/8EH6NuH"><img src="https://raw.githubusercontent.com/amd64fox/SpotX/main/.github/Pic/Shields/excel.svg"></a>
       <a href="https://github.com/amd64fox/SpotX/blob/main/.github/Doc/FAQ.md"><img src="https://raw.githubusercontent.com/amd64fox/SpotX/main/.github/Pic/Shields/faq.svg"></a>
-      
       </p>
-     <h2> <div align="center"><b> Modified Spotify Client for Windows </b></div> </h2>
+
+    <h2> <div align="center"><b> Modified Spotify Client for Windows </b></div> </h2>
 
 <h1>System requirements</h1>
 

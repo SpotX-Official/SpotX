@@ -9,7 +9,7 @@
       <a href="https://github.com/amd64fox/SpotX/blob/main/.github/Doc/FAQ.md"><img src="https://raw.githubusercontent.com/amd64fox/SpotX/main/.github/Pic/Shields/faq.svg"></a>
       </p>
 
-    <h2> <div align="center"><b> Modified Spotify Client for Windows </b></div> </h2>
+   <h2> <div align="center"><b> Modified Spotify Client for Windows </b></div> </h2>
 
 <h1>System requirements</h1>
 

@@ -50,6 +50,7 @@ If a new version has been released, and SpotX has not yet been updated, then you
 
 <div align="center"><h2>I got an error editing my hosts file, how can I fix it?</h2></div>
 This error can be fixed in two ways:
+
 - Just run the bat file as administrator
 
 or

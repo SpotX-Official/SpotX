@@ -33,7 +33,7 @@
 - <strong>Enabled [Ignore In Recommendations](https://github.com/amd64fox/SpotX/discussions/50#discussioncomment-2996165)</strong>
 - <strong>Enabled [Equalizer](https://github.com/amd64fox/SpotX/discussions/50#discussioncomment-3179778)</strong>
 - <strong>Enabled [new device picker panel](https://github.com/amd64fox/SpotX/discussions/50#discussioncomment-3179782)</strong>
-- <strong>Activated ["Made For You" in the left sidebar](https://github.com/amd64fox/SpotX/discussions/50#discussioncomment-2853981)</strong>
+- <strong>Activated [Made For You" in the left sidebar](https://github.com/amd64fox/SpotX/discussions/50#discussioncomment-2853981)</strong>
 - <strong>Disabled Sentry (Prevented Sentry from sending console log/error/warning to Spotify developers)</strong>
 - <strong>Disabled logging (Stopped various elements to log user interaction)</strong>
 - <strong>Removed RTL rules (Removed all right-to-left CSS rules to simplify CSS files)</strong>

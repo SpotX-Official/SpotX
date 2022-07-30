@@ -925,7 +925,7 @@ function Helper($paramname) {
         "OffRujs" { 
             # Remove all languages except En and Ru from xpui.js
             $rus_js = @{
-                OffRujs = '(en:{displayName:"English",displayNameEn:"English"}).*"Vietnamese"', '$1,ru:{displayName:"Русский",displayNameEn:"Russian"'
+                OffRujs = '(en:{displayName:"English",displayNameEn:"English"}).*"Zulu"', '$1,ru:{displayName:"Русский",displayNameEn:"Russian"'
             }
             $n = ($lang).NoVariable2
             $contents = $rus_js

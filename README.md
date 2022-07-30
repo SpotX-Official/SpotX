@@ -6,7 +6,7 @@
       <a href="https://t.me/spotify_windows_mod"><img src="https://raw.githubusercontent.com/amd64fox/SpotX/main/.github/Pic/Shields/tg.svg"></a>
       <a href="https://www.youtube.com/results?search_query=https%3A%2F%2Fgithub.com%2Famd64fox%2FSpotX"><img src="https://raw.githubusercontent.com/amd64fox/SpotX/main/.github/Pic/Shields/youtube.svg"></a>
       <a href="https://cutt.ly/8EH6NuH"><img src="https://raw.githubusercontent.com/amd64fox/SpotX/main/.github/Pic/Shields/excel.svg"></a>
-      <a href="https://github.com/amd64fox/SpotX/blob/main/.github/Doc/FAQ.md"><img src="https://raw.githubusercontent.com/amd64fox/SpotX/main/.github/Pic/Shields/faq.svg"></a>
+      <a href="https://github.com/amd64fox/SpotX/blob/main/.github/Doc/FAQ.md#faq"><img src="https://raw.githubusercontent.com/amd64fox/SpotX/main/.github/Pic/Shields/faq.svg"></a>
       </p>
 
    <h2> <div align="center"><b> Modified Spotify Client for Windows </b></div> </h2>
@@ -14,7 +14,7 @@
 <h1>System requirements</h1>
 
 - <strong>OS: Windows 7-11</strong>
-- <strong>Spotify: Recommended official version [1.1.90.859](https://cutt.ly/8EH6NuH)</strong>
+- <strong>Spotify: Recommended official version [1.1.91.824](https://cutt.ly/8EH6NuH)</strong>
 - <strong>For Windows Desktop only (Microsoft store version is not suitable).</strong>
 - <strong>PowerShell: 3 or higher</strong>
 
@@ -181,7 +181,7 @@ or
 
 <h1>FAQ</h1>
 
-- Please see [FAQ](https://github.com/amd64fox/SpotX/blob/main/.github/Doc/FAQ.md)
+- Read [FAQ](https://github.com/amd64fox/SpotX/blob/main/.github/Doc/FAQ.md#faq)
 
 <h1>Credits</h1>
 

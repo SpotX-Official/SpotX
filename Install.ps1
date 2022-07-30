@@ -883,6 +883,9 @@ if (!($cache_on) -and !($cache_off)) {
     }
 }
 
+if ($exp_standart) { Write-Host ($lang).ExpStandart`n }
+if ($exp_spotify) { Write-Host ($lang).ExpSpotify`n }
+
 function Helper($paramname) {
 
     switch ( $paramname ) {
@@ -932,15 +935,10 @@ function Helper($paramname) {
         "RuTranslate" { 
             # Additional translation of some words for the Russian language
             $ru_translate = @{
-                One                = '"one": "Enhanced with [{]0[}] recommended song."', '"one": "Добавлен {0} рекомендованный трек."' 
-                Few                = '"few": "Enhanced with [{]0[}] recommended songs."', '"few": "Добавлено {0} рекомендованных трека."' 
-                Many               = '"many": "Enhanced with [{]0[}] recommended songs."', '"many": "Добавлено {0} рекомендованных треков."' 
-                Other              = '"other": "Enhanced with [{]0[}] recommended songs."', '"other": "Добавлено {0} рекомендованных трека."' 
                 EnhancePlaylist    = '"To Enhance this playlist, you.ll need to go online."', '"Чтобы улучшить этот плейлист, вам нужно подключиться к интернету."'
                 ConfirmAge         = '"Confirm your age"', '"Подтвердите свой возраст"' 
-                Premium            = '"%price%\/month after. Terms and conditions apply. One month free not available for users who have already tried Premium."', '"%price%/месяц спустя. Принять условия. Один месяц бесплатно, недоступно для пользователей, которые уже попробовали Premium."' 
-                AdFreeMusic        = '"Enjoy ad-free music listening, offline listening, and more. Cancel anytime."', '"Наслаждайтесь прослушиванием музыки без рекламы, прослушиванием в офлайн режиме и многим другим. Отменить можно в любое время."' 
-                LyricsBy           = '"Lyrics provided by [{]0[}]"', '"Тексты песен предоставлены {0}"' 
+                Premium            = '"%price%\/month after. Terms and conditions apply. One month free not available for users who have already tried Premium."', '"%price%/месяц спустя. Принять условия. Один месяц бесплатно, недоступно для пользователей, которые уже попробовали Premium."'
+                AdFreeMusic        = '"Enjoy ad-free music listening, offline listening, and more. Cancel anytime."', '"Наслаждайтесь прослушиванием музыки без рекламы, прослушиванием в офлайн режиме и многим другим. Отменить можно в любое время."'
                 AddPlaylist        = '"Add to another playlist"', '"Добавить в другой плейлист"' 
                 OfflineStorage     = '"Offline storage location"', '"Хранилище скачанных треков"' 
                 ChangeLocation     = '"Change location"', '"Изменить место"' 
@@ -955,8 +953,7 @@ function Helper($paramname) {
                 Name               = '"Name"', '"Имя"' 
                 ChangeSpeed        = '"Change speed"', '"Изменение скорости"' 
                 Years19            = '"You need to be at least 19 years old to listen to explicit content marked with"', '"Вам должно быть не менее 19 лет, чтобы слушать непристойный контент, помеченный значком"' 
-                AddPlaylist2       = '"Add to this playlist"', '"Добавить в этот плейлист"' 
-                Retrying           = '"Retrying in [{]0[}]..."', '"Повторная попытка в {0}..."' 
+                AddPlaylist2       = '"Add to this playlist"', '"Добавить в этот плейлист"'
                 NoConnect          = '"Couldn.t connect to Spotify."', '"Не удалось подключиться к Spotify."' 
                 Reconnecting       = '"Reconnecting..."', '"Повторное подключение..."' 
                 NoConnection       = '"No connection"', '"Нет соединения"' 
@@ -985,7 +982,6 @@ function Helper($paramname) {
                 AlbumReleaseMany   = '"many": "\\"%name%\\" was released %years% years ago this week!"', '"many": "\"%name%\" был выпущен %years% лет назад на этой неделе!"'
                 AlbumReleaseOther  = '"other": "\\"%name%\\" was released %years% years ago this week!"', '"other": "\"%name%\" был выпущен %years% года назад на этой неделе!"'
                 Speed              = '"Speed [{]0[}]×"', '"Скорость {0}×"'
-                SearchEmpty        = '(\")(No \{1\} found for)( \\\"\{0\}\\\"\")', '$1{1} не найдено для$3'
                 AudiobookFree      = '"This audiobook is free"', '"Эта аудиокнига бесплатна"'
                 AudiobookGet       = '"Get"', '"Получить"'
                 AudiobookBy        = '"Buy"', '"Купить"'
@@ -1025,7 +1021,6 @@ function Helper($paramname) {
             if (!($enablenavalt)) { $exp_features.Remove('ExpFeatures16') }
             if ($made_for_you_off) { $exp_features.Remove('ExpFeatures17') }
             if ($exp_standart) {
-                Write-Host ($lang).ExpStandart`n 
                 $exp_features.Remove('ExpFeatures10'), $exp_features.Remove('ExpFeatures11'), 
                 $exp_features.Remove('ExpFeatures12'), $exp_features.Remove('ExpFeatures13'), 
                 $exp_features.Remove('ExpFeatures14'), $exp_features.Remove('ExpFeatures15'), 
@@ -1152,7 +1147,6 @@ if (Test-Path $xpui_js_patch) {
     if (!($premium)) { $xpui_js = Helper -paramname "OffadsonFullscreen" } 
 
     # Experimental Feature
-    if ($exp_spotify) { Write-Host ($lang).ExpSpotify`n }
     if (!($exp_spotify)) { $xpui_js = Helper -paramname "ExpFeature" }
 
     # Remove all languages except En and Ru from xpui.js
@@ -1298,7 +1292,6 @@ If (Test-Path $xpui_spa_patch) {
     }
 
     # Experimental Feature
-    if ($exp_spotify) { Write-Host ($lang).ExpSpotify`n }
     if (!($exp_spotify)) { $xpui_js = Helper -paramname "ExpFeature" }
 
     # Remove all languages except En and Ru from xpui.js

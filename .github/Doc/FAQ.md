@@ -4,7 +4,7 @@
 
 If you notice an error or other malfunction in the mod or in its installation, then do not rush to create a problem report, try this couple of simple steps, this helps to solve a large number of different bugs:
 
-- Completely remove Spotify so that there are no tails from the old versions of the client, [this patch](https://github.com/amd64fox/Uninstall-Spotify) will do it for you in one click, after that, run the SpotX installation again, this way you will perform a clean installation, which helps to avoid a lot of bugs associated with outdated versions.
+- Completely remove Spotify so that there are no tails from the old versions of the client, [this patch](https://github.com/amd64fox/Uninstall-Spotify) will do it for you in one click, after that restart pc and run the SpotX installation again, this way you will perform a clean installation, which helps to avoid a lot of bugs associated with outdated versions.
 - Also, as an additional measure, look at your host file, it should not contain different URLs that can cause the client to work incorrectly, even if you are sure that you did not add anything to it, then go into it anyway and check it for sure, since Some ad blockers that you may have used in the past may have added entries to the host file automatically without your consent.
   To quickly open the host file, press `Win + R` and enter `%WinDir%\System32\Drivers\Etc\hosts`, in order for the system to allow you to edit the file, you need to open it as an administrator.
 - If you still see errors, then install the original client and check this error there, if the error is present in the original client, then here you need to wait for a fix from the Spotify developers.
@@ -66,7 +66,7 @@ If you need your old hosts file, then you can find a backup of it in the same fo
 
 <div align="center"><h2>I want to translate the installer into my language, how can I do that?</h2></div>
 
-If you would like to translate the installer into your language, you can do so here, and if you notice a bug in current languages, you can report it here.
+If you would like to translate the installer into your language, you can do so [here](https://github.com/amd64fox/SpotX/issues/new?assignees=&labels=%F0%9F%8C%90+New+translation&template=installer-new-translation.yml), and if you notice a bug in current languages, you can report it [here](https://github.com/amd64fox/SpotX/issues/new?assignees=&labels=%F0%9F%8C%90+Fix+translation&template=itranslation-fix.yml).
 
 
 

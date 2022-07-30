@@ -5,13 +5,13 @@ body:
 - type: checkboxes
   attributes:
       label: 🧐 Have you read the FAQ and viewed similar issues?
-      description: Please read the <a href="https://github.com/amd64fox/SpotX/blob/main/.github/Doc/FAQ.md">FAQ</a>. Also check the open and closed <a href="https://github.com/amd64fox/SpotX/issues">issue</a> because your issue may have already been fixed.
+      description: Please read the <a href="https://github.com/amd64fox/SpotX/blob/main/.github/Doc/FAQ.md#faq">FAQ</a>. Also check the open and closed <a href="https://github.com/amd64fox/SpotX/issues">issue</a> because your issue may have already been fixed.
       options:
         - label: I have read the FAQ
           required: true
         - label: I have checked older issues, open and closed
           required: true
-        - label: I did a clean install of SpotX as described in the FAQ
+        - label: I did a clean install of SpotX as <a href="https://github.com/amd64fox/SpotX/blob/main/.github/Doc/FAQ.md#i-have-an-error--bug--strange-client-behavior-what-can-i-do-">described in the FAQ</a>
           required: true  
 - type: markdown
   attributes:

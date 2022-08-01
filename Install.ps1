@@ -148,6 +148,7 @@ function Set-ScriptLanguageStrings {
         # Define language strings.
         $langStringsEN = [PSCustomObject]@{
             Author          = "Patch author:"
+            Author2         = "@Amd64fox"
             Incorrect       = "Oops, an incorrect value,"
             Incorrect2      = "enter again through "
             Download        = "Error downloading"
@@ -161,7 +162,6 @@ function Set-ScriptLanguageStrings {
             MsSpoti3        = "Automatic uninstalling Spotify MS..."
             MsSpoti4        = "Uninstalling Spotify MS..."
             Prem            = "Modification for premium account..."
-            DownBts         = "Downloading latest patch BTS..."
             OldV            = "Found outdated version of Spotify"
             OldV2           = "Your Spotify {0} version is outdated, it is recommended to upgrade to {1}"
             OldV3           = "Want to update ? [Y/N]"
@@ -211,6 +211,7 @@ function Set-ScriptLanguageStrings {
         
         $langStringsRU = [PSCustomObject]@{
             Author          = "Автор патча:"
+            Author2         = "@Amd64fox"
             Incorrect       = "Ой, некорректное значение,"
             Incorrect2      = "повторите ввод через"
             Download        = "Ошибка загрузки"
@@ -224,7 +225,6 @@ function Set-ScriptLanguageStrings {
             MsSpoti3        = "Автоматическое удаление Spotify MS..."
             MsSpoti4        = "Удаление Spotify MS..."
             Prem            = "Модификация для премиум аккаунта..."
-            DownBts         = "Загружаю последний патч BTS..."
             OldV            = "Найдена устаревшая версия Spotify"
             OldV2           = "Ваша версия Spotify {0} устарела, рекомендуется обновиться до {1}"
             OldV3           = "Обновить ? [Y/N]"
@@ -274,8 +274,10 @@ function Set-ScriptLanguageStrings {
         }
 
         $langStringsIT = [PSCustomObject]@{
-            Author          = "Autore della patch:"
+            Author          = "Autore patch:"
+            Author2         = "@Amd64fox"
             TranslationBy   = "Autore traduzione:"
+            TranslationBy2  = "@Francescoaracu"
             Incorrect       = "Ops! Valore sbagliato,"
             Incorrect2      = "Inserisci di nuovo"
             Download        = "Errore nel download"
@@ -289,7 +291,6 @@ function Set-ScriptLanguageStrings {
             MsSpoti3        = "Disinstallazione automatica Spotify MS..."
             MsSpoti4        = "Disinstallo Spotify MS..."
             Prem            = "Modifica per account premium..."
-            DownBts         = "Scarico l'ultima patch BTS..."
             OldV            = "Trovata vecchia versione di Spotify"
             OldV2           = "La tua versione di Spotify {0} è vecchia, è consigliato aggiornare alla versione {1}"
             OldV3           = "Vuoi aggiornare? [Y/N]"
@@ -376,15 +377,21 @@ if ($langCode -eq 'ru') { $ru = $true }
 # Set variable 'it'.
 if ($langCode -eq 'it') { $it = $true }
 
+# Automatic length of stars
+$au = ($lang).Author.Length + ($lang).Author2.Length
+$by = ($lang).TranslationBy.Length + ($lang).TranslationBy2.Length
+if ($au -gt $by ) {$long = $au+1} else {$long = $by+1} 
+$st = ""
+$star = $st.PadLeft($long,'*')
 
-Write-Host "*****************"
+Write-Host $star
 Write-Host ($lang).Author"" -NoNewline
-Write-Host "@Amd64fox" -ForegroundColor DarkYellow
-if (!($it)) { Write-Host "*****************"`n }
+Write-Host ($lang).Author2 -ForegroundColor DarkYellow
+if (!($it)) { Write-Host $star`n }
 if ($it) {
     Write-Host ($lang).TranslationBy"" -NoNewline
-    Write-Host "@Francescoaracu" -ForegroundColor DarkYellow
-    Write-Host "*****************"`n
+    Write-Host ($lang).TranslationBy2 -ForegroundColor DarkYellow
+    Write-Host $star`n
 }
 
 # Sending a statistical web query to cutt.ly
@@ -669,7 +676,6 @@ if ($premium) {
     Write-Host ($lang).Prem`n
 }
 if (!($premium)) {
-    Write-Host ($lang).DownBts`n
     downloadScripts -param1 "BTS"
     Add-Type -Assembly 'System.IO.Compression.FileSystem'
     $zip = [System.IO.Compression.ZipFile]::Open("$PWD\chrome_elf.zip", 'read')

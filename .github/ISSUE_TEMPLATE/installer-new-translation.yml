@@ -29,6 +29,7 @@ body:
       Good luck to you. 
     value: |
       Author          = "Patch author:"
+      Author2         = "@Amd64fox"
       Incorrect       = "Oops, an incorrect value,"
       Incorrect2      = "enter again through "
       Download        = "Error downloading"
@@ -42,7 +43,6 @@ body:
       MsSpoti3        = "Automatic uninstalling Spotify MS..."
       MsSpoti4        = "Uninstalling Spotify MS..."
       Prem            = "Modification for premium account..."
-      DownBts         = "Downloading latest patch BTS..."
       OldV            = "Found outdated version of Spotify"
       OldV2           = "Your Spotify {0} version is outdated, it is recommended to upgrade to {1}"
       OldV3           = "Want to update ? [Y/N]"

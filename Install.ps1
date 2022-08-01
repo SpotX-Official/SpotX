@@ -83,7 +83,6 @@ $PSDefaultParameterValues['Stop-Process:ErrorAction'] = [System.Management.Autom
 function Format-LanguageCode {
     
     # Normalizes and confirms support of the selected language.
-
     [CmdletBinding()]
     [OutputType([string])]
     param
@@ -94,7 +93,8 @@ function Format-LanguageCode {
     begin {
         $supportLanguages = @(
             'en',
-            'ru'
+            'ru',
+            'it'
         )
     }
     
@@ -107,6 +107,10 @@ function Format-LanguageCode {
             }
             '^(ru|py)' {
                 $returnCode = 'ru'
+                break
+            }
+            '^it' {
+                $returnCode = 'it'
                 break
             }
             Default {
@@ -143,7 +147,7 @@ function Set-ScriptLanguageStrings {
     begin {
         # Define language strings.
         $langStringsEN = [PSCustomObject]@{
-            Author          = "Author:"
+            Author          = "Patch author:"
             Incorrect       = "Oops, an incorrect value,"
             Incorrect2      = "enter again through "
             Download        = "Error downloading"
@@ -151,7 +155,6 @@ function Set-ScriptLanguageStrings {
             Download3       = "Error again"
             Download4       = "Check your network settings and run the installation again"
             Download5       = "Downloading Spotify"
-            Download6       = "Failed web request via curl"
             StopScrpit      = "Script is stopped"
             MsSpoti         = "The Microsoft Store version of Spotify has been detected which is not supported"
             MsSpoti2        = "Uninstall Spotify Windows Store edition [Y/N]"
@@ -192,7 +195,7 @@ function Set-ScriptLanguageStrings {
             Error           = "Error"
             FileLocBroken   = "Location of Spotify files is broken, uninstall the client and run the script again"
             Spicetify       = "Spicetify detected"
-            NoRestore       = "SpotX has already been installed, xpui.js and xpui.css not found. `nPlease uninstall Spotify client and run Install.bat again"
+            NoRestore       = "SpotX has already been installed, but files to recover xpui.js.bak and xpui.css.bak not found. `nPlease uninstall Spotify client and run Install.bat again"
             ExpSpotify      = "Experimental features operated by Spotify"
             ExpStandart     = "Experimental features of SpotX are not included"
             NoRestore2      = "SpotX has already been installed, xpui.bak not found. `nPlease uninstall Spotify client and run Install.bat again"
@@ -207,7 +210,7 @@ function Set-ScriptLanguageStrings {
         }
         
         $langStringsRU = [PSCustomObject]@{
-            Author          = "Автор:"
+            Author          = "Автор патча:"
             Incorrect       = "Ой, некорректное значение,"
             Incorrect2      = "повторите ввод через"
             Download        = "Ошибка загрузки"
@@ -215,7 +218,6 @@ function Set-ScriptLanguageStrings {
             Download3       = "Опять ошибка"
             Download4       = "Проверьте настройки вашей сети и снова запустите установку"
             Download5       = "Загрузка Spotify"
-            Download6       = "Неудачный веб-запрос через curl"
             StopScrpit      = "Cкрипт остановлен"
             MsSpoti         = "Обнаружена версия Spotify из Microsoft Store, которая не поддерживается"
             MsSpoti2        = "Хотите удалить Spotify Microsoft Store ? [Y/N]"
@@ -270,6 +272,70 @@ function Set-ScriptLanguageStrings {
             HostDel         = "Попытка удалить нежелательные Url-адреса из оригинального файла hosts..."
             HostError       = "Что-то пошло не так при редактировании файла hosts, отредактируйте его вручную или запустите скрипт от администратора"
         }
+
+        $langStringsIT = [PSCustomObject]@{
+            Author          = "Autore della patch:"
+            TranslationBy   = "Autore traduzione:"
+            Incorrect       = "Ops! Valore sbagliato,"
+            Incorrect2      = "Inserisci di nuovo"
+            Download        = "Errore nel download"
+            Download2       = "Nuova richiesta in 5 secondi..."
+            Download3       = "Nuovo errore"
+            Download4       = "Verifica le tue impostazioni di rete e fai partire di nuovo l'installazione"
+            Download5       = "Scarico Spotify"
+            StopScrpit      = "Lo script è stato fermato"
+            MsSpoti         = "Trovata versione del Microsoft Store di Spotify, che non è supportata"
+            MsSpoti2        = "Disinstalla la versione Microsoft Store di Spotify [Y/N]"
+            MsSpoti3        = "Disinstallazione automatica Spotify MS..."
+            MsSpoti4        = "Disinstallo Spotify MS..."
+            Prem            = "Modifica per account premium..."
+            DownBts         = "Scarico l'ultima patch BTS..."
+            OldV            = "Trovata vecchia versione di Spotify"
+            OldV2           = "La tua versione di Spotify {0} è vecchia, è consigliato aggiornare alla versione {1}"
+            OldV3           = "Vuoi aggiornare? [Y/N]"
+            AutoUpd         = "Aggiornamento automatico alla versione consigliata"
+            DelOrOver       = "Vuoi disinstallare la versione installata {0} o sovrascriverla? Y [Disinstalla] / N [Sovrascrivi]"
+            DelOld          = "Disinstallo vecchio Spotify..."
+            NewV            = "Trovata versione di Spotify non supportata"
+            NewV2           = "La tua versione {0} di Spotify non è stata ancora testata, al momento la {1} è stabile"
+            NewV3           = "Vuoi continuare a installare la versione {0} (possibili errori)? [Y/N]"
+            Recom           = "Vuoi installare la versione consigliata {0}? [Y/N]"
+            DelNew          = "Disinstallo una versione non testata di Spotify..."
+            DownSpoti       = "Scarico e installo Spotify"
+            DownSpoti2      = "Attendi..."
+            PodcatsOff      = "Podcasts OFF"
+            PodcastsOn      = "Podcasts ON"
+            PodcatsSelect   = "Vuoi rimuovere i podcast dalla home? [Y/N]"
+            DowngradeNote   = "Si consiglia il blocco degli aggiornamenti perché è stato eseguito un downgrade di Spotify"
+            UpdBlock        = "Aggiornamenti di Spotify bloccati"
+            UpdUnblock      = "Aggiornamenti di Spotify non bloccati"
+            UpdSelect       = "Vuoi bloccare gli aggiornamenti automatici di Spotify? [Y/N]"
+            CacheOn         = "Attivata la cancellazione automatica della cache ({0})"
+            CacheOff        = "Cancellazione automatica della cache non attiva"
+            CacheSelect     = "Vuoi attivare la cancellazione automatica della cache? [Y/N]"
+            CacheDays       = "Verrà cancellata la cache più vecchia di XX giorni"
+            CacheDays2      = "Inserisci il numero dei giorni da 1 a 100"
+            NoVariable      = "Variabile non trovata"
+            NoVariable2     = "in xpui.js"
+            NoVariable3     = "in licenses.html"
+            NoVariable4     = "in html"
+            ModSpoti        = "Patching Spotify..."
+            Error           = "Errore"
+            FileLocBroken   = "Il percorso dei file di Spotify non è stato trovato, disinstalla Spotify e fai ripartire lo script"
+            Spicetify       = "Rilevato Spicetify"
+            NoRestore       = "SpotX è già stato installato, ma file da recuperare xpui.js.bak e xpui.css.bak non trovati. `nPer favore, disinstalla Spotify e riapri il file Install.bat"
+            ExpSpotify      = "Features sperimentali attivate da Spotify"
+            ExpStandart     = "Features sperimentali di SpotX non incluse"
+            NoRestore2      = "SpotX è già stato installato, xpui.bak non trovato. `nPer favore, disinstalla Spotify e riapri il file Install.bat"
+            UpdateBlocked   = "Gli aggiornamenti automatici di Spotify sono già stati bloccati"
+            UpdateError     = "Blocco degli aggiornamenti non riuscito"
+            NoSpotifyExe    = "Spotify.exe non trovato"
+            InstallComplete = "Installazione completata"
+            HostInfo        = "Trovati URL non desiderati nel file hosts"
+            HostBak         = "Backup di hosts.bak in corso..."
+            HostDel         = "Provo a rimuovere URL non desiderati dal file hosts originale..."
+            HostError       = "Qualcosa è andato storto provando a modificare il file hosts, modificalo manualmente o fai partire lo script come amministratore"
+        }
     }
     
     process {
@@ -281,6 +347,10 @@ function Set-ScriptLanguageStrings {
             }
             'ru' {
                 $langStrings = $langStringsRU
+                break
+            }
+            'it' {
+                $langStrings = $langStringsIT
                 break
             }
             Default {
@@ -303,12 +373,19 @@ $lang = Set-ScriptLanguageStrings -LanguageCode $langCode
 
 # Set variable 'ru'.
 if ($langCode -eq 'ru') { $ru = $true }
+# Set variable 'it'.
+if ($langCode -eq 'it') { $it = $true }
 
 
 Write-Host "*****************"
 Write-Host ($lang).Author"" -NoNewline
 Write-Host "@Amd64fox" -ForegroundColor DarkYellow
-Write-Host "*****************"`n
+if (!($it)) { Write-Host "*****************"`n }
+if ($it) {
+    Write-Host ($lang).TranslationBy"" -NoNewline
+    Write-Host "@Francescoaracu" -ForegroundColor DarkYellow
+    Write-Host "*****************"`n
+}
 
 # Sending a statistical web query to cutt.ly
 $ErrorActionPreference = 'SilentlyContinue'

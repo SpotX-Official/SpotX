@@ -9,6 +9,7 @@ body:
     options:
       - English
       - Russian
+      - Italian
   validations:
     required: true
 - type: textarea

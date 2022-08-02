@@ -95,9 +95,7 @@ function Format-LanguageCode {
     
     begin {
         $supportLanguages = @(
-            'en',
-            'ru',
-            'it'
+            'en', 'ru', 'it', 'tr'
         )
     }
     
@@ -114,6 +112,10 @@ function Format-LanguageCode {
             }
             '^it' {
                 $returnCode = 'it'
+                break
+            }
+            '^tr' {
+                $returnCode = 'tr'
                 break
             }
             Default {
@@ -340,6 +342,71 @@ function Set-ScriptLanguageStrings {
             HostDel         = "Provo a rimuovere URL non desiderati dal file hosts originale..."
             HostError       = "Qualcosa è andato storto provando a modificare il file hosts, modificalo manualmente o fai partire lo script come amministratore"
         }
+
+        $langStringsTR = [PSCustomObject]@{
+            Author          = "Yama yapımcısı:"
+            Author2         = "@Amd64fox"
+            TranslationBy   = "Tercüman:"
+            TranslationBy2  = "@metezd"
+            Incorrect       = "Eyvah, yanlış bir değer,"
+            Incorrect2      = "tekrar girin "
+            Download        = "İndirirken hata oluştu"
+            Download2       = "5 saniye içinde tekrar talep edilecek..."
+            Download3       = "Yine hata oluştu"
+            Download4       = "Ağ ayarlarınızı kontrol edin ve kurulumu tekrar çalıştırın"
+            Download5       = "Spotify indiriliyor"
+            StopScrpit      = "Komut dosyası durduruldu"
+            MsSpoti         = "Spotify'ın desteklenmeyen Microsoft Mağazası sürümü tespit edildi"
+            MsSpoti2        = "Spotify Windows Mağazası sürümünü kaldır [Y/N]"
+            MsSpoti3        = "Spotify MS otomatik olarak kaldırlıyor..."
+            MsSpoti4        = "Spotify MS kaldırılıyor..."
+            Prem            = "Premium hesap için modifikasyon ..."
+            OldV            = "Spotify'ın eski bir sürümü bulundu"
+            OldV2           = "Spotify {0} sürümü güncel değil, {1} sürümüne yükseltmeniz önerilir"
+            OldV3           = "Güncelleme yapılsın mı? [Y/N]"
+            AutoUpd         = "Önerilen sürüme otomatik olarak güncelle"
+            DelOrOver       = "Mevcut {0} sürümünü kaldırmak mı yoksa üzerine yüklemek mi istiyorsunuz? Y [Kaldır] / N [Üzerine Yükle]"
+            DelOld          = "Eski Spotify kaldırılıyor..."
+            NewV            = "Desteklenmeyen Spotify sürümü bulundu"
+            NewV2           = "Spotify {0} sürümü henüz test edilmedi, şu anda kararlı olan {1} sürümüdür"
+            NewV3           = "{0} sürümü ile devam etmek istiyor musunuz (hatalar olabilir) ? [Y/N]"
+            Recom           = "Önerilen {0} sürümünü yüklemek istiyor musunuz? [Y/N]"
+            DelNew          = "Test edilmemiş Spotify kaldırılıyor..."
+            DownSpoti       = "Spotify indiriliyor ve kuruluyor"
+            DownSpoti2      = "Lütfen bekleyin..."
+            PodcatsOff      = "Podcast'ler Kapalı"
+            PodcastsOn      = "Podcast'ler Açık"
+            PodcatsSelect   = "Podcast'leri ana sayfadan kaldırmak istiyor musunuz? [Y/N]"
+            DowngradeNote   = "Spotify'da bir sürüm düşürme olduğu için engellemeniz önerilir"
+            UpdBlock        = "Spotify güncellemeleri engellendi"
+            UpdUnblock      = "Spotify güncellemeleri engellenmedi"
+            UpdSelect       = "Spotify güncellemelerini engellemek ister misiniz? [Y/N]"
+            CacheOn         = "Önbelleği temizleme etkin ({0})"
+            CacheOff        = "Önbelleğin temizlenmesi etkin değil"
+            CacheSelect     = "Otomatik önbellek temizlemeyi ayarlamak ister misiniz? [Y/N]"
+            CacheDays       = "Daha eski olan önbellek: XX gün içinde temizlenecek "
+            CacheDays2      = "Gün sayısını 1 ile 100 arasında girin"
+            NoVariable      = "Değişken bulunamadı"
+            NoVariable2     = "xpui.js içinde"
+            NoVariable3     = "in licenses.html"
+            NoVariable4     = "html içinde"
+            ModSpoti        = "Spotify'a yama yapılıyor..."
+            Error           = "Hata"
+            FileLocBroken   = "Spotify dosyalarının konumu bozuk, istemciyi kaldırın ve kodu tekrar çalıştırın"
+            Spicetify       = "Spicetify algılandı"
+            NoRestore       = "SpotX zaten yüklenmiş, ancak xpui.js.bak ve xpui.css.bak dosyalarının bulunamadığı tespit edildi. `nLütfen Spotify istemcisini kaldırın ve Install.bat dosyasını tekrar çalıştırın"
+            ExpSpotify      = "Spotify tarafından sunulan deneysel özellikler"
+            ExpStandart     = "SpotX'in deneysel özellikleri dahil değildir"
+            NoRestore2      = "SpotX zaten kurulmuş, xpui.bak dosyası bulunamadı. `nLütfen Spotify istemcisini kaldırın ve Install.bat dosyasını tekrar çalıştırın"
+            UpdateBlocked   = "Spotify güncellemeleri zaten engellenmiş durumda"
+            UpdateError     = "Güncellemeler engellenemedi"
+            NoSpotifyExe    = "Spotify.exe bulunamadı"
+            InstallComplete = "kurulum tamamlandı"
+            HostInfo        = "Hosts dosyasında istenmeyen URL'ler bulundu"
+            HostBak         = "hosts.bak dosyası yedekleniyor...."
+            HostDel         = "Orijinal hosts dosyasından istenmeyen URL'ler kaldırılmaya çalışılıyor..."
+            HostError       = "Hosts dosyasını düzenlerken bir şeyler ters gitti, elle düzenleyin veya kodu yönetici olarak çalıştırın"
+        }
     }
     
     process {
@@ -355,6 +422,10 @@ function Set-ScriptLanguageStrings {
             }
             'it' {
                 $langStrings = $langStringsIT
+                break
+            }
+            'tr' {
+                $langStrings = $langStringsTR
                 break
             }
             Default {
@@ -377,21 +448,21 @@ $lang = Set-ScriptLanguageStrings -LanguageCode $langCode
 
 # Set variable 'ru'.
 if ($langCode -eq 'ru') { $ru = $true }
-# Set variable 'it'.
-if ($langCode -eq 'it') { $it = $true }
+# Set variable 'add transl line'.
+if ($langCode -match '^(it|tr)') { $line = $true }
 
 # Automatic length of stars
 $au = ($lang).Author.Length + ($lang).Author2.Length
 $by = ($lang).TranslationBy.Length + ($lang).TranslationBy2.Length
-if ($au -gt $by ) {$long = $au+1} else {$long = $by+1} 
+if ($au -gt $by ) { $long = $au + 1 } else { $long = $by + 1 } 
 $st = ""
-$star = $st.PadLeft($long,'*')
+$star = $st.PadLeft($long, '*')
 
 Write-Host $star
 Write-Host ($lang).Author"" -NoNewline
 Write-Host ($lang).Author2 -ForegroundColor DarkYellow
-if (!($it)) { Write-Host $star`n }
-if ($it) {
+if (!($line)) { Write-Host $star`n }
+if ($line) {
     Write-Host ($lang).TranslationBy"" -NoNewline
     Write-Host ($lang).TranslationBy2 -ForegroundColor DarkYellow
     Write-Host $star`n

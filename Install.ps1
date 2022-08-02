@@ -71,6 +71,9 @@ param
 
     [Parameter(HelpMessage = 'Enabled the new home structure and navigation.')]
     [switch]$enablenavalt,
+
+    [Parameter(HelpMessage = 'Connect unlock test.')]
+    [switch]$testconnect,
     
     [Parameter(HelpMessage = 'Select the desired language to use for installation. Default is the detected system language.')]
     [Alias('l')]
@@ -990,6 +993,14 @@ function Helper($paramname) {
                 EmptyBlockAd        = 'adsEnabled:!0', 'adsEnabled:!1' # Removing an empty block
                 FullScreenAd        = '(return|.=.=>)"free"===(.+?)(return|.=.=>)"premium"===', '$1"premium"===$2$3"free"===' # Fullscreen act., removing upgrade menu, button
                 PlaylistSponsorsOff = 'allSponsorships' , '' # Disabling a playlist sponsor
+                ConnectUnlock       = ' connect-device-list-item--disabled' , '' # Connect unlock test for 1.1.91
+                ConnectUnlock2      = 'connect-picker.unavailable-to-control' , 'spotify-connect'
+                ConnectUnlock3      = '(className:.,disabled:)(..)' , '$1false'
+                ConnectUnlock4      = 'return (..isDisabled)(\?..createElement\(..,)' , 'return false$2'
+            }
+            if (!($testconnect)) {
+                $exp_features.Remove('ConnectUnlock'), $exp_features.Remove('ConnectUnlock2'),
+                $exp_features.Remove('ConnectUnlock3'), $exp_features.Remove('ConnectUnlock4')
             }
             $n = ($lang).NoVariable2
             $contents = $offadson_fullscreen

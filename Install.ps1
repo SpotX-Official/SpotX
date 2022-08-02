@@ -999,8 +999,8 @@ function Helper($paramname) {
                 ConnectUnlock4      = 'return (..isDisabled)(\?..createElement\(..,)' , 'return false$2'
             }
             if (!($testconnect)) {
-                $exp_features.Remove('ConnectUnlock'), $exp_features.Remove('ConnectUnlock2'),
-                $exp_features.Remove('ConnectUnlock3'), $exp_features.Remove('ConnectUnlock4')
+                $offadson_fullscreen.Remove('ConnectUnlock'), $offadson_fullscreen.Remove('ConnectUnlock2'),
+                $offadson_fullscreen.Remove('ConnectUnlock3'), $offadson_fullscreen.Remove('ConnectUnlock4')
             }
             $n = ($lang).NoVariable2
             $contents = $offadson_fullscreen

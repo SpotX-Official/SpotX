@@ -6,7 +6,8 @@ body:
   id: lang
   attributes:
     label: What language do you want to translate into?
-    placeholder: e.g. English
+    description: Also pay attention to the <a href="https://github.com/amd64fox/SpotX/blob/0f42f1be40798dbe85fb1f765b266cca4ffe9a6c/Install.ps1#L98">languages</a> that have already been added.
+    placeholder: e.g. English 
   validations:
     required: true
 - type: input

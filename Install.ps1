@@ -1049,11 +1049,11 @@ function Helper($paramname) {
         "HtmlLicMin" { 
             # licenses.html minification
             $html_lic_min = @{
-                HtmlLicMin1 = '\r?\n(?!\(1|\d)', ''
-                HtmlLicMin2 = '(?m)(^\s*\r?\n)', ''
+                HtmlLicMin1 = '<li><a href="#6eef7">zlib<\/a><\/li>\n(.|\n)*<\/p><!-- END CONTAINER DEPS LICENSES -->(<\/div>)', '$2'
+                HtmlLicMin2 = '	', ''
                 HtmlLicMin3 = '  ', ''
-                HtmlLicMin4 = '	', ''
-                HtmlLicMin5 = '<li><a href="#6eef7">zlib<\/a><\/li>\n(.|\n)*<\/p><!-- END CONTAINER DEPS LICENSES -->(<\/div>)', ''
+                HtmlLicMin4 = '(?m)(^\s*\r?\n)', ''
+                HtmlLicMin5 = '\r?\n(?!\(1|\d)', ''
             }
             $n = ($lang).NoVariable3
             $contents = $html_lic_min
@@ -1197,7 +1197,7 @@ function Helper($paramname) {
         }
     }
 
-    $contents.Keys | ForEach-Object { 
+    $contents.Keys | Sort-Object | ForEach-Object { 
  
         if ($paramdata -match $contents.$PSItem[0]) { 
             $paramdata = $paramdata -replace $contents.$PSItem[0], $contents.$PSItem[1] 

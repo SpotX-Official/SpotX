@@ -74,6 +74,9 @@ param
 
     #[Parameter(HelpMessage = 'Connect unlock test.')]
     #[switch]$testconnect,
+
+    [Parameter(HelpMessage = 'Do not create desktop shortcut.')]
+    [switch]$no_shortcut,
     
     [Parameter(HelpMessage = 'Select the desired language to use for installation. Default is the detected system language.')]
     [Alias('l')]
@@ -636,6 +639,7 @@ $chrome_elf = "$spotifyDirectory\chrome_elf.dll"
 $chrome_elf_bak = "$spotifyDirectory\chrome_elf_bak.dll"
 $cache_folder = "$env:APPDATA\Spotify\cache"
 $spotifyUninstall = "$env:TEMP\SpotifyUninstall.exe"
+$start_menu = "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Spotify.lnk"
 $upgrade_client = $false
 
 function incorrectValue {
@@ -1063,11 +1067,13 @@ if (-not $spotifyInstalled -or $upgrade_client) {
     Start-Process -FilePath explorer.exe -ArgumentList $PWD\SpotifySetup.exe
     while (-not (get-process | Where-Object { $_.ProcessName -eq 'SpotifySetup' })) {}
     wait-process -name SpotifySetup
-
-
-    wait-process -name SpotifySetup
-    Stop-Process -Name Spotify 
-
+    Stop-Process -Name Spotify
+    if ($no_shortcut) {
+        $ErrorActionPreference = 'SilentlyContinue'
+        $desktop_folder = DesktopFolder
+        Start-Sleep -Milliseconds 1000
+        remove-item "$desktop_folder\Spotify.lnk" -Recurse -Force
+    }
 }
 
 # Delete the leveldb folder (Fixes bug with incorrect experimental features for some accounts)
@@ -1152,6 +1158,7 @@ if ($cache_off) {
     if (Test-Path -LiteralPath $cache_folder) {
         remove-item $cache_folder -Recurse -Force
         remove-item $desktop_folder\Spotify.lnk -Recurse -Force
+        remove-item $start_menu -Recurse -Force
     } 
 }
 if (!($cache_on) -and !($cache_off)) {
@@ -1182,6 +1189,7 @@ if (!($cache_on) -and !($cache_off)) {
         if (Test-Path -LiteralPath $cache_folder) {
             remove-item $cache_folder -Recurse -Force
             remove-item $desktop_folder\Spotify.lnk -Recurse -Force
+            remove-item $start_menu -Recurse -Force
         }
     }
 }
@@ -1762,14 +1770,29 @@ if ($ru) {
     Remove-Item $patch_lang -Exclude *en*, *ru* -Recurse
 }
 
-# Shortcut Spotify.lnk
+# create a desktop shortcut
 $ErrorActionPreference = 'SilentlyContinue' 
 
-$desktop_folder = DesktopFolder
+if (!($no_shortcut)) {
 
-If (!(Test-Path $desktop_folder\Spotify.lnk)) {
+    $desktop_folder = DesktopFolder
+
+    If (!(Test-Path $desktop_folder\Spotify.lnk)) {
+        $source = "$env:APPDATA\Spotify\Spotify.exe"
+        $target = "$desktop_folder\Spotify.lnk"
+        $WorkingDir = "$env:APPDATA\Spotify"
+        $WshShell = New-Object -comObject WScript.Shell
+        $Shortcut = $WshShell.CreateShortcut($target)
+        $Shortcut.WorkingDirectory = $WorkingDir
+        $Shortcut.TargetPath = $source
+        $Shortcut.Save()      
+    }
+}
+
+# create shortcut in start menu
+If (!(Test-Path $start_menu)) {
     $source = "$env:APPDATA\Spotify\Spotify.exe"
-    $target = "$desktop_folder\Spotify.lnk"
+    $target = $start_menu
     $WorkingDir = "$env:APPDATA\Spotify"
     $WshShell = New-Object -comObject WScript.Shell
     $Shortcut = $WshShell.CreateShortcut($target)
@@ -1820,9 +1843,22 @@ if ($cache_install) {
     downloadScripts -param1 "hide_window"
     downloadScripts -param1 "run_ps"
 
-    # Spotify.lnk
+
+    # create a desktop shortcut
+    if (!($no_shortcut)) {
+        $source2 = "$cache_folder\hide_window.vbs"
+        $target2 = "$desktop_folder\Spotify.lnk"
+        $WorkingDir2 = "$cache_folder"
+        $WshShell2 = New-Object -comObject WScript.Shell
+        $Shortcut2 = $WshShell2.CreateShortcut($target2)
+        $Shortcut2.WorkingDirectory = $WorkingDir2
+        $Shortcut2.IconLocation = "$env:APPDATA\Spotify\Spotify.exe"
+        $Shortcut2.TargetPath = $source2
+        $Shortcut2.Save()
+    }
+    # create shortcut in start menu
     $source2 = "$cache_folder\hide_window.vbs"
-    $target2 = "$desktop_folder\Spotify.lnk"
+    $target2 = $start_menu
     $WorkingDir2 = "$cache_folder"
     $WshShell2 = New-Object -comObject WScript.Shell
     $Shortcut2 = $WshShell2.CreateShortcut($target2)

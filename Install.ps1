@@ -72,8 +72,8 @@ param
     [Parameter(HelpMessage = 'Enabled the new home structure and navigation.')]
     [switch]$enablenavalt,
 
-    [Parameter(HelpMessage = 'Connect unlock test.')]
-    [switch]$testconnect,
+    #[Parameter(HelpMessage = 'Connect unlock test.')]
+    #[switch]$testconnect,
     
     [Parameter(HelpMessage = 'Select the desired language to use for installation. Default is the detected system language.')]
     [Alias('l')]
@@ -1215,10 +1215,10 @@ function Helper($paramname) {
                 ConnectUnlock3      = '(className:.,disabled:)(..)' , '$1false'
                 ConnectUnlock4      = 'return (..isDisabled)(\?..createElement\(..,)' , 'return false$2'
             }
-            if (!($testconnect)) {
-                $offadson_fullscreen.Remove('ConnectUnlock'), $offadson_fullscreen.Remove('ConnectUnlock2'),
-                $offadson_fullscreen.Remove('ConnectUnlock3'), $offadson_fullscreen.Remove('ConnectUnlock4')
-            }
+            #if (!($testconnect)) {
+            #    $offadson_fullscreen.Remove('ConnectUnlock'), $offadson_fullscreen.Remove('ConnectUnlock2'),
+            #    $offadson_fullscreen.Remove('ConnectUnlock3'), $offadson_fullscreen.Remove('ConnectUnlock4')
+            #}
             $n = ($lang).NoVariable2
             $contents = $offadson_fullscreen
             $paramdata = $xpui_js

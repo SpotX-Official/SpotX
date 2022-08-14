@@ -1068,12 +1068,14 @@ if (-not $spotifyInstalled -or $upgrade_client) {
     while (-not (get-process | Where-Object { $_.ProcessName -eq 'SpotifySetup' })) {}
     wait-process -name SpotifySetup
     Stop-Process -Name Spotify
-    if ($no_shortcut) {
-        $ErrorActionPreference = 'SilentlyContinue'
-        $desktop_folder = DesktopFolder
-        Start-Sleep -Milliseconds 1000
-        remove-item "$desktop_folder\Spotify.lnk" -Recurse -Force
-    }
+}
+
+# Delete Spotify shortcut if it is on desktop
+if ($no_shortcut) {
+    $ErrorActionPreference = 'SilentlyContinue'
+    $desktop_folder = DesktopFolder
+    Start-Sleep -Milliseconds 1000
+    remove-item "$desktop_folder\Spotify.lnk" -Recurse -Force
 }
 
 # Delete the leveldb folder (Fixes bug with incorrect experimental features for some accounts)

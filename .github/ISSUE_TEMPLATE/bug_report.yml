@@ -15,7 +15,18 @@ body:
           required: true  
 - type: markdown
   attributes:
-    value: "###"          
+    value: "###"    
+- type: input
+  id: lang_spoti
+  attributes:
+    label: Сountry of your account
+    description: You can view your country on your account page, in paragraph <a href="https://www.spotify.com/account/">Country or region</a>.
+    placeholder: "e.g. Ukraine"
+  validations:
+    required: true 
+- type: markdown
+  attributes:
+    value: "###"     
 - type: dropdown
   id: plan
   attributes:
@@ -80,3 +91,4 @@ body:
     description: Place any screenshots of the issue here if needed
   validations:
     required: false    
+    

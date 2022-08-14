@@ -11,6 +11,8 @@ body:
       - Russian
       - Italian
       - Turkish
+      - Georgian
+      - Polish
   validations:
     required: true
 - type: textarea

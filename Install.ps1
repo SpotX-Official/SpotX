@@ -95,7 +95,7 @@ function Format-LanguageCode {
     
     begin {
         $supportLanguages = @(
-            'en', 'ru', 'it', 'tr'
+            'en', 'ru', 'it', 'tr', 'ka', 'pl'
         )
     }
     
@@ -116,6 +116,14 @@ function Format-LanguageCode {
             }
             '^tr' {
                 $returnCode = 'tr'
+                break
+            }
+            '^ka' {
+                $returnCode = 'ka'
+                break
+            }
+            '^pl' {
+                $returnCode = 'pl'
                 break
             }
             Default {
@@ -407,6 +415,136 @@ function Set-ScriptLanguageStrings {
             HostDel         = "Orijinal hosts dosyasından istenmeyen URL'ler kaldırılmaya çalışılıyor..."
             HostError       = "Hosts dosyasını düzenlerken bir şeyler ters gitti, elle düzenleyin veya kodu yönetici olarak çalıştırın"
         }
+
+        $langStringsKA = [PSCustomObject]@{
+            Author          = "პაჩის ავტორი:"
+            Author2         = "@Amd64fox"
+            TranslationBy   = "თარგმანის ავტორი:"
+            TranslationBy2  = "@Naviamold1"
+            Incorrect       = "უპს, არასწორი შენატანი,"
+            Incorrect2      = "მაგრამ თავიდან სცადე"
+            Download        = "შეცდომა ჩაწერის დროს"
+            Download2       = "თავიდან ვცდი 5 წამში..."
+            Download3       = "შეცდომა ისევ"
+            Download4       = "შეამოწმეთ თქვენი კავშირი ქსელთან და თავიდან სცადე ინსტალაცია"
+            Download5       = "Spotify იწერება"
+            StopScrpit      = "სკრიპტი ჩერდება"
+            MsSpoti         = "Microsoft Store-ის ვერსია მოიძებნა რომელიც არ არის მხარდაჯერილი" 
+            MsSpoti2        = "წავშალოთ Spotify Microsoft Store-ის ვერსია [Y/N]"
+            MsSpoti3        = "ავტუმატურად იშლება Spotify MS..."
+            MsSpoti4        = "იშლება Spotify MS..."
+            Prem            = "მოდიფიკაცია პრემიუმ აკკოუნტის..."
+            OldV            = "მოიძებნა მოძველებული Spotify-ს ვერსია"
+            OldV2           = "თქვენი Spotify-ს {0} ვერსია არის მოძველებული, რეკომენდურია მისი აპგრეიდობა ამ ვერსიაზე {1}"
+            OldV3           = "გინდა განაახლოთ ? [Y/N]"
+            AutoUpd         = "აუტომატიკური აპდაიტი რეკომენდებულ ვერსიაზე"
+            DelOrOver       = "გინდა წაშალო ეხლანდელი ვერსია: {0} თუ თავიდან ჩაწერა? Y [წაშლა] / N [თავიდან ჩაწერა]"
+            DelOld          = "ძველი Spotify იშლება..."
+            NewV            = "არა მხარდაჯერილი Spotify-ს ვერსია არის მოწებნილი"
+            NewV2           = "თქვენი Spotify-ს {0} ვერსია ჯერ არ არის დატესტილი, ამჟამად არის სტაბილური {1} ვერსია"
+            NewV3           = "გინდათ რომ გააგრძელოთ {0} ვერსიაზე (შეცდომები შესაძლებელია) ? [Y/N]"
+            Recom           = "გინდათ რო ჩაიწეროთ რეკომენდირებული {0} ვერსია ? [Y/N]"
+            DelNew          = "იშლება არა ტესტირებულ Spotify..."
+            DownSpoti       = "ვტვირთავთ და ვიწერთ Spotify-ს"
+            DownSpoti2      = "გთხოვთ დაიცადოთ..."
+            PodcatsOff      = "პოდკასტები გათიშული"
+            PodcastsOn      = "პოდკასტები ჩართული"
+            PodcatsSelect   = "გინდათ რომ გათიშოთ პოდკასტები მთავარ გვერდიდან? [Y/N]"
+            DowngradeNote   = "რეკომენდირებული რომ დაბლოკოთ იმიტომ რომ იყო Spotify-ს დაქვეითება"
+            UpdBlock        = "Spotify-ს განახლებები დაბლოკილია"
+            UpdUnblock      = "Spotify-ს განახლებები არ არის დაბლოკილი"
+            UpdSelect       = "გინდათ რომ დაბლოკოთ Spotify-ს განახლებები? [Y/N]"
+            CacheOn         = "ქეშის გაწმენდა ჩართულია ({0})"
+            CacheOff        = "ქეშის გაწმენდა არ არის ჩართული"
+            CacheSelect     = "გინდათ რომ ჩართოთ ავტომატიკური ქეშის გაწმენდა? [Y/N]"
+            CacheDays       = "ქეში უფრო ძველია: XX დღეზე რომ იყოს გაწმენდილი "
+            CacheDays2      = "შეიყვანეთ the დღეების რაოდენობა 1-იდან 100-ამდე"
+            NoVariable      = "ცვლადი არ არის მოძებნილი"
+            NoVariable2     = "xpui.js -ში"
+            NoVariable3     = "licenses.html -ში"
+            NoVariable4     = "html =ში"
+            ModSpoti        = "Spotify იკერვება..."
+            Error           = "შეცდომა"
+            FileLocBroken   = "Spotify ფაილების ლოკაცია არის გადეხილი, წაშალეთ კლიენტი და თავიდან გაუშვით სკრიპტი"
+            Spicetify       = "Spicetify მოიზებნა"
+            NoRestore       = "SpotX უკვეა ჩაწერილი, მაგრამ ფაილები xpui.js.bak და xpui.css.bak აღსადგენად ვერ მოიძებნა. `nგთხოვთ წაშალეთ Spotify-ის აპლიკაცია და თავიდან გაუშვით Install.bat"
+            ExpSpotify      = "ექსპერიმენტული ფუნქციები, რომელსაც მართავს Spotify"
+            ExpStandart     = "ექსპერიმენტული ფუნქციები SpotX არ მოითავსება"
+            NoRestore2      = "SpotX უკვე დაინსტალირებულია, xpui.bak ვერ მოიძებნა. `nგთხოვთ, წაშალოთ Spotify აპლიკაცია და თავიდან გაუშვით Install.bat"
+            UpdateBlocked   = "Spotify-ს განახლებები უკვე დაბლოკერიბული არიან"
+            UpdateError     = "განახლებების დაბლოკვა ვერ მოხერხდა"
+            NoSpotifyExe    = "Spotify.exe ვერ მოიძებნა"
+            InstallComplete = "ინსტალაცია დასრულდა"
+            HostInfo        = "არასასურველი URL-ები ნაპოვნი მასპინძელის ფაილში"
+            HostBak         = "იქმნება hosts.bak-ის სარევეზნო ასლი..."
+            HostDel         = "ვცდილობთ რომ ამოვიღოთ არასასურველი URL-ები ორიგინალური მასპინძელის ფაილიდან..."
+            HostError       = "რაღაც შეცდომა მოხდა მასპინძელის ფაილის რედაქტირებისას, დაარედაქტირეთ ის ხელით ან გაუშვით სკრიპტი ადმინისტრატორის სახით"
+        }
+
+        $langStringsPL = [PSCustomObject]@{
+            Author          = "Patch author:"
+            Author2         = "@Amd64fox"
+            TranslationBy   = "Translation author:"
+            TranslationBy2  = "@Nokxixr"
+            Incorrect       = "Oops, niewłaściwa wartość,"
+            Incorrect2      = "Wejdź ponownie przez "
+            Download        = "Błąd pobierania"
+            Download2       = "Prośbę ponowię za 5 sekund..."
+            Download3       = "Ponowny Błąd"
+            Download4       = "Sprawdź swoje połączenie z siecią i spróbuj ponownie"
+            Download5       = "Pobieranie Spotify"
+            StopScrpit      = "Skrypt wstrzymany"
+            MsSpoti         = "Wersja Microsoft Store Spotify została wykryta i nie jest wspierana"
+            MsSpoti2        = "Odinstalować wersję od Spotify Windows Store? [Y/N]"
+            MsSpoti3        = "Automatyczne odinstalowywanie Spotify MS..."
+            MsSpoti4        = "Odinstalowywanie Spotify MS..."
+            Prem            = "Modyfikacja dla konta premium..."
+            OldV            = "Znaleziono nieaktualną wersję Spotify"
+            OldV2           = "Twoja wersja Spotify {0} jest nieaktualna, zalecana jest aktualizacja do {1}"
+            OldV3           = "Czy chcesz ją pobrać? [Y/N]"
+            AutoUpd         = "Automatyczna aktualizacja do zalecanej wersji"
+            DelOrOver       = "Chcesz odinstalować aktualną wersję {0}, czy pobrać nową? Y [Odinstaluj] / N [Pobierz Nowa]"
+            DelOld          = "Odinstalowywanie przedawnionego Spotify..."
+            NewV            = "Wykryto niewspieraną wersję Spotify"
+            NewV2           = "Twoja wersja {0} nie została jeszcze przetestowana, obecna stabilna jest wersja {1} "
+            NewV3           = "Czy chcesz kontynuować z wersją {0} (możliwe błędy) ? [Y/N]"
+            Recom           = "Czy chcesz pobrać zalecaną, {0} wersję ? [Y/N]"
+            DelNew          = "Odinstalowywanie niesprawdzonego Spotify..."
+            DownSpoti       = "Pobieranie i instalowanie Spotify"
+            DownSpoti2      = "Proszę czekać..."
+            PodcatsOff      = "Wyłączanie Podcastsów"
+            PodcastsOn      = "Włączanie Podcastsów"
+            PodcatsSelect   = "Czy chcesz wyłączyć podcasty ze strony głównej?? [Y/N]"
+            DowngradeNote   = "Zalecane jest zablokowanie, ponieważ nastąpiło obniżenie wartości dla Spotify"
+            UpdBlock        = "Aktualizacje Spotify zablokowane"
+            UpdUnblock      = "Aktualizacje Spotify nie są zablokowane"
+            UpdSelect       = "Czy chcesz zablokować aktualizacje dla Spotify? [Y/N]"
+            CacheOn         = "Usuwanie plików cache ({0})"
+            CacheOff        = "Czyszczenie plików cache jest wyłączone"
+            CacheSelect     = "Chcesz ustawić automatyczne czyszczenie plików cache? [Y/N]"
+            CacheDays       = "Czyszczenie co: XX dni"
+            CacheDays2      = "Wybierz co ile dni ma nastąpić czyszczenie od 1 to 100 do"
+            NoVariable      = "Nieznaleziono wartości"
+            NoVariable2     = "w xpui.js"
+            NoVariable3     = "w licenses.html"
+            NoVariable4     = "w html"
+            ModSpoti        = "Patchowanie Spotify..."
+            Error           = "Błąd"
+            FileLocBroken   = "Lokalizacje plików spotify są zepsute, odinstaluj klienta i uruchom ponownie skrypt"
+            Spicetify       = "Spicetify wykryty"
+            NoRestore       = "SpotX został zainstalowany, jednak pliki do odzyskania xpui.js.bak i xpui.css.bak zostały nieznalezione. `nProszę odinstalować klienta i uruchomić Install.bat ponownie"
+            ExpSpotify      = "Eksperymentalne funkcje obsługiwane przez Spotify"
+            ExpStandart     = "Eksperymentalne funkcje SpotX nie są uwzględnione"
+            NoRestore2      = "SpotX został pobrany, xpui.bak nie znaleziony. `nProszę odinstalować klienta Spotify i uruchomić Install.bat ponownie"
+            UpdateBlocked   = "Spotify aktualizacje są już zablokowane"
+            UpdateError     = "Nie udało się zablokować aktualizacji"
+            NoSpotifyExe    = "Nie można znaleźć Spotify.exe"
+            InstallComplete = "Instalacja zakończona"
+            HostInfo        = "Niepożądane adresy URL znalezione w plikach hosts"
+            HostBak         = "Tworzenie kopii zapasowych hosts.bak..."
+            HostDel         = "Próba usunięcia niechcianych adresów URL z oryginalnego pliku hosts..."
+            HostError       = "Coś poszło nie tak podczas edycji pliku hosts, edytuj go ręcznie lub uruchom skrypt jako administrator"
+        }
     }
     
     process {
@@ -426,6 +564,14 @@ function Set-ScriptLanguageStrings {
             }
             'tr' {
                 $langStrings = $langStringsTR
+                break
+            }
+            'ka' {
+                $langStrings = $langStringsKA
+                break
+            }
+            'pl' {
+                $langStrings = $langStringsPL
                 break
             }
             Default {
@@ -449,7 +595,7 @@ $lang = Set-ScriptLanguageStrings -LanguageCode $langCode
 # Set variable 'ru'.
 if ($langCode -eq 'ru') { $ru = $true }
 # Set variable 'add transl line'.
-if ($langCode -match '^(it|tr)') { $line = $true }
+if ($langCode -match '^(it|tr|ka|pl)') { $line = $true }
 
 # Automatic length of stars
 $au = ($lang).Author.Length + ($lang).Author2.Length

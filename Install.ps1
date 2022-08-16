@@ -1246,7 +1246,15 @@ function Helper($paramname) {
         "OffRujs" { 
             # Remove all languages except En and Ru from xpui.js
             $rus_js = @{
-                OffRujs = '(en:{displayName:"English",displayNameEn:"English"}).*"Zulu"', '$1,ru:{displayName:"Русский",displayNameEn:"Russian"'
+                OffRujs = '(a\.go\.en,)(.+?\])', '$1a.go.ru]'
+                # temporary translation
+                clear   = 'Remove all downloads', 'Удалить все загрузки'
+                clear2  = 'Clear cache', 'Очистка кеша'
+                clear3  = 'Temporary files that Spotify stores for a faster experience on slow networks', 'Временные файлы, которые Spotify хранит для более быстрой работы в медленных сетях'
+                clear4  = 'Content you have downloaded for offline use', 'Контент, который вы скачали для автономного использования'
+                clear5  =  'null,"Storage"', 'null,"Хранилище"'
+                clear6  =  '"Downloads:"', '"Загрузки:"'
+                clear7  =  '"Cache:"', '"Кэш:"'
             }
             $n = ($lang).NoVariable2
             $contents = $rus_js
@@ -1332,6 +1340,7 @@ function Helper($paramname) {
                 ExpFeatures15 = '(Enable showing a new and improved device picker UI",default:)(!1)', '$1!0'
                 ExpFeatures16 = '(Enable the new home structure and navigation",default:)(!1)', '$1!0'
                 ExpFeatures17 = '(Show "Made For You" entry point in the left sidebar.,default:)(!1)', '$1!0'
+                ExpFeatures18 = '(Enable option in settings to clear all downloads",default:)(!1)', '$1!0'
             }
             if ($enhance_like_off) { $exp_features.Remove('ExpFeatures10') }
             if ($enhance_playlist_off) { $exp_features.Remove('ExpFeatures11') }

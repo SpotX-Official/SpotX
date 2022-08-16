@@ -14,7 +14,7 @@
 <h1>System requirements</h1>
 
 - <strong>OS: Windows 7-11</strong>
-- <strong>Spotify: Recommended official version [1.1.91.824](https://cutt.ly/8EH6NuH)</strong>
+- <strong>Spotify: Recommended official version [1.1.92.647](https://cutt.ly/8EH6NuH)</strong>
 - <strong>For Windows Desktop only (Microsoft store version is not suitable).</strong>
 - <strong>PowerShell: 3 or higher</strong>
 
@@ -181,7 +181,7 @@ or
 
 <h1>FAQ</h1>
 
-- Read [FAQ](https://github.com/amd64fox/SpotX/blob/main/.github/Doc/FAQ.md#faq)
+- Read [FAQ](https://github.com/amd64fox/SpotX/discussions/111)
 
 <h1>Credits</h1>
 

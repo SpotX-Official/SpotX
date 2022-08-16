@@ -6,7 +6,7 @@ body:
   id: lang
   attributes:
     label: What language do you want to translate into?
-    description: Also pay attention to the <a href="https://github.com/amd64fox/SpotX/blob/0f42f1be40798dbe85fb1f765b266cca4ffe9a6c/Install.ps1#L98">languages</a> that have already been added.
+    description: Also note the already added languages in the <a href="https://github.com/amd64fox/SpotX/discussions/60">Language parameters</a> section
     placeholder: e.g. English 
   validations:
     required: true
@@ -25,7 +25,7 @@ body:
       Now you can start translating strings, a few notes before you start:
         - Translation strings start after an equals sign and are enclosed in quotation marks
         - There are variables before the equal sign, they do not need to be translated.
-        - Also, if you come across characters <kbd>{0}</kbd>, <kbd>{1}</kbd> or file names, then just skip them.
+        - Also, if you come across characters <kbd>{0}</kbd>, <kbd>{1}</kbd>, <kbd>[Y/N]</kbd> or file names, then just skip them.
         
       Good luck to you. 
     value: |

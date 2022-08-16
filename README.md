@@ -6,7 +6,7 @@
       <a href="https://t.me/spotify_windows_mod"><img src="https://raw.githubusercontent.com/amd64fox/SpotX/main/.github/Pic/Shields/tg.svg"></a>
       <a href="https://www.youtube.com/results?search_query=https%3A%2F%2Fgithub.com%2Famd64fox%2FSpotX"><img src="https://raw.githubusercontent.com/amd64fox/SpotX/main/.github/Pic/Shields/youtube.svg"></a>
       <a href="https://cutt.ly/8EH6NuH"><img src="https://raw.githubusercontent.com/amd64fox/SpotX/main/.github/Pic/Shields/excel.svg"></a>
-      <a href="https://github.com/amd64fox/SpotX/blob/main/.github/Doc/FAQ.md#faq"><img src="https://raw.githubusercontent.com/amd64fox/SpotX/main/.github/Pic/Shields/faq.svg"></a>
+      <a href="https://github.com/amd64fox/SpotX/discussions/111"><img src="https://raw.githubusercontent.com/amd64fox/SpotX/main/.github/Pic/Shields/faq.svg"></a>
       </p>
 
    <h2> <div align="center"><b> Modified Spotify Client for Windows </b></div> </h2>
@@ -33,7 +33,7 @@
 - <strong>Enabled [Ignore In Recommendations](https://github.com/amd64fox/SpotX/discussions/50#discussioncomment-2996165)</strong>
 - <strong>Enabled [Equalizer](https://github.com/amd64fox/SpotX/discussions/50#discussioncomment-3179778)</strong>
 - <strong>Enabled [new device picker panel](https://github.com/amd64fox/SpotX/discussions/50#discussioncomment-3179782)</strong>
-- <strong>Activated [Made For You" in the left sidebar](https://github.com/amd64fox/SpotX/discussions/50#discussioncomment-2853981)</strong>
+- <strong>Activated ["Made For You" in the left sidebar](https://github.com/amd64fox/SpotX/discussions/50#discussioncomment-2853981)</strong>
 - <strong>Disabled Sentry (Prevented Sentry from sending console log/error/warning to Spotify developers)</strong>
 - <strong>Disabled logging (Stopped various elements to log user interaction)</strong>
 - <strong>Removed RTL rules (Removed all right-to-left CSS rules to simplify CSS files)</strong>
@@ -63,9 +63,9 @@ or
 </details>
   
 <details>
-<summary><small>Automated basic installation</small></summary><p>
+<summary><small>Automatic basic installation</small></summary><p>
   
-  #### Automated basic installation without confirmation, what does it do? 
+  #### Automatic basic installation without confirmation, what does it do? 
   
   - Automatic removal of Spotify MS if it was found 
   - Automatic installation of the recommended version of Spotify (if another client has already been found, it will be installed over)
@@ -177,7 +177,7 @@ You can specify various parameters for a more flexible installation, more [detai
 
 or
 
-- Reinstall Spotify ([Full uninstall](https://github.com/amd64fox/Uninstall-Spotify) recommended)
+- Reinstall Spotify ([Full uninstall Spotify](https://github.com/amd64fox/Uninstall-Spotify) recommended)
 
 <h1>FAQ</h1>
 

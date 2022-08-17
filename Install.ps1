@@ -604,7 +604,7 @@ function Set-ScriptLanguageStrings {
             FileLocBroken   = "La ubicación de los archivos de Spotify no funciona, desinstala el cliente y vuelve a ejecutar el script"
             Spicetify       = "Spicetify detectado"
             NoRestore       = "SpotX ya ha sido instalado, pero los archivos a recuperar xpui.js.bak y xpui.css.bak no se encuentran. `nPor favor, desinstala el cliente Spotify y ejecuta Install.bat de nuevo"
-            ExpSpotify      = "Funciones experimentales utilizadas para Spotify".
+            ExpSpotify      = "Funciones experimentales utilizadas para Spotify"
             ExpStandart     = "Las características experimentales de SpotX no están incluidas"
             NoRestore2      = "SpotX ya ha sido instalado, xpui.bak no se encuentra. `nPor favor, desinstala el cliente de Spotify y ejecuta Install.bat de nuevo"
             UpdateBlocked   = "Las actualizaciones de Spotify ya están bloqueadas"

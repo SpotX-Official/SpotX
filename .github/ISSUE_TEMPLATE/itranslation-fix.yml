@@ -13,6 +13,7 @@ body:
       - Turkish
       - Georgian
       - Polish
+      - Spanish 
   validations:
     required: true
 - type: textarea

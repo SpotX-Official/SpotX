@@ -98,7 +98,7 @@ function Format-LanguageCode {
     
     begin {
         $supportLanguages = @(
-            'en', 'ru', 'it', 'tr', 'ka', 'pl', 'es'
+            'en', 'ru', 'it', 'tr', 'ka', 'pl', 'es', 'fr'
         )
     }
     
@@ -131,6 +131,10 @@ function Format-LanguageCode {
             }
             '^es' {
                 $returnCode = 'es'
+                break
+            }
+            '^fr' {
+                $returnCode = 'fr'
                 break
             }
             Default {
@@ -616,9 +620,12 @@ function Set-ScriptLanguageStrings {
             HostDel         = "Intentando eliminar las URLs no deseadas del archivo hosts original..."
             HostError       = "Algo salió mal al editar el archivo hosts, edítelo manualmente o ejecute el script como administrador"
         }
-		$langStringsFR = [PSCustomObject]@{
+
+        $langStringsFR = [PSCustomObject]@{
             Author          = "Auteur du patch:"
             Author2         = "@Amd64fox"
+            TranslationBy   = "Auteur de la traduction:"
+            TranslationBy2  = "@xerta555"
             Incorrect       = "Oops, une valeure incorrecte,"
             Incorrect2      = "entrer de nouveau par "
             Download        = "Erreur de téléchargement"
@@ -711,6 +718,10 @@ function Set-ScriptLanguageStrings {
                 $langStrings = $langStringsES
                 break
             }
+            'fr' {
+                $langStrings = $langStringsFR
+                break
+            }
             Default {
                 # Default to English if unable to find a match.
                 $langStrings = $langStringsEN
@@ -732,7 +743,7 @@ $lang = Set-ScriptLanguageStrings -LanguageCode $langCode
 # Set variable 'ru'.
 if ($langCode -eq 'ru') { $ru = $true }
 # Set variable 'add transl line'.
-if ($langCode -match '^(it|tr|ka|pl|es)') { $line = $true }
+if ($langCode -match '^(it|tr|ka|pl|es|fr)') { $line = $true }
 
 # Automatic length of stars
 $au = ($lang).Author.Length + ($lang).Author2.Length
@@ -1382,9 +1393,9 @@ function Helper($paramname) {
                 clear2  = 'Clear cache', 'Очистка кеша'
                 clear3  = 'Temporary files that Spotify stores for a faster experience on slow networks', 'Временные файлы, которые Spotify хранит для более быстрой работы в медленных сетях'
                 clear4  = 'Content you have downloaded for offline use', 'Контент, который вы скачали для автономного использования'
-                clear5  =  'null,"Storage"', 'null,"Хранилище"'
-                clear6  =  '"Downloads:"', '"Загрузки:"'
-                clear7  =  '"Cache:"', '"Кэш:"'
+                clear5  = 'null,"Storage"', 'null,"Хранилище"'
+                clear6  = '"Downloads:"', '"Загрузки:"'
+                clear7  = '"Cache:"', '"Кэш:"'
             }
             $n = ($lang).NoVariable2
             $contents = $rus_js

@@ -180,6 +180,7 @@ function Set-ScriptLanguageStrings {
             Download3       = "Error again"
             Download4       = "Check your network settings and run the installation again"
             Download5       = "Downloading Spotify"
+            Download6       = "Curl error"
             StopScrpit      = "Script is stopped"
             MsSpoti         = "The Microsoft Store version of Spotify has been detected which is not supported"
             MsSpoti2        = "Uninstall Spotify Windows Store edition [Y/N]"
@@ -222,7 +223,7 @@ function Set-ScriptLanguageStrings {
             NoRestore       = "SpotX has already been installed, but files to recover xpui.js.bak and xpui.css.bak not found. `nPlease uninstall Spotify client and run Install.bat again"
             ExpSpotify      = "Experimental features operated by Spotify"
             ExpStandart     = "Experimental features of SpotX are not included"
-            NoRestore2      = "SpotX has already been installed, xpui.bak not found. `nPlease uninstall Spotify client and run Install.bat again"
+            NoRestore2      = "SpotX has already been installed, xpui.bak not found. Please uninstall Spotify client and run Install.bat again"
             UpdateBlocked   = "Spotify updates are already blocked"
             UpdateError     = "Failed to block updates"
             NoSpotifyExe    = "Could not find Spotify.exe"
@@ -243,6 +244,7 @@ function Set-ScriptLanguageStrings {
             Download3       = "Опять ошибка"
             Download4       = "Проверьте настройки вашей сети и снова запустите установку"
             Download5       = "Загрузка Spotify"
+            Download6       = "Ошибка в Curl"
             StopScrpit      = "Cкрипт остановлен"
             MsSpoti         = "Обнаружена версия Spotify из Microsoft Store, которая не поддерживается"
             MsSpoti2        = "Хотите удалить Spotify Microsoft Store ? [Y/N]"
@@ -309,6 +311,7 @@ function Set-ScriptLanguageStrings {
             Download3       = "Nuovo errore"
             Download4       = "Verifica le tue impostazioni di rete e fai partire di nuovo l'installazione"
             Download5       = "Scarico Spotify"
+            Download6       = "Curl error" #
             StopScrpit      = "Lo script è stato fermato"
             MsSpoti         = "Trovata versione del Microsoft Store di Spotify, che non è supportata"
             MsSpoti2        = "Disinstalla la versione Microsoft Store di Spotify [Y/N]"
@@ -374,6 +377,7 @@ function Set-ScriptLanguageStrings {
             Download3       = "Yine hata oluştu"
             Download4       = "Ağ ayarlarınızı kontrol edin ve kurulumu tekrar çalıştırın"
             Download5       = "Spotify indiriliyor"
+            Download6       = "Curl error" #
             StopScrpit      = "Komut dosyası durduruldu"
             MsSpoti         = "Spotify'ın desteklenmeyen Microsoft Mağazası sürümü tespit edildi"
             MsSpoti2        = "Spotify Windows Mağazası sürümünü kaldır [Y/N]"
@@ -439,6 +443,7 @@ function Set-ScriptLanguageStrings {
             Download3       = "შეცდომა ისევ"
             Download4       = "შეამოწმეთ თქვენი კავშირი ქსელთან და თავიდან სცადე ინსტალაცია"
             Download5       = "Spotify იწერება"
+            Download6       = "Curl error" #
             StopScrpit      = "სკრიპტი ჩერდება"
             MsSpoti         = "Microsoft Store-ის ვერსია მოიძებნა რომელიც არ არის მხარდაჯერილი" 
             MsSpoti2        = "წავშალოთ Spotify Microsoft Store-ის ვერსია [Y/N]"
@@ -504,6 +509,7 @@ function Set-ScriptLanguageStrings {
             Download3       = "Ponowny Błąd"
             Download4       = "Sprawdź swoje połączenie z siecią i spróbuj ponownie"
             Download5       = "Pobieranie Spotify"
+            Download6       = "Curl error" #
             StopScrpit      = "Skrypt wstrzymany"
             MsSpoti         = "Wersja Microsoft Store Spotify została wykryta i nie jest wspierana"
             MsSpoti2        = "Odinstalować wersję od Spotify Windows Store? [Y/N]"
@@ -568,6 +574,7 @@ function Set-ScriptLanguageStrings {
             Download3       = "Error de nuevo"
             Download4       = "Comprueba tu configuración de red y ejecuta la instalación de nuevo"
             Download5       = "Descargando Spotify"
+            Download6       = "Curl error" #
             StopScrpit      = "El script se ha detenido"
             MsSpoti         = "La versión de Spotify de Microsoft Store se ha detectado y no es compatible"
             MsSpoti2        = "Desinstalar Spotify edición Windows Store [Y/N]"
@@ -633,6 +640,7 @@ function Set-ScriptLanguageStrings {
             Download3       = "Erreur à nouveau"
             Download4       = "Vérifiez vos réglages réseau et lancez à nouveau l'installation"
             Download5       = "Téléchargement de Spotify"
+            Download6       = "Curl error" #
             StopScrpit      = "Le script est arrêté"
             MsSpoti         = "La version Microsoft Store de Spotify a été détectée et n'est pas prise en charge."
             MsSpoti2        = "Désinstaller l'édition Windows Store de Spotify [Y/N] ?"
@@ -886,6 +894,8 @@ function downloadScripts($param1) {
     }
     try { 
         if ($param1 -eq "Desktop" -and $curl_check) {
+            $stcode = curl.exe -I -s $web_Url --retry 1 --ssl-no-revoke
+            if (!($stcode -match "200 OK")) { throw ($lang).Download6 }
             curl.exe $web_Url -o $local_Url --progress-bar --retry 3 --ssl-no-revoke
         }
         if ($param1 -eq "Desktop" -and $null -ne (Get-Module -Name BitsTransfer -ListAvailable) -and !($curl_check )) {
@@ -910,6 +920,8 @@ function downloadScripts($param1) {
         try { 
 
             if ($param1 -eq "Desktop" -and $curl_check) {
+                $stcode = curl.exe -I -s $web_Url --retry 1 --ssl-no-revoke
+                if (!($stcode -match "200 OK")) { throw ($lang).Download6 }
                 curl.exe $web_Url -o $local_Url --progress-bar --retry 3 --ssl-no-revoke
             }
             if ($param1 -eq "Desktop" -and $null -ne (Get-Module -Name BitsTransfer -ListAvailable) -and !($curl_check )) {

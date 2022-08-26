@@ -40,6 +40,7 @@ body:
       Download3       = "Error again"
       Download4       = "Check your network settings and run the installation again"
       Download5       = "Downloading Spotify"
+      Download6       = "Curl error"
       StopScrpit      = "Script is stopped"
       MsSpoti         = "The Microsoft Store version of Spotify has been detected which is not supported"
       MsSpoti2        = "Uninstall Spotify Windows Store edition [Y/N]"

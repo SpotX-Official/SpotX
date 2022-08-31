@@ -162,9 +162,9 @@ function Format-LanguageCode {
 function CallLang($clg) {
 
     [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
-    C:\Users\Ps1\Documents\GitHub\SpotX\scripts\installer-lang
     $urlLang = "https://raw.githubusercontent.com/amd64fox/SpotX/main/scripts/installer-lang/$clg.ps1"
     $ProgressPreference = 'SilentlyContinue'
+    
     try {
 (Invoke-WebRequest -useb $urlLang).Content | Invoke-Expression 
     }

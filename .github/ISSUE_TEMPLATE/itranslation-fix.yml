@@ -2,20 +2,6 @@ name: "🌐 Localization/Translation issue"
 description: Report incorrect translations.
 labels: 🌐 Fix translation 
 body:
-- type: dropdown
-  id: langselect
-  attributes:
-    label: 🌐 Select language
-    options:
-      - English
-      - Russian
-      - Italian
-      - Turkish
-      - Georgian
-      - Polish
-      - Spanish 
-  validations:
-    required: true
 - type: textarea
   attributes: 
     label: ❌ Actual phrase(s)

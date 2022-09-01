@@ -855,13 +855,19 @@ function Helper($paramname) {
         }
         "OffadsonFullscreen" { 
             $offadson_fullscreen = @{
-                EmptyBlockAd        = 'adsEnabled:!0', 'adsEnabled:!1' # Removing an empty block
-                FullScreenAd        = '(return|.=.=>)"free"===(.+?)(return|.=.=>)"premium"===', '$1"premium"===$2$3"free"===' # Fullscreen act., removing upgrade menu, button
-                PlaylistSponsorsOff = 'allSponsorships' , '' # Disabling a playlist sponsor
-                ConnectUnlock       = ' connect-device-list-item--disabled' , '' # Connect unlock test for 1.1.91
+                # Removing an empty block
+                EmptyBlockAd        = 'adsEnabled:!0', 'adsEnabled:!1'
+                # Fullscreen act., removing upgrade menu, button
+                FullScreenAd        = '(return|.=.=>)"free"===(.+?)(return|.=.=>)"premium"===', '$1"premium"===$2$3"free"==='
+                # Disabling a playlist sponsor
+                PlaylistSponsorsOff = 'allSponsorships' , ''
+                # Connect unlock test for 1.1.91 >
+                ConnectUnlock       = ' connect-device-list-item--disabled' , ''
                 ConnectUnlock2      = 'connect-picker.unavailable-to-control' , 'spotify-connect'
                 ConnectUnlock3      = '(className:.,disabled:)(..)' , '$1false'
                 ConnectUnlock4      = 'return (..isDisabled)(\?..createElement\(..,)' , 'return false$2'
+                # Removing the track download quality switch
+                DownloadQuality     = 'xe\(...\)\)\)\)...createElement\(....{filterMatchQuery:.....get\(.desktop.settings.downloadQuality.title.\).+?xe' , 'xe'
             }
             #if (!($testconnect)) {
             #    $offadson_fullscreen.Remove('ConnectUnlock'), $offadson_fullscreen.Remove('ConnectUnlock2'),
@@ -1159,6 +1165,8 @@ if (Test-Path $xpui_js_patch) {
         $writer.Write([System.Environment]::NewLine + ' .BKsbV2Xl786X9a09XROH{display:none}')
         # Hide submenu item "download"
         $writer.Write([System.Environment]::NewLine + ' button.wC9sIed7pfp47wZbmU6m.pzkhLqffqF_4hucrVVQA{display:none}')
+        # Hide very high quality streaming
+        $writer.Write([System.Environment]::NewLine + ' #desktop\.settings\.streamingQuality>option:nth-child(5) {display:none}')
     }
     # new UI fix
     if ($enablenavalt) {
@@ -1329,9 +1337,11 @@ If (Test-Path $xpui_spa_patch) {
     $writer.Write($xpuiContents_xpui_css)
     if (!($premium)) {
         # Hide download icon on different pages
-        $writer.Write([System.Environment]::NewLine + ' .BKsbV2Xl786X9a09XROH {display: none}')
+        $writer.Write([System.Environment]::NewLine + ' .BKsbV2Xl786X9a09XROH {display:none}')
         # Hide submenu item "download"
-        $writer.Write([System.Environment]::NewLine + ' button.wC9sIed7pfp47wZbmU6m.pzkhLqffqF_4hucrVVQA {display: none}')
+        $writer.Write([System.Environment]::NewLine + ' button.wC9sIed7pfp47wZbmU6m.pzkhLqffqF_4hucrVVQA {display:none}')
+        # Hide very high quality streaming
+        $writer.Write([System.Environment]::NewLine + ' #desktop\.settings\.streamingQuality>option:nth-child(5) {display:none}')
     }
      
     # new UI fix
@@ -1345,7 +1355,7 @@ If (Test-Path $xpui_spa_patch) {
     }
     # Hide broken podcast menu
     #if ($podcast_off) { 
-    #$writer.Write([System.Environment]::NewLine + ' li.OEFWODerafYHGp09iLlA [href="/collection/podcasts"] {display: none}')
+    #$writer.Write([System.Environment]::NewLine + ' li.OEFWODerafYHGp09iLlA [href="/collection/podcasts"] {display:none}')
     #}
     $writer.Close()
 

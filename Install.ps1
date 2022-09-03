@@ -78,6 +78,9 @@ param
     [Parameter(HelpMessage = 'Do not create desktop shortcut.')]
     [switch]$no_shortcut,
     
+    [Parameter(HelpMessage = 'Use bts patch.')]
+    [switch]$bts,
+    
     [Parameter(HelpMessage = 'Select the desired language to use for installation. Default is the detected system language.')]
     [Alias('l')]
     [string]$Language
@@ -255,7 +258,7 @@ if ($line) {
 }
 
 # Sending a statistical web query to cutt.ly
-#$ErrorActionPreference = 'SilentlyContinue'
+$ErrorActionPreference = 'SilentlyContinue'
 $cutt_url = "https://cutt.ly/DK8UQub"
 try {
     $ProgressPreference = 'SilentlyContinue'
@@ -538,11 +541,13 @@ if ($premium) {
     Write-Host ($lang).Prem`n
 }
 if (!($premium)) {
-    downloadScripts -param1 "BTS"
-    Add-Type -Assembly 'System.IO.Compression.FileSystem'
-    $zip = [System.IO.Compression.ZipFile]::Open("$PWD\chrome_elf.zip", 'read')
-    [System.IO.Compression.ZipFileExtensions]::ExtractToDirectory($zip, $PWD)
-    $zip.Dispose()
+    if ($bts) {
+        downloadScripts -param1 "BTS"
+        Add-Type -Assembly 'System.IO.Compression.FileSystem'
+        $zip = [System.IO.Compression.ZipFile]::Open("$PWD\chrome_elf.zip", 'read')
+        [System.IO.Compression.ZipFileExtensions]::ExtractToDirectory($zip, $PWD)
+        $zip.Dispose()
+    }
 }
 downloadScripts -param1 "links.tsv"
 
@@ -725,7 +730,7 @@ if ($leveldb) {
 }
 
 # Create backup chrome_elf.dll
-if (!(Test-Path -LiteralPath $chrome_elf_bak) -and !($premium)) {
+if (!(Test-Path -LiteralPath $chrome_elf_bak) -and !($premium) -and $bts) {
     Move-Item $chrome_elf $chrome_elf_bak 
 }
 
@@ -855,6 +860,10 @@ function Helper($paramname) {
         }
         "OffadsonFullscreen" { 
             $offadson_fullscreen = @{
+                # Removing a billboard on the homepage
+                Bilboard            = '.(\?\[xB\(n.leaderboard,)', 'false$1'
+                # Removing audio ads
+                AidioAds            = '(case 0:)return this.enabled=...+?(;case 4:this.subscription=this.audioApi).+?(;case 5)', '$1$2.cosmosConnector.increaseStreamTime(-100000000000)$3'
                 # Removing an empty block
                 EmptyBlockAd        = 'adsEnabled:!0', 'adsEnabled:!1'
                 # Fullscreen act., removing upgrade menu, button
@@ -868,6 +877,9 @@ function Helper($paramname) {
                 ConnectUnlock4      = 'return (..isDisabled)(\?..createElement\(..,)' , 'return false$2'
                 # Removing the track download quality switch
                 DownloadQuality     = 'xe\(...\)\)\)\)...createElement\(....{filterMatchQuery:.....get\(.desktop.settings.downloadQuality.title.\).+?xe' , 'xe'
+            }
+            if ($bts) {
+                $offadson_fullscreen.Remove('Bilboard'), $offadson_fullscreen.Remove('AidioAds')
             }
             #if (!($testconnect)) {
             #    $offadson_fullscreen.Remove('ConnectUnlock'), $offadson_fullscreen.Remove('ConnectUnlock2'),
@@ -1021,7 +1033,7 @@ function Helper($paramname) {
 Write-Host ($lang).ModSpoti`n
 
 # Patching files
-if (!($premium)) {
+if (!($premium) -and $bts) {
     $patchFiles = "$PWD\chrome_elf.dll", "$PWD\config.ini"
     Copy-Item -LiteralPath $patchFiles -Destination "$spotifyDirectory"
 }
@@ -1291,6 +1303,27 @@ If (Test-Path $xpui_spa_patch) {
     $writer.BaseStream.SetLength(0)
     $writer.Write($xpui_js)
     $writer.Write([System.Environment]::NewLine + '// Patched by SpotX') 
+    $writer.Close()
+
+
+    # Add discriptions (xpui-desktop-modals.js)
+    $entry_xpui_desktop_modals = $zip.GetEntry('xpui-desktop-modals.js')
+    $reader = New-Object System.IO.StreamReader($entry_xpui_desktop_modals.Open())
+    $xpuiContents_xpui_desktop_modals = $reader.ReadToEnd()
+    $reader.Close()
+
+    $about = "`$1`"<h3>More about SpotX</h3>`"}),`$1`'<a `
+     href=`"https://github.com/amd64fox/SpotX`">Github</a>`'}),`$1`'<a `
+     href=`"https://github.com/amd64fox/SpotX/discussions/111`">FAQ</a>'}),`$1`'<a `
+     href=`"https://t.me/spotify_windows_mod`">Telegram channel</a>`'}),`$1`'<a `
+     href=`"https://github.com/amd64fox/SpotX/issues/new?assignees=&labels=%E2%9D%8C+bug&template=bug_report.yml`">Create `
+     an issue report</a>`'}),`$1`"<br>`"}),`$1`"<h4>DISCLAIMER</h4>`"}),`$1`"SpotX is a modified version of the official Spotify client, provided as an evaluation version, you use it at your own risk.`"})"
+
+    $xpuiContents_xpui_desktop_modals = $xpuiContents_xpui_desktop_modals `
+        -replace '(..createElement\(....,{source:).....get\("about.copyright",.\),paragraphClassName:.}\)', $about
+    $writer = New-Object System.IO.StreamWriter($entry_xpui_desktop_modals.Open())
+    $writer.BaseStream.SetLength(0)
+    $writer.Write($xpuiContents_xpui_desktop_modals)
     $writer.Close()
 
     # Disable Sentry (vendor~xpui.js)

@@ -861,9 +861,9 @@ function Helper($paramname) {
         "OffadsonFullscreen" { 
             $offadson_fullscreen = @{
                 # Removing a billboard on the homepage
-                Bilboard            = '.(\?\[xB\(n.leaderboard,)', 'false$1'
+                Bilboard            = '.(\?\[..\(..leaderboard,)', 'false$1' 
                 # Removing audio ads
-                AidioAds            = '(case 0:)return this.enabled=...+?(;case 4:this.subscription=this.audioApi).+?(;case 5)', '$1$2.cosmosConnector.increaseStreamTime(-100000000000)$3'
+                AidioAds            = '(case .:)return this.enabled=...+?(;case .:this.subscription=this.audioApi).+?(;case .)', '$1$2.cosmosConnector.increaseStreamTime(-100000000000)$3'
                 # Removing an empty block
                 EmptyBlockAd        = 'adsEnabled:!0', 'adsEnabled:!1'
                 # Fullscreen act., removing upgrade menu, button
@@ -892,7 +892,8 @@ function Helper($paramname) {
         "OffPodcasts" {  
             # Turn off podcasts
             $podcasts_off = @{
-                PodcastsOff = '(Array.isArray\(o\)&&0===..length)', '$1||l==="spotify:section:0JQ5DAnM3wGh0gz1MXnu9e"||l==="spotify:section:0JQ5DAob0KawTDUxBEiEIF"'
+                PodcastsOff  = '(Array.isArray\(.\)&&0===..length)', '$1||l==="spotify:section:0JQ5DAnM3wGh0gz1MXnu9e"||l==="spotify:section:0JQ5DAob0KawTDUxBEiEIF"'
+                PodcastsOff2 = '(.=..UBIWrapper;)(return)', '$1 if(n==="spotify:section:0JQ5DAnM3wGh0gz1MXnu9e"||n==="spotify:section:0JQ5DAob0KawTDUxBEiEIF") return null; $2'
             }
             $n = ($lang).NoVariable2
             $contents = $podcasts_off

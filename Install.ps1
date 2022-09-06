@@ -998,7 +998,7 @@ function Helper($paramname) {
                 ExpFeatures17 = '(Show "Made For You" entry point in the left sidebar.,default:)(!1)', '$1!0'
                 ExpFeatures18 = '(Enable option in settings to clear all downloads",default:)(!1)', '$1!0'
                 # "Create similar playlist" menu is activated for someone else's playlists
-                ExpFeatures19  = ',(.\.isOwnedBySelf&&)(..createElement\(..Fragment,null,..createElement\(.+?{(uri:.|spec:.),(uri:.|spec:.).+?contextmenu.create-similar-playlist)' , ',$2'
+                ExpFeatures19  = ',(.\.isOwnedBySelf&&)(..createElement\(..Fragment,null,..createElement\(.+?{(uri:.|spec:.),(uri:.|spec:.).+?contextmenu.create-similar-playlist"\)}\),)' , ',$2$1'
             }
             if ($enhance_like_off) { $exp_features.Remove('ExpFeatures10') }
             if ($enhance_playlist_off) { $exp_features.Remove('ExpFeatures11') }

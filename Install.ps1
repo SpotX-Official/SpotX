@@ -869,14 +869,16 @@ function Helper($paramname) {
                 # Fullscreen act., removing upgrade menu, button
                 FullScreenAd        = '(return|.=.=>)"free"===(.+?)(return|.=.=>)"premium"===', '$1"premium"===$2$3"free"==='
                 # Disabling a playlist sponsor
-                PlaylistSponsorsOff = 'allSponsorships' , ''
+                PlaylistSponsorsOff = 'allSponsorships', ''
                 # Connect unlock test for 1.1.91 >
-                ConnectUnlock       = ' connect-device-list-item--disabled' , ''
-                ConnectUnlock2      = 'connect-picker.unavailable-to-control' , 'spotify-connect'
-                ConnectUnlock3      = '(className:.,disabled:)(..)' , '$1false'
-                ConnectUnlock4      = 'return (..isDisabled)(\?..createElement\(..,)' , 'return false$2'
+                ConnectUnlock       = ' connect-device-list-item--disabled', ''
+                ConnectUnlock2      = 'connect-picker.unavailable-to-control', 'spotify-connect'
+                ConnectUnlock3      = '(className:.,disabled:)(..)', '$1false'
+                ConnectUnlock4      = 'return (..isDisabled)(\?..createElement\(..,)', 'return false$2'
                 # Removing the track download quality switch
-                DownloadQuality     = 'xe\(...\)\)\)\)...createElement\(....{filterMatchQuery:.....get\(.desktop.settings.downloadQuality.title.\).+?xe' , 'xe'
+                DownloadQuality     = 'xe\(...\)\)\)\)...createElement\(....{filterMatchQuery:.....get\(.desktop.settings.downloadQuality.title.\).+?xe', 'xe'
+                # "Create similar playlist" menu is activated for someone else's playlists
+                SimilarPlaylistAll  = ',(.\.isOwnedBySelf&&)(..createElement\(..Fragment,null,..createElement\(.+?{(uri:.|spec:.),(uri:.|spec:.).+?contextmenu.create-similar-playlist)' , ',$2'
             }
             if ($bts) {
                 $offadson_fullscreen.Remove('Bilboard'), $offadson_fullscreen.Remove('AidioAds')

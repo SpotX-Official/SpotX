@@ -877,8 +877,6 @@ function Helper($paramname) {
                 ConnectUnlock4      = 'return (..isDisabled)(\?..createElement\(..,)', 'return false$2'
                 # Removing the track download quality switch
                 DownloadQuality     = 'xe\(...\)\)\)\)...createElement\(....{filterMatchQuery:.....get\(.desktop.settings.downloadQuality.title.\).+?xe', 'xe'
-                # "Create similar playlist" menu is activated for someone else's playlists
-                SimilarPlaylistAll  = ',(.\.isOwnedBySelf&&)(..createElement\(..Fragment,null,..createElement\(.+?{(uri:.|spec:.),(uri:.|spec:.).+?contextmenu.create-similar-playlist)' , ',$2'
             }
             if ($bts) {
                 $offadson_fullscreen.Remove('Bilboard'), $offadson_fullscreen.Remove('AidioAds')
@@ -999,6 +997,8 @@ function Helper($paramname) {
                 ExpFeatures16 = '(Enable the new home structure and navigation",default:)(!1)', '$1!0'
                 ExpFeatures17 = '(Show "Made For You" entry point in the left sidebar.,default:)(!1)', '$1!0'
                 ExpFeatures18 = '(Enable option in settings to clear all downloads",default:)(!1)', '$1!0'
+                # "Create similar playlist" menu is activated for someone else's playlists
+                ExpFeatures19  = ',(.\.isOwnedBySelf&&)(..createElement\(..Fragment,null,..createElement\(.+?{(uri:.|spec:.),(uri:.|spec:.).+?contextmenu.create-similar-playlist)' , ',$2'
             }
             if ($enhance_like_off) { $exp_features.Remove('ExpFeatures10') }
             if ($enhance_playlist_off) { $exp_features.Remove('ExpFeatures11') }
@@ -1012,7 +1012,8 @@ function Helper($paramname) {
                 $exp_features.Remove('ExpFeatures10'), $exp_features.Remove('ExpFeatures11'), 
                 $exp_features.Remove('ExpFeatures12'), $exp_features.Remove('ExpFeatures13'), 
                 $exp_features.Remove('ExpFeatures14'), $exp_features.Remove('ExpFeatures15'), 
-                $exp_features.Remove('ExpFeatures16'), $exp_features.Remove('ExpFeatures17')
+                $exp_features.Remove('ExpFeatures16'), $exp_features.Remove('ExpFeatures17'),
+                $exp_features.Remove('ExpFeatures19')
             }
             $n = ($lang).NoVariable2
             $contents = $exp_features

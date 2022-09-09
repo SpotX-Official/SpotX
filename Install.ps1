@@ -891,9 +891,12 @@ function Helper($paramname) {
         }
         "OffPodcasts" {  
             # Turn off podcasts
+            $sct1 = "spotify:section:0JQ5DAnM3wGh0gz1MXnu9e"
+            $sct2 = "spotify:section:0JQ5DAob0KawTDUxBEiEIF"
+            $sct3 = "spotify:section:0JQ5DAnM3wGh0gz1MXnu3L"
             $podcasts_off = @{
-                PodcastsOff  = '(Array.isArray\(.\)&&0===..length)', '$1||l==="spotify:section:0JQ5DAnM3wGh0gz1MXnu9e"||l==="spotify:section:0JQ5DAob0KawTDUxBEiEIF"'
-                PodcastsOff2 = '(.=..UBIWrapper;)(return)', '$1 if(n==="spotify:section:0JQ5DAnM3wGh0gz1MXnu9e"||n==="spotify:section:0JQ5DAob0KawTDUxBEiEIF") return null; $2'
+                PodcastsOff  = '(Array.isArray\(.\)&&0===..length)', "`$1||l===`"$sct1`"||l===`"$sct2`"||l===`"$sct3`""
+                PodcastsOff2 = '(.=..UBIWrapper;)(return)', "`$1 if(n===`"$sct1`"||n===`"$sct2`"||n===`"$sct3`") return null; `$2"
             }
             $n = ($lang).NoVariable2
             $contents = $podcasts_off

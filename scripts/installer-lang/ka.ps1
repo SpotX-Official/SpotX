@@ -46,6 +46,8 @@
     NoVariable2     = "xpui.js -ში"
     NoVariable3     = "licenses.html -ში"
     NoVariable4     = "html =ში"
+    NoVariable5     = "home-v2.js -ში"
+    NoVariable6     = "xpui-desktop-modals.js -ში"
     ModSpoti        = "Spotify იკერვება..."
     Error           = "შეცდომა"
     FileLocBroken   = "Spotify ფაილების ლოკაცია არის გადეხილი, წაშალეთ კლიენტი და თავიდან გაუშვით სკრიპტი"

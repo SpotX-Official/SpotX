@@ -46,6 +46,8 @@
     NoVariable2     = "in xpui.js"
     NoVariable3     = "in licenses.html"
     NoVariable4     = "in html"
+    NoVariable5     = "in home-v2.js"
+    NoVariable6     = "in xpui-desktop-modals.js"
     ModSpoti        = "Patching Spotify..."
     Error           = "Errore"
     FileLocBroken   = "Il percorso dei file di Spotify non è stato trovato, disinstalla Spotify e fai ripartire lo script"

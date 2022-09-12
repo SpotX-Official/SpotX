@@ -69,11 +69,8 @@ param
     [Parameter(HelpMessage = 'Enable showing a new and improved device picker UI.')]
     [switch]$device_new_off,
 
-    [Parameter(HelpMessage = 'Enabled the new home structure and navigation.')]
-    [switch]$enablenavalt,
-
-    #[Parameter(HelpMessage = 'Connect unlock test.')]
-    #[switch]$testconnect,
+    [Parameter(HelpMessage = 'Disable the new home structure and navigation.')]
+    [switch]$navalt_off,
 
     [Parameter(HelpMessage = 'Do not create desktop shortcut.')]
     [switch]$no_shortcut,
@@ -842,7 +839,7 @@ if (!($cache_on) -and !($cache_off)) {
 if ($exp_standart) { Write-Host ($lang).ExpStandart`n }
 if ($exp_spotify) { Write-Host ($lang).ExpSpotify`n }
 
-function Helper($paramname) {
+function Helper($paramname, $addstring) {
 
     switch ( $paramname ) {
         "HtmlLicMin" { 
@@ -854,9 +851,26 @@ function Helper($paramname) {
                 HtmlLicMin4 = '(?m)(^\s*\r?\n)', ''
                 HtmlLicMin5 = '\r?\n(?!\(1|\d)', ''
             }
-            $n = ($lang).NoVariable3
+            $n = ($lang).NoVariable6
             $contents = $html_lic_min
             $paramdata = $xpuiContents_html
+        }
+        "Discriptions" {  
+            # Add discriptions (xpui-desktop-modals.js)
+            $about = "`$1`"<h3>More about SpotX</h3>`"}),`$1`'<a `
+        href=`"https://github.com/amd64fox/SpotX`">Github</a>`'}),`$1`'<a `
+        href=`"https://github.com/amd64fox/SpotX/discussions/111`">FAQ</a>'}),`$1`'<a `
+        href=`"https://t.me/spotify_windows_mod`">Telegram channel</a>`'}),`$1`'<a `
+        href=`"https://github.com/amd64fox/SpotX/issues/new?assignees=&labels=%E2%9D%8C+bug&template=bug_report.yml`">Create `
+        an issue report</a>`'}),`$1`"<br>`"}),`$1`"<h4>DISCLAIMER</h4>`"}),`$1`"SpotX is a modified version of the official Spotify client, provided as an evaluation version, you use it at your own risk.`"})"
+
+            $discript = @{
+                Log = '(..createElement\(....,{source:).....get\("about.copyright",.\),paragraphClassName:.}\)', $about
+            }
+            $n = ($lang).NoVariable2
+            $contents = $discript
+            $paramdata = $xpui_desktop_modals
+
         }
         "OffadsonFullscreen" { 
             $offadson_fullscreen = @{
@@ -881,40 +895,24 @@ function Helper($paramname) {
             if ($bts) {
                 $offadson_fullscreen.Remove('Bilboard'), $offadson_fullscreen.Remove('AidioAds')
             }
-            #if (!($testconnect)) {
-            #    $offadson_fullscreen.Remove('ConnectUnlock'), $offadson_fullscreen.Remove('ConnectUnlock2'),
-            #    $offadson_fullscreen.Remove('ConnectUnlock3'), $offadson_fullscreen.Remove('ConnectUnlock4')
-            #}
+
             $n = ($lang).NoVariable2
             $contents = $offadson_fullscreen
             $paramdata = $xpui_js
         }
         "OffPodcasts" {  
             # Turn off podcasts
-            $sct1 = "spotify:section:0JQ5DAnM3wGh0gz1MXnu9e"
-            $sct2 = "spotify:section:0JQ5DAob0KawTDUxBEiEIF"
-            $sct3 = "spotify:section:0JQ5DAnM3wGh0gz1MXnu3L"
-            $sct4 = "spotify:section:0JQ5IMCbQBLnpmAFclBLmI"
             $podcasts_off = @{
-                PodcastsOff  = '(Array.isArray\(.\)&&0===..length)', "`$1||l===`"$sct1`"||l===`"$sct2`"||l===`"$sct3`"||l===`"$sct4`""
-                PodcastsOff2 = '(.=..UBIWrapper;)(return)', "`$1 if(n===`"$sct1`"||n===`"$sct2`"||n===`"$sct3`"||n===`"$sct4`") return null; `$2"
+                PodcastsOff = '(\!Array.isArray\(.\)\|\|.===..length)', "`$1||e.children[0].key.includes('episode')||e.children[0].key.includes('show')"
             }
-            $n = ($lang).NoVariable2
+            $n = ($lang).NoVariable5
             $contents = $podcasts_off
-            $paramdata = $xpui_js
+            $paramdata = $xpui_homev2
         }
         "OffRujs" { 
             # Remove all languages except En and Ru from xpui.js
             $rus_js = @{
                 OffRujs = '(\[a\.go\.en,)(.+?\])', '$1a.go.ru]'
-                # temporary translation
-                clear   = 'Remove all downloads', 'Удалить все загрузки'
-                clear2  = 'Clear cache', 'Очистка кеша'
-                clear3  = 'Temporary files that Spotify stores for a faster experience on slow networks', 'Временные файлы, которые Spotify хранит для более быстрой работы в медленных сетях'
-                clear4  = 'Content you have downloaded for offline use', 'Контент, который вы скачали для автономного использования'
-                clear5  = 'null,"Storage"', 'null,"Хранилище"'
-                clear6  = '"Downloads:"', '"Загрузки:"'
-                clear7  = '"Cache:"', '"Кеш:"'
             }
             $n = ($lang).NoVariable2
             $contents = $rus_js
@@ -971,11 +969,20 @@ function Helper($paramname) {
                 AlbumReleaseMany   = '"many": "\\"%name%\\" was released %years% years ago this week!"', '"many": "\"%name%\" был выпущен %years% лет назад на этой неделе!"'
                 AlbumReleaseOther  = '"other": "\\"%name%\\" was released %years% years ago this week!"', '"other": "\"%name%\" был выпущен %years% года назад на этой неделе!"'
                 Speed              = '"Speed [{]0[}]×"', '"Скорость {0}×"'
-                AudiobookFree      = '"This audiobook is free"', '"Эта аудиокнига бесплатна"'
                 AudiobookGet       = '"Get"', '"Получить"'
                 AudiobookBy        = '"Buy"', '"Купить"'
+                CloseModal         = '"Close modal"', '"Закрыть"'
+                RatinggoToApp      = '"Head over to Spotify on your mobile phone to rate this title."', '"Зайдите в Spotify на своем мобильном телефоне, чтобы оценить этот заголовок."'
+                Freexplanation     = '"Tap Get to add it to Your Library and it will be ready for listening in a few seconds."', '"Нажмите «Получить», чтобы добавить его в свою библиотеку, и через несколько секунд он будет готов для прослушивания."'
+                Confidential       = '"This is a highly confidential test. Do not share details of this test or any song you create outside of Spotify."', '"Это очень конфиденциальный тест. Не делитесь подробностями этого теста или какой-либо песни, которую вы создаете, за пределами Spotify."'
+                LoveAudiobook      = '"Love this audiobook\? Unlock all chapters first"', '"Нравится эта аудиокнига? Сначала разблокируйте все главы"'
+                FullAudiobook      = '"You can listen to this chapter after purchasing the full audiobook."', '"Вы можете прослушать эту главу после покупки полной аудиокниги."'
+                PurchaseAudiobook  = '"Purchase audiobook"', '"Купить аудиокнигу"'
+                Cache              = '"Cache:"', '"Кеш:"'
+                Downloads          = '"Downloads:"', '"Загрузки:"'
+
             }
-            $n = ($lang).NoVariable5
+            $n = ($lang).NoVariable7
             $contents = $ru_translate
             $paramdata = $xpui_ru
         }
@@ -983,59 +990,58 @@ function Helper($paramname) {
         "ExpFeature" { 
             # Experimental Feature Standart
             $exp_features = @{
-                ExpFeatures1  = '(Enable Liked Songs section on Artist page",default:)(!1)', '$1!0' 
-                ExpFeatures2  = '(Enable block users feature in clientX",default:)(!1)', '$1!0' 
-                ExpFeatures3  = '(Enables quicksilver in-app messaging modal",default:)(!0)', '$1!1' 
-                ExpFeatures4  = '(With this enabled, clients will check whether tracks have lyrics available",default:)(!1)', '$1!0' 
-                ExpFeatures5  = '(Enables new playlist creation flow in Web Player and DesktopX",default:)(!1)', '$1!0'
-                ExpFeatures6  = '(Adds a search box so users are able to filter playlists when trying to add songs to a playlist using the contextmenu",default:)(!1)', '$1!0'
-                ExpFeatures7  = '(Enable Ignore In Recommendations for desktop and web",default:)(!1)', '$1!0'
-                ExpFeatures8  = '(Enable Playlist Permissions flows for Prod",default:)(!1)', '$1!0'
-                ExpFeatures9  = '(Enable showing balloons on album release date anniversaries",default:)(!1)', '$1!0'
-                ExpFeatures10 = '(Enable Enhance Liked Songs UI and functionality",default:)(!1)', '$1!0'
-                ExpFeatures11 = '(Enable Enhance Playlist UI and functionality for end-users",default:)(!1)', '$1!0' 
-                ExpFeatures12 = '(Enable a condensed disography shelf on artist pages",default:)(!1)', '$1!0' 
-                ExpFeatures13 = '(Enable Lyrics match labels in search results",default:)(!1)', '$1!0'  
-                ExpFeatures14 = '(Enable audio equalizer for Desktop and Web Player",default:)(!1)', '$1!0' 
-                ExpFeatures15 = '(Enable showing a new and improved device picker UI",default:)(!1)', '$1!0'
-                ExpFeatures16 = '(Enable the new home structure and navigation",default:)(!1)', '$1!0'
-                ExpFeatures17 = '(Show "Made For You" entry point in the left sidebar.,default:)(!1)', '$1!0'
-                ExpFeatures18 = '(Enable option in settings to clear all downloads",default:)(!1)', '$1!0'
+                LikedArtistPage  = '(Enable Liked Songs section on Artist page",default:)(!1)', '$1true' 
+                BlockUsers       = '(Enable block users feature in clientX",default:)(!1)', '$1true' 
+                Quicksilver      = '(Enables quicksilver in-app messaging modal",default:)(!0)', '$1false' 
+                IgnorInRec       = '(Enable Ignore In Recommendations for desktop and web",default:)(!1)', '$1true'
+                Prod             = '(Enable Playlist Permissions flows for Prod",default:)(!1)', '$1true'
+                ShowingBalloons  = '(Enable showing balloons on album release date anniversaries",default:)(!1)', '$1true'
+                EnhanceLiked     = '(Enable Enhance Liked Songs UI and functionality",default:)(!1)', '$1true'
+                EnhancePlaylist  = '(Enable Enhance Playlist UI and functionality for end-users",default:)(!1)', '$1true' 
+                DisographyArtist = '(Enable a condensed disography shelf on artist pages",default:)(!1)', '$1true' 
+                LyricsMatch      = '(Enable Lyrics match labels in search results",default:)(!1)', '$1true'  
+                Equalizer        = '(Enable audio equalizer for Desktop and Web Player",default:)(!1)', '$1true' 
+                DevicePicker     = '(Enable showing a new and improved device picker UI",default:)(!1)', '$1true'
+                NewHome          = '(Enable the new home structure and navigation",values:.,default:)(..DISABLED)', '$1true'
+                MadeForYou       = '(Show "Made For You" entry point in the left sidebar.,default:)(!1)', '$1true'
+                ClearCache       = '(Enable option in settings to clear all downloads",default:)(!1)', '$1true'
+                CarouselsonHome  = '(Use carousels on Home",default:)(!1)', '$1true'
                 # "Create similar playlist" menu is activated for someone else's playlists
-                ExpFeatures19  = ',(.\.isOwnedBySelf&&)(..createElement\(..Fragment,null,..createElement\(.+?{(uri:.|spec:.),(uri:.|spec:.).+?contextmenu.create-similar-playlist"\)}\),)' , ',$2$1'
+                SimilarPlaylist  = ',(.\.isOwnedBySelf&&)(..createElement\(..Fragment,null,..createElement\(.+?{(uri:.|spec:.),(uri:.|spec:.).+?contextmenu.create-similar-playlist"\)}\),)' , ',$2$1'
             }
-            if ($enhance_like_off) { $exp_features.Remove('ExpFeatures10') }
-            if ($enhance_playlist_off) { $exp_features.Remove('ExpFeatures11') }
-            if ($new_artist_pages_off) { $exp_features.Remove('ExpFeatures12') }
-            if ($new_lyrics_off) { $exp_features.Remove('ExpFeatures13') }
-            if ($equalizer_off) { $exp_features.Remove('ExpFeatures14') }
-            if ($device_new_off) { $exp_features.Remove('ExpFeatures15') }
-            if (!($enablenavalt)) { $exp_features.Remove('ExpFeatures16') }
-            if ($made_for_you_off) { $exp_features.Remove('ExpFeatures17') }
+            if ($enhance_like_off) { $exp_features.Remove('EnhanceLiked') }
+            if ($enhance_playlist_off) { $exp_features.Remove('EnhancePlaylist') }
+            if ($new_artist_pages_off) { $exp_features.Remove('DisographyArtist') }
+            if ($new_lyrics_off) { $exp_features.Remove('LyricsMatch') }
+            if ($equalizer_off) { $exp_features.Remove('Equalizer') }
+            if ($device_new_off) { $exp_features.Remove('DevicePicker') }
+            if ($navalt_off) { $exp_features.Remove('NewHome') }
+            if ($made_for_you_off) { $exp_features.Remove('MadeForYou') }
             if ($exp_standart) {
-                $exp_features.Remove('ExpFeatures10'), $exp_features.Remove('ExpFeatures11'), 
-                $exp_features.Remove('ExpFeatures12'), $exp_features.Remove('ExpFeatures13'), 
-                $exp_features.Remove('ExpFeatures14'), $exp_features.Remove('ExpFeatures15'), 
-                $exp_features.Remove('ExpFeatures16'), $exp_features.Remove('ExpFeatures17'),
-                $exp_features.Remove('ExpFeatures19')
+                $exp_features.Remove('EnhanceLiked'), $exp_features.Remove('EnhancePlaylist'), 
+                $exp_features.Remove('DisographyArtist'), $exp_features.Remove('LyricsMatch'), 
+                $exp_features.Remove('Equalizer'), $exp_features.Remove('DevicePicker'), 
+                $exp_features.Remove('NewHome'), $exp_features.Remove('MadeForYou'),
+                $exp_features.Remove('SimilarPlaylist')
             }
             $n = ($lang).NoVariable2
             $contents = $exp_features
             $paramdata = $xpui_js
         }
-    }
 
-    $contents.Keys | Sort-Object | ForEach-Object { 
- 
-        if ($paramdata -match $contents.$PSItem[0]) { 
-            $paramdata = $paramdata -replace $contents.$PSItem[0], $contents.$PSItem[1] 
-        }
-        else { 
-            Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline 
-            Write-Host "`$contents.$PSItem"$n
-        }    
+
     }
-    $paramdata
+        $contents.Keys | Sort-Object | ForEach-Object { 
+ 
+            if ($paramdata -match $contents.$PSItem[0]) { 
+                $paramdata = $paramdata -replace $contents.$PSItem[0], $contents.$PSItem[1] 
+            }
+            else { 
+                Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline 
+                Write-Host "`$contents.$PSItem"$n
+            }    
+        }
+        $paramdata
 }
 
 Write-Host ($lang).ModSpoti`n
@@ -1132,9 +1138,6 @@ if (Test-Path $xpui_js_patch) {
     $reader = New-Object -TypeName System.IO.StreamReader -ArgumentList $xpui_js_patch
     $xpui_js = $reader.ReadToEnd()
     $reader.Close()
-
-    # Turn off podcasts
-    if ($Podcast_off) { $xpui_js = Helper -paramname "OffPodcasts" }
     
     # Full screen mode activation and removing "Upgrade to premium" menu, upgrade button, disabling a playlist sponsor
     if (!($premium)) { $xpui_js = Helper -paramname "OffadsonFullscreen" } 
@@ -1163,6 +1166,28 @@ if (Test-Path $xpui_js_patch) {
         $writer.Write($xpui_ru)
         $writer.Close()  
     }
+    $file_desktop_modals = get-item $env:APPDATA\Spotify\Apps\xpui\xpui-desktop-modals.js
+    $reader = New-Object -TypeName System.IO.StreamReader -ArgumentList $file_desktop_modals
+    $xpui_desktop_modals = $reader.ReadToEnd()
+    $reader.Close()
+    $xpui_desktop_modals = Helper -paramname "Discriptions"
+    $writer = New-Object System.IO.StreamWriter -ArgumentList $file_desktop_modals
+    $writer.BaseStream.SetLength(0)
+    $writer.Write($xpui_desktop_modals)
+    $writer.Close()  
+
+    # Turn off podcasts
+    if ($Podcast_off) { 
+        $file_homev2 = get-item $env:APPDATA\Spotify\Apps\xpui\home-v2.js
+        $reader = New-Object -TypeName System.IO.StreamReader -ArgumentList $file_homev2
+        $xpui_homev2 = $reader.ReadToEnd()
+        $reader.Close()
+        $xpui_homev2 = Helper -paramname "OffPodcasts" 
+        $writer = New-Object System.IO.StreamWriter -ArgumentList $file_homev2
+        $writer.BaseStream.SetLength(0)
+        $writer.Write($xpui_homev2)
+        $writer.Close()  
+    }
 
     # xpui.css
     $file_xpui_css = get-item $env:APPDATA\Spotify\Apps\xpui\xpui.css
@@ -1174,11 +1199,6 @@ if (Test-Path $xpui_js_patch) {
     $writer.BaseStream.SetLength(0)
     $writer.Write($xpuiContents_xpui_css)
 
-    # new UI fix
-    if ($enablenavalt) {
-        $xpuiContents_xpui_css = $xpuiContents_xpui_css `
-            -replace 'fWwn9sakqBBjgiNti7LD{display:-webkit-box;display:-ms-flexbox;display:flex}', 'fWwn9sakqBBjgiNti7LD{display:-webkit-box;display:-ms-flexbox;display:flex;margin-left:40px}'
-    }
 
     if (!($premium)) {
         # Hide download icon on different pages
@@ -1189,7 +1209,7 @@ if (Test-Path $xpui_js_patch) {
         $writer.Write([System.Environment]::NewLine + ' #desktop\.settings\.streamingQuality>option:nth-child(5) {display:none}')
     }
     # new UI fix
-    if ($enablenavalt) {
+    if (!($navalt_off)) {
         $writer.Write([System.Environment]::NewLine + ' .nav-alt .Root__top-container {background: #00000085;gap: 6px;padding: 8px;}')
         $writer.Write([System.Environment]::NewLine + ' .Root__fixed-top-bar {background-color: #00000000}')
     }
@@ -1197,10 +1217,6 @@ if (Test-Path $xpui_js_patch) {
     if (!($hide_col_icon_off) -and !($exp_spotify)) {
         $writer.Write([System.Environment]::NewLine + ' .X1lXSiVj0pzhQCUo_72A{display:none}')
     }
-    # Hide broken podcast menu
-    #if ($podcast_off) { 
-    #$writer.Write([System.Environment]::NewLine + ' li.OEFWODerafYHGp09iLlA [href="/collection/podcasts"]{display:none}')
-    #}
     $writer.Close()
 
     # licenses.html minification
@@ -1289,9 +1305,6 @@ If (Test-Path $xpui_spa_patch) {
     $reader = New-Object System.IO.StreamReader($entry_xpui.Open())
     $xpui_js = $reader.ReadToEnd()
     $reader.Close()
-
-    # Turn off podcasts
-    if ($podcast_off) { $xpui_js = Helper -paramname "OffPodcasts" }
     
     if (!($premium)) {
         # Full screen mode activation and removing "Upgrade to premium" menu, upgrade button, disabling a playlist sponsor
@@ -1314,24 +1327,28 @@ If (Test-Path $xpui_spa_patch) {
     $writer.Close()
 
 
+    # Turn off podcasts
+    if ($podcast_off) { 
+        $entry_home_v2 = $zip.GetEntry('home-v2.js')
+        $reader = New-Object System.IO.StreamReader($entry_home_v2.Open())
+        $xpui_homev2 = $reader.ReadToEnd()
+        $reader.Close()
+        $xpui_homev2 = Helper -paramname "OffPodcasts" 
+        $writer = New-Object System.IO.StreamWriter($entry_home_v2.Open())
+        $writer.BaseStream.SetLength(0)
+        $writer.Write($xpui_homev2)
+        $writer.Close()
+    }
+
     # Add discriptions (xpui-desktop-modals.js)
     $entry_xpui_desktop_modals = $zip.GetEntry('xpui-desktop-modals.js')
     $reader = New-Object System.IO.StreamReader($entry_xpui_desktop_modals.Open())
-    $xpuiContents_xpui_desktop_modals = $reader.ReadToEnd()
+    $xpui_desktop_modals = $reader.ReadToEnd()
     $reader.Close()
-
-    $about = "`$1`"<h3>More about SpotX</h3>`"}),`$1`'<a `
-     href=`"https://github.com/amd64fox/SpotX`">Github</a>`'}),`$1`'<a `
-     href=`"https://github.com/amd64fox/SpotX/discussions/111`">FAQ</a>'}),`$1`'<a `
-     href=`"https://t.me/spotify_windows_mod`">Telegram channel</a>`'}),`$1`'<a `
-     href=`"https://github.com/amd64fox/SpotX/issues/new?assignees=&labels=%E2%9D%8C+bug&template=bug_report.yml`">Create `
-     an issue report</a>`'}),`$1`"<br>`"}),`$1`"<h4>DISCLAIMER</h4>`"}),`$1`"SpotX is a modified version of the official Spotify client, provided as an evaluation version, you use it at your own risk.`"})"
-
-    $xpuiContents_xpui_desktop_modals = $xpuiContents_xpui_desktop_modals `
-        -replace '(..createElement\(....,{source:).....get\("about.copyright",.\),paragraphClassName:.}\)', $about
+    $xpui_desktop_modals = Helper -paramname "Discriptions"
     $writer = New-Object System.IO.StreamWriter($entry_xpui_desktop_modals.Open())
     $writer.BaseStream.SetLength(0)
-    $writer.Write($xpuiContents_xpui_desktop_modals)
+    $writer.Write($xpui_desktop_modals)
     $writer.Close()
 
     # Disable Sentry (vendor~xpui.js)
@@ -1368,11 +1385,6 @@ If (Test-Path $xpui_spa_patch) {
     $xpuiContents_xpui_css = $reader.ReadToEnd()
     $reader.Close()
     
-    # new UI fix
-    if ($enablenavalt) {
-        $xpuiContents_xpui_css = $xpuiContents_xpui_css `
-            -replace 'fWwn9sakqBBjgiNti7LD{display:-webkit-box;display:-ms-flexbox;display:flex}', 'fWwn9sakqBBjgiNti7LD{display:-webkit-box;display:-ms-flexbox;display:flex;margin-left:40px}'
-    }
     $writer = New-Object System.IO.StreamWriter($entry_xpui_css.Open())
     $writer.BaseStream.SetLength(0)
     $writer.Write($xpuiContents_xpui_css)
@@ -1386,7 +1398,7 @@ If (Test-Path $xpui_spa_patch) {
     }
      
     # new UI fix
-    if ($enablenavalt) {
+    if (!($navalt_off)) {
         $writer.Write([System.Environment]::NewLine + ' .nav-alt .Root__top-container {background: #00000085;gap: 6px;padding: 8px;}')
         $writer.Write([System.Environment]::NewLine + ' .Root__fixed-top-bar {background-color: #00000000}')
     }
@@ -1394,10 +1406,6 @@ If (Test-Path $xpui_spa_patch) {
     if (!($hide_col_icon_off) -and !($exp_spotify)) {
         $writer.Write([System.Environment]::NewLine + ' .X1lXSiVj0pzhQCUo_72A{display:none}')
     }
-    # Hide broken podcast menu
-    #if ($podcast_off) { 
-    #$writer.Write([System.Environment]::NewLine + ' li.OEFWODerafYHGp09iLlA [href="/collection/podcasts"] {display:none}')
-    #}
     $writer.Close()
 
     # of all *.Css

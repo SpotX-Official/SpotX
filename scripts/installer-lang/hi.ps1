@@ -46,6 +46,8 @@
     NoVariable2     = "xpui.js में"
     NoVariable3     = "licenses.html में"
     NoVariable4     = "html में"
+    NoVariable5     = "home-v2.js में"
+    NoVariable6     = "xpui-desktop-modals.js में"
     ModSpoti        = "स्पॉटिफाई पैचिंग..."
     Error           = "गडबड"
     FileLocBroken   = "स्पॉटिफाई  फ़ाइलों का स्थान टूटा हुआ है, क्लाइंट की स्थापना रद्द करें और स्क्रिप्ट को फिर से चलाएँ"

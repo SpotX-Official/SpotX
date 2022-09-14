@@ -1006,6 +1006,9 @@ function Helper($paramname, $addstring) {
                 MadeForYou       = '(Show "Made For You" entry point in the left sidebar.,default:)(!1)', '$1true'
                 ClearCache       = '(Enable option in settings to clear all downloads",default:)(!1)', '$1true'
                 CarouselsonHome  = '(Use carousels on Home",default:)(!1)', '$1true'
+                LyricsEnabled    = '(With this enabled, clients will check whether tracks have lyrics available",default:)(!1)', '$1true' 
+                PlaylistCreation = '(Enables new playlist creation flow in Web Player and DesktopX",default:)(!1)', '$1true'
+                SearchBox        = '(Adds a search box so users are able to filter playlists when trying to add songs to a playlist using the contextmenu",default:)(!1)', '$1true'
                 # "Create similar playlist" menu is activated for someone else's playlists
                 SimilarPlaylist  = ',(.\.isOwnedBySelf&&)(..createElement\(..Fragment,null,..createElement\(.+?{(uri:.|spec:.),(uri:.|spec:.).+?contextmenu.create-similar-playlist"\)}\),)' , ',$2$1'
             }
@@ -1024,6 +1027,12 @@ function Helper($paramname, $addstring) {
                 $exp_features.Remove('NewHome'), $exp_features.Remove('MadeForYou'),
                 $exp_features.Remove('SimilarPlaylist')
             }
+            $ofline = Check_verison_clients -param2 "offline"
+            if ($ofline -ge "1.1.94.864") {
+                $exp_features.Remove('LyricsEnabled'), $exp_features.Remove('PlaylistCreation'), 
+                $exp_features.Remove('SearchBox')
+            }
+            if ($ofline -le "1.1.93.896") { $exp_features.Remove('NewHome') }
             $n = ($lang).NoVariable2
             $contents = $exp_features
             $paramdata = $xpui_js
@@ -1031,17 +1040,17 @@ function Helper($paramname, $addstring) {
 
 
     }
-        $contents.Keys | Sort-Object | ForEach-Object { 
+    $contents.Keys | Sort-Object | ForEach-Object { 
  
-            if ($paramdata -match $contents.$PSItem[0]) { 
-                $paramdata = $paramdata -replace $contents.$PSItem[0], $contents.$PSItem[1] 
-            }
-            else { 
-                Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline 
-                Write-Host "`$contents.$PSItem"$n
-            }    
+        if ($paramdata -match $contents.$PSItem[0]) { 
+            $paramdata = $paramdata -replace $contents.$PSItem[0], $contents.$PSItem[1] 
         }
-        $paramdata
+        else { 
+            Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline 
+            Write-Host "`$contents.$PSItem"$n
+        }    
+    }
+    $paramdata
 }
 
 Write-Host ($lang).ModSpoti`n

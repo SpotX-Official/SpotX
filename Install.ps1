@@ -98,7 +98,7 @@ function Format-LanguageCode {
     
     begin {
         $supportLanguages = @(
-            'en', 'ru', 'it', 'tr', 'ka', 'pl', 'es', 'fr', 'hi'
+            'en', 'ru', 'it', 'tr', 'ka', 'pl', 'es', 'fr', 'hi', 'pt'
         )
     }
     
@@ -139,6 +139,10 @@ function Format-LanguageCode {
             }
             '^hi' {
                 $returnCode = 'hi'
+                break
+            }
+            '^pt' {
+                $returnCode = 'pt'
                 break
             }
             Default {
@@ -215,6 +219,10 @@ function Set-ScriptLanguageStrings($LanguageCode) {
             $langStrings = CallLang -clg "hi"
             break
         }
+        'pt' {
+            $langStrings = CallLang -clg "pt"
+            break
+        }
         Default {
             # Default to English if unable to find a match.
             $langStrings = CallLang -clg "en"
@@ -235,7 +243,7 @@ $lang = Set-ScriptLanguageStrings -LanguageCode $langCode
 # Set variable 'ru'.
 if ($langCode -eq 'ru') { $ru = $true }
 # Set variable 'add transl line'.
-if ($langCode -match '^(it|tr|ka|pl|es|fr|hi)') { $line = $true }
+if ($langCode -match '^(it|tr|ka|pl|es|fr|hi|pt)') { $line = $true }
 
 # Automatic length of stars
 $au = ($lang).Author.Length + ($lang).Author2.Length

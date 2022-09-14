@@ -1,6 +1,8 @@
 [PSCustomObject]@{
     Author          = "Autor do patch:"
     Author2         = "@Amd64fox"
+    TranslationBy   = "Translation author:"
+    TranslationBy2  = "@igorruckert"
     Incorrect       = "Ops, um valor incorreto,"
     Incorrect2      = "entre novamente por "
     Download        = "Erro no download"

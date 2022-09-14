@@ -55,7 +55,7 @@
     NoRestore       = "O SpotX já foi instalado, mas os arquivos de recuperação xpui.js.bak e xpui.css.bak não foram encontrados. `nPor favor, desinstale o cliente do Spotify e execute Install.bat novamente"
     ExpSpotify      = "Recursos experimentais oferecidos pelo Spotify"
     ExpStandart     = "Os recursos experimentais do SpotX não estão incluídos"
-    NoRestore2      = "O SpotX já foi instalado, xpui.bak não encontrado. Por favor, desinstale o cliente do Spotify e execute Install.bat novamente"
+    NoRestore2      = "O SpotX já foi instalado, xpui.bak não encontrado. `nPor favor, desinstale o cliente do Spotify e execute Install.bat novamente"
     UpdateBlocked   = "As atualizações do Spotify já estão bloqueadas"
     UpdateError     = "Falha ao bloquear as atualizações"
     NoSpotifyExe    = "Não foi possível localizar Spotify.exe"

@@ -859,23 +859,16 @@ function Helper($paramname, $addstring) {
                 HtmlLicMin4 = '(?m)(^\s*\r?\n)', ''
                 HtmlLicMin5 = '\r?\n(?!\(1|\d)', ''
             }
-            $n = ($lang).NoVariable6
+            $n = ($lang).NoVariable3
             $contents = $html_lic_min
             $paramdata = $xpuiContents_html
         }
         "Discriptions" {  
             # Add discriptions (xpui-desktop-modals.js)
-            $about = "`$1`"<h3>More about SpotX</h3>`"}),`$1`'<a `
-        href=`"https://github.com/amd64fox/SpotX`">Github</a>`'}),`$1`'<a `
-        href=`"https://github.com/amd64fox/SpotX/discussions/111`">FAQ</a>'}),`$1`'<a `
-        href=`"https://t.me/spotify_windows_mod`">Telegram channel</a>`'}),`$1`'<a `
-        href=`"https://github.com/amd64fox/SpotX/issues/new?assignees=&labels=%E2%9D%8C+bug&template=bug_report.yml`">Create `
-        an issue report</a>`'}),`$1`"<br>`"}),`$1`"<h4>DISCLAIMER</h4>`"}),`$1`"SpotX is a modified version of the official Spotify client, provided as an evaluation version, you use it at your own risk.`"})"
-
             $discript = @{
-                Log = '(..createElement\(....,{source:).....get\("about.copyright",.\),paragraphClassName:.}\)', $about
+                Log = '(..createElement\(....,{source:).....get\("about.copyright",.\),paragraphClassName:.}\)', "`$1`"<h3>More about SpotX</h3>`"}),`$1`'<a href=`"https://github.com/amd64fox/SpotX`">Github</a>`'}),`$1`'<a href=`"https://github.com/amd64fox/SpotX/discussions/111`">FAQ</a>'}),`$1`'<a href=`"https://t.me/spotify_windows_mod`">Telegram channel</a>`'}),`$1`'<a href=`"https://github.com/amd64fox/SpotX/issues/new?assignees=&labels=%E2%9D%8C+bug&template=bug_report.yml`">Create an issue report</a>`'}),`$1`"<br>`"}),`$1`"<h4>DISCLAIMER</h4>`"}),`$1`"SpotX is a modified version of the official Spotify client, provided as an evaluation version, you use it at your own risk.`"})"
             }
-            $n = ($lang).NoVariable2
+            $n = ($lang).NoVariable6
             $contents = $discript
             $paramdata = $xpui_desktop_modals
 

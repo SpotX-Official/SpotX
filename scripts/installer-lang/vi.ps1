@@ -31,7 +31,7 @@
     DownSpoti       = "Đang tải và cài Spotify"
     DownSpoti2      = "Vui lòng chờ..."
     PodcatsOff      = "Tắt Podcasts"
-    PodcastsOn      = "Tắt Podcasts"
+    PodcastsOn      = "Bật Podcasts"
     PodcatsSelect   = "Bạn có muốn tắt podcasts trên trang chủ? [Y/N]"
     DowngradeNote   = "Nên chặn vì đây là bản Spotify cũ"
     UpdBlock        = "Đã chặn cập nhật Spotify"

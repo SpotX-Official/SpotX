@@ -153,6 +153,7 @@ function Format-LanguageCode {
                 $returnCode = 'vi'
                 break
             }
+
             Default {
                 $returnCode = $PSUICulture.Remove(2)
                 break

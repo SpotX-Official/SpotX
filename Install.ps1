@@ -882,7 +882,7 @@ function Helper($paramname, $addstring) {
         "Discriptions" {  
             # Add discriptions (xpui-desktop-modals.js)
             $discript = @{
-                Log = '(..createElement\(....,{source:).....get\("about.copyright",.\),paragraphClassName:.}\)', "`$1`"<h3>More about SpotX</h3>`"}),`$1`'<a href=`"https://github.com/amd64fox/SpotX`">Github</a>`'}),`$1`'<a href=`"https://github.com/amd64fox/SpotX/discussions/111`">FAQ</a>'}),`$1`'<a href=`"https://t.me/spotify_windows_mod`">Telegram channel</a>`'}),`$1`'<a href=`"https://github.com/amd64fox/SpotX/issues/new?assignees=&labels=%E2%9D%8C+bug&template=bug_report.yml`">Create an issue report</a>`'}),`$1`"<br>`"}),`$1`"<h4>DISCLAIMER</h4>`"}),`$1`"SpotX is a modified version of the official Spotify client, provided as an evaluation version, you use it at your own risk.`"})"
+                Log = '(..createElement\(....,{source:).....get\("about.copyright",.\),paragraphClassName:.}\)', "`$1`"<h3>More about SpotX</h3>`"}),`$1`'<a href=`"https://github.com/amd64fox/SpotX`">Github</a>`'}),`$1`'<a href=`"https://telegra.ph/SpotX-FAQ-09-19`">FAQ</a>'}),`$1`'<a href=`"https://t.me/spotify_windows_mod`">Telegram channel</a>`'}),`$1`'<a href=`"https://github.com/amd64fox/SpotX/issues/new?assignees=&labels=%E2%9D%8C+bug&template=bug_report.yml`">Create an issue report</a>`'}),`$1`"<br>`"}),`$1`"<h4>DISCLAIMER</h4>`"}),`$1`"SpotX is a modified version of the official Spotify client, provided as an evaluation version, you use it at your own risk.`"})"
             }
             $n = ($lang).NoVariable6
             $contents = $discript

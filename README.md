@@ -7,7 +7,7 @@
       <a href="https://discord.gg/p43cusgUPm"><img src="https://discord.com/api/guilds/807273906872123412/widget.png"></a>
       <a href="https://www.youtube.com/results?search_query=https%3A%2F%2Fgithub.com%2Famd64fox%2FSpotX"><img src="https://raw.githubusercontent.com/amd64fox/SpotX/main/.github/Pic/Shields/youtube.svg"></a>
       <a href="https://cutt.ly/8EH6NuH"><img src="https://raw.githubusercontent.com/amd64fox/SpotX/main/.github/Pic/Shields/excel.svg"></a>
-      <a href="https://github.com/amd64fox/SpotX/discussions/111"><img src="https://raw.githubusercontent.com/amd64fox/SpotX/main/.github/Pic/Shields/faq.svg"></a>
+      <a href="https://telegra.ph/SpotX-FAQ-09-19"><img src="https://raw.githubusercontent.com/amd64fox/SpotX/main/.github/Pic/Shields/faq.svg"></a>
       </p>
 
    <h2> <div align="center"><b> Modified Spotify Client for Windows </b></div> </h2>
@@ -23,18 +23,10 @@
 
 - <strong>Blocks all banner, video and audio ads in the client</strong>
 - <strong>Unlocks the skip function of any track</strong>
-- <strong>Full screen mode activated</strong>
-- <strong>Hidden podcasts and episodes from the homepage (optional)</strong>
-- <strong>Blocks automatic updates (optional)</strong>
-- <strong>Automatic [cache clearing](https://github.com/amd64fox/SpotX/discussions/2) (optional)</strong>
-- <strong>Enabled [enhance playlist](https://github.com/amd64fox/SpotX/discussions/50#discussion-4108773)</strong>
-- <strong>Enabled [enhance liked songs UI](https://github.com/amd64fox/SpotX/discussions/50#discussioncomment-2851482)</strong>
-- <strong>Enabled [new lyrics](https://github.com/amd64fox/SpotX/discussions/50#discussioncomment-2851485)</strong>
-- <strong>Enabled [a condensed discography shelf on artist pages](https://github.com/amd64fox/SpotX/discussions/50#discussioncomment-2851591)</strong>
-- <strong>Enabled [Ignore In Recommendations](https://github.com/amd64fox/SpotX/discussions/50#discussioncomment-2996165)</strong>
-- <strong>Enabled [Equalizer](https://github.com/amd64fox/SpotX/discussions/50#discussioncomment-3179778)</strong>
-- <strong>Enabled [new device picker panel](https://github.com/amd64fox/SpotX/discussions/50#discussioncomment-3179782)</strong>
-- <strong>Activated ["Made For You" in the left sidebar](https://github.com/amd64fox/SpotX/discussions/50#discussioncomment-2853981)</strong>
+- <strong>Hiding podcasts and episodes from the homepage (optional)</strong>
+- <strong>Block Spotify automatic updates (optional)</strong>
+- <strong>Automatic clearing of [audio cache](https://github.com/amd64fox/SpotX/discussions/2) (optional)</strong>
+- <strong>More experimental features have been activated ([see the full list](https://github.com/amd64fox/SpotX/discussions/50))</strong>
 - <strong>Disabled Sentry (Prevented Sentry from sending console log/error/warning to Spotify developers)</strong>
 - <strong>Disabled logging (Stopped various elements to log user interaction)</strong>
 - <strong>Removed RTL rules (Removed all right-to-left CSS rules to simplify CSS files)</strong>
@@ -190,8 +182,8 @@ or
 
 <h1>FAQ</h1>
 
-- Read [FAQ](https://github.com/amd64fox/SpotX/discussions/111)
+- Read [FAQ](https://telegra.ph/SpotX-FAQ-09-19)
 
 <h1>Credits</h1>
 
-- The repository is based on <a href="https://github.com/mrpond/BlockTheSpot">BlockTheSpot</a>, and also some tricks were taken from <a href="https://github.com/khanhas/spicetify-cli">spicetify-cli</a>, many thanks to the contributors
+- This repository partially uses <a href="https://github.com/mrpond/BlockTheSpot">BlockTheSpot</a>, and also some tricks were taken from <a href="https://github.com/khanhas/spicetify-cli">spicetify-cli</a>, many thanks to the contributors

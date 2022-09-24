@@ -561,14 +561,12 @@ New-Item -Type Directory -Name "SpotX_Temp-$(Get-Date -UFormat '%Y-%m-%d_%H-%M-%
 if ($premium) {
     Write-Host ($lang).Prem`n
 }
-if (!($premium)) {
-    if ($bts) {
+if (!($premium) -and $bts) {
         downloadScripts -param1 "BTS"
         Add-Type -Assembly 'System.IO.Compression.FileSystem'
         $zip = [System.IO.Compression.ZipFile]::Open("$PWD\chrome_elf.zip", 'read')
         [System.IO.Compression.ZipFileExtensions]::ExtractToDirectory($zip, $PWD)
         $zip.Dispose()
-    }
 }
 downloadScripts -param1 "links.tsv"
 
@@ -743,12 +741,14 @@ if ($no_shortcut) {
 }
 
 # Delete the leveldb folder (Fixes bug with incorrect experimental features for some accounts)
+<# 
 $leveldb = (Test-Path -LiteralPath "$spotifyDirectory2\Browser\Local Storage\leveldb")
 
 if ($leveldb) {
     $ErrorActionPreference = 'SilentlyContinue'
     remove-item "$spotifyDirectory2\Browser\Local Storage\leveldb" -Recurse -Force
 }
+#>
 
 # Create backup chrome_elf.dll
 if (!(Test-Path -LiteralPath $chrome_elf_bak) -and !($premium) -and $bts) {

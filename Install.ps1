@@ -72,11 +72,17 @@ param
     [Parameter(HelpMessage = 'Disable the new home structure and navigation.')]
     [switch]$navalt_off,
 
+    [Parameter(HelpMessage = 'Enable new left sidebar.')]
+    [switch]$left_sidebar_on,
+    
     [Parameter(HelpMessage = 'Do not create desktop shortcut.')]
     [switch]$no_shortcut,
     
     [Parameter(HelpMessage = 'Use bts patch.')]
     [switch]$bts,
+
+    [Parameter(HelpMessage = 'Error log ru string.')]
+    [switch]$err_ru,
     
     [Parameter(HelpMessage = 'Select the desired language to use for installation. Default is the detected system language.')]
     [Alias('l')]
@@ -98,7 +104,7 @@ function Format-LanguageCode {
     
     begin {
         $supportLanguages = @(
-            'en', 'ru', 'it', 'tr', 'ka', 'pl', 'es', 'fr', 'hi', 'pt', 'id','vi'
+            'en', 'ru', 'it', 'tr', 'ka', 'pl', 'es', 'fr', 'hi', 'pt', 'id', 'vi'
         )
     }
     
@@ -562,11 +568,11 @@ if ($premium) {
     Write-Host ($lang).Prem`n
 }
 if (!($premium) -and $bts) {
-        downloadScripts -param1 "BTS"
-        Add-Type -Assembly 'System.IO.Compression.FileSystem'
-        $zip = [System.IO.Compression.ZipFile]::Open("$PWD\chrome_elf.zip", 'read')
-        [System.IO.Compression.ZipFileExtensions]::ExtractToDirectory($zip, $PWD)
-        $zip.Dispose()
+    downloadScripts -param1 "BTS"
+    Add-Type -Assembly 'System.IO.Compression.FileSystem'
+    $zip = [System.IO.Compression.ZipFile]::Open("$PWD\chrome_elf.zip", 'read')
+    [System.IO.Compression.ZipFileExtensions]::ExtractToDirectory($zip, $PWD)
+    $zip.Dispose()
 }
 downloadScripts -param1 "links.tsv"
 
@@ -882,7 +888,7 @@ function Helper($paramname, $addstring) {
         "Discriptions" {  
             # Add discriptions (xpui-desktop-modals.js)
             $discript = @{
-                Log = '(..createElement\(....,{source:).....get\("about.copyright",.\),paragraphClassName:.}\)', "`$1`"<h3>More about SpotX</h3>`"}),`$1`'<a href=`"https://github.com/amd64fox/SpotX`">Github</a>`'}),`$1`'<a href=`"https://telegra.ph/SpotX-FAQ-09-19`">FAQ</a>'}),`$1`'<a href=`"https://t.me/spotify_windows_mod`">Telegram channel</a>`'}),`$1`'<a href=`"https://github.com/amd64fox/SpotX/issues/new?assignees=&labels=%E2%9D%8C+bug&template=bug_report.yml`">Create an issue report</a>`'}),`$1`"<br>`"}),`$1`"<h4>DISCLAIMER</h4>`"}),`$1`"SpotX is a modified version of the official Spotify client, provided as an evaluation version, you use it at your own risk.`"})"
+                Log = '((..createElement|children:\(.{1,7}\))\(....,{source:).....get\("about.copyright",.\),paragraphClassName:.}\)', "`$1`"<h3>More about SpotX</h3><a href=`'https://github.com/amd64fox/SpotX`'>Github</a><br/><a href=`'https://telegra.ph/SpotX-FAQ-09-19`'>FAQ</a><br/><a href=`'https://t.me/spotify_windows_mod`'>Telegram channel</a><br/><a href=`'https://github.com/amd64fox/SpotX/issues/new?assignees=&labels=%E2%9D%8C+bug&template=bug_report.yml`'>Create an issue report</a><br> <br/><h4>DISCLAIMER</h4>SpotX is a modified version of the official Spotify client, provided as an evaluation version, you use it at your own risk.`"})"
             }
             $n = ($lang).NoVariable6
             $contents = $discript
@@ -905,12 +911,24 @@ function Helper($paramname, $addstring) {
                 ConnectUnlock       = ' connect-device-list-item--disabled', ''
                 ConnectUnlock2      = 'connect-picker.unavailable-to-control', 'spotify-connect'
                 ConnectUnlock3      = '(className:.,disabled:)(..)', '$1false'
-                ConnectUnlock4      = 'return (..isDisabled)(\?..createElement\(..,)', 'return false$2'
+                ConnectUnlock4      = 'return (..isDisabled)(\?(..createElement|\(.{1,10}\))\(..,)', 'return false$2'
                 # Removing the track download quality switch
-                DownloadQuality     = 'xe\(...\)\)\)\)...createElement\(....{filterMatchQuery:.....get\(.desktop.settings.downloadQuality.title.\).+?xe', 'xe'
+                DownloadQuality     = '(children:..\(.,.\)|xe\(.,.\)\)\)\)).+?(children:..\(.,.\)|xe\(.,.\)\)\)\))', '$1'
+                # temporary Russian strings for xpui.js
+                Creator             = '("creator",value:")Creator("\})', '$1Создано$2'
+                CustomOrder         = '("custom-order",value:")Custom order("\})', '$1Особая$2'
+                Alphabetical        = '("alphabetical",value:")Alphabetical("\})', '$1Алфавитная$2'
+                RecentlyAdded       = '("recently-added",value:")Recently added("\})', '$1Недавно добавленные$2' 
+                MostRecent          = '("most-recent",value:")Most recent("\})', '$1Самые последние$2'
             }
             if ($bts) {
                 $offadson_fullscreen.Remove('Bilboard'), $offadson_fullscreen.Remove('AidioAds')
+            }
+            $ofline = Check_verison_clients -param2 "offline"
+            if (!($ru) -or $ofline -le "1.1.94.872") {
+                $offadson_fullscreen.Remove('Creator'), $offadson_fullscreen.Remove('CustomOrder'), $offadson_fullscreen.Remove('Alphabetical'),
+                $offadson_fullscreen.Remove('RecentlyAdded'), $offadson_fullscreen.Remove('MostRecent')
+                
             }
 
             $n = ($lang).NoVariable2
@@ -934,70 +952,91 @@ function Helper($paramname, $addstring) {
             $n = ($lang).NoVariable2
             $contents = $rus_js
             $paramdata = $xpui_js
-
         }
         "RuTranslate" { 
             # Additional translation of some words for the Russian language
             $ru_translate = @{
-                EnhancePlaylist    = '"To Enhance this playlist, you.ll need to go online."', '"Чтобы улучшить этот плейлист, вам нужно подключиться к интернету."'
-                ConfirmAge         = '"Confirm your age"', '"Подтвердите свой возраст"' 
-                Premium            = '"%price%\/month after. Terms and conditions apply. One month free not available for users who have already tried Premium."', '"%price%/месяц спустя. Принять условия. Один месяц бесплатно, недоступно для пользователей, которые уже попробовали Premium."'
-                AdFreeMusic        = '"Enjoy ad-free music listening, offline listening, and more. Cancel anytime."', '"Наслаждайтесь прослушиванием музыки без рекламы, прослушиванием в офлайн режиме и многим другим. Отменить можно в любое время."'
-                AddPlaylist        = '"Add to another playlist"', '"Добавить в другой плейлист"' 
-                OfflineStorage     = '"Offline storage location"', '"Хранилище скачанных треков"' 
-                ChangeLocation     = '"Change location"', '"Изменить место"' 
-                Linebreaks         = '"Line breaks aren.t supported in the description."', '"В описании не поддерживаются разрывы строк."' 
-                PressSave          = '"Press save to keep changes you.ve made."', '"Нажмите «Сохранить», чтобы сохранить внесенные изменения."' 
-                NoInternet         = '"No internet connection found. Changes to description and image will not be saved."', '"Подключение к интернету не найдено. Изменения в описании и изображении не будут сохранены."' 
-                ImageSmall         = '"Image too small. Images must be at least [{]0[}]x[{]1[}]."', '"Изображение слишком маленькое. Изображения должны быть не менее {0}x{1}."' 
-                FailedUpload       = '"Failed to upload image. Please try again."', '"Не удалось загрузить изображение. Пожалуйста, попробуйте снова."' 
-                Description        = '"Description"', '"Описание"' 
-                ChangePhoto        = '"Change photo"', '"Сменить изображение"' 
-                RemovePhoto        = '"Remove photo"', '"Удалить изображение"' 
-                Name               = '"Name"', '"Имя"' 
-                ChangeSpeed        = '"Change speed"', '"Изменение скорости"' 
-                Years19            = '"You need to be at least 19 years old to listen to explicit content marked with"', '"Вам должно быть не менее 19 лет, чтобы слушать непристойный контент, помеченный значком"' 
-                AddPlaylist2       = '"Add to this playlist"', '"Добавить в этот плейлист"'
-                NoConnect          = '"Couldn.t connect to Spotify."', '"Не удалось подключиться к Spotify."' 
-                Reconnecting       = '"Reconnecting..."', '"Повторное подключение..."' 
-                NoConnection       = '"No connection"', '"Нет соединения"' 
-                CharacterCounter   = '"Character counter"', '"Счетчик символов"' 
-                Lightsaber         = '"Toggle lightsaber hilt. Current is [{]0[}]."', '"Переключить рукоять светового меча. Текущий {0}."' 
-                SongAvailable      = '"Song not available"', '"Песня недоступна"' 
-                HiFi               = '"The song you.re trying to listen to is not available in HiFi at this time."', '"Песня, которую вы пытаетесь прослушать, в настоящее время недоступна в HiFi."' 
-                Quality            = '"Current audio quality:"', '"Текущее качество звука:"' 
-                Network            = '"Network connection"', '"Подключение к сети"' 
-                Good               = '"Good"', '"Хорошее"' 
-                Poor               = '"Poor"', '"Плохое"' 
-                Yes                = '"Yes"', '"Да"' 
-                No                 = '"No"', '"Нет"' 
-                Location           = '"Your Location"', '"Ваше местоположение"'
-                NetworkConnection  = '"Network connection failed while playing this content."', '"Сбой сетевого подключения при воспроизведении этого контента."'
-                ContentLocation    = '"We.re not able to play this content in your current location."', '"Мы не можем воспроизвести этот контент в вашем текущем местоположении."'
-                ContentUnavailable = '"This content is unavailable. Try another\?"', '"Этот контент недоступен. Попробуете другой?"'
-                NoContent          = '"Sorry, we.re not able to play this content."', '"К сожалению, мы не можем воспроизвести этот контент."'
-                NoContent2         = '"Hmm... we can.t seem to play this content. Try installing the latest version of Spotify."', '"Хм... похоже, мы не можем воспроизвести этот контент. Попробуйте установить последнюю версию Spotify."'
-                NoContent3         = '"Please upgrade Spotify to play this content."', '"Пожалуйста, обновите Spotify, чтобы воспроизвести этот контент."'
-                NoContent4         = '"This content cannot be played on your operating system version."', '"Этот контент нельзя воспроизвести в вашей версии операционной системы."'
-                DevLang            = '"Override certain user attributes to test regionalized content programming. The overrides are only active in this app."', '"Переопределите определенные атрибуты пользователя, чтобы протестировать региональное программирование контента. Переопределения активны только в этом приложении."'
-                AlbumRelease       = '"...name... was released this week!"', '"\"%name%\" был выпущен на этой неделе!"'
-                AlbumReleaseOne    = '"one": "\\"%name%\\" was released %years% year ago this week!"', '"one": "\"%name%\" был выпущен %years% год назад на этой неделе!"'
-                AlbumReleaseFew    = '"few": "\\"%name%\\" was released %years% years ago this week!"', '"few": "\"%name%\" был выпущен %years% года назад на этой неделе!"'
-                AlbumReleaseMany   = '"many": "\\"%name%\\" was released %years% years ago this week!"', '"many": "\"%name%\" был выпущен %years% лет назад на этой неделе!"'
-                AlbumReleaseOther  = '"other": "\\"%name%\\" was released %years% years ago this week!"', '"other": "\"%name%\" был выпущен %years% года назад на этой неделе!"'
-                Speed              = '"Speed [{]0[}]×"', '"Скорость {0}×"'
-                AudiobookGet       = '"Get"', '"Получить"'
-                AudiobookBy        = '"Buy"', '"Купить"'
-                CloseModal         = '"Close modal"', '"Закрыть"'
-                RatinggoToApp      = '"Head over to Spotify on your mobile phone to rate this title."', '"Зайдите в Spotify на своем мобильном телефоне, чтобы оценить этот заголовок."'
-                Freexplanation     = '"Tap Get to add it to Your Library and it will be ready for listening in a few seconds."', '"Нажмите «Получить», чтобы добавить его в свою библиотеку, и через несколько секунд он будет готов для прослушивания."'
-                Confidential       = '"This is a highly confidential test. Do not share details of this test or any song you create outside of Spotify."', '"Это очень конфиденциальный тест. Не делитесь подробностями этого теста или какой-либо песни, которую вы создаете, за пределами Spotify."'
-                LoveAudiobook      = '"Love this audiobook\? Unlock all chapters first"', '"Нравится эта аудиокнига? Сначала разблокируйте все главы"'
-                FullAudiobook      = '"You can listen to this chapter after purchasing the full audiobook."', '"Вы можете прослушать эту главу после покупки полной аудиокниги."'
-                PurchaseAudiobook  = '"Purchase audiobook"', '"Купить аудиокнигу"'
-                Cache              = '"Cache:"', '"Кеш:"'
-                Downloads          = '"Downloads:"', '"Загрузки:"'
-
+                EnhancePlaylist     = '"To Enhance this playlist, you.ll need to go online."', '"Чтобы улучшить этот плейлист, вам нужно подключиться к интернету."'
+                ConfirmAge          = '"Confirm your age"', '"Подтвердите свой возраст"' 
+                Premium             = '"%price%\/month after. Terms and conditions apply. One month free not available for users who have already tried Premium."', '"%price%/месяц спустя. Принять условия. Один месяц бесплатно, недоступно для пользователей, которые уже попробовали Premium."'
+                AdFreeMusic         = '"Enjoy ad-free music listening, offline listening, and more. Cancel anytime."', '"Наслаждайтесь прослушиванием музыки без рекламы, прослушиванием в офлайн режиме и многим другим. Отменить можно в любое время."'
+                AddPlaylist         = '"Add to another playlist"', '"Добавить в другой плейлист"' 
+                OfflineStorage      = '"Offline storage location"', '"Хранилище скачанных треков"' 
+                ChangeLocation      = '"Change location"', '"Изменить место"' 
+                Linebreaks          = '"Line breaks aren.t supported in the description."', '"В описании не поддерживаются разрывы строк."' 
+                PressSave           = '"Press save to keep changes you.ve made."', '"Нажмите «Сохранить», чтобы сохранить внесенные изменения."' 
+                NoInternet          = '"No internet connection found. Changes to description and image will not be saved."', '"Подключение к интернету не найдено. Изменения в описании и изображении не будут сохранены."' 
+                ImageSmall          = '"Image too small. Images must be at least [{]0[}]x[{]1[}]."', '"Изображение слишком маленькое. Изображения должны быть не менее {0}x{1}."' 
+                FailedUpload        = '"Failed to upload image. Please try again."', '"Не удалось загрузить изображение. Пожалуйста, попробуйте снова."' 
+                Description         = '"Description"', '"Описание"' 
+                ChangePhoto         = '"Change photo"', '"Сменить изображение"' 
+                RemovePhoto         = '"Remove photo"', '"Удалить изображение"' 
+                Name                = '"Name"', '"Имя"' 
+                ChangeSpeed         = '"Change speed"', '"Изменение скорости"' 
+                Years19             = '"You need to be at least 19 years old to listen to explicit content marked with"', '"Вам должно быть не менее 19 лет, чтобы слушать непристойный контент, помеченный значком"' 
+                AddPlaylist2        = '"Add to this playlist"', '"Добавить в этот плейлист"'
+                NoConnect           = '"Couldn.t connect to Spotify."', '"Не удалось подключиться к Spotify."' 
+                Reconnecting        = '"Reconnecting..."', '"Повторное подключение..."' 
+                NoConnection        = '"No connection"', '"Нет соединения"' 
+                CharacterCounter    = '"Character counter"', '"Счетчик символов"' 
+                Lightsaber          = '"Toggle lightsaber hilt. Current is [{]0[}]."', '"Переключить рукоять светового меча. Текущий {0}."' 
+                SongAvailable       = '"Song not available"', '"Песня недоступна"' 
+                HiFi                = '"The song you.re trying to listen to is not available in HiFi at this time."', '"Песня, которую вы пытаетесь прослушать, в настоящее время недоступна в HiFi."' 
+                Quality             = '"Current audio quality:"', '"Текущее качество звука:"' 
+                Network             = '"Network connection"', '"Подключение к сети"' 
+                Good                = '"Good"', '"Хорошее"' 
+                Poor                = '"Poor"', '"Плохое"' 
+                Yes                 = '"Yes"', '"Да"' 
+                No                  = '"No"', '"Нет"' 
+                Location            = '"Your Location"', '"Ваше местоположение"'
+                NetworkConnection   = '"Network connection failed while playing this content."', '"Сбой сетевого подключения при воспроизведении этого контента."'
+                ContentLocation     = '"We.re not able to play this content in your current location."', '"Мы не можем воспроизвести этот контент в вашем текущем местоположении."'
+                ContentUnavailable  = '"This content is unavailable. Try another\?"', '"Этот контент недоступен. Попробуете другой?"'
+                NoContent           = '"Sorry, we.re not able to play this content."', '"К сожалению, мы не можем воспроизвести этот контент."'
+                NoContent2          = '"Hmm... we can.t seem to play this content. Try installing the latest version of Spotify."', '"Хм... похоже, мы не можем воспроизвести этот контент. Попробуйте установить последнюю версию Spotify."'
+                NoContent3          = '"Please upgrade Spotify to play this content."', '"Пожалуйста, обновите Spotify, чтобы воспроизвести этот контент."'
+                NoContent4          = '"This content cannot be played on your operating system version."', '"Этот контент нельзя воспроизвести в вашей версии операционной системы."'
+                DevLang             = '"Override certain user attributes to test regionalized content programming. The overrides are only active in this app."', '"Переопределите определенные атрибуты пользователя, чтобы протестировать региональное программирование контента. Переопределения активны только в этом приложении."'
+                AlbumRelease        = '"...name... was released this week!"', '"\"%name%\" был выпущен на этой неделе!"'
+                AlbumReleaseOne     = '"one": "\\"%name%\\" was released %years% year ago this week!"', '"one": "\"%name%\" был выпущен %years% год назад на этой неделе!"'
+                AlbumReleaseFew     = '"few": "\\"%name%\\" was released %years% years ago this week!"', '"few": "\"%name%\" был выпущен %years% года назад на этой неделе!"'
+                AlbumReleaseMany    = '"many": "\\"%name%\\" was released %years% years ago this week!"', '"many": "\"%name%\" был выпущен %years% лет назад на этой неделе!"'
+                AlbumReleaseOther   = '"other": "\\"%name%\\" was released %years% years ago this week!"', '"other": "\"%name%\" был выпущен %years% года назад на этой неделе!"'
+                Speed               = '"Speed [{]0[}]×"', '"Скорость {0}×"'                            
+                Confidential        = '"This is a highly confidential test. Do not share details of this test or any song you create outside of Spotify."', '"Это очень конфиденциальный тест. Не делитесь подробностями этого теста или какой-либо песни, которую вы создаете, за пределами Spotify."'          
+                Cache               = '"Cache:"', '"Кеш:"'
+                Downloads           = '"Downloads:"', '"Загрузки:"'
+                StartGroupSession   = '"How to start a Group Session"', '"Как начать групповую сессию"'
+                ForPremium          = '"For: Premium on mobile and tablet"', '"Для: Premium на мобильных устройствах и планшетах"'
+                GroupSessionControl = '"In a group session, everyone invited – no matter where they are – can control what plays."', '"На групповом сеансе каждый приглашенный – независимо от того, где он находится – может контролировать то, что играет."'
+                OpenSpotify         = '"Open Spotify and play something."', '"Откройте Spotify и включите что-нибудь."'
+                TapIcon             = '"Tap [{]icon[}] at the bottom of the screen."', '"Нажмите {icon} в нижней части экрана."'
+                TapStart            = '"Tap Start a remote group session."', '"Нажмите Начать сеанс удаленной группы."'
+                TapInvite           = '"Tap Invite friends."', '"Нажмите Пригласить друзей."'
+                AddFiends           = '"Or, if you want to invite additional friends after you.ve started a group session, tap the avatar at the bottom of the screen and tap [{]icon[}]."', '"Или, если вы хотите пригласить дополнительных друзей после начала группового сеанса, коснитесь аватара в нижней части экрана и нажмите {icon}."'
+                Share               = '"Select how you want to share, or choose Copy link and send it to your friends."', '"Выберите, как вы хотите поделиться, или выберите Скопировать ссылку и отправить ее своим друзьям."'
+                LearnMore           = '"Learn more"', '"Узнать больше"'
+                Author              = '"Author"', '"Автор"'
+                Creator             = '"Creator"', '"Создатель"'
+                CustomOrder         = '"Custom order"', '"Особая"'
+                Alphabetical        = '"Alphabetical"', '"Алфавитная"'
+                RecentlyAdded       = '"Recently added"', '"Недавно добавленные"'
+                RecentlyPlayed      = '"Recently played"', '"Недавно проигранные"'
+                MostRecent          = '"Most recent"', '"Самые последние"'
+                RecentlyUpdated     = '"Recently updated"', '"Недавно обновленные"'
+                MostRelevant        = '"Most relevant"', '"Наиболее актуальные"'
+                Albums              = '"Albums",', '"Альбомы",'
+                Artists             = '"Artists",', '"Артисты",'
+                Playlists           = '"Playlists",', '"Плейлисты",'
+                PodcastsShows       = '"Podcasts . Shows",', '"Подкасты и Шоу",'
+                Audiobooks          = '"Audiobooks",', '"Аудиокниги",'
+                Downloaded          = '"Downloaded"', '"Скачано"'
+                ByYou               = '"By you"', '"Ваши"'
+                Unplayed            = '"Unplayed"', '"Невоспроизведенное"'
+                InProgress          = '"In progress"', '"В процессе"'
+                LikedSongs          = '"Liked Songs"', '"Понравившиеся песни"'
+                YourEpisodes        = '"Your Episodes"', '"Ваши эпизоды"'
+                LocalFiles          = '"Local Files"', '"Локальные файлы"'
             }
             $n = ($lang).NoVariable7
             $contents = $ru_translate
@@ -1023,28 +1062,30 @@ function Helper($paramname, $addstring) {
                 MadeForYou       = '(Show "Made For You" entry point in the left sidebar.,default:)(!1)', '$1true'
                 ClearCache       = '(Enable option in settings to clear all downloads",default:)(!1)', '$1true'
                 CarouselsonHome  = '(Use carousels on Home",default:)(!1)', '$1true'
+                LeftSidebar      = '(Enable Your Library X view of the left sidebar",default:)(!1)', '$1true'
                 LyricsEnabled    = '(With this enabled, clients will check whether tracks have lyrics available",default:)(!1)', '$1true' 
                 PlaylistCreation = '(Enables new playlist creation flow in Web Player and DesktopX",default:)(!1)', '$1true'
                 SearchBox        = '(Adds a search box so users are able to filter playlists when trying to add songs to a playlist using the contextmenu",default:)(!1)', '$1true'
                 # "Create similar playlist" menu is activated for someone else's playlists
-                SimilarPlaylist  = ',(.\.isOwnedBySelf&&)(..createElement\(..Fragment,null,..createElement\(.+?{(uri:.|spec:.),(uri:.|spec:.).+?contextmenu.create-similar-playlist"\)}\),)' , ',$2$1'
+                SimilarPlaylist  = ',(.\.isOwnedBySelf&&)((\(.{0,11}\)|..createElement)\(.{1,3}Fragment,.+?{(uri:.|spec:.),(uri:.|spec:.).+?contextmenu.create-similar-playlist"\)}\),)' , ',$2$1'
             }
+            $ofline = Check_verison_clients -param2 "offline"
             if ($enhance_like_off) { $exp_features.Remove('EnhanceLiked') }
             if ($enhance_playlist_off) { $exp_features.Remove('EnhancePlaylist') }
             if ($new_artist_pages_off) { $exp_features.Remove('DisographyArtist') }
             if ($new_lyrics_off) { $exp_features.Remove('LyricsMatch') }
             if ($equalizer_off) { $exp_features.Remove('Equalizer') }
             if ($device_new_off) { $exp_features.Remove('DevicePicker') }
-            if ($navalt_off) { $exp_features.Remove('NewHome') }
             if ($made_for_you_off) { $exp_features.Remove('MadeForYou') }
             if ($exp_standart) {
                 $exp_features.Remove('EnhanceLiked'), $exp_features.Remove('EnhancePlaylist'), 
                 $exp_features.Remove('DisographyArtist'), $exp_features.Remove('LyricsMatch'), 
                 $exp_features.Remove('Equalizer'), $exp_features.Remove('DevicePicker'), 
                 $exp_features.Remove('NewHome'), $exp_features.Remove('MadeForYou'),
-                $exp_features.Remove('SimilarPlaylist')
+                $exp_features.Remove('SimilarPlaylist'), $exp_features.Remove('LeftSidebar')
             }
-            $ofline = Check_verison_clients -param2 "offline"
+            if (!($left_sidebar_on) -or $ofline -le "1.1.94.872") { $exp_features.Remove('LeftSidebar') }
+            if ($navalt_off) { $exp_features.Remove('NewHome'), $exp_features.Remove('LeftSidebar') }
             if ($ofline -ge "1.1.94.864") {
                 $exp_features.Remove('LyricsEnabled'), $exp_features.Remove('PlaylistCreation'), 
                 $exp_features.Remove('SearchBox')
@@ -1054,8 +1095,6 @@ function Helper($paramname, $addstring) {
             $contents = $exp_features
             $paramdata = $xpui_js
         }
-
-
     }
     $contents.Keys | Sort-Object | ForEach-Object { 
  
@@ -1063,8 +1102,11 @@ function Helper($paramname, $addstring) {
             $paramdata = $paramdata -replace $contents.$PSItem[0], $contents.$PSItem[1] 
         }
         else { 
-            Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline 
-            Write-Host "`$contents.$PSItem"$n
+            if (!($paramname -eq "RuTranslate") -or $err_ru) {
+
+                Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline 
+                Write-Host "`$contents.$PSItem"$n
+            }
         }    
     }
     $paramdata
@@ -1303,14 +1345,14 @@ If (Test-Path $xpui_spa_patch) {
     if ($ru) {
         [Reflection.Assembly]::LoadWithPartialName('System.IO.Compression') | Out-Null
 
-        $files = 'af.json', 'am.json', 'ar.json', 'az.json', 'bg.json', 'bho.json', 'bn.json', `
-            'cs.json', 'da.json', 'de.json', 'el.json', 'es-419.json', 'es.json', 'et.json', 'fa.json', `
-            'fi.json', 'fil.json', 'fr-CA.json', 'fr.json', 'gu.json', 'he.json', 'hi.json', 'hu.json', `
+        $files = 'af.json', 'am.json', 'ar.json', 'ar-EG.json', 'ar-SA.json', 'ar-MA.json', 'az.json', 'bg.json', 'bho.json', 'bn.json', `
+            'bs.json', 'cs.json', 'ca.json', 'gl.json', 'da.json', 'de.json', 'en-GB.json', 'el.json', 'es-419.json', 'es-MX.json', 'es-AR.json', 'es.json', 'et.json', 'fa.json', `
+            'fi.json', 'fil.json', 'fr-CA.json', 'fr.json', 'gu.json', 'he.json', 'hi.json', 'eu.json', 'hu.json', `
             'id.json', 'is.json', 'it.json', 'ja.json', 'kn.json', 'ko.json', 'lt.json', 'lv.json', `
-            'ml.json', 'mr.json', 'ms.json', 'nb.json', 'ne.json', 'nl.json', 'or.json', 'pa-IN.json', `
+            'ml.json', 'mr.json', 'ms.json', 'mk.json', 'nb.json', 'ne.json', 'nl.json', 'or.json', 'pa-IN.json', `
             'pl.json', 'pt-BR.json', 'pt-PT.json', 'ro.json', 'sk.json', 'sl.json', 'sr.json', 'sv.json', `
-            'sw.json' , 'ta.json' , 'te.json' , 'th.json' , 'tr.json' , 'uk.json' , 'ur.json' , 'vi.json', `
-            'zh-CN.json', 'zh-TW.json' , 'zu.json' , 'pa-PK.json' , 'hr.json'
+            'sw.json' , 'ta.json', 'te.json', 'th.json', 'tr.json', 'uk.json', 'ur.json', 'vi.json', `
+            'zh-CN.json', 'zh-TW.json', 'zh-HK.json', 'zu.json', 'pa-PK.json', 'hr.json'
 
         $stream = New-Object IO.FileStream($xpui_spa_patch, [IO.FileMode]::Open)
         $mode = [IO.Compression.ZipArchiveMode]::Update

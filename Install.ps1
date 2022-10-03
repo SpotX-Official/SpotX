@@ -1,9 +1,9 @@
 param
 (
-    [Parameter(HelpMessage = 'Remove podcasts from homepage.')]
+    [Parameter(HelpMessage = 'Remove podcasts/episodes/audiobooks from homepage.')]
     [switch]$podcasts_off,
     
-    [Parameter(HelpMessage = 'Do not remove podcasts from homepage.')]
+    [Parameter(HelpMessage = 'Do not remove podcasts/episodes/audiobooks from homepage.')]
     [switch]$podcasts_on,
     
     [Parameter(HelpMessage = 'Block Spotify automatic updates.')]
@@ -45,7 +45,7 @@ param
     [Parameter(HelpMessage = 'Do not hide the icon of collaborations in playlists.')]
     [switch]$hide_col_icon_off,
     
-    [Parameter(HelpMessage = 'Do not enable the made for you button on the left sidebar.')]
+    [Parameter(HelpMessage = 'Do not enable the Made For You button on the left sidebar.')]
     [switch]$made_for_you_off,
     
     [Parameter(HelpMessage = 'Do not enable enhance playlist.')]
@@ -264,7 +264,7 @@ $lang = Set-ScriptLanguageStrings -LanguageCode $langCode
 
 # Set variable 'ru'.
 if ($langCode -eq 'ru') { $ru = $true }
-# Set variable 'add transl line'.
+# Set variable 'add translation line'.
 if ($langCode -match '^(it|tr|ka|pl|es|fr|hi|pt|id|vi)') { $line = $true }
 
 # Automatic length of stars
@@ -326,7 +326,7 @@ function incorrectValue {
 
 function Check_verison_clients($param2) {
 
-    # checking the recommended version for spotx
+    # Checking the recommended version for spotx
     if ($param2 -eq "online") {
         $ProgressPreference = 'SilentlyContinue' # Hiding Progress Bars
         $readme = Invoke-WebRequest -UseBasicParsing -Uri https://raw.githubusercontent.com/SpotX-CLI/SpotX-Win/main/README.md
@@ -900,7 +900,7 @@ function Helper($paramname, $addstring) {
                 # Removing a billboard on the homepage
                 Bilboard            = '.(\?\[..\(..leaderboard,)', 'false$1' 
                 # Removing audio ads
-                AidioAds            = '(case .:)return this.enabled=...+?(;case .:this.subscription=this.audioApi).+?(;case .)', '$1$2.cosmosConnector.increaseStreamTime(-100000000000)$3'
+                AudioAds            = '(case .:)return this.enabled=...+?(;case .:this.subscription=this.audioApi).+?(;case .)', '$1$2.cosmosConnector.increaseStreamTime(-100000000000)$3'
                 # Removing an empty block
                 EmptyBlockAd        = 'adsEnabled:!0', 'adsEnabled:!1'
                 # Fullscreen act., removing upgrade menu, button
@@ -922,7 +922,7 @@ function Helper($paramname, $addstring) {
                 MostRecent          = '("most-recent",value:")Most recent("\})', '$1Самые последние$2'
             }
             if ($bts) {
-                $offadson_fullscreen.Remove('Bilboard'), $offadson_fullscreen.Remove('AidioAds')
+                $offadson_fullscreen.Remove('Bilboard'), $offadson_fullscreen.Remove('AudioAds')
             }
             $ofline = Check_verison_clients -param2 "offline"
             if (!($ru) -or $ofline -le "1.1.94.872") {
@@ -1276,7 +1276,7 @@ if (Test-Path $xpui_js_patch) {
         # Hide very high quality streaming
         $writer.Write([System.Environment]::NewLine + ' #desktop\.settings\.streamingQuality>option:nth-child(5) {display:none}')
     }
-    # new UI fix
+    # New UI fix
     if (!($navalt_off)) {
         $writer.Write([System.Environment]::NewLine + ' .nav-alt .Root__top-container {background: #00000085;gap: 6px;padding: 8px;}')
         $writer.Write([System.Environment]::NewLine + ' .Root__fixed-top-bar {background-color: #00000000}')
@@ -1432,7 +1432,7 @@ If (Test-Path $xpui_spa_patch) {
     $writer.Write($xpuiContents_vendor)
     $writer.Close()
 
-    # minification of all *.js
+    # Minification of all *.js
     $zip.Entries | Where-Object FullName -like '*.js' | ForEach-Object {
         $readerjs = New-Object System.IO.StreamReader($_.Open())
         $xpuiContents_js = $readerjs.ReadToEnd()
@@ -1465,7 +1465,7 @@ If (Test-Path $xpui_spa_patch) {
         $writer.Write([System.Environment]::NewLine + ' #desktop\.settings\.streamingQuality>option:nth-child(5) {display:none}')
     }
      
-    # new UI fix
+    # New UI fix
     if (!($navalt_off)) {
         $writer.Write([System.Environment]::NewLine + ' .nav-alt .Root__top-container {background: #00000085;gap: 6px;padding: 8px;}')
         $writer.Write([System.Environment]::NewLine + ' .Root__fixed-top-bar {background-color: #00000000}')
@@ -1568,7 +1568,7 @@ if ($ru) {
     Remove-Item $patch_lang -Exclude *en*, *ru* -Recurse
 }
 
-# create a desktop shortcut
+# Create a desktop shortcut
 $ErrorActionPreference = 'SilentlyContinue' 
 
 if (!($no_shortcut)) {
@@ -1587,7 +1587,7 @@ if (!($no_shortcut)) {
     }
 }
 
-# create shortcut in start menu
+# Create shortcut in start menu
 If (!(Test-Path $start_menu)) {
     $source = "$env:APPDATA\Spotify\Spotify.exe"
     $target = $start_menu
@@ -1642,7 +1642,7 @@ if ($cache_install) {
     downloadScripts -param1 "run_ps"
 
 
-    # create a desktop shortcut
+    # Create a desktop shortcut
     if (!($no_shortcut)) {
         $source2 = "$cache_folder\hide_window.vbs"
         $target2 = "$desktop_folder\Spotify.lnk"
@@ -1654,7 +1654,7 @@ if ($cache_install) {
         $Shortcut2.TargetPath = $source2
         $Shortcut2.Save()
     }
-    # create shortcut in start menu
+    # Create shortcut in start menu
     $source2 = "$cache_folder\hide_window.vbs"
     $target2 = $start_menu
     $WorkingDir2 = "$cache_folder"

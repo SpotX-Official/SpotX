@@ -63,7 +63,7 @@ or
   
   - Automatic removal of Spotify MS if it was found 
   - Automatic installation of the recommended version of Spotify (if another client has already been found, it will be installed over) 
-  - Removal of podcasts/episodes/audiobooks from the main page 
+  - Hiding podcasts/episodes/audiobooks from the homepage 
   - Automatic blocking of Spotify updates
   - All [experimental features](https://github.com/SpotX-CLI/SpotX-Win/discussions/50) included
   - After the installation is completed, the client will autorun.
@@ -136,7 +136,7 @@ or
 
   - Automatic removal of Spotify MS if it was found 
   - Automatic installation of the recommended version of Spotify (if another client has already been found, it will be installed over) 
-  - Removal of podcasts from the main page 
+  - Hiding podcasts/episodes/audiobooks from the homepage  
   - Automatic blocking of Spotify updates
   - All [experimental features](https://github.com/SpotX-CLI/SpotX-Win/discussions/50) included 
   

@@ -23,7 +23,7 @@
 
 - <strong>Blocks all banner, video and audio ads in the client</strong>
 - <strong>Unlocks the skip function of any track</strong>
-- <strong>Hiding podcasts and episodes from the homepage (optional)</strong>
+- <strong>Hiding podcasts, episodes and audiobooks from the homepage (optional)</strong>
 - <strong>Block Spotify automatic updates (optional)</strong>
 - <strong>Automatic clearing of [audio cache](https://github.com/SpotX-CLI/SpotX-Win/discussions/2) (optional)</strong>
 - <strong>More experimental features have been activated ([see the full list](https://github.com/SpotX-CLI/SpotX-Win/discussions/50))</strong>
@@ -63,7 +63,7 @@ or
   
   - Automatic removal of Spotify MS if it was found 
   - Automatic installation of the recommended version of Spotify (if another client has already been found, it will be installed over) 
-  - Removal of podcasts from the main page 
+  - Hiding podcasts/episodes/audiobooks from the homepage 
   - Automatic blocking of Spotify updates
   - All [experimental features](https://github.com/SpotX-CLI/SpotX-Win/discussions/50) included
   - After the installation is completed, the client will autorun.
@@ -136,7 +136,7 @@ or
 
   - Automatic removal of Spotify MS if it was found 
   - Automatic installation of the recommended version of Spotify (if another client has already been found, it will be installed over) 
-  - Removal of podcasts from the main page 
+  - Hiding podcasts/episodes/audiobooks from the homepage  
   - Automatic blocking of Spotify updates
   - All [experimental features](https://github.com/SpotX-CLI/SpotX-Win/discussions/50) included 
   

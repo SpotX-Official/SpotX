@@ -32,7 +32,7 @@
     DownSpoti2      = "कृपया प्रतीक्षा करें..."
     PodcatsOff      = "पॉडकास्ट बंद "
     PodcastsOn      = "पॉडकास्ट चालू"
-    PodcatsSelect   = "क्या आप मुख्य पृष्ठ से पॉडकास्ट अक्षम करना चाहते हैं? [Y/N]"
+    PodcatsSelect   = "Do you want to disable podcasts, episodes and audiobooks from the main page? [Y/N]" #
     DowngradeNote   = "इसे अवरुद्ध करने की अनुशंसा की जाती है क्योंकि स्पॉटिफाई का डाउनग्रेड था"
     UpdBlock        = "स्पॉटिफाई अपडेट ब्लॉक किए गए"
     UpdUnblock      = "स्पॉटिफाई अपडेट ब्लॉक नहीं हैं"

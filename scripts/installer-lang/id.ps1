@@ -32,7 +32,7 @@
     DownSpoti2      = "Mohon ditunggu..."
     PodcatsOff      = "Podcast mati"
     PodcastsOn      = "Podcast hidup"
-    PodcatsSelect   = "Apakah anda ingin menonaktifkan podcast dari halaman utama? [Y/N]"
+    PodcatsSelect   = "Do you want to disable podcasts, episodes and audiobooks from the main page? [Y/N]" #
     DowngradeNote   = "Disarankan untuk memblokir karena ada penurunan versi Spotify"
     UpdBlock        = "Pembaruan Spotify diblokir"
     UpdUnblock      = "Pembaruan Spotify tidak diblokir"
@@ -64,5 +64,4 @@
     HostBak         = "Mencadangkan host.bak..."
     HostDel         = "Mencoba menghapus URL yang tidak diinginkan dari file host asli..."
     HostError       = "Terjadi kesalahan saat mengedit file host, mengeditnya secara manual, atau menjalankan skrip sebagai administrator"
-    
 }

@@ -32,7 +32,7 @@
     DownSpoti2      = "Lütfen bekleyin..."
     PodcatsOff      = "Podcast'ler Kapalı"
     PodcastsOn      = "Podcast'ler Açık"
-    PodcatsSelect   = "Podcast'leri ana sayfadan kaldırmak istiyor musunuz? [Y/N]"
+    PodcatsSelect   = "Do you want to disable podcasts, episodes and audiobooks from the main page? [Y/N]" #
     DowngradeNote   = "Spotify'da bir sürüm düşürme olduğu için engellemeniz önerilir"
     UpdBlock        = "Spotify güncellemeleri engellendi"
     UpdUnblock      = "Spotify güncellemeleri engellenmedi"

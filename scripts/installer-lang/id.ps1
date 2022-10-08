@@ -32,7 +32,7 @@
     DownSpoti2      = "Mohon ditunggu..."
     PodcatsOff      = "Podcast mati"
     PodcastsOn      = "Podcast hidup"
-    PodcatsSelect   = "Do you want to disable podcasts, episodes and audiobooks from the main page? [Y/N]" #
+    PodcatsSelect   = "Apakah anda ingin menghilangkan podcast, episode, dan buku audio dari halaman utama?"
     DowngradeNote   = "Disarankan untuk memblokir karena ada penurunan versi Spotify"
     UpdBlock        = "Pembaruan Spotify diblokir"
     UpdUnblock      = "Pembaruan Spotify tidak diblokir"

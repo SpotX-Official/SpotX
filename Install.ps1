@@ -163,7 +163,7 @@ function Format-LanguageCode {
                 $returnCode = 'ro'
                 break
             }
-			'^de' {
+	    '^de' {
                 $returnCode = 'de'
                 break
             }

@@ -1092,7 +1092,7 @@ function Helper($paramname, $addstring) {
             if ($new_lyrics_off) { $exp_features.Remove('LyricsMatch') }
             if ($equalizer_off) { $exp_features.Remove('Equalizer') }
             if (!($device_picker_old)) { $exp_features.Remove('DevicePicker') }
-            if ($made_for_you_off -or $ofline -ge "1.1.95.893") { $exp_features.Remove('MadeForYou') }
+            if ($made_for_you_off -or $ofline -ge "1.1.96.783") { $exp_features.Remove('MadeForYou') }
             if ($exp_standart) {
                 $exp_features.Remove('EnhanceLiked'), $exp_features.Remove('EnhancePlaylist'), 
                 $exp_features.Remove('DisographyArtist'), $exp_features.Remove('LyricsMatch'), 

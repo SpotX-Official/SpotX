@@ -66,8 +66,8 @@ param
     [Parameter(HelpMessage = 'Enable audio equalizer for Desktop.')]
     [switch]$equalizer_off,
     
-    [Parameter(HelpMessage = 'Enable showing a new and improved device picker UI.')]
-    [switch]$device_new_off,
+    [Parameter(HelpMessage = 'Return the old device picker')]
+    [switch]$device_picker_old,
 
     [Parameter(HelpMessage = 'Disable the new home structure and navigation.')]
     [switch]$navalt_off,
@@ -914,7 +914,7 @@ function Helper($paramname, $addstring) {
         "OffadsonFullscreen" { 
             $offadson_fullscreen = @{
                 # Removing a billboard on the homepage
-                Bilboard            = '.(\?\[..\(..leaderboard,)', 'false$1' 
+                Bilboard            = '.(\?\[.{1,6}[a-zA-Z].leaderboard,)', 'false$1' 
                 # Removing audio ads
                 AudioAds            = '(case .:)return this.enabled=...+?(;case .:this.subscription=this.audioApi).+?(;case .)', '$1$2.cosmosConnector.increaseStreamTime(-100000000000)$3'
                 # Removing an empty block
@@ -929,7 +929,7 @@ function Helper($paramname, $addstring) {
                 ConnectUnlock3      = '(className:.,disabled:)(..)', '$1false'
                 ConnectUnlock4      = 'return (..isDisabled)(\?(..createElement|\(.{1,10}\))\(..,)', 'return false$2'
                 # Removing the track download quality switch
-                DownloadQuality     = '(children:..\(.,.\)|xe\(.,.\)\)\)\)).+?(children:..\(.,.\)|xe\(.,.\)\)\)\))', '$1'
+                DownloadQuality     = '(\(.,..jsxs\)\(.{1,3}|..createElement\(.{1,4}),{filterMatchQuery:.{1,6}get\("desktop.settings.downloadQuality.title.+?(children:.{1,2}\(.,.\).+?,|xe\(.,.\).+?,)', ''
                 # temporary Russian strings for xpui.js
                 Creator             = '("creator",value:")Creator("\})', '$1Автор$2'
                 CustomOrder         = '("custom-order",value:")Custom order("\})', '$1Особая$2'
@@ -1073,7 +1073,7 @@ function Helper($paramname, $addstring) {
                 DisographyArtist = '(Enable a condensed disography shelf on artist pages",default:)(!1)', '$1true' 
                 LyricsMatch      = '(Enable Lyrics match labels in search results",default:)(!1)', '$1true'  
                 Equalizer        = '(Enable audio equalizer for Desktop and Web Player",default:)(!1)', '$1true' 
-                DevicePicker     = '(Enable showing a new and improved device picker UI",default:)(!1)', '$1true'
+                DevicePickerOld  = '(Enable showing a new and improved device picker UI",default:)(!.)', '$1false'
                 NewHome          = '(Enable the new home structure and navigation",values:.,default:)(..DISABLED)', '$1true'
                 MadeForYou       = '(Show "Made For You" entry point in the left sidebar.,default:)(!1)', '$1true'
                 ClearCache       = '(Enable option in settings to clear all downloads",default:)(!1)', '$1true'
@@ -1091,8 +1091,8 @@ function Helper($paramname, $addstring) {
             if ($new_artist_pages_off) { $exp_features.Remove('DisographyArtist') }
             if ($new_lyrics_off) { $exp_features.Remove('LyricsMatch') }
             if ($equalizer_off) { $exp_features.Remove('Equalizer') }
-            if ($device_new_off) { $exp_features.Remove('DevicePicker') }
-            if ($made_for_you_off) { $exp_features.Remove('MadeForYou') }
+            if (!($device_picker_old)) { $exp_features.Remove('DevicePicker') }
+            if ($made_for_you_off -or $ofline -ge "1.1.95.893") { $exp_features.Remove('MadeForYou') }
             if ($exp_standart) {
                 $exp_features.Remove('EnhanceLiked'), $exp_features.Remove('EnhancePlaylist'), 
                 $exp_features.Remove('DisographyArtist'), $exp_features.Remove('LyricsMatch'), 

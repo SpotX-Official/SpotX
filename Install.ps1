@@ -163,7 +163,7 @@ function Format-LanguageCode {
                 $returnCode = 'ro'
                 break
             }
-	    '^de' {
+            '^de' {
                 $returnCode = 'de'
                 break
             }
@@ -930,21 +930,9 @@ function Helper($paramname, $addstring) {
                 ConnectUnlock4      = 'return (..isDisabled)(\?(..createElement|\(.{1,10}\))\(..,)', 'return false$2'
                 # Removing the track download quality switch
                 DownloadQuality     = '(\(.,..jsxs\)\(.{1,3}|..createElement\(.{1,4}),{filterMatchQuery:.{1,6}get\("desktop.settings.downloadQuality.title.+?(children:.{1,2}\(.,.\).+?,|xe\(.,.\).+?,)', ''
-                # temporary Russian strings for xpui.js
-                Creator             = '("creator",value:")Creator("\})', '$1Автор$2'
-                CustomOrder         = '("custom-order",value:")Custom order("\})', '$1Особая$2'
-                Alphabetical        = '("alphabetical",value:")Alphabetical("\})', '$1Алфавитная$2'
-                RecentlyAdded       = '("recently-added",value:")Recently added("\})', '$1Недавно добавленные$2' 
-                MostRecent          = '("most-recent",value:")Most recent("\})', '$1Самые последние$2'
             }
             if ($bts) {
                 $offadson_fullscreen.Remove('Bilboard'), $offadson_fullscreen.Remove('AudioAds')
-            }
-            $ofline = Check_verison_clients -param2 "offline"
-            if (!($ru) -or $ofline -le "1.1.94.872") {
-                $offadson_fullscreen.Remove('Creator'), $offadson_fullscreen.Remove('CustomOrder'), $offadson_fullscreen.Remove('Alphabetical'),
-                $offadson_fullscreen.Remove('RecentlyAdded'), $offadson_fullscreen.Remove('MostRecent')
-                
             }
 
             $n = ($lang).NoVariable2
@@ -1020,17 +1008,7 @@ function Helper($paramname, $addstring) {
                 AlbumReleaseOther   = '"other": "\\"%name%\\" was released %years% years ago this week!"', '"other": "\"%name%\" был выпущен %years% года назад на этой неделе!"'
                 Speed               = '"Speed [{]0[}]×"', '"Скорость {0}×"'                            
                 Confidential        = '"This is a highly confidential test. Do not share details of this test or any song you create outside of Spotify."', '"Это очень конфиденциальный тест. Не делитесь подробностями этого теста или какой-либо песни, которую вы создаете, за пределами Spotify."'          
-                Cache               = '"Cache:"', '"Кеш:"'
-                Downloads           = '"Downloads:"', '"Загрузки:"'
                 StartGroupSession   = '"How to start a Group Session"', '"Как начать групповую сессию"'
-                ForPremium          = '"For: Premium on mobile and tablet"', '"Для: Premium на мобильных устройствах и планшетах"'
-                GroupSessionControl = '"In a group session, everyone invited – no matter where they are – can control what plays."', '"На групповом сеансе каждый приглашенный – независимо от того, где он находится – может контролировать то, что играет."'
-                OpenSpotify         = '"Open Spotify and play something."', '"Откройте Spotify и включите что-нибудь."'
-                TapIcon             = '"Tap [{]icon[}] at the bottom of the screen."', '"Нажмите {icon} в нижней части экрана."'
-                TapStart            = '"Tap Start a remote group session."', '"Нажмите Начать сеанс удаленной группы."'
-                TapInvite           = '"Tap Invite friends."', '"Нажмите Пригласить друзей."'
-                AddFiends           = '"Or, if you want to invite additional friends after you.ve started a group session, tap the avatar at the bottom of the screen and tap [{]icon[}]."', '"Или, если вы хотите пригласить дополнительных друзей после начала группового сеанса, коснитесь аватара в нижней части экрана и нажмите {icon}."'
-                Share               = '"Select how you want to share, or choose Copy link and send it to your friends."', '"Выберите, как вы хотите поделиться, или выберите Скопировать ссылку и отправить ее своим друзьям."'
                 LearnMore           = '"Learn more"', '"Узнать больше"'
                 Author              = '"Author"', '"Автор"'
                 Creator             = '"Creator"', '"Создатель"'
@@ -1053,6 +1031,27 @@ function Helper($paramname, $addstring) {
                 LikedSongs          = '"Liked Songs"', '"Понравившиеся песни"'
                 YourEpisodes        = '"Your Episodes"', '"Ваши эпизоды"'
                 LocalFiles          = '"Local Files"', '"Локальные файлы"'
+                EnhancePrem         = '"Enhance your playlists with Premium"', '"Улучшите свои плейлисты с Premium"'
+                EnhancePrem2        = '"Instantly add personalized tracks that match this playlist.s unique sound"', '"Мгновенно добавляйте персонализированные треки, соответствующие уникальному звучанию этого плейлиста"'
+                EnhancePrem3        = '"Enhance %playlist%"', '"Улучшить %playlist%"'
+                EnhancePrem4        = '"Enhanced"', '"Улучшенный"'
+                EnhancePrem5        = '"Enhance"', '"Улучшить"'
+                HigherQualityAudio  = '"Higher Quality Audio"', '"Более Высокое Качество Звука"'
+                HigherQualityAudio2 = '"Crisp highs & booming lows, a few of the things you.ll hear with high-quality audio"', '"Четкие высокие частоты и гулкие низкие частоты — вот некоторые вещи, которые вы услышите благодаря высококачественному звуку."'
+                Enabled             = '"Enabled"', '"Включено"'
+                ChangeSettings      = '"Change settings"', '"Изменить настройки"'
+                ListenTogether      = '"Listen together, from anywhere"', '"Слушайте вместе, откуда угодно"'
+                InviteFriends       = '"Invite your friends to join you remotely in controlling what plays"', '"Пригласите своих друзей присоединиться к вам удаленно, чтобы контролировать то, что играет"'
+                PublishSongs        = '"Create and publish songs right on Spotify. Choose a song and genre, record your vocals, then edit the song to make it yours."', '"Создавайте и публикуйте песни прямо на Spotify. Выберите песню и жанр, запишите свой вокал, а затем отредактируйте песню, чтобы сделать ее своей."'
+                GroupSession        = '"Group sessions let you and your friends listen to music and podcasts together, from anywhere."', '"Групповые сеансы позволяют вам и вашим друзьям вместе слушать музыку и подкасты из любого места."'
+                GroupSession2       = '"To start your group session:"', '"Чтобы начать групповой сеанс:"'
+                PhoneTablet         = '"Open Spotify on a phone or tablet."', '"Откройте Spotify на телефоне или планшете."'
+                PickSongPodcast     = '"Pick a song or podcast and play it."', '"Выберите песню или подкаст и воспроизведите"'
+                TapIcon             = '"Tap .icon.."', '"Нажмите {icon}."'
+                TapStart            = '"Tap ...Start a remote group session....."', '"Нажмите <b>Начать сеанс удаленной группы</b>."'
+                TapInvite           = '"Tap ...Invite friends....."', '"Нажмите <b>Пригласить друзей</b>."'
+                ShareFriends        = '"Share with your friends."', '"Поделись с друзьями."'
+                GroupSession3       = '"You can only start or join a group session using a phone or tablet."', '"Вы можете начать или присоединиться к групповому сеансу только с помощью телефона или планшета."'
             }
             $n = ($lang).NoVariable7
             $contents = $ru_translate

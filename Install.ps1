@@ -400,7 +400,7 @@ function downloadScripts($param1) {
         $ver = Check_verison_clients -param2 "online"
         $l = "$PWD\links.tsv"
         $old = [IO.File]::ReadAllText($l)
-        $links = $old -match "https:\/\/upgrade.scdn.co\/upgrade\/client\/win32-x86\/spotify_installer-$ver\.g[0-9a-f]{8}-[0-9]{1,3}\.exe" 
+        $links = $old -match "https:\/\/upgrade.scdn.co\/upgrade\/client\/win32-x86\/spotify_installer-$ver\.g[0-9a-f]{8}-[0-9]{1,4}\.exe" 
         $links = $Matches.Values
     }
     if ($ru -and $param1 -eq "cache-spotify") {

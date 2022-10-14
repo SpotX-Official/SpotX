@@ -1098,7 +1098,7 @@ function Helper($paramname, $addstring) {
             if ($new_artist_pages_off) { $exp_features.Remove('DisographyArtist') }
             if ($new_lyrics_off) { $exp_features.Remove('LyricsMatch') }
             if ($equalizer_off) { $exp_features.Remove('Equalizer') }
-            if (!($device_picker_old)) { $exp_features.Remove('DevicePicker') }
+            if (!($device_picker_old)) { $exp_features.Remove('DevicePickerOld') }
             if ($made_for_you_off -or $ofline -ge "1.1.96.783") { $exp_features.Remove('MadeForYou') }
             if ($exp_standart) {
                 $exp_features.Remove('EnhanceLiked'), $exp_features.Remove('EnhancePlaylist'), 

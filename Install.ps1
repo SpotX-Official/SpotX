@@ -81,6 +81,9 @@ param
     [Parameter(HelpMessage = 'Use bts patch.')]
     [switch]$bts,
 
+    [Parameter(HelpMessage = 'Static color for lyrics.')]
+    [int16]$lyrics_stat,
+
     [Parameter(HelpMessage = 'Error log ru string.')]
     [switch]$err_ru,
     
@@ -909,6 +912,45 @@ function Helper($paramname, $addstring) {
             $contents = $html_lic_min
             $paramdata = $xpuiContents_html
         }
+        "Lyrics-color" { 
+            # Static color for lyrics (xpui-routes-lyrics.css)
+
+            $pasttext = "#ffffff4a", "#ffffffb8", "#ffffff6b", "#E40909B3"
+            $current = "#ffffffc7", "#ffffffc7", "#ffffffc7", "#C2C2C2"
+            $next = "#ffffff4a", "#322319", "#2e080b", "#CA861A"
+            $background = "#121212", "#956b4b", "#c62736f2", "#121212"
+            $maxmatch = "#ffffff94", "#322319", "#2e080b", "#C2C2C2"
+
+            switch ($lyrics_stat) {
+                1 { 
+                    $pasttextR = $pasttext[0]; $currentR = $current[0]; $nextR = $next[0]; $backgroundR = $background[0]; $maxmatchR = $maxmatch[0]
+                }
+                2 { 
+                    $pasttextR = $pasttext[1]; $currentR = $current[1]; $nextR = $next[1]; $backgroundR = $background[1]; $maxmatchR = $maxmatch[1]
+                }
+                3 { 
+                    $pasttextR = $pasttext[2]; $currentR = $current[2]; $nextR = $next[2]; $backgroundR = $background[2]; $maxmatchR = $maxmatch[2]
+                }
+                4 { 
+                    $pasttextR = $pasttext[3]; $currentR = $current[3]; $nextR = $next[3]; $backgroundR = $background[3]; $maxmatchR = $maxmatch[3]
+                }
+                Default {
+                    $pasttextR = $pasttext[0]; $currentR = $current[0]; $nextR = $next[0]; $backgroundR = $background[0]; $maxmatchR = $maxmatch[0]
+                }
+
+            }
+            $lyrics = @{
+                pasttext   = '(H2J92dVdr0ykdOX5azL1{color:)var\(--lyrics-color-active\)', "`$1$pasttextR"
+                current    = '(TDPh45khCfG51fNwNIiw{color:)var\(--lyrics-color-active\)', "`$1$currentR"
+                next       = '(NHVfxGs2HwmI_fly2JC4{color:)var\(--lyrics-color-inactive\)' , "`$1$nextR"
+                background = 'var\(--lyrics-color-background\)', $backgroundR
+                maxmatch   = '(iq4cgi0YEKr6DGaTtzUj{color:)var\(--lyrics-color-inactive\)', "`$1$maxmatchR"
+            }
+            $n = ($lang).NoVariable6
+            $contents = $lyrics
+            $paramdata = $xpui_lyrics
+
+        }
         "Discriptions" {  
             # Add discriptions (xpui-desktop-modals.js)
             $discript = @{
@@ -1280,6 +1322,20 @@ if (Test-Path $xpui_js_patch) {
         $writer.Close()  
     }
 
+    # Static color for lyrics
+    if ($lyrics_stat) {
+        $file_lyrics = get-item $env:APPDATA\Spotify\Apps\xpui\xpui-routes-lyrics.css
+        $reader = New-Object -TypeName System.IO.StreamReader -ArgumentList $file_lyrics
+        $xpui_lyrics = $reader.ReadToEnd()
+        $reader.Close()
+        $xpui_lyrics = Helper -paramname "Lyrics-color" 
+        $writer = New-Object System.IO.StreamWriter -ArgumentList $file_lyrics
+        $writer.BaseStream.SetLength(0)
+        $writer.Write($xpui_lyrics)
+        $writer.Close()  
+    }
+    
+
     # xpui.css
     $file_xpui_css = get-item $env:APPDATA\Spotify\Apps\xpui\xpui.css
     $reader = New-Object -TypeName System.IO.StreamReader -ArgumentList $file_xpui_css
@@ -1428,6 +1484,19 @@ If (Test-Path $xpui_spa_patch) {
         $writer = New-Object System.IO.StreamWriter($entry_home_v2.Open())
         $writer.BaseStream.SetLength(0)
         $writer.Write($xpui_homev2)
+        $writer.Close()
+    }
+
+    # Static color for lyrics
+    if ($lyrics_stat) {
+        $entry_lyrics = $zip.GetEntry('xpui-routes-lyrics.css')
+        $reader = New-Object System.IO.StreamReader($entry_lyrics.Open())
+        $xpui_lyrics = $reader.ReadToEnd()
+        $reader.Close()
+        $xpui_lyrics = Helper -paramname "Lyrics-color" 
+        $writer = New-Object System.IO.StreamWriter($entry_lyrics.Open())
+        $writer.BaseStream.SetLength(0)
+        $writer.Write($xpui_lyrics)
         $writer.Close()
     }
 

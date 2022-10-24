@@ -5,8 +5,6 @@
 <p align="center">        
       <a href="https://t.me/spotify_windows_mod"><img src="https://raw.githubusercontent.com/SpotX-CLI/SpotX-Win/main/.github/Pic/Shields/tg.svg"></a>
       <a href="https://discord.gg/p43cusgUPm"><img src="https://discord.com/api/guilds/807273906872123412/widget.png"></a>
-      <a href="https://www.youtube.com/results?search_query=https%3A%2F%2Fgithub.com%2Famd64fox%2FSpotX"><img src="https://raw.githubusercontent.com/SpotX-CLI/SpotX-Win/main/.github/Pic/Shields/youtube.svg"></a>
-      <a href="https://cutt.ly/8EH6NuH"><img src="https://raw.githubusercontent.com/SpotX-CLI/SpotX-Win/main/.github/Pic/Shields/excel.svg"></a>
       <a href="https://telegra.ph/SpotX-FAQ-09-19"><img src="https://raw.githubusercontent.com/SpotX-CLI/SpotX-Win/main/.github/Pic/Shields/faq.svg"></a>
       </p>
 

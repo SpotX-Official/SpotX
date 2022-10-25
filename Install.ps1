@@ -926,7 +926,7 @@ function Helper($paramname, $addstring) {
             $pasttext = "#ffffff4a", "#ffffffb8", "#ffffff6b", "#E40909B3"
             $current = "#ffffffc7", "#ffffffc7", "#ffffffc7", "#C2C2C2"
             $next = "#ffffff4a", "#322319", "#2e080b", "#CA861A"
-            $hover = "#ffffffc7", "#ffffffc7", "#ffffffc7", "#C2C2C2"
+            $hover = "#ffffffc7", "#ffffffc7", "#ffffffc7", "#0FD40F"
             $background = "#121212", "#956b4b", "#c62736f2", "#121212"
             $maxmatch = "#ffffff94", "#322319", "#2e080b", "#C2C2C2"
 

@@ -10,7 +10,7 @@
     Download3       = "Ponowny błąd"
     Download4       = "Sprawdź swoje połączenie z siecią i spróbuj ponownie"
     Download5       = "Pobieranie Spotify"
-    Download6       = "Curl error" #
+    Download6       = "Błąd Curl"
     StopScrpit      = "Skrypt wstrzymany"
     MsSpoti         = "Wersja Spotify ze Sklepu Microsoft została wykryta i nie jest wspierana"
     MsSpoti2        = "Odinstalować wersję Spotify ze Sklepu Microsoft? [Y/N]"
@@ -32,7 +32,7 @@
     DownSpoti2      = "Proszę czekać..."
     PodcatsOff      = "Wyłączanie Podcastów"
     PodcastsOn      = "Włączanie Podcastów"
-    PodcatsSelect   = "Do you want to disable podcasts, episodes and audiobooks from the main page? [Y/N]" #
+    PodcatsSelect   = "Czy chcesz ukryć podcasty, epizody i audiobooki ze strony główniej? [Y/N]"
     DowngradeNote   = "Zalecane jest zablokowanie, ponieważ nastąpiło obniżenie wartości dla Spotify"
     UpdBlock        = "Aktualizacje Spotify zablokowane"
     UpdUnblock      = "Aktualizacje Spotify nie są zablokowane"

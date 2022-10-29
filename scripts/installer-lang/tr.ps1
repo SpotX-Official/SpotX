@@ -10,7 +10,7 @@
     Download3       = "Yine hata oluştu"
     Download4       = "Ağ ayarlarınızı kontrol edin ve kurulumu tekrar çalıştırın"
     Download5       = "Spotify indiriliyor"
-    Download6       = "Curl error" #
+    Download6       = "Curl hatası"
     StopScrpit      = "Komut dosyası durduruldu"
     MsSpoti         = "Spotify'ın desteklenmeyen Microsoft Mağazası sürümü tespit edildi"
     MsSpoti2        = "Spotify Windows Mağazası sürümünü kaldır [Y/N]"
@@ -32,7 +32,7 @@
     DownSpoti2      = "Lütfen bekleyin..."
     PodcatsOff      = "Podcast'ler Kapalı"
     PodcastsOn      = "Podcast'ler Açık"
-    PodcatsSelect   = "Do you want to disable podcasts, episodes and audiobooks from the main page? [Y/N]" #
+    PodcatsSelect   = "Ana sayfadan podcast'leri, bölümleri ve sesli kitapları kaldırmak istiyor musunuz? [Y/N]"
     DowngradeNote   = "Spotify'da bir sürüm düşürme olduğu için engellemeniz önerilir"
     UpdBlock        = "Spotify güncellemeleri engellendi"
     UpdUnblock      = "Spotify güncellemeleri engellenmedi"

@@ -952,6 +952,8 @@ function Helper($paramname) {
 
             $webjson.free.psobject.properties.remove('submenudownload'), $webjson.free.psobject.properties.remove('veryhighstream'), $webjson.free.psobject.properties.remove('downloadicon')
             
+            if ($ofline -ge "1.1.98.683") { $webjson.free.psobject.properties.remove('connectold') }
+
             $n = ($lang).NoVariable2
             $contents = $webjson.free.psobject.properties.name
             $json = $webjson.free
@@ -960,11 +962,12 @@ function Helper($paramname) {
         "OffPodcasts" {  
             # Turn off podcasts
             $n = ($lang).NoVariable5
-            if ($ofline -le "1.1.96.785") { $podcats = "podcastsoff2" }
+            if ($ofline -le "1.1.92.647") { $podcats = "podcastsoff" }
+            if ($ofline -le "1.1.96.785" -and $ofline -ge "1.1.93.896") { $podcats = "podcastsoff2" }
             if ($ofline -ge "1.1.97.952") { $podcats = "podcastsoff3" }
             $contents = $podcats
             $json = $webjson.others
-            $paramdata = $xpui_homev2
+            $paramdata = $xpui_podcast
         }
         "OffRujs" { 
             # Remove all languages except En and Ru from xpui.js
@@ -1083,7 +1086,7 @@ function Helper($paramname) {
             if ($new_artist_pages_off) { $rem.remove('disographyartist') }
             if ($new_lyrics_off) { $rem.remove('lyricsmatch') }
             if ($equalizer_off) { $rem.remove('equalizer') }
-            if (!($device_picker_old)) { $rem.remove('devicepickerold') }
+            if (!($device_picker_old) -or $ofline -ge "1.1.98.683") { $rem.remove('devicepickerold') }
             if ($made_for_you_off -or $ofline -ge "1.1.96.783") { $rem.remove('madeforyou') }
             if ($exp_standart) {
                 $rem.remove('enhanceliked'), $rem.remove('enhanceplaylist'), 
@@ -1459,15 +1462,28 @@ If (Test-Path $xpui_spa_patch) {
 
     # Turn off podcasts
     if ($podcast_off) { 
-        $entry_home_v2 = $zip.GetEntry('home-v2.js')
-        $reader = New-Object System.IO.StreamReader($entry_home_v2.Open())
-        $xpui_homev2 = $reader.ReadToEnd()
-        $reader.Close()
-        $xpui_homev2 = Helper -paramname "OffPodcasts" 
-        $writer = New-Object System.IO.StreamWriter($entry_home_v2.Open())
-        $writer.BaseStream.SetLength(0)
-        $writer.Write($xpui_homev2)
-        $writer.Close()
+        if ($ofline -ge "1.1.93.896" -and $ofline -le "1.1.97.962") {
+            $entry_home_v2 = $zip.GetEntry('home-v2.js')
+            $reader = New-Object System.IO.StreamReader($entry_home_v2.Open())
+            $xpui_podcast = $reader.ReadToEnd()
+            $reader.Close()
+            $xpui_podcast = Helper -paramname "OffPodcasts" 
+            $writer = New-Object System.IO.StreamWriter($entry_home_v2.Open())
+            $writer.BaseStream.SetLength(0)
+            $writer.Write($xpui_podcast)
+            $writer.Close()
+        }
+        if ($ofline -le "1.1.92.647" -or $ofline -ge "1.1.98.683") {
+            $entry_home_v2 = $zip.GetEntry('xpui.js')
+            $reader = New-Object System.IO.StreamReader($entry_home_v2.Open())
+            $xpui_podcast = $reader.ReadToEnd()
+            $reader.Close()
+            $xpui_podcast = Helper -paramname "OffPodcasts" 
+            $writer = New-Object System.IO.StreamWriter($entry_home_v2.Open())
+            $writer.BaseStream.SetLength(0)
+            $writer.Write($xpui_podcast)
+            $writer.Close()
+        }
     }
 
     # Static color for lyrics

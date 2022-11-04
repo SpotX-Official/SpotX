@@ -1088,12 +1088,13 @@ function Helper($paramname) {
             if ($equalizer_off) { $rem.remove('equalizer') }
             if (!($device_picker_old) -or $ofline -ge "1.1.98.683") { $rem.remove('devicepickerold') }
             if ($made_for_you_off -or $ofline -ge "1.1.96.783") { $rem.remove('madeforyou') }
+            if ($ofline -lt "1.1.98.683") { $rem.remove('rightsidebar') }
             if ($exp_standart) {
                 $rem.remove('enhanceliked'), $rem.remove('enhanceplaylist'), 
                 $rem.remove('disographyartist'), $rem.remove('lyricsmatch'), 
                 $rem.remove('equalizer'), $rem.remove('devicepicker'), 
                 $rem.remove('newhome'), $rem.remove('madeforyou'),
-                $rem.remove('similarplaylist'), $rem.remove('leftsidebar')
+                $rem.remove('similarplaylist'), $rem.remove('leftsidebar'), $rem.remove('rightsidebar')
             }
             if (!($left_sidebar_on) -or $ofline -le "1.1.94.872") { $rem.remove('leftsidebar') }
             if ($navalt_off) { $rem.remove('newhome'), $rem.remove('leftsidebar') }

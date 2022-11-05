@@ -1298,14 +1298,16 @@ if (Test-Path $xpui_js_patch) {
 
     # Turn off podcasts
     if ($Podcast_off) { 
-        $file_homev2 = get-item $env:APPDATA\Spotify\Apps\xpui\home-v2.js
+        if ($ofline -ge "1.1.93.896" -and $ofline -le "1.1.97.962") { $js = "home-v2.js" }
+        if ($ofline -le "1.1.92.647" -or $ofline -ge "1.1.98.683") { $js = "xpui.js" }
+        $file_homev2 = get-item $env:APPDATA\Spotify\Apps\xpui\$js
         $reader = New-Object -TypeName System.IO.StreamReader -ArgumentList $file_homev2
-        $xpui_homev2 = $reader.ReadToEnd()
+        $xpui_podcast = $reader.ReadToEnd()
         $reader.Close()
-        $xpui_homev2 = Helper -paramname "OffPodcasts" 
+        $xpui_podcast = Helper -paramname "OffPodcasts" 
         $writer = New-Object System.IO.StreamWriter -ArgumentList $file_homev2
         $writer.BaseStream.SetLength(0)
-        $writer.Write($xpui_homev2)
+        $writer.Write($xpui_podcast)
         $writer.Close()  
     }
 
@@ -1463,28 +1465,17 @@ If (Test-Path $xpui_spa_patch) {
 
     # Turn off podcasts
     if ($podcast_off) { 
-        if ($ofline -ge "1.1.93.896" -and $ofline -le "1.1.97.962") {
-            $entry_home_v2 = $zip.GetEntry('home-v2.js')
-            $reader = New-Object System.IO.StreamReader($entry_home_v2.Open())
-            $xpui_podcast = $reader.ReadToEnd()
-            $reader.Close()
-            $xpui_podcast = Helper -paramname "OffPodcasts" 
-            $writer = New-Object System.IO.StreamWriter($entry_home_v2.Open())
-            $writer.BaseStream.SetLength(0)
-            $writer.Write($xpui_podcast)
-            $writer.Close()
-        }
-        if ($ofline -le "1.1.92.647" -or $ofline -ge "1.1.98.683") {
-            $entry_home_v2 = $zip.GetEntry('xpui.js')
-            $reader = New-Object System.IO.StreamReader($entry_home_v2.Open())
-            $xpui_podcast = $reader.ReadToEnd()
-            $reader.Close()
-            $xpui_podcast = Helper -paramname "OffPodcasts" 
-            $writer = New-Object System.IO.StreamWriter($entry_home_v2.Open())
-            $writer.BaseStream.SetLength(0)
-            $writer.Write($xpui_podcast)
-            $writer.Close()
-        }
+        if ($ofline -ge "1.1.93.896" -and $ofline -le "1.1.97.962") { $js = 'home-v2.js' }
+        if ($ofline -le "1.1.92.647" -or $ofline -ge "1.1.98.683") { $js = 'xpui.js' }
+        $entry_home_v2 = $zip.GetEntry($js)
+        $reader = New-Object System.IO.StreamReader($entry_home_v2.Open())
+        $xpui_podcast = $reader.ReadToEnd()
+        $reader.Close()
+        $xpui_podcast = Helper -paramname "OffPodcasts" 
+        $writer = New-Object System.IO.StreamWriter($entry_home_v2.Open())
+        $writer.BaseStream.SetLength(0)
+        $writer.Write($xpui_podcast)
+        $writer.Close()
     }
 
     # Static color for lyrics

@@ -298,7 +298,11 @@ $langCode = Format-LanguageCode -LanguageCode $Language
 $lang = Set-ScriptLanguageStrings -LanguageCode $langCode
 
 # Set variable 'ru'.
-if ($langCode -eq 'ru') { $ru = $true }
+if ($langCode -eq 'ru') { 
+    $ru = $true
+    $urlru = "https://raw.githubusercontent.com/amd64fox/Test/main/ru.json"
+    $webjsonru = (Invoke-WebRequest -UseBasicParsing -Uri $urlru).Content | ConvertFrom-Json
+}
 # Set variable 'add translation line'.
 if ($langCode -match '^(it|tr|ka|pl|es|fr|hi|pt|id|vi|ro|de|hu|zh)') { $line = $true }
 
@@ -978,108 +982,25 @@ function Helper($paramname) {
         }
         "RuTranslate" { 
             # Additional translation of some words for the Russian language
-            $ru_translate = @{
-                EnhancePlaylist     = '"To Enhance this playlist, you.ll need to go online."', '"Чтобы улучшить этот плейлист, вам нужно подключиться к интернету."'
-                ConfirmAge          = '"Confirm your age"', '"Подтвердите свой возраст"' 
-                Premium             = '"%price%\/month after. Terms and conditions apply. One month free not available for users who have already tried Premium."', '"%price%/месяц спустя. Принять условия. Один месяц бесплатно, недоступно для пользователей, которые уже попробовали Premium."'
-                AdFreeMusic         = '"Enjoy ad-free music listening, offline listening, and more. Cancel anytime."', '"Наслаждайтесь прослушиванием музыки без рекламы, прослушиванием в офлайн режиме и многим другим. Отменить можно в любое время."'
-                AddPlaylist         = '"Add to another playlist"', '"Добавить в другой плейлист"' 
-                OfflineStorage      = '"Offline storage location"', '"Хранилище скачанных треков"' 
-                ChangeLocation      = '"Change location"', '"Изменить место"' 
-                Linebreaks          = '"Line breaks aren.t supported in the description."', '"В описании не поддерживаются разрывы строк."' 
-                PressSave           = '"Press save to keep changes you.ve made."', '"Нажмите «Сохранить», чтобы сохранить внесенные изменения."' 
-                NoInternet          = '"No internet connection found. Changes to description and image will not be saved."', '"Подключение к интернету не найдено. Изменения в описании и изображении не будут сохранены."' 
-                ImageSmall          = '"Image too small. Images must be at least [{]0[}]x[{]1[}]."', '"Изображение слишком маленькое. Изображения должны быть не менее {0}x{1}."' 
-                FailedUpload        = '"Failed to upload image. Please try again."', '"Не удалось загрузить изображение. Пожалуйста, попробуйте снова."' 
-                Description         = '"Description"', '"Описание"' 
-                ChangePhoto         = '"Change photo"', '"Сменить изображение"' 
-                RemovePhoto         = '"Remove photo"', '"Удалить изображение"' 
-                Name                = '"Name"', '"Имя"' 
-                ChangeSpeed         = '"Change speed"', '"Изменение скорости"' 
-                Years19             = '"You need to be at least 19 years old to listen to explicit content marked with"', '"Вам должно быть не менее 19 лет, чтобы слушать непристойный контент, помеченный значком"' 
-                AddPlaylist2        = '"Add to this playlist"', '"Добавить в этот плейлист"'
-                NoConnect           = '"Couldn.t connect to Spotify."', '"Не удалось подключиться к Spotify."' 
-                Reconnecting        = '"Reconnecting..."', '"Повторное подключение..."' 
-                NoConnection        = '"No connection"', '"Нет соединения"' 
-                CharacterCounter    = '"Character counter"', '"Счетчик символов"' 
-                Lightsaber          = '"Toggle lightsaber hilt. Current is [{]0[}]."', '"Переключить рукоять светового меча. Текущий {0}."' 
-                SongAvailable       = '"Song not available"', '"Песня недоступна"' 
-                HiFi                = '"The song you.re trying to listen to is not available in HiFi at this time."', '"Песня, которую вы пытаетесь прослушать, в настоящее время недоступна в HiFi."' 
-                Quality             = '"Current audio quality:"', '"Текущее качество звука:"' 
-                Network             = '"Network connection"', '"Подключение к сети"' 
-                Good                = '"Good"', '"Хорошее"' 
-                Poor                = '"Poor"', '"Плохое"' 
-                Yes                 = '"Yes"', '"Да"' 
-                No                  = '"No"', '"Нет"' 
-                Location            = '"Your Location"', '"Ваше местоположение"'
-                NetworkConnection   = '"Network connection failed while playing this content."', '"Сбой сетевого подключения при воспроизведении этого контента."'
-                ContentLocation     = '"We.re not able to play this content in your current location."', '"Мы не можем воспроизвести этот контент в вашем текущем местоположении."'
-                ContentUnavailable  = '"This content is unavailable. Try another\?"', '"Этот контент недоступен. Попробуете другой?"'
-                NoContent           = '"Sorry, we.re not able to play this content."', '"К сожалению, мы не можем воспроизвести этот контент."'
-                NoContent2          = '"Hmm... we can.t seem to play this content. Try installing the latest version of Spotify."', '"Хм... похоже, мы не можем воспроизвести этот контент. Попробуйте установить последнюю версию Spotify."'
-                NoContent3          = '"Please upgrade Spotify to play this content."', '"Пожалуйста, обновите Spotify, чтобы воспроизвести этот контент."'
-                NoContent4          = '"This content cannot be played on your operating system version."', '"Этот контент нельзя воспроизвести в вашей версии операционной системы."'
-                DevLang             = '"Override certain user attributes to test regionalized content programming. The overrides are only active in this app."', '"Переопределите определенные атрибуты пользователя, чтобы протестировать региональное программирование контента. Переопределения активны только в этом приложении."'
-                AlbumRelease        = '"...name... was released this week!"', '"\"%name%\" был выпущен на этой неделе!"'
-                AlbumReleaseOne     = '"one": "\\"%name%\\" was released %years% year ago this week!"', '"one": "\"%name%\" был выпущен %years% год назад на этой неделе!"'
-                AlbumReleaseFew     = '"few": "\\"%name%\\" was released %years% years ago this week!"', '"few": "\"%name%\" был выпущен %years% года назад на этой неделе!"'
-                AlbumReleaseMany    = '"many": "\\"%name%\\" was released %years% years ago this week!"', '"many": "\"%name%\" был выпущен %years% лет назад на этой неделе!"'
-                AlbumReleaseOther   = '"other": "\\"%name%\\" was released %years% years ago this week!"', '"other": "\"%name%\" был выпущен %years% года назад на этой неделе!"'
-                Speed               = '"Speed [{]0[}]×"', '"Скорость {0}×"'                            
-                Confidential        = '"This is a highly confidential test. Do not share details of this test or any song you create outside of Spotify."', '"Это очень конфиденциальный тест. Не делитесь подробностями этого теста или какой-либо песни, которую вы создаете, за пределами Spotify."'          
-                StartGroupSession   = '"How to start a Group Session"', '"Как начать групповую сессию"'
-                LearnMore           = '"Learn more"', '"Узнать больше"'
-                Author              = '"Author"', '"Автор"'
-                Creator             = '"Creator"', '"Создатель"'
-                CustomOrder         = '"Custom order"', '"Особая"'
-                Alphabetical        = '"Alphabetical"', '"Алфавитная"'
-                RecentlyAdded       = '"Recently added"', '"Недавно добавленные"'
-                RecentlyPlayed      = '"Recently played"', '"Недавно проигранные"'
-                MostRecent          = '"Most recent"', '"Самые последние"'
-                RecentlyUpdated     = '"Recently updated"', '"Недавно обновленные"'
-                MostRelevant        = '"Most relevant"', '"Наиболее актуальные"'
-                Albums              = '"Albums",', '"Альбомы",'
-                Artists             = '"Artists",', '"Артисты",'
-                Playlists           = '"Playlists",', '"Плейлисты",'
-                PodcastsShows       = '"Podcasts . Shows",', '"Подкасты и Шоу",'
-                Audiobooks          = '"Audiobooks",', '"Аудиокниги",'
-                Downloaded          = '"Downloaded"', '"Скачано"'
-                ByYou               = '"By you"', '"Ваши"'
-                Unplayed            = '"Unplayed"', '"Невоспроизведенное"'
-                InProgress          = '"In progress"', '"В процессе"'
-                LikedSongs          = '"Liked Songs"', '"Понравившиеся песни"'
-                YourEpisodes        = '"Your Episodes"', '"Ваши эпизоды"'
-                LocalFiles          = '"Local Files"', '"Локальные файлы"'
-                EnhancePrem         = '"Enhance your playlists with Premium"', '"Улучшите свои плейлисты с Premium"'
-                EnhancePrem2        = '"Instantly add personalized tracks that match this playlist.s unique sound"', '"Мгновенно добавляйте персонализированные треки, соответствующие уникальному звучанию этого плейлиста"'
-                EnhancePrem3        = '"Enhance %playlist%"', '"Улучшить %playlist%"'
-                EnhancePrem4        = '"Enhanced"', '"Улучшенный"'
-                EnhancePrem5        = '"Enhance"', '"Улучшить"'
-                HigherQualityAudio  = '"Higher Quality Audio"', '"Более Высокое Качество Звука"'
-                HigherQualityAudio2 = '"Crisp highs & booming lows, a few of the things you.ll hear with high-quality audio"', '"Четкие высокие частоты и гулкие низкие частоты — вот некоторые вещи, которые вы услышите благодаря высококачественному звуку."'
-                Enabled             = '"Enabled"', '"Включено"'
-                ChangeSettings      = '"Change settings"', '"Изменить настройки"'
-                ListenTogether      = '"Listen together, from anywhere"', '"Слушайте вместе, откуда угодно"'
-                InviteFriends       = '"Invite your friends to join you remotely in controlling what plays"', '"Пригласите своих друзей присоединиться к вам удаленно, чтобы контролировать то, что играет"'
-                PublishSongs        = '"Create and publish songs right on Spotify. Choose a song and genre, record your vocals, then edit the song to make it yours."', '"Создавайте и публикуйте песни прямо на Spotify. Выберите песню и жанр, запишите свой вокал, а затем отредактируйте песню, чтобы сделать ее своей."'
-                GroupSession        = '"Group sessions let you and your friends listen to music and podcasts together, from anywhere."', '"Групповые сеансы позволяют вам и вашим друзьям вместе слушать музыку и подкасты из любого места."'
-                GroupSession2       = '"To start your group session:"', '"Чтобы начать групповой сеанс:"'
-                PhoneTablet         = '"Open Spotify on a phone or tablet."', '"Откройте Spotify на телефоне или планшете."'
-                PickSongPodcast     = '"Pick a song or podcast and play it."', '"Выберите песню или подкаст и воспроизведите"'
-                TapIcon             = '"Tap .icon.."', '"Нажмите {icon}."'
-                TapStart            = '"Tap ...Start a remote group session....."', '"Нажмите <b>Начать сеанс удаленной группы</b>."'
-                TapInvite           = '"Tap ...Invite friends....."', '"Нажмите <b>Пригласить друзей</b>."'
-                ShareFriends        = '"Share with your friends."', '"Поделись с друзьями."'
-                GroupSession3       = '"You can only start or join a group session using a phone or tablet."', '"Вы можете начать или присоединиться к групповому сеансу только с помощью телефона или планшета."'
-            }
+
             $n = ($lang).NoVariable7
-            $contents = $ru_translate
+            $contents = $webjsonru.psobject.properties.name
+            $json = $webjsonru
             $paramdata = $xpui_ru
         }
 
         "ExpFeature" { 
             # Experimental Feature Standart
             $rem = $webjson.exp.psobject.properties 
+
+            if ( $ofline -le "1.1.96.785") { 
+                $rem.remove('newhome2')
+                $newhome = 'newhome'
+            }
+            if ( $ofline -ge "1.1.97.956") { 
+                $rem.remove('newhome')
+                $newhome = 'newhome2' 
+            }
 
             if ($enhance_like_off) { $rem.remove('enhanceliked') }
             if ($enhance_playlist_off) { $rem.remove('enhanceplaylist') }
@@ -1093,17 +1014,17 @@ function Helper($paramname) {
                 $rem.remove('enhanceliked'), $rem.remove('enhanceplaylist'), 
                 $rem.remove('disographyartist'), $rem.remove('lyricsmatch'), 
                 $rem.remove('equalizer'), $rem.remove('devicepicker'), 
-                $rem.remove('newhome'), $rem.remove('madeforyou'),
+                $rem.remove($newhome), $rem.remove('madeforyou'),
                 $rem.remove('similarplaylist'), $rem.remove('leftsidebar'), $rem.remove('rightsidebar')
             }
             if (!($left_sidebar_on) -or $ofline -le "1.1.94.872") { $rem.remove('leftsidebar') }
-            if ($navalt_off) { $rem.remove('newhome'), $rem.remove('leftsidebar') }
+            if ($navalt_off) { $rem.remove($newhome), $rem.remove('leftsidebar') }
             if ($ofline -ge "1.1.94.864") {
                 $rem.remove('lyricsenabled'), $rem.remove('playlistcreat'), 
                 $rem.remove('searchbox')
             }
             if ($ofline -lt "1.1.90.859" -or $ofline -gt "1.1.95.893") { $rem.remove('devicepicker') }
-            if ($ofline -le "1.1.93.896") { $rem.remove('newhome') }
+            if ($ofline -le "1.1.93.896") { $rem.remove($newhome) }
             $n = ($lang).NoVariable2
             $contents = $webjson.exp.psobject.properties.name
             $json = $webjson.exp
@@ -1111,7 +1032,7 @@ function Helper($paramname) {
         }
     }
 
-    if ($paramname -ne "HtmlLicMin" -or $paramname -ne "RuTranslate") {
+    if ($paramname -ne "HtmlLicMin") {
 
         $contents | ForEach-Object { 
         
@@ -1146,7 +1067,7 @@ function Helper($paramname) {
             }    
         }
     }
-    if ($paramname -eq "HtmlLicMin" -or $paramname -eq "RuTranslate") {
+    if ($paramname -eq "HtmlLicMin") {
         $contents.Keys | Sort-Object | ForEach-Object { 
  
             if ($paramdata -match $contents.$PSItem[0]) { 

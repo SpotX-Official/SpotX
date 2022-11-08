@@ -42,7 +42,6 @@
     CacheSelect     = "Szeretné beállítani az automatikus gyorsítótár-tisztítást? [Y/N]"
     CacheDays       = "XX napnál régebbi gyorsítótárak törlésre fognak kerülni "
     CacheDays2      = "Adj meg egy napot 1 és 100 között."
-    NoVariable      = "Nem talált változót"
     NoVariable2     = "xpui.js-ben"
     NoVariable3     = "licenses.html-ben"
     NoVariable4     = "html-ben"

@@ -300,7 +300,7 @@ $lang = Set-ScriptLanguageStrings -LanguageCode $langCode
 # Set variable 'ru'.
 if ($langCode -eq 'ru') { 
     $ru = $true
-    $urlru = "https://raw.githubusercontent.com/amd64fox/Test/main/ru.json"
+    $urlru = "https://raw.githubusercontent.com/SpotX-CLI/SpotX-commons/main/Augmented%20translation/ru.json"
     $webjsonru = (Invoke-WebRequest -UseBasicParsing -Uri $urlru).Content | ConvertFrom-Json
 }
 # Set variable 'add translation line'.
@@ -911,32 +911,70 @@ if ($exp_spotify) { Write-Host ($lang).ExpSpotify`n }
 $url = "https://raw.githubusercontent.com/SpotX-CLI/SpotX-commons/main/patches.json"
 $webjson = (Invoke-WebRequest -UseBasicParsing -Uri $url).Content | ConvertFrom-Json
 $ofline = Check_verison_clients -param2 "offline"
+
 function Helper($paramname) {
 
     switch ( $paramname ) {
         "HtmlLicMin" { 
             # licenses.html minification
-            $html_lic_min = @{
-                HtmlLicMin1 = '<li><a href="#6eef7">zlib<\/a><\/li>\n(.|\n)*<\/p><!-- END CONTAINER DEPS LICENSES -->(<\/div>)', '$2'
-                HtmlLicMin2 = '	', ''
-                HtmlLicMin3 = '  ', ''
-                HtmlLicMin4 = '(?m)(^\s*\r?\n)', ''
-                HtmlLicMin5 = '\r?\n(?!\(1|\d)', ''
-            }
-            $n = ($lang).NoVariable3
-            $contents = $html_lic_min
+            $name = "patches.json.others."
+            $n = "licenses.html"
+            $contents = "htmlmin"
+            $json = $webjson.others
             $paramdata = $xpuiContents_html
+        }
+        "HtmlBlank" { 
+            # htmlBlank minification
+            $name = "patches.json.others."
+            $n = "blank.html"
+            $contents = "blank.html"
+            $json = $webjson.others
+            $paramdata = $xpuiContents_html_blank
+        }
+        "MinJs" { 
+            # Minification of all *.js
+            $contents = "minjs"
+            $json = $webjson.others
+            $paramdata = $xpuiContents_js
+        }
+        "MinJson" { 
+            # Minification of all *.json
+            $contents = "minjson"
+            $json = $webjson.others
+            $paramdata = $xpuiContents_json
+        }
+        "RemovertlCssmin" { 
+            # Remove RTL and minification of all *.css
+            $contents = "removertl-cssmin"
+            $json = $webjson.others
+            $paramdata = $xpuiContents_css
+        }
+        "DisableSentry" { 
+            # Disable Sentry (vendor~xpui.js)
+            $name = "patches.json.others."
+            $n = "vendor~xpui.js"
+            $contents = "disablesentry"
+            $json = $webjson.others
+            $paramdata = $xpuiContents_vendor
+        }
+        "DisabledLog" { 
+            # Disabled logging
+            $name = "patches.json.others."
+            $n = "xpui.js"
+            $contents = "disablelog"
+            $json = $webjson.others
+            $paramdata = $xpui_js
         }
         "Lyrics-color" { 
             # Static color for lyrics (xpui-routes-lyrics.css)
-
             $webjson.others.lyricscolor.replace[0] = '$1' + $webjson.others.lyricscolor.theme.$lyrics_stat.pasttext 
             $webjson.others.lyricscolor.replace[1] = '$1' + $webjson.others.lyricscolor.theme.$lyrics_stat.current 
             $webjson.others.lyricscolor.replace[2] = '$1' + $webjson.others.lyricscolor.theme.$lyrics_stat.next 
             $webjson.others.lyricscolor.replace[3] = '$1' + $webjson.others.lyricscolor.theme.$lyrics_stat.hover 
             $webjson.others.lyricscolor.replace[4] = $webjson.others.lyricscolor.theme.$lyrics_stat.background 
             $webjson.others.lyricscolor.replace[5] = '$1' + $webjson.others.lyricscolor.theme.$lyrics_stat.maxmatch 
-
+            $name = "patches.json.others."
+            $n = "xpui-routes-lyrics.css"
             $contents = "lyricscolor"
             $json = $webjson.others
             $paramdata = $xpui_lyrics
@@ -944,46 +982,44 @@ function Helper($paramname) {
         }
         "Discriptions" {  
             # Add discriptions (xpui-desktop-modals.js)
-            $n = ($lang).NoVariable6
+            $name = "patches.json.others."
+            $n = "xpui-desktop-modals.js"
             $contents = "discriptions"
             $json = $webjson.others
             $paramdata = $xpui_desktop_modals
 
         }
         "OffadsonFullscreen" { 
-           
+            # Full screen mode activation and removing "Upgrade to premium" menu, upgrade button, disabling a playlist sponsor
             if ($bts) { $webjson.free.psobject.properties.remove('bilboard'), $webjson.free.psobject.properties.remove('audioads') }
-
-            $webjson.free.psobject.properties.remove('submenudownload'), $webjson.free.psobject.properties.remove('veryhighstream'), $webjson.free.psobject.properties.remove('downloadicon')
-            
             if ($ofline -ge "1.1.98.683") { $webjson.free.psobject.properties.remove('connectold') }
-
-            $n = ($lang).NoVariable2
+            $name = "patches.json.free."
+            $n = "xpui.js"
             $contents = $webjson.free.psobject.properties.name
             $json = $webjson.free
             $paramdata = $xpui_js
         }
         "OffPodcasts" {  
             # Turn off podcasts
-            $n = ($lang).NoVariable5
-            if ($ofline -le "1.1.92.647") { $podcats = "podcastsoff" }
-            if ($ofline -le "1.1.96.785" -and $ofline -ge "1.1.93.896") { $podcats = "podcastsoff2" }
-            if ($ofline -ge "1.1.97.952") { $podcats = "podcastsoff3" }
+            $n = $js
+            if ($ofline -le "1.1.92.647") { $podcats = "podcastsoff"; $name = "patches.json.others.podcastsoff" }
+            if ($ofline -ge "1.1.93.896" -and $ofline -le "1.1.96.785") { $podcats = "podcastsoff2"; $name = "patches.json.others.podcastsoff2" }
+            if ($ofline -ge "1.1.97.952") { $podcats = "podcastsoff3"; $name = "patches.json.others.podcastsoff3" }
             $contents = $podcats
             $json = $webjson.others
             $paramdata = $xpui_podcast
         }
         "OffRujs" { 
             # Remove all languages except En and Ru from xpui.js
-            $n = ($lang).NoVariable2
+            $name = "patches.json.others."
+            $n = "xpui.js"
             $contents = "offrujs"
             $json = $webjson.others
             $paramdata = $xpui_js
         }
         "RuTranslate" { 
             # Additional translation of some words for the Russian language
-
-            $n = ($lang).NoVariable7
+            $n = "ru.json"
             $contents = $webjsonru.psobject.properties.name
             $json = $webjsonru
             $paramdata = $xpui_ru
@@ -1025,62 +1061,50 @@ function Helper($paramname) {
             }
             if ($ofline -lt "1.1.90.859" -or $ofline -gt "1.1.95.893") { $rem.remove('devicepicker') }
             if ($ofline -le "1.1.93.896") { $rem.remove($newhome) }
-            $n = ($lang).NoVariable2
+            $name = "patches.json.exp."
+            $n = "xpui.js"
             $contents = $webjson.exp.psobject.properties.name
             $json = $webjson.exp
             $paramdata = $xpui_js
         }
     }
-
-    if ($paramname -ne "HtmlLicMin") {
-
-        $contents | ForEach-Object { 
+    $novariable = "Didn't find variable "
+    $contents | ForEach-Object { 
         
-            if ($json.$PSItem.match.Count -gt 1) {
-                $count = $json.$PSItem.match.Count - 1
-                $numbers = 0
-                While ($numbers -le $count) {
+        if ($json.$PSItem.match.Count -gt 1) {
+            $count = $json.$PSItem.match.Count - 1
+            $numbers = 0
+            While ($numbers -le $count) {
             
-                    if ($paramdata -match $json.$PSItem.match[$numbers]) { 
-                        $paramdata = $paramdata -replace $json.$PSItem.match[$numbers], $json.$PSItem.replace[$numbers] 
-                    }
-                    else { 
-                
-                        Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline 
-                        Write-Host "`$contents.$PSItem $numbers"$n
-                    }  
-                    $numbers++
-                }
-            }
-            if ($json.$PSItem.match.Count -eq 1) {
-                if ($paramdata -match $json.$PSItem.match) { 
-                    $paramdata = $paramdata -replace $json.$PSItem.match, $json.$PSItem.replace 
+                if ($paramdata -match $json.$PSItem.match[$numbers]) { 
+                    $paramdata = $paramdata -replace $json.$PSItem.match[$numbers], $json.$PSItem.replace[$numbers] 
                 }
                 else { 
-                
-                    if (!($paramname -eq "RuTranslate") -or $err_ru) {
+
+                    $notlog = "MinJs", "MinJson", "Removertl", "RemovertlCssmin"
+                    if ($paramname -notin $notlog) {
     
-                        Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline 
-                        Write-Host "`$contents.$PSItem"$n
+                        Write-Host $novariable -ForegroundColor red -NoNewline 
+                        Write-Host "$name$PSItem $numbers"'in'$n
                     }
-                }
-            }    
+                }  
+                $numbers++
+            }
         }
-    }
-    if ($paramname -eq "HtmlLicMin") {
-        $contents.Keys | Sort-Object | ForEach-Object { 
- 
-            if ($paramdata -match $contents.$PSItem[0]) { 
-                $paramdata = $paramdata -replace $contents.$PSItem[0], $contents.$PSItem[1] 
+        if ($json.$PSItem.match.Count -eq 1) {
+            if ($paramdata -match $json.$PSItem.match) { 
+                $paramdata = $paramdata -replace $json.$PSItem.match, $json.$PSItem.replace 
             }
             else { 
+
                 if (!($paramname -eq "RuTranslate") -or $err_ru) {
 
-                    Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline 
-                    Write-Host "`$contents.$PSItem"$n
+    
+                    Write-Host $novariable -ForegroundColor red -NoNewline 
+                    Write-Host "$name$PSItem"'in'$n
                 }
-            }    
-        }
+            }
+        }    
     }
     $paramdata
 }
@@ -1192,7 +1216,7 @@ if (Test-Path $xpui_js_patch) {
     $writer = New-Object System.IO.StreamWriter -ArgumentList $xpui_js_patch
     $writer.BaseStream.SetLength(0)
     $writer.Write($xpui_js)
-    $writer.Write([System.Environment]::NewLine + '// Patched by SpotX') 
+    $writer.Write([System.Environment]::NewLine + $webjson.others.byspotx.add) 
     $writer.Close()  
 
     # Russian additional translation
@@ -1259,20 +1283,20 @@ if (Test-Path $xpui_js_patch) {
 
     if (!($premium)) {
         # Hide download icon on different pages
-        $writer.Write([System.Environment]::NewLine + ' .BKsbV2Xl786X9a09XROH{display:none}')
+        $writer.Write([System.Environment]::NewLine + $webjson.others.downloadicon.add)
         # Hide submenu item "download"
-        $writer.Write([System.Environment]::NewLine + ' button.wC9sIed7pfp47wZbmU6m.pzkhLqffqF_4hucrVVQA{display:none}')
+        $writer.Write([System.Environment]::NewLine + $webjson.others.submenudownload.add)
         # Hide very high quality streaming
-        $writer.Write([System.Environment]::NewLine + ' #desktop\.settings\.streamingQuality>option:nth-child(5) {display:none}')
+        $writer.Write([System.Environment]::NewLine + $webjson.others.veryhighstream.add)
     }
     # New UI fix
     if (!($navalt_off)) {
-        $writer.Write([System.Environment]::NewLine + ' .nav-alt .Root__top-container {background: #00000085;gap: 6px;padding: 8px;}')
-        $writer.Write([System.Environment]::NewLine + ' .Root__fixed-top-bar {background-color: #00000000}')
+        $writer.Write([System.Environment]::NewLine + $webjson.others.navaltfix.add[0])
+        $writer.Write([System.Environment]::NewLine + $webjson.others.navaltfix.add[1])
     }
     # Hide Collaborators icon
     if (!($hide_col_icon_off) -and !($exp_spotify)) {
-        $writer.Write([System.Environment]::NewLine + ' .X1lXSiVj0pzhQCUo_72A{display:none}')
+        $writer.Write([System.Environment]::NewLine + $webjson.others.collaboraticon.add)
     }
     $writer.Close()
 
@@ -1362,9 +1386,9 @@ If (Test-Path $xpui_spa_patch) {
     $reader = New-Object System.IO.StreamReader($entry_xpui.Open())
     $xpui_js = $reader.ReadToEnd()
     $reader.Close()
-    
+
+    # Full screen mode activation and removing "Upgrade to premium" menu, upgrade button, disabling a playlist sponsor
     if (!($premium)) {
-        # Full screen mode activation and removing "Upgrade to premium" menu, upgrade button, disabling a playlist sponsor
         $xpui_js = Helper -paramname "OffadsonFullscreen"
     }
 
@@ -1375,12 +1399,12 @@ If (Test-Path $xpui_spa_patch) {
     if ($ru) { $xpui_js = Helper -paramname "OffRujs" }
 
     # Disabled logging
-    $xpui_js = $xpui_js -replace "sp://logging/v3/\w+", ""
+    $xpui_js = Helper -paramname "DisabledLog"
    
     $writer = New-Object System.IO.StreamWriter($entry_xpui.Open())
     $writer.BaseStream.SetLength(0)
     $writer.Write($xpui_js)
-    $writer.Write([System.Environment]::NewLine + '// Patched by SpotX') 
+    $writer.Write([System.Environment]::NewLine + $webjson.others.byspotx.add) 
     $writer.Close()
 
 
@@ -1428,9 +1452,7 @@ If (Test-Path $xpui_spa_patch) {
     $reader = New-Object System.IO.StreamReader($entry_vendor_xpui.Open())
     $xpuiContents_vendor = $reader.ReadToEnd()
     $reader.Close()
-
-    $xpuiContents_vendor = $xpuiContents_vendor `
-        -replace "(?:prototype\.)?bindClient(?:=function)?\(\w+\)\{", '${0}return;'
+    $xpuiContents_vendor = Helper -paramname "DisableSentry"
     $writer = New-Object System.IO.StreamWriter($entry_vendor_xpui.Open())
     $writer.BaseStream.SetLength(0)
     $writer.Write($xpuiContents_vendor)
@@ -1441,10 +1463,7 @@ If (Test-Path $xpui_spa_patch) {
         $readerjs = New-Object System.IO.StreamReader($_.Open())
         $xpuiContents_js = $readerjs.ReadToEnd()
         $readerjs.Close()
-
-        $xpuiContents_js = $xpuiContents_js `
-            -replace "[/][/][#] sourceMappingURL=.*[.]map", "" -replace "\r?\n(?!\(1|\d)", ""
-
+        $xpuiContents_js = Helper -paramname "MinJs" 
         $writer = New-Object System.IO.StreamWriter($_.Open())
         $writer.BaseStream.SetLength(0)
         $writer.Write($xpuiContents_js)
@@ -1462,40 +1481,30 @@ If (Test-Path $xpui_spa_patch) {
     $writer.Write($xpuiContents_xpui_css)
     if (!($premium)) {
         # Hide download icon on different pages
-        $writer.Write([System.Environment]::NewLine + ' .BKsbV2Xl786X9a09XROH {display:none}')
+        $writer.Write([System.Environment]::NewLine + $webjson.others.downloadicon.add)
         # Hide submenu item "download"
-        $writer.Write([System.Environment]::NewLine + ' button.wC9sIed7pfp47wZbmU6m.pzkhLqffqF_4hucrVVQA {display:none}')
+        $writer.Write([System.Environment]::NewLine + $webjson.others.submenudownload.add)
         # Hide very high quality streaming
-        $writer.Write([System.Environment]::NewLine + ' #desktop\.settings\.streamingQuality>option:nth-child(5) {display:none}')
+        $writer.Write([System.Environment]::NewLine + $webjson.others.veryhighstream.add)
     }
      
     # New UI fix
     if (!($navalt_off)) {
-        $writer.Write([System.Environment]::NewLine + ' .nav-alt .Root__top-container {background: #00000085;gap: 6px;padding: 8px;}')
-        $writer.Write([System.Environment]::NewLine + ' .Root__fixed-top-bar {background-color: #00000000}')
+        $writer.Write([System.Environment]::NewLine + $webjson.others.navaltfix.add[0])
+        $writer.Write([System.Environment]::NewLine + $webjson.others.navaltfix.add[1])
     }
     # Hide Collaborators icon
     if (!($hide_col_icon_off) -and !($exp_spotify)) {
-        $writer.Write([System.Environment]::NewLine + ' .X1lXSiVj0pzhQCUo_72A{display:none}')
+        $writer.Write([System.Environment]::NewLine + $webjson.others.collaboraticon.add)
     }
     $writer.Close()
 
-    # of all *.Css
+    # Remove RTL and minification of all *.css
     $zip.Entries | Where-Object FullName -like '*.css' | ForEach-Object {
         $readercss = New-Object System.IO.StreamReader($_.Open())
         $xpuiContents_css = $readercss.ReadToEnd()
         $readercss.Close()
-
-        $xpuiContents_css = $xpuiContents_css `
-            <# Remove RTL #>`
-            -replace "}\[dir=ltr\]\s?([.a-zA-Z\d[_]+?,\[dir=ltr\])", '}[dir=str] $1' -replace "}\[dir=ltr\]\s?", "} " -replace "html\[dir=ltr\]", "html" `
-            -replace ",\s?\[dir=rtl\].+?(\{.+?\})", '$1' -replace "[\w\-\.]+\[dir=rtl\].+?\{.+?\}", "" -replace "\}\[lang=ar\].+?\{.+?\}", "}" `
-            -replace "\}\[dir=rtl\].+?\{.+?\}", "}" -replace "\}html\[dir=rtl\].+?\{.+?\}", "}" -replace "\}html\[lang=ar\].+?\{.+?\}", "}" `
-            -replace "\[lang=ar\].+?\{.+?\}", "" -replace "html\[dir=rtl\].+?\{.+?\}", "" -replace "html\[lang=ar\].+?\{.+?\}", "" `
-            -replace "\[dir=rtl\].+?\{.+?\}", "" -replace "\[dir=str\]", "[dir=ltr]" `
-            <# Css minification #>`
-            -replace "[/]\*([^*]|[\r\n]|(\*([^/]|[\r\n])))*\*[/]", "" -replace "[/][/]#\s.*", "" -replace "\r?\n(?!\(1|\d)", ""
-    
+        $xpuiContents_css = Helper -paramname "RemovertlCssmin"
         $writer = New-Object System.IO.StreamWriter($_.Open())
         $writer.BaseStream.SetLength(0)
         $writer.Write($xpuiContents_css)
@@ -1519,15 +1528,7 @@ If (Test-Path $xpui_spa_patch) {
     $reader = New-Object System.IO.StreamReader($entry_blank_html.Open())
     $xpuiContents_html_blank = $reader.ReadToEnd()
     $reader.Close()
-
-    $html_min1 = "  "
-    $html_min2 = "(?m)(^\s*\r?\n)"
-    $html_min3 = "\r?\n(?!\(1|\d)"
-    if ($xpuiContents_html_blank -match $html_min1) { $xpuiContents_html_blank = $xpuiContents_html_blank -replace $html_min1, "" } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$html_min1 "($lang).NoVariable4 }
-    if ($xpuiContents_html_blank -match $html_min2) { $xpuiContents_html_blank = $xpuiContents_html_blank -replace $html_min2, "" } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$html_min2 "($lang).NoVariable4 }
-    if ($xpuiContents_html_blank -match $html_min3) { $xpuiContents_html_blank = $xpuiContents_html_blank -replace $html_min3, "" } else { Write-Host ($lang).NoVariable"" -ForegroundColor red -NoNewline; Write-Host "`$html_min3 "($lang).NoVariable4 }
-
-    $xpuiContents_html_blank = $xpuiContents_html_blank
+    $xpuiContents_html_blank = Helper -paramname "HtmlBlank"
     $writer = New-Object System.IO.StreamWriter($entry_blank_html.Open())
     $writer.BaseStream.SetLength(0)
     $writer.Write($xpuiContents_html_blank)
@@ -1548,16 +1549,12 @@ If (Test-Path $xpui_spa_patch) {
             $writer.Close()
         }
     }
-    # Json
+    # Minification of all *.json
     $zip.Entries | Where-Object FullName -like '*.json' | ForEach-Object {
         $readerjson = New-Object System.IO.StreamReader($_.Open())
         $xpuiContents_json = $readerjson.ReadToEnd()
         $readerjson.Close()
-
-        # json minification
-        $xpuiContents_json = $xpuiContents_json `
-            -replace "  ", "" -replace "    ", "" -replace '": ', '":' -replace "\r?\n(?!\(1|\d)", "" 
-
+        $xpuiContents_json = Helper -paramname "MinJson" 
         $writer = New-Object System.IO.StreamWriter($_.Open())
         $writer.BaseStream.SetLength(0)
         $writer.Write($xpuiContents_json)

@@ -1002,9 +1002,10 @@ function Helper($paramname) {
         "OffPodcasts" {  
             # Turn off podcasts
             $n = $js
-            if ($ofline -le "1.1.92.647") { $podcats = "podcastsoff"; $name = "patches.json.others.podcastsoff" }
-            if ($ofline -ge "1.1.93.896" -and $ofline -le "1.1.96.785") { $podcats = "podcastsoff2"; $name = "patches.json.others.podcastsoff2" }
-            if ($ofline -ge "1.1.97.952") { $podcats = "podcastsoff3"; $name = "patches.json.others.podcastsoff3" }
+            if ($ofline -le "1.1.92.647") { $podcats = "podcastsoff" }
+            if ($ofline -ge "1.1.93.896" -and $ofline -le "1.1.96.785") { $podcats = "podcastsoff2" }
+            if ($ofline -ge "1.1.97.952") { $podcats = "podcastsoff3" }
+            $name = "patches.json.others."
             $contents = $podcats
             $json = $webjson.others
             $paramdata = $xpui_podcast

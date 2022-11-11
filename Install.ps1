@@ -1061,7 +1061,7 @@ function Helper($paramname) {
                 $rem.remove($newhome), $rem.remove('madeforyou'),
                 $rem.remove('similarplaylist'), $rem.remove('leftsidebar'), $rem.remove('rightsidebar')
             }
-            if ($left_sidebar_old -or $ofline -le "1.1.94.872") { $rem.remove('leftsidebar') }
+            if ($left_sidebar_old -or $ofline -le "1.1.98.683") { $rem.remove('leftsidebar') }
             if ($navalt_off) { $rem.remove($newhome) }
             if ($ofline -ge "1.1.94.864") {
                 $rem.remove('lyricsenabled'), $rem.remove('playlistcreat'), 

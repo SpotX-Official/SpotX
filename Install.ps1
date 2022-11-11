@@ -72,8 +72,8 @@ param
     [Parameter(HelpMessage = 'Disable the new home structure and navigation.')]
     [switch]$navalt_off,
 
-    [Parameter(HelpMessage = 'Enable new left sidebar.')]
-    [switch]$left_sidebar_on,
+    [Parameter(HelpMessage = 'Enable old left sidebar.')]
+    [switch]$left_sidebar_old,
     
     [Parameter(HelpMessage = 'Do not create desktop shortcut.')]
     [switch]$no_shortcut,
@@ -1025,7 +1025,14 @@ function Helper($paramname) {
             $json = $webjsonru
             $paramdata = $xpui_ru
         }
-
+        "Collaborators" { 
+            # Hide Collaborators icon
+            $name = "patches.json.others."
+            $n = "xpui-routes-playlist.js"
+            $contents = "collaboration"
+            $json = $webjson.others
+            $paramdata = $xpui_coll
+        }
         "ExpFeature" { 
             # Experimental Feature Standart
             $rem = $webjson.exp.psobject.properties 
@@ -1054,8 +1061,8 @@ function Helper($paramname) {
                 $rem.remove($newhome), $rem.remove('madeforyou'),
                 $rem.remove('similarplaylist'), $rem.remove('leftsidebar'), $rem.remove('rightsidebar')
             }
-            if (!($left_sidebar_on) -or $ofline -le "1.1.94.872") { $rem.remove('leftsidebar') }
-            if ($navalt_off) { $rem.remove($newhome), $rem.remove('leftsidebar') }
+            if ($left_sidebar_old -or $ofline -le "1.1.94.872") { $rem.remove('leftsidebar') }
+            if ($navalt_off) { $rem.remove($newhome) }
             if ($ofline -ge "1.1.94.864") {
                 $rem.remove('lyricsenabled'), $rem.remove('playlistcreat'), 
                 $rem.remove('searchbox')
@@ -1242,6 +1249,19 @@ if (Test-Path $xpui_js_patch) {
     $writer.Write($xpui_desktop_modals)
     $writer.Close()  
 
+    # Hide Collaborators icon
+    if (!($hide_col_icon_off) -and !($exp_spotify)) {
+        $file_coll = get-item $env:APPDATA\Spotify\Apps\xpui\xpui-routes-playlist.js
+        $reader = New-Object -TypeName System.IO.StreamReader -ArgumentList $file_coll
+        $xpui_coll = $reader.ReadToEnd()
+        $reader.Close()
+        $xpui_coll = Helper -paramname "Collaborators" 
+        $writer = New-Object System.IO.StreamWriter -ArgumentList $file_coll
+        $writer.BaseStream.SetLength(0)
+        $writer.Write($xpui_coll)
+        $writer.Close()  
+    }
+
     # Turn off podcasts
     if ($Podcast_off) { 
         if ($ofline -ge "1.1.93.896" -and $ofline -le "1.1.97.962") { $js = "home-v2.js" }
@@ -1295,10 +1315,7 @@ if (Test-Path $xpui_js_patch) {
         $writer.Write([System.Environment]::NewLine + $webjson.others.navaltfix.add[0])
         $writer.Write([System.Environment]::NewLine + $webjson.others.navaltfix.add[1])
     }
-    # Hide Collaborators icon
-    if (!($hide_col_icon_off) -and !($exp_spotify)) {
-        $writer.Write([System.Environment]::NewLine + $webjson.others.collaboraticon.add)
-    }
+
     $writer.Close()
 
     # licenses.html minification
@@ -1424,6 +1441,20 @@ If (Test-Path $xpui_spa_patch) {
         $writer.Close()
     }
 
+        # Hide Collaborators icon
+        if (!($hide_col_icon_off) -and !($exp_spotify)) {
+            $file_coll = $zip.GetEntry('xpui-routes-playlist.js')
+            $reader = New-Object System.IO.StreamReader($file_coll.Open())
+            $xpui_coll = $reader.ReadToEnd()
+            $reader.Close()
+            $xpui_coll = Helper -paramname "Collaborators" 
+            $writer = New-Object System.IO.StreamWriter($file_coll.Open())
+            $writer.BaseStream.SetLength(0)
+            $writer.Write($xpui_coll)
+            $writer.Close()  
+        }
+    
+
     # Static color for lyrics
     if ($lyrics_stat) {
         $entry_lyrics = $zip.GetEntry('xpui-routes-lyrics.css')
@@ -1493,10 +1524,6 @@ If (Test-Path $xpui_spa_patch) {
     if (!($navalt_off)) {
         $writer.Write([System.Environment]::NewLine + $webjson.others.navaltfix.add[0])
         $writer.Write([System.Environment]::NewLine + $webjson.others.navaltfix.add[1])
-    }
-    # Hide Collaborators icon
-    if (!($hide_col_icon_off) -and !($exp_spotify)) {
-        $writer.Write([System.Environment]::NewLine + $webjson.others.collaboraticon.add)
     }
     $writer.Close()
 

@@ -1,11 +1,11 @@
   <p align="center">
-  <a href="https://github.com/SpotX-CLI/SpotX-Win/releases"><img src="https://github.com/SpotX-CLI/SpotX-Win/raw/main/.github/Pic/logo.png" />
+  <a href="https://github.com/SpotX-CLI/SpotX-Win/releases"><img src="https://raw.githubusercontent.com/SpotX-CLI/SpotX-commons/main/.github/Pic/Logo/logo-win.png" />
 </p>
 
 <p align="center">        
-      <a href="https://t.me/spotify_windows_mod"><img src="https://raw.githubusercontent.com/SpotX-CLI/SpotX-Win/main/.github/Pic/Shields/tg.svg"></a>
+      <a href="https://t.me/spotify_windows_mod"><img src="https://raw.githubusercontent.com/SpotX-CLI/SpotX-commons/main/.github/Pic/Shields/tg.svg"></a>
       <a href="https://discord.gg/p43cusgUPm"><img src="https://discord.com/api/guilds/807273906872123412/widget.png"></a>
-      <a href="https://telegra.ph/SpotX-FAQ-09-19"><img src="https://raw.githubusercontent.com/SpotX-CLI/SpotX-Win/main/.github/Pic/Shields/faq.svg"></a>
+      <a href="https://telegra.ph/SpotX-FAQ-09-19"><img src="https://raw.githubusercontent.com/SpotX-CLI/SpotX-commons/main/.github/Pic/Shields/faq.svg"></a>
       </p>
 
    <h2> <div align="center"><b> Modified Spotify Client for Windows </b></div> </h2>

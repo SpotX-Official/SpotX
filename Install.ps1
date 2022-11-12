@@ -921,7 +921,6 @@ function Helper($paramname) {
             $n = "licenses.html"
             $contents = "htmlmin"
             $json = $webjson.others
-            $paramdata = $xpuiContents_html
         }
         "HtmlBlank" { 
             # htmlBlank minification
@@ -929,25 +928,21 @@ function Helper($paramname) {
             $n = "blank.html"
             $contents = "blank.html"
             $json = $webjson.others
-            $paramdata = $xpuiContents_html_blank
         }
         "MinJs" { 
             # Minification of all *.js
             $contents = "minjs"
             $json = $webjson.others
-            $paramdata = $xpuiContents_js
         }
         "MinJson" { 
             # Minification of all *.json
             $contents = "minjson"
             $json = $webjson.others
-            $paramdata = $xpuiContents_json
         }
         "RemovertlCssmin" { 
             # Remove RTL and minification of all *.css
             $contents = "removertl-cssmin"
             $json = $webjson.others
-            $paramdata = $xpuiContents_css
         }
         "DisableSentry" { 
             # Disable Sentry (vendor~xpui.js)
@@ -955,7 +950,6 @@ function Helper($paramname) {
             $n = "vendor~xpui.js"
             $contents = "disablesentry"
             $json = $webjson.others
-            $paramdata = $xpuiContents_vendor
         }
         "DisabledLog" { 
             # Disabled logging
@@ -963,7 +957,6 @@ function Helper($paramname) {
             $n = "xpui.js"
             $contents = "disablelog"
             $json = $webjson.others
-            $paramdata = $xpui_js
         }
         "Lyrics-color" { 
             # Static color for lyrics (xpui-routes-lyrics.css)
@@ -977,8 +970,6 @@ function Helper($paramname) {
             $n = "xpui-routes-lyrics.css"
             $contents = "lyricscolor"
             $json = $webjson.others
-            $paramdata = $xpui_lyrics
-
         }
         "Discriptions" {  
             # Add discriptions (xpui-desktop-modals.js)
@@ -986,8 +977,6 @@ function Helper($paramname) {
             $n = "xpui-desktop-modals.js"
             $contents = "discriptions"
             $json = $webjson.others
-            $paramdata = $xpui_desktop_modals
-
         }
         "OffadsonFullscreen" { 
             # Full screen mode activation and removing "Upgrade to premium" menu, upgrade button, disabling a playlist sponsor
@@ -997,7 +986,6 @@ function Helper($paramname) {
             $n = "xpui.js"
             $contents = $webjson.free.psobject.properties.name
             $json = $webjson.free
-            $paramdata = $xpui_js
         }
         "OffPodcasts" {  
             # Turn off podcasts
@@ -1008,7 +996,6 @@ function Helper($paramname) {
             $name = "patches.json.others."
             $contents = $podcats
             $json = $webjson.others
-            $paramdata = $xpui_podcast
         }
         "OffRujs" { 
             # Remove all languages except En and Ru from xpui.js
@@ -1016,14 +1003,12 @@ function Helper($paramname) {
             $n = "xpui.js"
             $contents = "offrujs"
             $json = $webjson.others
-            $paramdata = $xpui_js
         }
         "RuTranslate" { 
             # Additional translation of some words for the Russian language
             $n = "ru.json"
             $contents = $webjsonru.psobject.properties.name
             $json = $webjsonru
-            $paramdata = $xpui_ru
         }
         "Collaborators" { 
             # Hide Collaborators icon
@@ -1031,7 +1016,6 @@ function Helper($paramname) {
             $n = "xpui-routes-playlist.js"
             $contents = "collaboration"
             $json = $webjson.others
-            $paramdata = $xpui_coll
         }
         "ExpFeature" { 
             # Experimental Feature Standart
@@ -1073,9 +1057,9 @@ function Helper($paramname) {
             $n = "xpui.js"
             $contents = $webjson.exp.psobject.properties.name
             $json = $webjson.exp
-            $paramdata = $xpui_js
         }
     }
+    $paramdata = $xpui
     $novariable = "Didn't find variable "
     $contents | ForEach-Object { 
         
@@ -1115,6 +1099,50 @@ function Helper($paramname) {
         }    
     }
     $paramdata
+}
+
+function extract ($counts, $method, $name, $helper, $add) {
+    switch ( $counts ) {
+        "one" { 
+            if ($method -eq "zip") {
+                Add-Type -Assembly 'System.IO.Compression.FileSystem'
+                $xpui_spa_patch = "$env:APPDATA\Spotify\Apps\xpui.spa"
+                $zip = [System.IO.Compression.ZipFile]::Open($xpui_spa_patch, 'update')   
+                $file = $zip.GetEntry($name)
+                $reader = New-Object System.IO.StreamReader($file.Open())
+            }
+            if ($method -eq "nonezip") {
+                $file = get-item $env:APPDATA\Spotify\Apps\xpui\$name
+                $reader = New-Object -TypeName System.IO.StreamReader -ArgumentList $file
+            }
+            $xpui = $reader.ReadToEnd()
+            $reader.Close()
+            if ($helper) { $xpui = Helper -paramname $helper } 
+            if ($method -eq "zip") { $writer = New-Object System.IO.StreamWriter($file.Open()) }
+            if ($method -eq "nonezip") { $writer = New-Object System.IO.StreamWriter -ArgumentList $file }
+            $writer.BaseStream.SetLength(0)
+            $writer.Write($xpui)
+            if ($add) { $add | ForEach-Object { $writer.Write([System.Environment]::NewLine + $PSItem ) } }
+            $writer.Close()  
+            if ($method -eq "zip") { $zip.Dispose() }
+        }
+        "more" {  
+            Add-Type -Assembly 'System.IO.Compression.FileSystem'
+            $xpui_spa_patch = "$env:APPDATA\Spotify\Apps\xpui.spa"
+            $zip = [System.IO.Compression.ZipFile]::Open($xpui_spa_patch, 'update') 
+            $zip.Entries | Where-Object FullName -like $name | ForEach-Object {
+                $reader = New-Object System.IO.StreamReader($_.Open())
+                $xpui = $reader.ReadToEnd()
+                $reader.Close()
+                $xpui = Helper -paramname $helper 
+                $writer = New-Object System.IO.StreamWriter($_.Open())
+                $writer.BaseStream.SetLength(0)
+                $writer.Write($xpui)
+                $writer.Close()
+            }
+            $zip.Dispose()
+        }
+    }
 }
 
 Write-Host ($lang).ModSpoti`n
@@ -1208,126 +1236,61 @@ if (Test-Path $xpui_js_patch) {
     Copy-Item $xpui_lic_patch $xpui_lic_bak_patch
     if ($ru) { Copy-Item $xpui_ru_patch $xpui_ru_bak_patch }
 
-    $reader = New-Object -TypeName System.IO.StreamReader -ArgumentList $xpui_js_patch
-    $xpui_js = $reader.ReadToEnd()
-    $reader.Close()
     
     # Full screen mode activation and removing "Upgrade to premium" menu, upgrade button, disabling a playlist sponsor
-    if (!($premium)) { $xpui_js = Helper -paramname "OffadsonFullscreen" } 
+    if (!($premium)) { extract -counts 'one' -method 'nonezip' -name 'xpui.js' -helper 'OffadsonFullscreen' }   
 
     # Experimental Feature
-    if (!($exp_spotify)) { $xpui_js = Helper -paramname "ExpFeature" }
+    if (!($exp_spotify)) { extract -counts 'one' -method 'nonezip' -name 'xpui.js' -helper 'ExpFeature' }
 
     # Remove all languages except En and Ru from xpui.js
-    if ($ru) { $xpui_js = Helper -paramname "OffRujs" }
-
-    $writer = New-Object System.IO.StreamWriter -ArgumentList $xpui_js_patch
-    $writer.BaseStream.SetLength(0)
-    $writer.Write($xpui_js)
-    $writer.Write([System.Environment]::NewLine + $webjson.others.byspotx.add) 
-    $writer.Close()  
+    if ($ru) { extract -counts 'one' -method 'nonezip' -name 'xpui.js' -helper 'OffRujs' -add $webjson.others.byspotx.add }
 
     # Russian additional translation
     if ($ru) {
-        $file_ru = get-item $env:APPDATA\Spotify\Apps\xpui\i18n\ru.json
-        $reader = New-Object -TypeName System.IO.StreamReader -ArgumentList $file_ru
-        $xpui_ru = $reader.ReadToEnd()
-        $reader.Close()
-        $xpui_ru = Helper -paramname "RuTranslate"
-        $writer = New-Object System.IO.StreamWriter -ArgumentList $file_ru
-        $writer.BaseStream.SetLength(0)
-        $writer.Write($xpui_ru)
-        $writer.Close()  
+        extract -counts 'one' -method 'nonezip' -name 'i18n\ru.json' -helper 'RuTranslate'
     }
-    $file_desktop_modals = get-item $env:APPDATA\Spotify\Apps\xpui\xpui-desktop-modals.js
-    $reader = New-Object -TypeName System.IO.StreamReader -ArgumentList $file_desktop_modals
-    $xpui_desktop_modals = $reader.ReadToEnd()
-    $reader.Close()
-    $xpui_desktop_modals = Helper -paramname "Discriptions"
-    $writer = New-Object System.IO.StreamWriter -ArgumentList $file_desktop_modals
-    $writer.BaseStream.SetLength(0)
-    $writer.Write($xpui_desktop_modals)
-    $writer.Close()  
+
+    extract -counts 'one' -method 'nonezip' -name 'xpui-desktop-modals.js' -helper 'Discriptions'
 
     # Hide Collaborators icon
     if (!($hide_col_icon_off) -and !($exp_spotify)) {
-        $file_coll = get-item $env:APPDATA\Spotify\Apps\xpui\xpui-routes-playlist.js
-        $reader = New-Object -TypeName System.IO.StreamReader -ArgumentList $file_coll
-        $xpui_coll = $reader.ReadToEnd()
-        $reader.Close()
-        $xpui_coll = Helper -paramname "Collaborators" 
-        $writer = New-Object System.IO.StreamWriter -ArgumentList $file_coll
-        $writer.BaseStream.SetLength(0)
-        $writer.Write($xpui_coll)
-        $writer.Close()  
+        extract -counts 'one' -method 'nonezip' -name 'xpui-routes-playlist.js' -helper 'Collaborators'
     }
 
     # Turn off podcasts
     if ($Podcast_off) { 
         if ($ofline -ge "1.1.93.896" -and $ofline -le "1.1.97.962") { $js = "home-v2.js" }
         if ($ofline -le "1.1.92.647" -or $ofline -ge "1.1.98.683") { $js = "xpui.js" }
-        $file_homev2 = get-item $env:APPDATA\Spotify\Apps\xpui\$js
-        $reader = New-Object -TypeName System.IO.StreamReader -ArgumentList $file_homev2
-        $xpui_podcast = $reader.ReadToEnd()
-        $reader.Close()
-        $xpui_podcast = Helper -paramname "OffPodcasts" 
-        $writer = New-Object System.IO.StreamWriter -ArgumentList $file_homev2
-        $writer.BaseStream.SetLength(0)
-        $writer.Write($xpui_podcast)
-        $writer.Close()  
+        extract -counts 'one' -method 'nonezip' -name $js -helper 'OffPodcasts'
     }
 
     # Static color for lyrics
     if ($lyrics_stat) {
-        $file_lyrics = get-item $env:APPDATA\Spotify\Apps\xpui\xpui-routes-lyrics.css
-        $reader = New-Object -TypeName System.IO.StreamReader -ArgumentList $file_lyrics
-        $xpui_lyrics = $reader.ReadToEnd()
-        $reader.Close()
-        $xpui_lyrics = Helper -paramname "Lyrics-color" 
-        $writer = New-Object System.IO.StreamWriter -ArgumentList $file_lyrics
-        $writer.BaseStream.SetLength(0)
-        $writer.Write($xpui_lyrics)
-        $writer.Close()  
+        extract -counts 'one' -method 'nonezip' -name 'xpui-routes-lyrics.css' -helper 'Lyrics-color'
     }
     
-
     # xpui.css
-    $file_xpui_css = get-item $env:APPDATA\Spotify\Apps\xpui\xpui.css
-    $reader = New-Object -TypeName System.IO.StreamReader -ArgumentList $file_xpui_css
-    $xpuiContents_xpui_css = $reader.ReadToEnd()
-    $reader.Close()
-
-    $writer = New-Object System.IO.StreamWriter -ArgumentList $file_xpui_css
-    $writer.BaseStream.SetLength(0)
-    $writer.Write($xpuiContents_xpui_css)
-
-
     if (!($premium)) {
         # Hide download icon on different pages
-        $writer.Write([System.Environment]::NewLine + $webjson.others.downloadicon.add)
+        $icon = $webjson.others.downloadicon.add
         # Hide submenu item "download"
-        $writer.Write([System.Environment]::NewLine + $webjson.others.submenudownload.add)
+        $submenu = $webjson.others.submenudownload.add
         # Hide very high quality streaming
-        $writer.Write([System.Environment]::NewLine + $webjson.others.veryhighstream.add)
+        $very_high = $webjson.others.veryhighstream.add
     }
+
     # New UI fix
     if (!($navalt_off)) {
-        $writer.Write([System.Environment]::NewLine + $webjson.others.navaltfix.add[0])
-        $writer.Write([System.Environment]::NewLine + $webjson.others.navaltfix.add[1])
+        $navaltfix = $webjson.others.navaltfix.add[0]
+        $navaltfix2 = $webjson.others.navaltfix.add[1]
     }
+    $css = $icon, $submenu, $very_high, $navaltfix, $navaltfix2
 
-    $writer.Close()
+    extract -counts 'one' -method 'nonezip' -name 'xpui.css' -add $css
 
     # licenses.html minification
-    $file_licenses = get-item $env:APPDATA\Spotify\Apps\xpui\licenses.html
-    $reader = New-Object -TypeName System.IO.StreamReader -ArgumentList $file_licenses
-    $xpuiContents_html = $reader.ReadToEnd()
-    $reader.Close()
-    $xpuiContents_html = Helper -paramname "HtmlLicMin" 
-    $writer = New-Object System.IO.StreamWriter -ArgumentList $file_licenses
-    $writer.BaseStream.SetLength(0)
-    $writer.Write($xpuiContents_html)
-    $writer.Close()
+    extract -counts 'one' -method 'nonezip' -name 'licenses.html' -helper 'HtmlLicMin'
 }  
 
 If (Test-Path $xpui_spa_patch) {
@@ -1396,199 +1359,81 @@ If (Test-Path $xpui_spa_patch) {
         $stream.Dispose()
     }
 
-    Add-Type -Assembly 'System.IO.Compression.FileSystem'
-    $zip = [System.IO.Compression.ZipFile]::Open($xpui_spa_patch, 'update')
-    
-    # xpui.js
-    $entry_xpui = $zip.GetEntry('xpui.js')
-    $reader = New-Object System.IO.StreamReader($entry_xpui.Open())
-    $xpui_js = $reader.ReadToEnd()
-    $reader.Close()
-
     # Full screen mode activation and removing "Upgrade to premium" menu, upgrade button, disabling a playlist sponsor
     if (!($premium)) {
-        $xpui_js = Helper -paramname "OffadsonFullscreen"
+        extract -counts 'one' -method 'zip' -name 'xpui.js' -helper 'OffadsonFullscreen'
     }
-
+    
     # Experimental Feature
-    if (!($exp_spotify)) { $xpui_js = Helper -paramname "ExpFeature" }
+    if (!($exp_spotify)) { extract -counts 'one' -method 'zip' -name 'xpui.js' -helper 'ExpFeature' }
 
     # Remove all languages except En and Ru from xpui.js
-    if ($ru) { $xpui_js = Helper -paramname "OffRujs" }
+    if ($ru) { extract -counts 'one' -method 'zip' -name 'xpui.js' -helper 'OffRujs' }
 
     # Disabled logging
-    $xpui_js = Helper -paramname "DisabledLog"
-   
-    $writer = New-Object System.IO.StreamWriter($entry_xpui.Open())
-    $writer.BaseStream.SetLength(0)
-    $writer.Write($xpui_js)
-    $writer.Write([System.Environment]::NewLine + $webjson.others.byspotx.add) 
-    $writer.Close()
-
+    extract -counts 'one' -method 'zip' -name 'xpui.js' -helper 'DisabledLog' -add $webjson.others.byspotx.add
 
     # Turn off podcasts
     if ($podcast_off) { 
         if ($ofline -ge "1.1.93.896" -and $ofline -le "1.1.97.962") { $js = 'home-v2.js' }
         if ($ofline -le "1.1.92.647" -or $ofline -ge "1.1.98.683") { $js = 'xpui.js' }
-        $entry_home_v2 = $zip.GetEntry($js)
-        $reader = New-Object System.IO.StreamReader($entry_home_v2.Open())
-        $xpui_podcast = $reader.ReadToEnd()
-        $reader.Close()
-        $xpui_podcast = Helper -paramname "OffPodcasts" 
-        $writer = New-Object System.IO.StreamWriter($entry_home_v2.Open())
-        $writer.BaseStream.SetLength(0)
-        $writer.Write($xpui_podcast)
-        $writer.Close()
+        extract -counts 'one' -method 'zip' -name $js -helper 'OffPodcasts'
     }
 
-        # Hide Collaborators icon
-        if (!($hide_col_icon_off) -and !($exp_spotify)) {
-            $file_coll = $zip.GetEntry('xpui-routes-playlist.js')
-            $reader = New-Object System.IO.StreamReader($file_coll.Open())
-            $xpui_coll = $reader.ReadToEnd()
-            $reader.Close()
-            $xpui_coll = Helper -paramname "Collaborators" 
-            $writer = New-Object System.IO.StreamWriter($file_coll.Open())
-            $writer.BaseStream.SetLength(0)
-            $writer.Write($xpui_coll)
-            $writer.Close()  
-        }
-    
+    # Hide Collaborators icon
+    if (!($hide_col_icon_off) -and !($exp_spotify)) {
+        extract -counts 'one' -method 'zip' -name 'xpui-routes-playlist.js' -helper 'Collaborators'
+    }
+
 
     # Static color for lyrics
     if ($lyrics_stat) {
-        $entry_lyrics = $zip.GetEntry('xpui-routes-lyrics.css')
-        $reader = New-Object System.IO.StreamReader($entry_lyrics.Open())
-        $xpui_lyrics = $reader.ReadToEnd()
-        $reader.Close()
-        $xpui_lyrics = Helper -paramname "Lyrics-color" 
-        $writer = New-Object System.IO.StreamWriter($entry_lyrics.Open())
-        $writer.BaseStream.SetLength(0)
-        $writer.Write($xpui_lyrics)
-        $writer.Close()
+        extract -counts 'one' -method 'zip' -name 'xpui-routes-lyrics.css' -helper 'Lyrics-color'
     }
 
     # Add discriptions (xpui-desktop-modals.js)
-    $entry_xpui_desktop_modals = $zip.GetEntry('xpui-desktop-modals.js')
-    $reader = New-Object System.IO.StreamReader($entry_xpui_desktop_modals.Open())
-    $xpui_desktop_modals = $reader.ReadToEnd()
-    $reader.Close()
-    $xpui_desktop_modals = Helper -paramname "Discriptions"
-    $writer = New-Object System.IO.StreamWriter($entry_xpui_desktop_modals.Open())
-    $writer.BaseStream.SetLength(0)
-    $writer.Write($xpui_desktop_modals)
-    $writer.Close()
+    extract -counts 'one' -method 'zip' -name 'xpui-desktop-modals.js' -helper 'Discriptions'
 
     # Disable Sentry (vendor~xpui.js)
-    $entry_vendor_xpui = $zip.GetEntry('vendor~xpui.js')
-    $reader = New-Object System.IO.StreamReader($entry_vendor_xpui.Open())
-    $xpuiContents_vendor = $reader.ReadToEnd()
-    $reader.Close()
-    $xpuiContents_vendor = Helper -paramname "DisableSentry"
-    $writer = New-Object System.IO.StreamWriter($entry_vendor_xpui.Open())
-    $writer.BaseStream.SetLength(0)
-    $writer.Write($xpuiContents_vendor)
-    $writer.Close()
+    extract -counts 'one' -method 'zip' -name 'vendor~xpui.js' -helper 'DisableSentry'
 
     # Minification of all *.js
-    $zip.Entries | Where-Object FullName -like '*.js' | ForEach-Object {
-        $readerjs = New-Object System.IO.StreamReader($_.Open())
-        $xpuiContents_js = $readerjs.ReadToEnd()
-        $readerjs.Close()
-        $xpuiContents_js = Helper -paramname "MinJs" 
-        $writer = New-Object System.IO.StreamWriter($_.Open())
-        $writer.BaseStream.SetLength(0)
-        $writer.Write($xpuiContents_js)
-        $writer.Close()
-    }
+    extract -counts 'more' -name '*.js' -helper 'MinJs'
 
     # xpui.css
-    $entry_xpui_css = $zip.GetEntry('xpui.css')
-    $reader = New-Object System.IO.StreamReader($entry_xpui_css.Open())
-    $xpuiContents_xpui_css = $reader.ReadToEnd()
-    $reader.Close()
-    
-    $writer = New-Object System.IO.StreamWriter($entry_xpui_css.Open())
-    $writer.BaseStream.SetLength(0)
-    $writer.Write($xpuiContents_xpui_css)
     if (!($premium)) {
         # Hide download icon on different pages
-        $writer.Write([System.Environment]::NewLine + $webjson.others.downloadicon.add)
+        $icon = $webjson.others.downloadicon.add
         # Hide submenu item "download"
-        $writer.Write([System.Environment]::NewLine + $webjson.others.submenudownload.add)
+        $submenu = $webjson.others.submenudownload.add
         # Hide very high quality streaming
-        $writer.Write([System.Environment]::NewLine + $webjson.others.veryhighstream.add)
+        $very_high = $webjson.others.veryhighstream.add
     }
-     
+
     # New UI fix
     if (!($navalt_off)) {
-        $writer.Write([System.Environment]::NewLine + $webjson.others.navaltfix.add[0])
-        $writer.Write([System.Environment]::NewLine + $webjson.others.navaltfix.add[1])
+        $navaltfix = $webjson.others.navaltfix.add[0]
+        $navaltfix2 = $webjson.others.navaltfix.add[1]
     }
-    $writer.Close()
+    $css = $icon, $submenu, $very_high, $navaltfix, $navaltfix2
+
+    extract -counts 'one' -method 'zip' -name 'xpui.css' -add $css
 
     # Remove RTL and minification of all *.css
-    $zip.Entries | Where-Object FullName -like '*.css' | ForEach-Object {
-        $readercss = New-Object System.IO.StreamReader($_.Open())
-        $xpuiContents_css = $readercss.ReadToEnd()
-        $readercss.Close()
-        $xpuiContents_css = Helper -paramname "RemovertlCssmin"
-        $writer = New-Object System.IO.StreamWriter($_.Open())
-        $writer.BaseStream.SetLength(0)
-        $writer.Write($xpuiContents_css)
-        $writer.Close()
-    }
+    extract -counts 'more' -name '*.css' -helper 'RemovertlCssmin'
     
     # licenses.html minification
-    $zip.Entries | Where-Object FullName -like '*licenses.html' | ForEach-Object {
-        $reader = New-Object System.IO.StreamReader($_.Open())
-        $xpuiContents_html = $reader.ReadToEnd()
-        $reader.Close()      
-        $xpuiContents_html = Helper -paramname "HtmlLicMin"
-        $writer = New-Object System.IO.StreamWriter($_.Open())
-        $writer.BaseStream.SetLength(0)
-        $writer.Write($xpuiContents_html)
-        $writer.Close()
-    }
+    extract -counts 'one' -method 'zip' -name 'licenses.html' -helper 'HtmlLicMin'
 
     # blank.html minification
-    $entry_blank_html = $zip.GetEntry('blank.html')
-    $reader = New-Object System.IO.StreamReader($entry_blank_html.Open())
-    $xpuiContents_html_blank = $reader.ReadToEnd()
-    $reader.Close()
-    $xpuiContents_html_blank = Helper -paramname "HtmlBlank"
-    $writer = New-Object System.IO.StreamWriter($entry_blank_html.Open())
-    $writer.BaseStream.SetLength(0)
-    $writer.Write($xpuiContents_html_blank)
-    $writer.Close()
+    extract -counts 'one' -method 'zip' -name 'blank.html' -helper 'HtmlBlank'
     
     if ($ru) {
         # Additional translation of the ru.json file
-        $zip.Entries | Where-Object FullName -like '*ru.json' | ForEach-Object {
-            $readerjson = New-Object System.IO.StreamReader($_.Open())
-            $xpui_ru = $readerjson.ReadToEnd()
-            $readerjson.Close()
-
-    
-            $xpui_ru = Helper -paramname "RuTranslate"
-            $writer = New-Object System.IO.StreamWriter($_.Open())
-            $writer.BaseStream.SetLength(0)
-            $writer.Write($xpui_ru)
-            $writer.Close()
-        }
+        extract -counts 'more' -name '*ru.json' -helper 'RuTranslate'
     }
     # Minification of all *.json
-    $zip.Entries | Where-Object FullName -like '*.json' | ForEach-Object {
-        $readerjson = New-Object System.IO.StreamReader($_.Open())
-        $xpuiContents_json = $readerjson.ReadToEnd()
-        $readerjson.Close()
-        $xpuiContents_json = Helper -paramname "MinJson" 
-        $writer = New-Object System.IO.StreamWriter($_.Open())
-        $writer.BaseStream.SetLength(0)
-        $writer.Write($xpuiContents_json)
-        $writer.Close()       
-    }
-    $zip.Dispose()   
+    extract -counts 'more' -name '*.json' -helper 'MinJson'
 }
 
 # Delete all files except "en" and "ru"

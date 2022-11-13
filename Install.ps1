@@ -72,8 +72,8 @@ param
     [Parameter(HelpMessage = 'Disable the new home structure and navigation.')]
     [switch]$navalt_off,
 
-    [Parameter(HelpMessage = 'Enable old left sidebar.')]
-    [switch]$left_sidebar_old,
+    [Parameter(HelpMessage = 'Enable new left sidebar.')]
+    [switch]$left_sidebar_on,
     
     [Parameter(HelpMessage = 'Do not create desktop shortcut.')]
     [switch]$no_shortcut,
@@ -1045,7 +1045,7 @@ function Helper($paramname) {
                 $rem.remove($newhome), $rem.remove('madeforyou'),
                 $rem.remove('similarplaylist'), $rem.remove('leftsidebar'), $rem.remove('rightsidebar')
             }
-            if ($left_sidebar_old -or $ofline -le "1.1.98.683") { $rem.remove('leftsidebar') }
+            if (!($left_sidebar_on) -or $ofline -le "1.1.97.956") { $rem.remove('leftsidebar') }
             if ($navalt_off) { $rem.remove($newhome) }
             if ($ofline -ge "1.1.94.864") {
                 $rem.remove('lyricsenabled'), $rem.remove('playlistcreat'), 

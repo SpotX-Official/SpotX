@@ -624,6 +624,7 @@ if ($spotifyInstalled) {
 
     $offline = Check_verison_clients -param2 "offline"
 
+    # Old version Spotify
     if ($online -gt $offline) {
         if ($confirm_spoti_recomended_over -or $confirm_spoti_recomended_unistall) {
             Write-Host ($lang).OldV`n
@@ -674,8 +675,29 @@ if ($spotifyInstalled) {
             $downgrading = $true
         }
     }
-
+    
+    # Unsupported version Spotify
     if ($online -lt $offline) {
+
+        # Submit unsupported version of Spotify to google form for further processing
+        try { 
+            $txt = [IO.File]::ReadAllText($spotifyExecutable)
+            $regex = "(\d+)\.(\d+)\.(\d+)\.(\d+)(\.g[0-9a-f]{8})"
+            $v = $txt | Select-String $regex -AllMatches
+            $version = $v.Matches.Value
+            $Parameters = @{
+                Uri    = 'https://docs.google.com/forms/d/e/1FAIpQLSegGsAgilgQ8Y36uw-N7zFF6Lh40cXNfyl1ecHPpZcpD8kdHg/formResponse'
+                Method = 'POST'
+                Body   = @{
+                    'entry.620327948' = $version
+                }   
+            }
+            Invoke-WebRequest @Parameters | Out-Null
+        }
+        catch {
+            Write-Host 'Unable to submit new version of Spotify' 
+            Write-Host "error description: $Error"
+        }
 
         if ($confirm_spoti_recomended_over -or $confirm_spoti_recomended_unistall) {
             Write-Host ($lang).NewV`n
@@ -1021,8 +1043,8 @@ function Helper($paramname) {
             # Experimental Feature Standart
             $rem = $webjson.exp.psobject.properties 
 
-            if ( $ofline -le "1.1.96.785") { $rem.remove('newhome2'), $rem.remove('copy-playlists'); $newhome = 'newhome'}
-            if ( $ofline -ge "1.1.97.956") { $rem.remove('newhome'); $newhome = 'newhome2'}
+            if ( $ofline -le "1.1.96.785") { $rem.remove('newhome2'), $rem.remove('copy-playlists'); $newhome = 'newhome' }
+            if ( $ofline -ge "1.1.97.956") { $rem.remove('newhome'); $newhome = 'newhome2' }
             if ($enhance_like_off) { $rem.remove('enhanceliked') }
             if ($enhance_playlist_off) { $rem.remove('enhanceplaylist') }
             if ($new_artist_pages_off) { $rem.remove('disographyartist') }

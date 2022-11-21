@@ -178,6 +178,10 @@ function Format-LanguageCode {
                 $returnCode = 'zh'
                 break
             }
+            '^ko' {
+                $returnCode = 'ko'
+                break
+            }
             Default {
                 $returnCode = $PSUICulture.Remove(2)
                 break
@@ -280,6 +284,10 @@ function Set-ScriptLanguageStrings($LanguageCode) {
             $langStrings = CallLang -clg "zh"
             break
         }
+        'ko' {
+            $langStrings = CallLang -clg "ko"
+            break
+        }
         Default {
             # Default to English if unable to find a match.
             $langStrings = CallLang -clg "en"
@@ -304,7 +312,7 @@ if ($langCode -eq 'ru') {
     $webjsonru = (Invoke-WebRequest -UseBasicParsing -Uri $urlru).Content | ConvertFrom-Json
 }
 # Set variable 'add translation line'.
-if ($langCode -match '^(it|tr|ka|pl|es|fr|hi|pt|id|vi|ro|de|hu|zh)') { $line = $true }
+if ($langCode -match '^(it|tr|ka|pl|es|fr|hi|pt|id|vi|ro|de|hu|zh|ko)') { $line = $true }
 
 # Automatic length of stars
 $au = ($lang).Author.Length + ($lang).Author2.Length

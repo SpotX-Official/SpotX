@@ -1045,6 +1045,7 @@ function Helper($paramname) {
 
             if ( $ofline -le "1.1.96.785") { $rem.remove('newhome2'), $rem.remove('copy-playlists'); $newhome = 'newhome' }
             if ( $ofline -ge "1.1.97.956") { $rem.remove('newhome'); $newhome = 'newhome2' }
+            if ( $ofline -ge "1.1.99.871") { $rem.remove('clearcache') }
             if ($enhance_like_off) { $rem.remove('enhanceliked') }
             if ($enhance_playlist_off) { $rem.remove('enhanceplaylist') }
             if ($new_artist_pages_off) { $rem.remove('disographyartist') }
@@ -1052,7 +1053,7 @@ function Helper($paramname) {
             if ($equalizer_off) { $rem.remove('equalizer') }
             if (!($device_picker_old) -or $ofline -ge "1.1.98.683") { $rem.remove('devicepickerold') }
             if ($made_for_you_off -or $ofline -ge "1.1.96.783") { $rem.remove('madeforyou') }
-            if ($ofline -lt "1.1.98.683") { $rem.remove('rightsidebar') }
+            if ($ofline -lt "1.1.98.683") { $rem.remove('rightsidebar'), $rem.remove('addingplaylist') }
             if ($exp_standart) {
                 $rem.remove('enhanceliked'), $rem.remove('enhanceplaylist'), 
                 $rem.remove('disographyartist'), $rem.remove('lyricsmatch'), 

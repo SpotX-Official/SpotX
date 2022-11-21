@@ -1051,7 +1051,7 @@ function Helper($paramname) {
             # Experimental Feature Standart
             $rem = $webjson.exp.psobject.properties 
 
-            if ( $ofline -le "1.1.96.785") { $rem.remove('newhome2'), $rem.remove('copy-playlists'); $newhome = 'newhome' }
+            if ( $ofline -le "1.1.96.785") { $rem.remove('newhome2'); $newhome = 'newhome' }
             if ( $ofline -ge "1.1.97.956") { $rem.remove('newhome'); $newhome = 'newhome2' }
             if ( $ofline -ge "1.1.99.871") { $rem.remove('clearcache') }
             if ($enhance_like_off) { $rem.remove('enhanceliked') }

@@ -1054,6 +1054,7 @@ function Helper($paramname) {
             if ( $ofline -le "1.1.96.785") { $rem.remove('newhome2'); $newhome = 'newhome' }
             if ( $ofline -ge "1.1.97.956") { $rem.remove('newhome'); $newhome = 'newhome2' }
             if ( $ofline -ge "1.1.99.871") { $rem.remove('clearcache') }
+            if ( $ofline -le "1.1.98.691") { $rem.remove('sidebar-fix') }
             if ($enhance_like_off) { $rem.remove('enhanceliked') }
             if ($enhance_playlist_off) { $rem.remove('enhanceplaylist') }
             if ($new_artist_pages_off) { $rem.remove('disographyartist') }

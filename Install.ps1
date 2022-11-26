@@ -537,8 +537,8 @@ function DesktopFolder {
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 
 Stop-Process -Name Spotify
-
-if ($PSVersionTable.PSVersion.major -ge 7) {
+$psv = $PSVersionTable.PSVersion.major
+if ($psv -ge 7) {
     Import-Module Appx -UseWindowsPowerShell -WarningAction:SilentlyContinue
 }
 
@@ -698,6 +698,9 @@ if ($spotifyInstalled) {
                 Method = 'POST'
                 Body   = @{
                     'entry.620327948' = $version
+                    'entry.1402903593' = $win_os
+                    'entry.860691305' = $psv
+                    'entry.2067427976' = $online + " меньше чем " + $offline
                 }   
             }
             Invoke-WebRequest @Parameters | Out-Null

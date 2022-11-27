@@ -10,16 +10,21 @@ body:
         - 1
         - 2
         - 3
-  validations:
-    required: true
     
 - type: textarea
   attributes:
     label: 📸 Screenshots
     description: Place any screenshots of the issue here if needed
   validations:
-    required: false 
-    
-- type: markdown
+    required: false   
+
+- type: textarea
   attributes:
-    value: If you like the idea, add a 👍 reaction to this post    
+    label: "⠀"
+    description: "Form for user reactions, please do not change the text inside"
+    placeholder: |
+      ***
+      If you like the idea, add a 👍 reaction to this post
+    value: |
+      ***
+      If you like the idea, add a 👍 reaction to this post

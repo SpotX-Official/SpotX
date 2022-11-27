@@ -371,28 +371,6 @@ function incorrectValue {
     Clear-Host
 } 
 
-function Check_verison_clients($param2) {
-
-    # Checking the recommended version for spotx
-    if ($param2 -eq "online") {
-        $ProgressPreference = 'SilentlyContinue' # Hiding Progress Bars
-        $readme = Invoke-WebRequest -UseBasicParsing -Uri https://raw.githubusercontent.com/SpotX-CLI/SpotX-Win/main/README.md
-        $v = $readme.RawContent | Select-String "Recommended official version \[\d+\.\d+\.\d+\.\d+\]" -AllMatches
-        $ver = $v.Matches.Value
-        $ver = $ver -replace 'Recommended official version \[(\d+\.\d+\.\d+\.\d+)\]', '$1'
-        return $ver
-    }
-    # Check version Spotify offline
-    if ($param2 -eq "offline") {
-        $check_offline = (Get-Item $spotifyExecutable).VersionInfo.FileVersion
-        return $check_offline
-    }
-    # Check version Spotify.bak
-    if ($param2 -eq "Spotify.bak") {
-        $check_offline_bak = (Get-Item $exe_bak).VersionInfo.FileVersion
-        return $check_offline_bak
-    }
-}
 function unlockFolder {
 
     $ErrorActionPreference = 'SilentlyContinue'
@@ -420,10 +398,9 @@ function downloadScripts($param1) {
     if ($param1 -eq "Desktop") {
         Import-Module BitsTransfer
         
-        $ver = Check_verison_clients -param2 "online"
         $l = "$PWD\links.tsv"
         $old = [IO.File]::ReadAllText($l)
-        $links = $old -match "https:\/\/upgrade.scdn.co\/upgrade\/client\/win32-x86\/spotify_installer-$ver\.g[0-9a-f]{8}-[0-9]{1,4}\.exe" 
+        $links = $old -match "https:\/\/upgrade.scdn.co\/upgrade\/client\/win32-x86\/spotify_installer-$online\.g[0-9a-f]{8}-[0-9]{1,4}\.exe" 
         $links = $Matches.Values
     }
     if ($ru -and $param1 -eq "cache-spotify") {
@@ -452,7 +429,6 @@ function downloadScripts($param1) {
     if ($param1 -eq "Desktop") {
         try { if (curl.exe -V) { $curl_check = $true } }
         catch { $curl_check = $false }
-        $vernew = Check_verison_clients -param2 "online"
     }
     try { 
         if ($param1 -eq "Desktop" -and $curl_check) {
@@ -462,7 +438,7 @@ function downloadScripts($param1) {
         }
         if ($param1 -eq "Desktop" -and $null -ne (Get-Module -Name BitsTransfer -ListAvailable) -and !($curl_check )) {
             $ProgressPreference = 'Continue'
-            Start-BitsTransfer -Source  $web_Url -Destination $local_Url  -DisplayName ($lang).Download5 -Description "$vernew "
+            Start-BitsTransfer -Source  $web_Url -Destination $local_Url  -DisplayName ($lang).Download5 -Description "$online "
         }
         if ($param1 -eq "Desktop" -and $null -eq (Get-Module -Name BitsTransfer -ListAvailable) -and !($curl_check )) {
             $webClient.DownloadFile($web_Url, $local_Url) 
@@ -532,6 +508,19 @@ function DesktopFolder {
     }
     return $desktop_folder
 }
+
+# Checking the recommended version for spotx
+$ProgressPreference = 'SilentlyContinue' # Hiding Progress Bars
+$readme = Invoke-WebRequest -UseBasicParsing -Uri https://raw.githubusercontent.com/SpotX-CLI/SpotX-Win/main/README.md
+$match = $readme.RawContent | Select-String "Recommended official version \[\d+\.\d+\.\d+\.\d+\]" -AllMatches
+$ver = $match.Matches.Value
+$online = $ver -replace 'Recommended official version \[(\d+\.\d+\.\d+\.\d+)\]', '$1'
+
+# Check version Spotify offline
+$offline = (Get-Item $spotifyExecutable).VersionInfo.FileVersion
+
+# Check version Spotify.bak
+$offline_bak = (Get-Item $exe_bak).VersionInfo.FileVersion
 
 # add Tls12
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
@@ -623,14 +612,9 @@ if (!($premium) -and $bts) {
 }
 downloadScripts -param1 "links.tsv"
 
-
-$online = Check_verison_clients -param2 "online"
-
 $spotifyInstalled = (Test-Path -LiteralPath $spotifyExecutable)
 
 if ($spotifyInstalled) {
-
-    $offline = Check_verison_clients -param2 "offline"
 
     # Old version Spotify
     if ($online -gt $offline) {
@@ -686,7 +670,6 @@ if ($spotifyInstalled) {
     
     # Unsupported version Spotify
     if ($online -lt $offline) {
-
         # Submit unsupported version of Spotify to google form for further processing
         try { 
             $txt = [IO.File]::ReadAllText($spotifyExecutable)
@@ -697,17 +680,17 @@ if ($spotifyInstalled) {
                 Uri    = 'https://docs.google.com/forms/d/e/1FAIpQLSegGsAgilgQ8Y36uw-N7zFF6Lh40cXNfyl1ecHPpZcpD8kdHg/formResponse'
                 Method = 'POST'
                 Body   = @{
-                    'entry.620327948' = $version
+                    'entry.620327948'  = $version
                     'entry.1402903593' = $win_os
-                    'entry.860691305' = $psv
+                    'entry.860691305'  = $psv
                     'entry.2067427976' = $online + " меньше чем " + $offline
                 }   
             }
-            Invoke-WebRequest @Parameters | Out-Null
+            Invoke-WebRequest -UseBasicParsing @Parameters | Out-Null
         }
         catch {
             Write-Host 'Unable to submit new version of Spotify' 
-            Write-Host "error description: $Error"
+            Write-Host "error description: "$Error[0]
         }
 
         if ($confirm_spoti_recomended_over -or $confirm_spoti_recomended_unistall) {
@@ -808,6 +791,12 @@ if (-not $spotifyInstalled -or $upgrade_client) {
     while (-not (get-process | Where-Object { $_.ProcessName -eq 'SpotifySetup' })) {}
     wait-process -name SpotifySetup
     Stop-Process -Name Spotify
+
+    # Upgrade check version Spotify offline
+    $offline = (Get-Item $spotifyExecutable).VersionInfo.FileVersion
+
+    # Upgrade check version Spotify.bak
+    $offline_bak = (Get-Item $exe_bak).VersionInfo.FileVersion
 }
 
 # Delete Spotify shortcut if it is on desktop
@@ -881,9 +870,7 @@ if ($ch -eq 'y') { $block_update = $true }
 
 if ($ch -eq 'n') {
     $ErrorActionPreference = 'SilentlyContinue'
-    $exe_onl_fn = Check_verison_clients -param2 "offline"
-    $exe_bak_fn = Check_verison_clients -param2 'Spotify.bak'
-    if ((Test-Path -LiteralPath $exe_bak) -and $exe_onl_fn -eq $exe_bak_fn) {
+    if ((Test-Path -LiteralPath $exe_bak) -and $offline -eq $offline_bak) {
         Remove-Item $spotifyExecutable -Recurse -Force
         Rename-Item $exe_bak $spotifyExecutable
     }
@@ -943,7 +930,6 @@ if ($exp_spotify) { Write-Host ($lang).ExpSpotify`n }
 
 $url = "https://raw.githubusercontent.com/SpotX-CLI/SpotX-commons/main/patches.json"
 $webjson = (Invoke-WebRequest -UseBasicParsing -Uri $url).Content | ConvertFrom-Json
-$ofline = Check_verison_clients -param2 "offline"
 
 function Helper($paramname) {
 
@@ -1014,7 +1000,7 @@ function Helper($paramname) {
         "OffadsonFullscreen" { 
             # Full screen mode activation and removing "Upgrade to premium" menu, upgrade button, disabling a playlist sponsor
             if ($bts) { $webjson.free.psobject.properties.remove('bilboard'), $webjson.free.psobject.properties.remove('audioads') }
-            if ($ofline -ge "1.1.98.683") { $webjson.free.psobject.properties.remove('connectold') }
+            if ($offline -ge "1.1.98.683") { $webjson.free.psobject.properties.remove('connectold') }
             $name = "patches.json.free."
             $n = "xpui.js"
             $contents = $webjson.free.psobject.properties.name
@@ -1023,9 +1009,9 @@ function Helper($paramname) {
         "OffPodcasts" {  
             # Turn off podcasts
             $n = $js
-            if ($ofline -le "1.1.92.647") { $podcats = "podcastsoff" }
-            if ($ofline -ge "1.1.93.896" -and $ofline -le "1.1.96.785") { $podcats = "podcastsoff2" }
-            if ($ofline -ge "1.1.97.952") { $podcats = "podcastsoff3" }
+            if ($offline -le "1.1.92.647") { $podcats = "podcastsoff" }
+            if ($offline -ge "1.1.93.896" -and $offline -le "1.1.96.785") { $podcats = "podcastsoff2" }
+            if ($offline -ge "1.1.97.952") { $podcats = "podcastsoff3" }
             $name = "patches.json.others."
             $contents = $podcats
             $json = $webjson.others
@@ -1054,18 +1040,18 @@ function Helper($paramname) {
             # Experimental Feature Standart
             $rem = $webjson.exp.psobject.properties 
 
-            if ( $ofline -le "1.1.96.785") { $rem.remove('newhome2'); $newhome = 'newhome' }
-            if ( $ofline -ge "1.1.97.956") { $rem.remove('newhome'); $newhome = 'newhome2' }
-            if ( $ofline -ge "1.1.99.871") { $rem.remove('clearcache') }
-            if ( $ofline -le "1.1.98.691") { $rem.remove('sidebar-fix') }
+            if ( $offline -le "1.1.96.785") { $rem.remove('newhome2'); $newhome = 'newhome' }
+            if ( $offline -ge "1.1.97.956") { $rem.remove('newhome'); $newhome = 'newhome2' }
+            if ( $offline -ge "1.1.99.871") { $rem.remove('clearcache') }
+            if ( $offline -le "1.1.98.691") { $rem.remove('sidebar-fix') }
             if ($enhance_like_off) { $rem.remove('enhanceliked') }
             if ($enhance_playlist_off) { $rem.remove('enhanceplaylist') }
             if ($new_artist_pages_off) { $rem.remove('disographyartist') }
             if ($new_lyrics_off) { $rem.remove('lyricsmatch') }
             if ($equalizer_off) { $rem.remove('equalizer') }
-            if (!($device_picker_old) -or $ofline -ge "1.1.98.683") { $rem.remove('devicepickerold') }
-            if ($made_for_you_off -or $ofline -ge "1.1.96.783") { $rem.remove('madeforyou') }
-            if ($ofline -lt "1.1.98.683") { $rem.remove('rightsidebar'), $rem.remove('addingplaylist') }
+            if (!($device_picker_old) -or $offline -ge "1.1.98.683") { $rem.remove('devicepickerold') }
+            if ($made_for_you_off -or $offline -ge "1.1.96.783") { $rem.remove('madeforyou') }
+            if ($offline -lt "1.1.98.683") { $rem.remove('rightsidebar'), $rem.remove('addingplaylist') }
             if ($exp_standart) {
                 $rem.remove('enhanceliked'), $rem.remove('enhanceplaylist'), 
                 $rem.remove('disographyartist'), $rem.remove('lyricsmatch'), 
@@ -1073,14 +1059,14 @@ function Helper($paramname) {
                 $rem.remove($newhome), $rem.remove('madeforyou'),
                 $rem.remove('similarplaylist'), $rem.remove('leftsidebar'), $rem.remove('rightsidebar')
             }
-            if (!($left_sidebar_on) -or $ofline -le "1.1.97.956") { $rem.remove('leftsidebar') }
+            if (!($left_sidebar_on) -or $offline -le "1.1.97.956") { $rem.remove('leftsidebar') }
             if ($navalt_off) { $rem.remove($newhome) }
-            if ($ofline -ge "1.1.94.864") {
+            if ($offline -ge "1.1.94.864") {
                 $rem.remove('lyricsenabled'), $rem.remove('playlistcreat'), 
                 $rem.remove('searchbox')
             }
-            if ($ofline -lt "1.1.90.859" -or $ofline -gt "1.1.95.893") { $rem.remove('devicepicker') }
-            if ($ofline -le "1.1.93.896") { $rem.remove($newhome) }
+            if ($offline -lt "1.1.90.859" -or $offline -gt "1.1.95.893") { $rem.remove('devicepicker') }
+            if ($offline -le "1.1.93.896") { $rem.remove($newhome) }
             $name = "patches.json.exp."
             $n = "xpui.js"
             $contents = $webjson.exp.psobject.properties.name
@@ -1288,8 +1274,8 @@ if (Test-Path $xpui_js_patch) {
 
     # Turn off podcasts
     if ($Podcast_off) { 
-        if ($ofline -ge "1.1.93.896" -and $ofline -le "1.1.97.962") { $js = "home-v2.js" }
-        if ($ofline -le "1.1.92.647" -or $ofline -ge "1.1.98.683") { $js = "xpui.js" }
+        if ($offline -ge "1.1.93.896" -and $offline -le "1.1.97.962") { $js = "home-v2.js" }
+        if ($offline -le "1.1.92.647" -or $offline -ge "1.1.98.683") { $js = "xpui.js" }
         extract -counts 'one' -method 'nonezip' -name $js -helper 'OffPodcasts'
     }
 
@@ -1308,12 +1294,7 @@ if (Test-Path $xpui_js_patch) {
         $very_high = $webjson.others.veryhighstream.add
     }
 
-    # New UI fix
-    if (!($navalt_off)) {
-        $navaltfix = $webjson.others.navaltfix.add[0]
-        $navaltfix2 = $webjson.others.navaltfix.add[1]
-    }
-    $css = $icon, $submenu, $very_high, $navaltfix, $navaltfix2
+    $css = $icon, $submenu, $very_high
 
     extract -counts 'one' -method 'nonezip' -name 'xpui.css' -add $css
 
@@ -1403,8 +1384,8 @@ If (Test-Path $xpui_spa_patch) {
 
     # Turn off podcasts
     if ($podcast_off) { 
-        if ($ofline -ge "1.1.93.896" -and $ofline -le "1.1.97.962") { $js = 'home-v2.js' }
-        if ($ofline -le "1.1.92.647" -or $ofline -ge "1.1.98.683") { $js = 'xpui.js' }
+        if ($offline -ge "1.1.93.896" -and $offline -le "1.1.97.962") { $js = 'home-v2.js' }
+        if ($offline -le "1.1.92.647" -or $offline -ge "1.1.98.683") { $js = 'xpui.js' }
         extract -counts 'one' -method 'zip' -name $js -helper 'OffPodcasts'
     }
 

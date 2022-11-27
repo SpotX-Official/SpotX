@@ -11,10 +11,15 @@ body:
         - 2
         - 3
   validations:
-    required: true  
+    required: true
+    
 - type: textarea
   attributes:
     label: 📸 Screenshots
     description: Place any screenshots of the issue here if needed
   validations:
-    required: false        
+    required: false 
+    
+- type: markdown
+  attributes:
+    value: If you like the idea, add a 👍 reaction to this post    

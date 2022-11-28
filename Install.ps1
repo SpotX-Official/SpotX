@@ -509,12 +509,8 @@ function DesktopFolder {
     return $desktop_folder
 }
 
-# Checking the recommended version for spotx
-$ProgressPreference = 'SilentlyContinue' # Hiding Progress Bars
-$readme = Invoke-WebRequest -UseBasicParsing -Uri https://raw.githubusercontent.com/SpotX-CLI/SpotX-Win/main/README.md
-$match = $readme.RawContent | Select-String "Recommended official version \[\d+\.\d+\.\d+\.\d+\]" -AllMatches
-$ver = $match.Matches.Value
-$online = $ver -replace 'Recommended official version \[(\d+\.\d+\.\d+\.\d+)\]', '$1'
+# Recommended version for spotx
+$online = "1.1.99.878"
 
 # Check version Spotify offline
 $offline = (Get-Item $spotifyExecutable).VersionInfo.FileVersion

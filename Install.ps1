@@ -958,6 +958,13 @@ function Helper($paramname) {
             $contents = "minjson"
             $json = $webjson.others
         }
+        "FixOldTheme" { 
+            # Remove indent for old theme xpui.css
+            $name = "patches.json.others."
+            $n = "xpui.css"
+            $contents = "fix-old-theme"
+            $json = $webjson.others
+        }
         "RemovertlCssmin" { 
             # Remove RTL and minification of all *.css
             $contents = "removertl-cssmin"
@@ -1292,11 +1299,10 @@ if (Test-Path $xpui_js_patch) {
         $submenu = $webjson.others.submenudownload.add
         # Hide very high quality streaming
         $very_high = $webjson.others.veryhighstream.add
+
+        $css = $icon, $submenu, $very_high
+        extract -counts 'one' -method 'nonezip' -name 'xpui.css' -add $css
     }
-
-    $css = $icon, $submenu, $very_high
-
-    extract -counts 'one' -method 'nonezip' -name 'xpui.css' -add $css
 
     # licenses.html minification
     extract -counts 'one' -method 'nonezip' -name 'licenses.html' -helper 'HtmlLicMin'
@@ -1424,9 +1430,13 @@ If (Test-Path $xpui_spa_patch) {
         $navaltfix = $webjson.others.navaltfix.add[0]
         $navaltfix2 = $webjson.others.navaltfix.add[1]
     }
-    $css = $icon, $submenu, $very_high, $navaltfix, $navaltfix2
-
-    extract -counts 'one' -method 'zip' -name 'xpui.css' -add $css
+    if (!($navalt_off) -or !($premium)) {
+        $css = $icon, $submenu, $very_high, $navaltfix, $navaltfix2
+        extract -counts 'one' -method 'zip' -name 'xpui.css' -add $css
+    }
+    
+    # Old UI fix
+    extract -counts 'one' -method 'zip' -name 'xpui.css' -helper "FixOldTheme"
 
     # Remove RTL and minification of all *.css
     extract -counts 'more' -name '*.css' -helper 'RemovertlCssmin'

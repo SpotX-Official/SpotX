@@ -1047,7 +1047,7 @@ function Helper($paramname) {
             if ( $offline -ge "1.1.97.956") { $rem.remove('newhome'); $newhome = 'newhome2' }
             if ( $offline -ge "1.1.99.871") { $rem.remove('clearcache') }
             if ( $offline -le "1.1.98.691") { $rem.remove('sidebar-fix') }
-            if ( $offline -lt "1.1.90.859") { $rem.remove('pathfinder') }
+            if ( $offline -lt "1.1.91.824") { $rem.remove('pathfinder') }
             if ($enhance_like_off) { $rem.remove('enhanceliked') }
             if ($enhance_playlist_off) { $rem.remove('enhanceplaylist') }
             if ($new_artist_pages_off) { $rem.remove('disographyartist') }

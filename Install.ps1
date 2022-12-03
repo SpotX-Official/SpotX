@@ -358,8 +358,6 @@ $spotifyDirectory = "$env:APPDATA\Spotify"
 $spotifyDirectory2 = "$env:LOCALAPPDATA\Spotify"
 $spotifyExecutable = "$spotifyDirectory\Spotify.exe"
 $exe_bak = "$spotifyDirectory\Spotify.bak"
-$chrome_elf = "$spotifyDirectory\chrome_elf.dll"
-$chrome_elf_bak = "$spotifyDirectory\chrome_elf_bak.dll"
 $cache_folder = "$env:APPDATA\Spotify\cache"
 $spotifyUninstall = "$env:TEMP\SpotifyUninstall.exe"
 $start_menu = "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Spotify.lnk"
@@ -811,21 +809,6 @@ if ($no_shortcut) {
     remove-item "$desktop_folder\Spotify.lnk" -Recurse -Force
 }
 
-# Delete the leveldb folder (Fixes bug with incorrect experimental features for some accounts)
-<# 
-$leveldb = (Test-Path -LiteralPath "$spotifyDirectory2\Browser\Local Storage\leveldb")
-
-if ($leveldb) {
-    $ErrorActionPreference = 'SilentlyContinue'
-    remove-item "$spotifyDirectory2\Browser\Local Storage\leveldb" -Recurse -Force
-}
-#>
-
-# Create backup chrome_elf.dll
-if (!(Test-Path -LiteralPath $chrome_elf_bak) -and !($premium) -and $bts) {
-    Move-Item $chrome_elf $chrome_elf_bak 
-}
-
 $ch = $null
 
 if ($podcasts_off) { 
@@ -1190,10 +1173,15 @@ function extract ($counts, $method, $name, $helper, $add) {
 
 Write-Host ($lang).ModSpoti`n
 
-# Patching files
+
 if (!($premium) -and $bts) {
-    $patchFiles = "$PWD\chrome_elf.dll", "$PWD\config.ini"
+    $patchFiles = "$PWD\dpapi.dll", "$PWD\config.ini"
     Copy-Item -LiteralPath $patchFiles -Destination "$spotifyDirectory"
+}
+else {
+    $ErrorActionPreference = 'SilentlyContinue' 
+    $test_bts = (Test-Path -Path "$spotifyDirectory\dpapi.dll") -or (Test-Path -Path "$spotifyDirectory\config.ini")
+    if ($test_bts) {Remove-Item "$spotifyDirectory\dpapi.dll", "$spotifyDirectory\config.ini" -Recurse -Force }
 }
 $tempDirectory = $PWD
 Pop-Location

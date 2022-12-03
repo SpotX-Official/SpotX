@@ -981,16 +981,33 @@ function Helper($paramname) {
             $json = $webjson.others
         }
         "Lyrics-color" { 
-            # Static color for lyrics (xpui-routes-lyrics.css)
-            $webjson.others.lyricscolor.replace[0] = '$1' + $webjson.others.lyricscolor.theme.$lyrics_stat.pasttext 
-            $webjson.others.lyricscolor.replace[1] = '$1' + $webjson.others.lyricscolor.theme.$lyrics_stat.current 
-            $webjson.others.lyricscolor.replace[2] = '$1' + $webjson.others.lyricscolor.theme.$lyrics_stat.next 
-            $webjson.others.lyricscolor.replace[3] = '$1' + $webjson.others.lyricscolor.theme.$lyrics_stat.hover 
-            $webjson.others.lyricscolor.replace[4] = $webjson.others.lyricscolor.theme.$lyrics_stat.background 
-            $webjson.others.lyricscolor.replace[5] = '$1' + $webjson.others.lyricscolor.theme.$lyrics_stat.maxmatch 
+            $pasttext = $webjson.others.themelyrics.theme.$lyrics_stat.pasttext
+            $current = $webjson.others.themelyrics.theme.$lyrics_stat.current
+            $next = $webjson.others.themelyrics.theme.$lyrics_stat.next
+            $background = $webjson.others.themelyrics.theme.$lyrics_stat.background
+
+            if ($offline -lt "1.1.99.871") { $lyrics = "lyricscolor1"; $contents = $lyrics }
+            if ($offline -ge "1.1.99.871") { $lyrics = "lyricscolor2"; $contents = $lyrics }
+
+            # xpui-routes-lyrics.js
+            if ($offline -ge "1.1.99.871") {
+
+                $webjson.others.$lyrics.replace[0] = '$1' + '"' + $pasttext + '"'  
+                $webjson.others.$lyrics.replace[1] = '$1' + '"' + $current + '"'  
+                $webjson.others.$lyrics.replace[2] = '$1' + '"' + $next + '"'  
+                $webjson.others.$lyrics.replace[3] = '$1' + '"' + $background + '"'   
+            }
+            # xpui-routes-lyrics.css
+            if ($offline -lt "1.1.99.871") {
+                $webjson.others.$lyrics.replace[0] = '$1' + $pasttext
+                $webjson.others.$lyrics.replace[1] = '$1' + $current
+                $webjson.others.$lyrics.replace[2] = '$1' + $next
+                $webjson.others.$lyrics.replace[3] = $background 
+                $webjson.others.$lyrics.replace[4] = '$1' + $webjson.others.themelyrics.theme.$lyrics_stat.hover 
+                $webjson.others.$lyrics.replace[5] = '$1' + $webjson.others.themelyrics.theme.$lyrics_stat.maxmatch 
+            }
             $name = "patches.json.others."
-            $n = "xpui-routes-lyrics.css"
-            $contents = "lyricscolor"
+            $n = $name_file
             $json = $webjson.others
         }
         "Discriptions" {  
@@ -1285,7 +1302,13 @@ if (Test-Path $xpui_js_patch) {
 
     # Static color for lyrics
     if ($lyrics_stat) {
-        extract -counts 'one' -method 'nonezip' -name 'xpui-routes-lyrics.css' -helper 'Lyrics-color'
+        if ($offline -lt "1.1.99.871") { 
+            $name_file = 'xpui-routes-lyrics.css'
+        }
+        if ($offline -ge "1.1.99.871") {
+            $name_file = 'xpui-routes-lyrics.js'   
+        }
+        extract -counts 'one' -method 'nonezip' -name $name_file -helper 'Lyrics-color'
     }
     
     # xpui.css
@@ -1400,7 +1423,13 @@ If (Test-Path $xpui_spa_patch) {
 
     # Static color for lyrics
     if ($lyrics_stat) {
-        extract -counts 'one' -method 'zip' -name 'xpui-routes-lyrics.css' -helper 'Lyrics-color'
+        if ($offline -lt "1.1.99.871") { 
+            $name_file = 'xpui-routes-lyrics.css'
+        }
+        if ($offline -ge "1.1.99.871") {
+            $name_file = 'xpui-routes-lyrics.js'   
+        }
+        extract -counts 'one' -method 'zip' -name $name_file -helper 'Lyrics-color'
     }
 
     # Add discriptions (xpui-desktop-modals.js)

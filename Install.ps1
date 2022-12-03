@@ -1076,7 +1076,7 @@ function Helper($paramname) {
             }
             if (!($left_sidebar_on) -or $offline -le "1.1.97.956") { $rem.remove('leftsidebar') }
             if (!($right_sidebar_on) -or $offline -lt "1.1.98.683") { $rem.remove('rightsidebar') }
-            if (!($right_sidebar_on) -and $offline -lt "1.2.0.1155") {$rem.remove('lyricssidebar')}
+            if (!($right_sidebar_on) -or $offline -lt "1.2.0.1155") {$rem.remove('lyricssidebar')}
             if ($navalt_off) { $rem.remove($newhome) }
             if ($offline -ge "1.1.94.864") {
                 $rem.remove('lyricsenabled'), $rem.remove('playlistcreat'), 

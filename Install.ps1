@@ -74,6 +74,9 @@ param
 
     [Parameter(HelpMessage = 'Enable new left sidebar.')]
     [switch]$left_sidebar_on,
+     
+    [Parameter(HelpMessage = 'Enable new right sidebar.')]
+    [switch]$right_sidebar_on,
     
     [Parameter(HelpMessage = 'Do not create desktop shortcut.')]
     [switch]$no_shortcut,
@@ -1063,7 +1066,7 @@ function Helper($paramname) {
             if ($equalizer_off) { $rem.remove('equalizer') }
             if (!($device_picker_old) -or $offline -ge "1.1.98.683") { $rem.remove('devicepickerold') }
             if ($made_for_you_off -or $offline -ge "1.1.96.783") { $rem.remove('madeforyou') }
-            if ($offline -lt "1.1.98.683") { $rem.remove('rightsidebar'), $rem.remove('addingplaylist') }
+            if ($offline -lt "1.1.98.683") { $rem.remove('addingplaylist') }
             if ($exp_standart) {
                 $rem.remove('enhanceliked'), $rem.remove('enhanceplaylist'), 
                 $rem.remove('disographyartist'), $rem.remove('lyricsmatch'), 
@@ -1072,6 +1075,7 @@ function Helper($paramname) {
                 $rem.remove('similarplaylist'), $rem.remove('leftsidebar'), $rem.remove('rightsidebar')
             }
             if (!($left_sidebar_on) -or $offline -le "1.1.97.956") { $rem.remove('leftsidebar') }
+            if (!($right_sidebar_on) -or $offline -lt "1.1.98.683") { $rem.remove('rightsidebar') }
             if ($navalt_off) { $rem.remove($newhome) }
             if ($offline -ge "1.1.94.864") {
                 $rem.remove('lyricsenabled'), $rem.remove('playlistcreat'), 

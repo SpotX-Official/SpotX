@@ -510,7 +510,7 @@ function DesktopFolder {
 }
 
 # Recommended version for spotx
-$online = "1.1.99.878"
+$online = "1.2.0.1155"
 
 # Check version Spotify offline
 $offline = (Get-Item $spotifyExecutable).VersionInfo.FileVersion

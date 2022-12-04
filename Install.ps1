@@ -110,7 +110,7 @@ function Format-LanguageCode {
     
     begin {
         $supportLanguages = @(
-            'en', 'ru', 'it', 'tr', 'ka', 'pl', 'es', 'fr', 'hi', 'pt', 'id', 'vi', 'ro', 'de', 'hu', 'zh', 'ko', 'ua'
+            'en', 'ru', 'it', 'tr', 'ka', 'pl', 'es', 'fr', 'hi', 'pt', 'id', 'vi', 'ro', 'de', 'hu', 'zh', 'ko', 'ua', 'fa'
         )
     }
     
@@ -187,6 +187,10 @@ function Format-LanguageCode {
             }
             '^ua' {
                 $returnCode = 'ua'
+                break
+            }
+            '^fa' {
+                $returnCode = 'fa'
                 break
             }
             Default {
@@ -299,6 +303,10 @@ function Set-ScriptLanguageStrings($LanguageCode) {
             $langStrings = CallLang -clg "ua"
             break
         }
+        'fa' {
+            $langStrings = CallLang -clg "fa"
+            break
+        }
         Default {
             # Default to English if unable to find a match.
             $langStrings = CallLang -clg "en"
@@ -323,7 +331,7 @@ if ($langCode -eq 'ru') {
     $webjsonru = (Invoke-WebRequest -UseBasicParsing -Uri $urlru).Content | ConvertFrom-Json
 }
 # Set variable 'add translation line'.
-if ($langCode -match '^(it|tr|ka|pl|es|fr|hi|pt|id|vi|ro|de|hu|zh|ko|ua)') { $line = $true }
+if ($langCode -match '^(it|tr|ka|pl|es|fr|hi|pt|id|vi|ro|de|hu|zh|ko|ua|fa)') { $line = $true }
 
 # Automatic length of stars
 $au = ($lang).Author.Length + ($lang).Author2.Length

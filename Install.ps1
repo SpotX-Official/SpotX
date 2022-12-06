@@ -1,9 +1,12 @@
 param
 (
-    [Parameter(HelpMessage = 'Remove podcasts/episodes/audiobooks from homepage.')]
+    [Parameter(HelpMessage = 'Hiding podcasts/episodes/audiobooks from homepage.')]
     [switch]$podcasts_off,
+
+    [Parameter(HelpMessage = 'Hiding Ad-like sections from the homepage')]
+    [switch]$adsections_off,
     
-    [Parameter(HelpMessage = 'Do not remove podcasts/episodes/audiobooks from homepage.')]
+    [Parameter(HelpMessage = 'Do not hiding podcasts/episodes/audiobooks from homepage.')]
     [switch]$podcasts_on,
     
     [Parameter(HelpMessage = 'Block Spotify automatic updates.')]
@@ -1030,12 +1033,20 @@ function Helper($paramname) {
         }
         "OffPodcasts" {  
             # Turn off podcasts
+            if ($offline -le "1.1.92.647") { $contents = "podcastsoff" }
+            if ($offline -ge "1.1.93.896" -and $offline -le "1.1.96.785") { $contents = "podcastsoff2" }
+            if ($offline -ge "1.1.97.952") { $contents = "podcastsoff3" }
             $n = $js
-            if ($offline -le "1.1.92.647") { $podcats = "podcastsoff" }
-            if ($offline -ge "1.1.93.896" -and $offline -le "1.1.96.785") { $podcats = "podcastsoff2" }
-            if ($offline -ge "1.1.97.952") { $podcats = "podcastsoff3" }
             $name = "patches.json.others."
-            $contents = $podcats
+            $json = $webjson.others
+        }
+        "OffAdSections" {  
+            # Hiding Ad-like sections from the homepage
+            if ($offline -le "1.1.96.785") { $webjson.others.adsectionsoff.replace = '$1 if ($3' + $webjson.others.adsectionsoff.replace }
+            else { $webjson.others.adsectionsoff.replace = '$1 if ($4' + $webjson.others.adsectionsoff.replace }
+            $n = $js
+            $name = "patches.json.others."
+            $contents = "adsectionsoff"
             $json = $webjson.others
         }
         "OffRujs" { 
@@ -1084,7 +1095,7 @@ function Helper($paramname) {
             }
             if (!($left_sidebar_on) -or $offline -le "1.1.97.956") { $rem.remove('leftsidebar') }
             if (!($right_sidebar_on) -or $offline -lt "1.1.98.683") { $rem.remove('rightsidebar') }
-            if (!($right_sidebar_on) -or $offline -lt "1.2.0.1155") {$rem.remove('lyricssidebar')}
+            if (!($right_sidebar_on) -or $offline -lt "1.2.0.1155") { $rem.remove('lyricssidebar') }
             if ($navalt_off) { $rem.remove($newhome) }
             if ($offline -ge "1.1.94.864") {
                 $rem.remove('lyricsenabled'), $rem.remove('playlistcreat'), 
@@ -1194,7 +1205,7 @@ if (!($premium) -and $bts) {
 else {
     $ErrorActionPreference = 'SilentlyContinue' 
     $test_bts = (Test-Path -Path "$spotifyDirectory\dpapi.dll") -or (Test-Path -Path "$spotifyDirectory\config.ini")
-    if ($test_bts) {Remove-Item "$spotifyDirectory\dpapi.dll", "$spotifyDirectory\config.ini" -Recurse -Force }
+    if ($test_bts) { Remove-Item "$spotifyDirectory\dpapi.dll", "$spotifyDirectory\config.ini" -Recurse -Force }
 }
 $tempDirectory = $PWD
 Pop-Location
@@ -1309,6 +1320,13 @@ if (Test-Path $xpui_js_patch) {
         extract -counts 'one' -method 'nonezip' -name $js -helper 'OffPodcasts'
     }
 
+    # Hiding Ad-like sections from the homepage
+    if ($adsections_off) { 
+        if ($offline -ge "1.1.93.896" -and $offline -le "1.1.97.962") { $js = 'home-v2.js' }
+        if ($offline -ge "1.1.98.683") { $js = 'xpui.js' }
+        extract -counts 'one' -method 'nonezip' -name $js -helper 'OffAdSections'
+    }
+    
     # Static color for lyrics
     if ($lyrics_stat) {
         if ($offline -lt "1.1.99.871") { 
@@ -1422,6 +1440,13 @@ If (Test-Path $xpui_spa_patch) {
         if ($offline -ge "1.1.93.896" -and $offline -le "1.1.97.962") { $js = 'home-v2.js' }
         if ($offline -le "1.1.92.647" -or $offline -ge "1.1.98.683") { $js = 'xpui.js' }
         extract -counts 'one' -method 'zip' -name $js -helper 'OffPodcasts'
+    }
+
+    # Hiding Ad-like sections from the homepage
+    if ($adsections_off) { 
+        if ($offline -ge "1.1.93.896" -and $offline -le "1.1.97.962") { $js = 'home-v2.js' }
+        if ($offline -ge "1.1.98.683") { $js = 'xpui.js' }
+        extract -counts 'one' -method 'zip' -name $js -helper 'OffAdSections'
     }
 
     # Hide Collaborators icon

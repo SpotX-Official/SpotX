@@ -90,6 +90,12 @@ param
     [Parameter(HelpMessage = 'Static color for lyrics.')]
     [int16]$lyrics_stat,
 
+    [Parameter(HelpMessage = 'Accumulation of track listening history with Goofy.')]
+    [string]$urlform_goofy = $null,
+
+    [Parameter(HelpMessage = 'Accumulation of track listening history with Goofy.')]
+    [string]$idbox_goofy = $null,
+
     [Parameter(HelpMessage = 'Error log ru string.')]
     [switch]$err_ru,
     
@@ -1069,6 +1075,14 @@ function Helper($paramname) {
             $contents = "collaboration"
             $json = $webjson.others
         }
+        "Goofy-History" { 
+            # Accumulation of track listening history with Goofy
+            $name = "patches.json.others."
+            $n = "xpui.js"
+            $contents = "goofyhistory"
+            $webjson.others.$contents.replace = "`$1 const urlForm=" + '"' + $urlform_goofy + '"' + ";const idBox=" + '"' + $idbox_goofy + '"' + $webjson.others.$contents.replace
+            $json = $webjson.others
+        }
         "ExpFeature" { 
             # Experimental Feature Standart
             $rem = $webjson.exp.psobject.properties 
@@ -1326,6 +1340,11 @@ if (Test-Path $xpui_js_patch) {
         if ($offline -ge "1.1.98.683") { $js = 'xpui.js' }
         extract -counts 'one' -method 'nonezip' -name $js -helper 'OffAdSections'
     }
+
+    # Accumulation of track listening history with Goofy
+    if ($urlform_goofy -and $idbox_goofy -and $offline -ge "1.1.90.859") { 
+        extract -counts 'one' -method 'nonezip' -name 'xpui.js' -helper 'Goofy-History'
+    }
     
     # Static color for lyrics
     if ($lyrics_stat) {
@@ -1447,6 +1466,11 @@ If (Test-Path $xpui_spa_patch) {
         if ($offline -ge "1.1.93.896" -and $offline -le "1.1.97.962") { $js = 'home-v2.js' }
         if ($offline -ge "1.1.98.683") { $js = 'xpui.js' }
         extract -counts 'one' -method 'zip' -name $js -helper 'OffAdSections'
+    }
+
+    # Accumulation of track listening history with Goofy
+    if ($urlform_goofy -and $idbox_goofy -and $offline -ge "1.1.90.859") { 
+        extract -counts 'one' -method 'zip' -name 'xpui.js' -helper 'Goofy-History'
     }
 
     # Hide Collaborators icon

@@ -48,7 +48,7 @@ or
 #### Run The following command in PowerShell:
 
 ```ps1
-[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; (iwr -useb 'https://raw.githubusercontent.com/SpotX-CLI/SpotX-Win/main/Install.ps1').Content | iex
+iex(irm raw.githubusercontent.com/SpotX-CLI/SpotX-Win/main/Install.ps1)
 ```
 
 </details>

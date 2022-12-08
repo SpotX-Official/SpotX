@@ -14,8 +14,8 @@ body:
   id: langpowershell
   attributes:
     label: Enter language name in PowerShell
-    description: Enter the following command in the PowerShell terminal <kbd>$PSUICulture.Remove(2)</kbd>, write the answer in the line below. For this to work, your Windows must be in this language.
-    placeholder: e.g. en
+    description: Enter the following command in the PowerShell terminal <kbd>$PSUICulture</kbd>, write the answer in the line below. For this to work, your Windows must be in this language.
+    placeholder: e.g. en-US
   validations:
     required: true
 - type: textarea

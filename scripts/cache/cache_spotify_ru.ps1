@@ -14,11 +14,12 @@ $day = 7 # Количество дней после которых кеш счи
 # Очищаем папку \Data если был найден устаревший кеш
 
 try {
-    If (!(Test-Path -Path $env:LOCALAPPDATA\Spotify\Data)) {
+    $SpotifyData = Join-Path -Path $env:LOCALAPPDATA -ChildPath "Spotify\Data"
+    If (!(Test-Path -Path $SpotifyData)) {
         "$(Get-Date -Format "dd/MM/yyyy HH:mm:ss") Папка Local\Spotify\Data не найдена" | Out-File log.txt -append
         exit	
     }
-    $check = Get-ChildItem $env:LOCALAPPDATA\Spotify\Data -File -Recurse | Where-Object lastaccesstime -lt (get-date).AddDays(-$day)
+    $check = Get-ChildItem $SpotifyData -File -Recurse | Where-Object lastaccesstime -lt (get-date).AddDays(-$day)
     if ($check.Length -ge 1) {
 
         $count = $check
@@ -31,7 +32,7 @@ try {
             $mb = "{0:N2} Mb" -f (($check | Measure-Object Length -s).sum / 1Mb)
             "$(Get-Date -Format "dd/MM/yyyy HH:mm:ss") Удалено $mb устаревшего кеша" | Out-File log.txt -append
         }
-        Get-ChildItem $env:LOCALAPPDATA\Spotify\Data -File -Recurse | Where-Object lastaccesstime -lt (get-date).AddDays(-$day) | Remove-Item
+        Get-ChildItem $SpotifyData -File -Recurse | Where-Object lastaccesstime -lt (get-date).AddDays(-$day) | Remove-Item
     }
     if ($check.Length -lt 1) {
         "$(Get-Date -Format "dd/MM/yyyy HH:mm:ss") Устаревшего кеша не найдено" | Out-File log.txt -append

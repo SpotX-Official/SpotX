@@ -44,7 +44,7 @@
     CacheDays2      = "Digite o número de dias entre 1 a 100"
     ModSpoti        = "Aplicando patch no Spotify..."
     Error           = "Erro"
-    FileLocBroken   = "A localização dos arquivos do Sotify está incorreta, desinstale o cliente e execute o script novamente"
+    FileLocBroken   = "A localização dos arquivos do Spotify está incorreta, desinstale o cliente e execute o script novamente"
     Spicetify       = "Spicetify detectado"
     NoRestore       = "O SpotX já foi instalado, mas os arquivos de recuperação xpui.js.bak e xpui.css.bak não foram encontrados. `nPor favor, desinstale o cliente do Spotify e execute Install.bat novamente"
     ExpSpotify      = "Recursos experimentais oferecidos pelo Spotify"

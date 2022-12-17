@@ -428,6 +428,7 @@ function downloadScripts($param1) {
         $old = [IO.File]::ReadAllText($l)
         $links = $old -match "https:\/\/upgrade.scdn.co\/upgrade\/client\/win32-x86\/spotify_installer-$online\.g[0-9a-f]{8}-[0-9]{1,4}\.exe" 
         $links = $Matches.Values
+        $links = $links -replace "upgrade.scdn", "download.scdn"
     }
     if ($ru -and $param1 -eq "cache-spotify") {
         $links2 = "https://raw.githubusercontent.com/SpotX-CLI/SpotX-Win/main/scripts/cache/cache_spotify_ru.ps1"

@@ -262,7 +262,7 @@ if ($langCode -eq 'ru') {
     $webjsonru = (Invoke-WebRequest -UseBasicParsing -Uri $urlru).Content | ConvertFrom-Json
 }
 
-Write-Host ($lang).Welcom
+Write-Host ($lang).Welcome
 Write-Host ""
 
 # Sending a statistical web query to cutt.ly

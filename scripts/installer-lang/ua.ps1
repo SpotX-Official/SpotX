@@ -1,8 +1,8 @@
 [PSCustomObject]@{
-    Author          = "Автор патчу:"
-    Author2         = "@Amd64fox"
-    TranslationBy   = "Автор перекладу:"
-    TranslationBy2  = "@va1dee"
+    Welcome         = "
+╔══════════════════════════════╗
+║ Welcome to SpotX for Windows ║
+╚══════════════════════════════╝"
     Incorrect       = "Упс, некоректне значення,"
     Incorrect2      = "введіть знову через "
     Download        = "Помилка завантаження"

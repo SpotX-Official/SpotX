@@ -1,8 +1,8 @@
 [PSCustomObject]@{
-    Author          = "Autor do patch:"
-    Author2         = "@Amd64fox"
-    TranslationBy   = "Autor da tradução:"
-    TranslationBy2  = "@igorruckert"
+    Welcome         = "
+╔══════════════════════════════╗
+║ Welcome to SpotX for Windows ║
+╚══════════════════════════════╝"
     Incorrect       = "Ops, um valor incorreto,"
     Incorrect2      = "entre novamente por "
     Download        = "Erro no download"

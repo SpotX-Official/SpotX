@@ -1,8 +1,8 @@
 [PSCustomObject]@{
-    Author          = "პაჩის ავტორი:"
-    Author2         = "@Amd64fox"
-    TranslationBy   = "თარგმანის ავტორი:"
-    TranslationBy2  = "@Naviamold1"
+    Welcome         = "
+╔══════════════════════════════╗
+║ Welcome to SpotX for Windows ║
+╚══════════════════════════════╝"
     Incorrect       = "უპს, არასწორი შენატანი,"
     Incorrect2      = "მაგრამ თავიდან სცადე"
     Download        = "შეცდომა ჩაწერის დროს"

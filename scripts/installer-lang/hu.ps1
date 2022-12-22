@@ -1,8 +1,8 @@
 [PSCustomObject]@{
-    Author          = "Patch szerzője:"
-    Author2         = "@Amd64fox"
-    TranslationBy   = "Fordítás szerzője:"
-    TranslationBy2  = "@Wex02"
+    Welcome         = "
+╔══════════════════════════════╗
+║ Welcome to SpotX for Windows ║
+╚══════════════════════════════╝"
     Incorrect       = "Hoppá, helytelen érték,"
     Incorrect2      = "Próbáld újra "
     Download        = "Letöltési hiba"

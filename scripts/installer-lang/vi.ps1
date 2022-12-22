@@ -1,8 +1,8 @@
 [PSCustomObject]@{
-    Author          = "Tác giả bản vá:"
-    Author2         = "@Amd64fox"
-    TranslationBy   = "Bản dịch của:"
-    TranslationBy2  = "@CDzungx"
+    Welcome         = "
+╔══════════════════════════════╗
+║ Welcome to SpotX for Windows ║
+╚══════════════════════════════╝"
     Incorrect       = "Ối, sai giá trị rồi,"
     Incorrect2      = "nhập lại lần nữa "
     Download        = "Lỗi khi tải xuống"

@@ -119,7 +119,7 @@ function Format-LanguageCode {
     
     
     $supportLanguages = @(
-        'en', 'ru', 'it', 'tr', 'ka', 'pl', 'es', 'fr', 'hi', 'pt', 'id', 'vi', 'ro', 'de', 'hu', 'zh-CN', 'zh-TW', 'ko', 'ua', 'fa', 'sr', 'lv'
+        'en', 'ru', 'it', 'tr', 'ka', 'pl', 'es', 'fr', 'hi', 'pt', 'id', 'vi', 'ro', 'de', 'hu', 'zh', 'zh-TW', 'ko', 'ua', 'fa', 'sr', 'lv'
     )
     
     

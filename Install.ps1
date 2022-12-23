@@ -1262,6 +1262,11 @@ if (Test-Path $xpui_js_patch) {
             $name_file = 'xpui-routes-lyrics.js'   
         }
         extract -counts 'one' -method 'nonezip' -name $name_file -helper 'Lyrics-color'
+        # mini lyrics
+        if ($offline -ge "1.2.0.1155") {
+            $name_file = 'xpui.js'   
+            extract -counts 'one' -method 'nonezip' -name $name_file -helper 'Lyrics-color'
+        }
     }
     
     # xpui.css
@@ -1388,13 +1393,20 @@ If (Test-Path $xpui_spa_patch) {
 
     # Static color for lyrics
     if ($lyrics_stat) {
+        # old
         if ($offline -lt "1.1.99.871") { 
             $name_file = 'xpui-routes-lyrics.css'
         }
+        # new 
         if ($offline -ge "1.1.99.871") {
             $name_file = 'xpui-routes-lyrics.js'   
         }
         extract -counts 'one' -method 'zip' -name $name_file -helper 'Lyrics-color'
+        # mini lyrics
+        if ($offline -ge "1.2.0.1155") {
+            $name_file = 'xpui.js'   
+            extract -counts 'one' -method 'zip' -name $name_file -helper 'Lyrics-color'
+        }
     }
 
     # Add discriptions (xpui-desktop-modals.js)

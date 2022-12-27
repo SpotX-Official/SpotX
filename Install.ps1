@@ -1007,9 +1007,13 @@ function Helper($paramname) {
 
             if ( $offline -le "1.1.96.785") { $rem.remove('newhome2'); $newhome = 'newhome' }
             if ( $offline -ge "1.1.97.956") { $rem.remove('newhome'); $newhome = 'newhome2' }
-            if ( $offline -ge "1.1.99.871") { $rem.remove('clearcache') }
+            if ( $offline -ge "1.1.99.871" -or $offline -lt "1.1.92.644" ) { $rem.remove('clearcache') }
+            if ( $offline -lt "1.1.93.896" ) { $rem.remove('carouselsonhome') }
             if ( $offline -le "1.1.98.691") { $rem.remove('sidebar-fix') }
             if ( $offline -lt "1.1.91.824") { $rem.remove('pathfinder') }
+            if ( $offline -lt "1.1.99.871") { $rem.remove('badbunny'), $rem.remove('devicelocal'), $rem.remove('silencetrimmer') }
+            if ( $offline -lt "1.2.0.1155") { $rem.remove('forgetdevice'), $rem.remove('speedpodcasts') }
+            if ( $offline -lt "1.2.1.958") { $rem.remove('showfollows') }
             if ($enhance_like_off) { $rem.remove('enhanceliked') }
             if ($enhance_playlist_off) { $rem.remove('enhanceplaylist') }
             if ($new_artist_pages_off) { $rem.remove('disographyartist') }
@@ -1019,11 +1023,10 @@ function Helper($paramname) {
             if ($made_for_you_off -or $offline -ge "1.1.96.783") { $rem.remove('madeforyou') }
             if ($offline -lt "1.1.98.683") { $rem.remove('addingplaylist') }
             if ($exp_standart) {
-                $rem.remove('enhanceliked'), $rem.remove('enhanceplaylist'), 
-                $rem.remove('disographyartist'), $rem.remove('lyricsmatch'), 
-                $rem.remove('equalizer'), $rem.remove('devicepicker'), 
-                $rem.remove($newhome), $rem.remove('madeforyou'),
-                $rem.remove('similarplaylist'), $rem.remove('leftsidebar'), $rem.remove('rightsidebar')
+                $rem.remove('enhanceliked'), $rem.remove('enhanceplaylist'), $rem.remove('disographyartist'), $rem.remove('lyricsmatch'), 
+                $rem.remove('equalizer'), $rem.remove('devicepicker'), $rem.remove($newhome), $rem.remove('madeforyou'),
+                $rem.remove('similarplaylist'), $rem.remove('leftsidebar'), $rem.remove('rightsidebar'), $rem.remove('badbunny'),
+                $rem.remove('devicelocal'), $rem.remove('silencetrimmer'), $rem.remove('forgetdevice'), $rem.remove('speedpodcasts') , $rem.remove('showfollows')
             }
             if (!($left_sidebar_on) -or $offline -le "1.1.97.956") { $rem.remove('leftsidebar') }
             if (!($right_sidebar_on) -or $offline -lt "1.1.98.683") { $rem.remove('rightsidebar') }

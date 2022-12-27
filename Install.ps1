@@ -950,6 +950,7 @@ function Helper($paramname) {
             # Full screen mode activation and removing "Upgrade to premium" menu, upgrade button, disabling a playlist sponsor
             if ($bts) { $webjson.free.psobject.properties.remove('bilboard'), $webjson.free.psobject.properties.remove('audioads') }
             if ($offline -ge "1.1.98.683") { $webjson.free.psobject.properties.remove('connectold') }
+            if ($offline -lt "1.2.0.1155") { $webjson.free.psobject.properties.remove('hidemerchsidebar') }
             $name = "patches.json.free."
             $n = "xpui.js"
             $contents = $webjson.free.psobject.properties.name

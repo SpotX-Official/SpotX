@@ -259,7 +259,7 @@ $lang = CallLang -clg $langCode
 if ($langCode -eq 'ru') { 
     $ru = $true
     $urlru = "https://raw.githubusercontent.com/SpotX-CLI/SpotX-commons/main/Augmented%20translation/ru.json"
-    $webjsonru = (Invoke-WebRequest -UseBasicParsing -Uri $urlru).Content | ConvertFrom-Json
+    $webjsonru = (Invoke-WebRequest -useb -Uri $urlru).Content | ConvertFrom-Json
 }
 
 Write-Host ($lang).Welcome
@@ -270,12 +270,12 @@ $ErrorActionPreference = 'SilentlyContinue'
 $cutt_url = "https://cutt.ly/DK8UQub"
 try {
     $ProgressPreference = 'SilentlyContinue'
-    Invoke-WebRequest -Uri $cutt_url | Out-Null
+    Invoke-WebRequest -useb -Uri $cutt_url | Out-Null
 }
 catch {
     Start-Sleep -Milliseconds 2300
     try { 
-        Invoke-WebRequest -Uri $cutt_url | Out-Null
+        Invoke-WebRequest -useb -Uri $cutt_url | Out-Null
     }
     catch { }
 }
@@ -615,7 +615,7 @@ if ($spotifyInstalled) {
                     'entry.2067427976' = $online + " меньше чем " + $offline
                 }   
             }
-            Invoke-WebRequest -UseBasicParsing @Parameters | Out-Null
+            Invoke-WebRequest -useb @Parameters | Out-Null
         }
         catch {
             Write-Host 'Unable to submit new version of Spotify' 
@@ -843,7 +843,7 @@ if ($exp_standart) { Write-Host ($lang).ExpStandart`n }
 if ($exp_spotify) { Write-Host ($lang).ExpSpotify`n }
 
 $url = "https://raw.githubusercontent.com/SpotX-CLI/SpotX-commons/main/patches.json"
-$webjson = (Invoke-WebRequest -UseBasicParsing -Uri $url).Content | ConvertFrom-Json
+$webjson = (Invoke-WebRequest -useb -Uri $url).Content | ConvertFrom-Json
 
 function Helper($paramname) {
 
@@ -911,7 +911,6 @@ function Helper($paramname) {
 
             # xpui-routes-lyrics.js
             if ($offline -ge "1.1.99.871") {
-
                 $webjson.others.$lyrics.replace[1] = '$1' + '"' + $pasttext + '"'  
                 $webjson.others.$lyrics.replace[2] = '$1' + '"' + $current + '"'  
                 $webjson.others.$lyrics.replace[3] = '$1' + '"' + $next + '"'  
@@ -949,8 +948,6 @@ function Helper($paramname) {
         "OffadsonFullscreen" { 
             # Full screen mode activation and removing "Upgrade to premium" menu, upgrade button, disabling a playlist sponsor
             if ($bts) { $webjson.free.psobject.properties.remove('bilboard'), $webjson.free.psobject.properties.remove('audioads') }
-            if ($offline -ge "1.1.98.683") { $webjson.free.psobject.properties.remove('connectold') }
-            if ($offline -lt "1.2.0.1155") { $webjson.free.psobject.properties.remove('hidemerchsidebar') }
             $name = "patches.json.free."
             $n = "xpui.js"
             $contents = $webjson.free.psobject.properties.name
@@ -1003,42 +1000,24 @@ function Helper($paramname) {
             $json = $webjson.others
         }
         "ExpFeature" { 
-            # Experimental Feature Standart
+            # Experimental Feature
             $rem = $webjson.exp.psobject.properties 
-
-            if ( $offline -le "1.1.96.785") { $rem.remove('newhome2'); $newhome = 'newhome' }
-            if ( $offline -ge "1.1.97.956") { $rem.remove('newhome'); $newhome = 'newhome2' }
-            if ( $offline -ge "1.1.99.871" -or $offline -lt "1.1.92.644" ) { $rem.remove('clearcache') }
-            if ( $offline -lt "1.1.93.896" ) { $rem.remove('carouselsonhome') }
-            if ( $offline -le "1.1.98.691") { $rem.remove('sidebar-fix') }
-            if ( $offline -lt "1.1.91.824") { $rem.remove('pathfinder') }
-            if ( $offline -lt "1.1.99.871") { $rem.remove('badbunny'), $rem.remove('devicelocal'), $rem.remove('silencetrimmer') }
-            if ( $offline -lt "1.2.0.1155") { $rem.remove('forgetdevice'), $rem.remove('speedpodcasts') }
-            if ( $offline -lt "1.2.1.958") { $rem.remove('showfollows') }
             if ($enhance_like_off) { $rem.remove('enhanceliked') }
             if ($enhance_playlist_off) { $rem.remove('enhanceplaylist') }
             if ($new_artist_pages_off) { $rem.remove('disographyartist') }
             if ($new_lyrics_off) { $rem.remove('lyricsmatch') }
             if ($equalizer_off) { $rem.remove('equalizer') }
-            if (!($device_picker_old) -or $offline -ge "1.1.98.683") { $rem.remove('devicepickerold') }
-            if ($made_for_you_off -or $offline -ge "1.1.96.783") { $rem.remove('madeforyou') }
-            if ($offline -lt "1.1.98.683") { $rem.remove('addingplaylist') }
+            if (!($device_picker_old)) { $rem.remove('devicepickerold') }
+            if ($made_for_you_off) { $rem.remove('madeforyou') }
             if ($exp_standart) {
                 $rem.remove('enhanceliked'), $rem.remove('enhanceplaylist'), $rem.remove('disographyartist'), $rem.remove('lyricsmatch'), 
                 $rem.remove('equalizer'), $rem.remove('devicepicker'), $rem.remove($newhome), $rem.remove('madeforyou'),
                 $rem.remove('similarplaylist'), $rem.remove('leftsidebar'), $rem.remove('rightsidebar'), $rem.remove('badbunny'),
                 $rem.remove('devicelocal'), $rem.remove('silencetrimmer'), $rem.remove('forgetdevice'), $rem.remove('speedpodcasts') , $rem.remove('showfollows')
             }
-            if (!($left_sidebar_on) -or $offline -le "1.1.97.956") { $rem.remove('leftsidebar') }
-            if (!($right_sidebar_on) -or $offline -lt "1.1.98.683") { $rem.remove('rightsidebar') }
-            if (!($right_sidebar_on) -or $offline -lt "1.2.0.1155") { $rem.remove('lyricssidebar') }
+            if (!($left_sidebar_on)) { $rem.remove('leftsidebar') }
+            if (!($right_sidebar_on)) { $rem.remove('rightsidebar'), $rem.remove('lyricssidebar') }
             if ($navalt_off) { $rem.remove($newhome) }
-            if ($offline -ge "1.1.94.864") {
-                $rem.remove('lyricsenabled'), $rem.remove('playlistcreat'), 
-                $rem.remove('searchbox')
-            }
-            if ($offline -lt "1.1.90.859" -or $offline -gt "1.1.95.893") { $rem.remove('devicepicker') }
-            if ($offline -le "1.1.93.896") { $rem.remove($newhome) }
             $name = "patches.json.exp."
             $n = "xpui.js"
             $contents = $webjson.exp.psobject.properties.name
@@ -1047,42 +1026,50 @@ function Helper($paramname) {
     }
     $paramdata = $xpui
     $novariable = "Didn't find variable "
+    $offline_patch = $offline -replace '(\d+\.\d+\.\d+)(.\d+)', '$1'
+
     $contents | ForEach-Object { 
-        
-        if ($json.$PSItem.match.Count -gt 1) {
-            $count = $json.$PSItem.match.Count - 1
-            $numbers = 0
-            While ($numbers -le $count) {
-            
-                if ($paramdata -match $json.$PSItem.match[$numbers]) { 
-                    $paramdata = $paramdata -replace $json.$PSItem.match[$numbers], $json.$PSItem.replace[$numbers] 
+
+        if ( $json.$PSItem.version.do ) { $do = $json.$PSItem.version.do -ge $offline_patch } else { $do = $true }
+        if ( $json.$PSItem.version.from ) { $from = $json.$PSItem.version.from -le $offline_patch } else { $from = $false }
+
+        $checkVer = $from -and $do; $translate = $paramname -eq "RuTranslate"
+
+        if ($checkVer -or $translate) {
+
+            if ($json.$PSItem.match.Count -gt 1) {
+
+                $count = $json.$PSItem.match.Count - 1
+                $numbers = 0
+
+                While ($numbers -le $count) {
+                    
+                    if ($paramdata -match $json.$PSItem.match[$numbers]) { 
+                        $paramdata = $paramdata -replace $json.$PSItem.match[$numbers], $json.$PSItem.replace[$numbers] 
+                    }
+                    else { 
+                        $notlog = "MinJs", "MinJson", "Removertl", "RemovertlCssmin"
+                        if ($paramname -notin $notlog) {
+    
+                            Write-Host $novariable -ForegroundColor red -NoNewline 
+                            Write-Host "$name$PSItem $numbers"'in'$n
+                        }
+                    }  
+                    $numbers++
+                }
+            }
+            if ($json.$PSItem.match.Count -eq 1) {
+                if ($paramdata -match $json.$PSItem.match) { 
+                    $paramdata = $paramdata -replace $json.$PSItem.match, $json.$PSItem.replace 
                 }
                 else { 
-
-                    $notlog = "MinJs", "MinJson", "Removertl", "RemovertlCssmin"
-                    if ($paramname -notin $notlog) {
-    
+                    if (!($translate) -or $err_ru) {
                         Write-Host $novariable -ForegroundColor red -NoNewline 
-                        Write-Host "$name$PSItem $numbers"'in'$n
+                        Write-Host "$name$PSItem"'in'$n
                     }
-                }  
-                $numbers++
-            }
-        }
-        if ($json.$PSItem.match.Count -eq 1) {
-            if ($paramdata -match $json.$PSItem.match) { 
-                $paramdata = $paramdata -replace $json.$PSItem.match, $json.$PSItem.replace 
-            }
-            else { 
-
-                if (!($paramname -eq "RuTranslate") -or $err_ru) {
-
-    
-                    Write-Host $novariable -ForegroundColor red -NoNewline 
-                    Write-Host "$name$PSItem"'in'$n
                 }
-            }
-        }    
+            }   
+        }
     }
     $paramdata
 }

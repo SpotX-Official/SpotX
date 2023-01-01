@@ -119,7 +119,7 @@ function Format-LanguageCode {
     
     
     $supportLanguages = @(
-        'en', 'ru', 'it', 'tr', 'ka', 'pl', 'es', 'fr', 'hi', 'pt', 'id', 'vi', 'ro', 'de', 'hu', 'zh', 'zh-TW', 'ko', 'ua', 'fa', 'sr', 'lv'
+        'en', 'ru', 'it', 'tr', 'ka', 'pl', 'es', 'fr', 'hi', 'pt', 'id', 'vi', 'ro', 'de', 'hu', 'zh', 'zh-TW', 'ko', 'ua', 'fa', 'sr', 'lv', 'bn'
     )
     
     
@@ -211,6 +211,10 @@ function Format-LanguageCode {
         }
         '^lv' {
             $returnCode = 'lv'
+            break
+        }
+        '^bn' {
+            $returnCode = 'bn'
             break
         }
         Default {

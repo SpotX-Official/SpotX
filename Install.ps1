@@ -443,7 +443,7 @@ function DesktopFolder {
 }
 
 # Recommended version for spotx
-$online = "1.2.1.968"
+$online = "1.2.2.582"
 
 # Check version Spotify offline
 $offline = (Get-Item $spotifyExecutable).VersionInfo.FileVersion
@@ -916,9 +916,9 @@ function Helper($paramname) {
                 $webjson.others.$lyrics.replace[3] = '$1' + '"' + $next + '"'  
                 $webjson.others.$lyrics.replace[4] = '$1' + '"' + $background + '"'
                 $webjson.others.$lyrics.replace[5] = '$1' + '"' + $hover + '"'   
-                $webjson.others.$lyrics.replace[6] = '$1' + '"' + $maxmatch + '"'  
-        
+                $webjson.others.$lyrics.replace[6] = '$1' + '"' + $maxmatch + '"'
             }
+
             # xpui-routes-lyrics.css
             if ($offline -lt "1.1.99.871") {
                 $webjson.others.$lyrics.replace[0] = '$1' + $pasttext
@@ -1018,6 +1018,9 @@ function Helper($paramname) {
             if (!($left_sidebar_on)) { $rem.remove('leftsidebar') }
             if (!($right_sidebar_on)) { $rem.remove('rightsidebar'), $rem.remove('lyricssidebar') }
             if ($navalt_off) { $rem.remove($newhome) }
+
+            $rem.remove('showfollows')
+
             $name = "patches.json.exp."
             $n = "xpui.js"
             $contents = $webjson.exp.psobject.properties.name
@@ -1043,7 +1046,7 @@ function Helper($paramname) {
                 $numbers = 0
 
                 While ($numbers -le $count) {
-                    
+
                     if ($paramdata -match $json.$PSItem.match[$numbers]) { 
                         $paramdata = $paramdata -replace $json.$PSItem.match[$numbers], $json.$PSItem.replace[$numbers] 
                     }
@@ -1158,7 +1161,7 @@ if ($test_spa -and $test_js) {
     Exit
 }
 
-if (Test-Path $xpui_js_patch) {
+if ($test_js) {
     Write-Host ($lang).Spicetify`n
 
     # Delete all files except "en", "ru" and "__longest"
@@ -1289,7 +1292,14 @@ if (Test-Path $xpui_js_patch) {
     extract -counts 'one' -method 'nonezip' -name 'licenses.html' -helper 'HtmlLicMin'
 }  
 
-If (Test-Path $xpui_spa_patch) {
+if (!($test_js) -and !($test_spa)) { 
+    Write-Host "xpui.spa not found, reinstall Spotify"
+    Write-Host ($lang).StopScrpit
+    Pause
+    Exit
+}
+
+If ($test_spa) {
 
     $bak_spa = "$env:APPDATA\Spotify\Apps\xpui.bak"
     $test_bak_spa = Test-Path -Path $bak_spa

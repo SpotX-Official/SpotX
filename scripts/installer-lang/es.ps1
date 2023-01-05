@@ -1,8 +1,8 @@
 [PSCustomObject]@{
     Welcome         = "
-╔══════════════════════════════╗
-║ Welcome to SpotX for Windows ║
-╚══════════════════════════════╝"
+╔═════════════════════════════════╗
+║ Bienvenido a SpotX para Windows ║
+╚═════════════════════════════════╝"
     Incorrect       = "Ufff, un valor incorrecto,"
     Incorrect2      = "ingrese nuevamente el valor "
     Download        = "Error al descargar"
@@ -32,7 +32,7 @@
     DownSpoti2      = "Por favor, espera..."
     PodcatsOff      = "Podcasts desactivados"
     PodcastsOn      = "Podcasts activados"
-    PodcatsSelect   = "Do you want to disable podcasts, episodes and audiobooks from the main page? [Y/N]" #
+    PodcatsSelect   = "¿Quieres desactivar los podcasts, episodios y audiolibros de la página principal? [Y/N]" #
     DowngradeNote   = "Es recomendable bloquear las actualizaciones porque ha habido una bajada en la versión de Spotify"
     UpdBlock        = "Actualizaciones de Spotify bloqueadas"
     UpdUnblock      = "Las actualizaciones de Spotify no están bloqueadas"

@@ -1015,13 +1015,13 @@ function Helper($paramname) {
             if ($made_for_you_off) { $rem.remove('madeforyou') }
             if ($exp_standart) {
                 $rem.remove('enhanceliked'), $rem.remove('enhanceplaylist'), $rem.remove('disographyartist'), $rem.remove('lyricsmatch'), 
-                $rem.remove('equalizer'), $rem.remove('devicepicker'), $rem.remove('newhome'), $rem.remove('madeforyou'),
-                $rem.remove('similarplaylist'), $rem.remove('leftsidebar'), $rem.remove('rightsidebar'), $rem.remove('badbunny'),
-                $rem.remove('devicelocal'), $rem.remove('silencetrimmer'), $rem.remove('forgetdevice'), $rem.remove('speedpodcasts') , $rem.remove('showfollows')
+                $rem.remove('equalizer'), $rem.remove('devicepicker'), $rem.remove('newhome'), $rem.remove('newhome2'), $rem.remove('madeforyou'),
+                $rem.remove('similarplaylist'), $rem.remove('leftsidebar'), $rem.remove('rightsidebar'), $rem.remove('badbunny'), $rem.remove('devicelocal'),
+                $rem.remove('silencetrimmer'), $rem.remove('forgetdevice'), $rem.remove('speedpodcasts') , $rem.remove('showfollows')
             }
             if (!($left_sidebar_on)) { $rem.remove('leftsidebar') }
             if (!($right_sidebar_on)) { $rem.remove('rightsidebar'), $rem.remove('lyricssidebar') }
-            if ($navalt_off) { $rem.remove('newhome') }
+            if ($navalt_off) { $rem.remove('newhome'), $rem.remove('newhome2') }
 
             $rem.remove('showfollows')
 

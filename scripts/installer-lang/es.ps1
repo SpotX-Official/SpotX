@@ -32,7 +32,7 @@
     DownSpoti2      = "Por favor, espera..."
     PodcatsOff      = "Podcasts desactivados"
     PodcastsOn      = "Podcasts activados"
-    PodcatsSelect   = "¿Quieres desactivar los podcasts, episodios y audiolibros de la página principal? [Y/N]" #
+    PodcatsSelect   = "¿Quieres desactivar los podcasts, episodios y audiolibros de la página principal? [Y/N]"
     DowngradeNote   = "Es recomendable bloquear las actualizaciones porque ha habido una bajada en la versión de Spotify"
     UpdBlock        = "Actualizaciones de Spotify bloqueadas"
     UpdUnblock      = "Las actualizaciones de Spotify no están bloqueadas"

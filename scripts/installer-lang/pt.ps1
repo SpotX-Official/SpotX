@@ -1,8 +1,8 @@
 [PSCustomObject]@{
     Welcome         = "
-╔══════════════════════════════╗
-║ Welcome to SpotX for Windows ║
-╚══════════════════════════════╝"
+╔═════════════════════════════════╗
+║ Bem-vindo ao SpotX para Windows ║
+╚═════════════════════════════════╝"
     Incorrect       = "Ops, um valor incorreto,"
     Incorrect2      = "entre novamente por "
     Download        = "Erro no download"
@@ -21,7 +21,7 @@
     OldV2           = "A sua versão {0} do Spotify está desatualizada, é recomendado atualizar para {1}"
     OldV3           = "Gostaria de atualizar? [Y/N]"
     AutoUpd         = "Atualização automática para a versão recomendada"
-    DelOrOver       = "Gostaria de desinstalar a versão atual do {0} ou substituir a instalação atual? Y [Desinstalar] / N [Substituir]"
+    DelOrOver       = "Gostaria de desinstalar a versão atual {0} ou substituir a instalação atual? Y [Desinstalar] / N [Substituir]"
     DelOld          = "Desinstalando a versão antiga do Spotify..."
     NewV            = "Encontrada uma versão não suportada do Spotify"
     NewV2           = "A sua versão do Spotify {0} não foi testada ainda, no momento, há uma versão estável {1}"
@@ -37,14 +37,14 @@
     UpdBlock        = "Atualizações do Spotify bloqueadas"
     UpdUnblock      = "Atualizações do Spotify não bloqueadas"
     UpdSelect       = "Deseja bloquear as atualizações do Spotify? [Y/N]"
-    CacheOn         = "Limpar cache ativado ({0})"
-    CacheOff        = "A limpeza do cache não está ativada"
-    CacheSelect     = "Deseja definir a limpeza automática do cache? [Y/N]"
-    CacheDays       = "Cache antigo: XX dias para serem limpos"
+    CacheOn         = "A limpeza do cache de áudio está ativada ({0})"
+    CacheOff        = "A limpeza do cache de áudio está desativada"
+    CacheSelect     = "Deseja instalar a limpeza automática do cache do áudio do Spotify? [Y/N]"
+    CacheDays       = "Um cache que não foi usado por mais do que o número de dias especificado por você será excluído"
     CacheDays2      = "Digite o número de dias entre 1 a 100"
     ModSpoti        = "Aplicando patch no Spotify..."
     Error           = "Erro"
-    FileLocBroken   = "A localização dos arquivos do Spotify está incorreta, desinstale o cliente e execute o script novamente"
+    FileLocBroken   = "A localização dos arquivos do Spotify está incorreta, desinstale o Spotify e execute o script novamente"
     Spicetify       = "Spicetify detectado"
     NoRestore       = "O SpotX já foi instalado, mas os arquivos de recuperação xpui.js.bak e xpui.css.bak não foram encontrados. `nPor favor, desinstale o cliente do Spotify e execute Install.bat novamente"
     ExpSpotify      = "Recursos experimentais oferecidos pelo Spotify"

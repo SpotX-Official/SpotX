@@ -33,15 +33,39 @@
 <h1>Fast installation / Update</h1>
 <h3>Choose installation type:</h3>
 <details>
-<summary><small>Usual installation</small></summary><p>
+<summary><small>Usual installation (New theme)</small></summary><p>
   
   #### During installation, you need to confirm some actions, also contains:
-
+  
+  - New theme activated (new right and left sidebar, some cover change)
   - All [experimental features](https://github.com/SpotX-CLI/SpotX-Win/discussions/50) included
 
   <h4> </h4>
   
-#### Just download and run [Install.bat](https://raw.githack.com/SpotX-CLI/SpotX-Win/main/Install.bat)
+#### Just download and run [Install.bat](https://raw.githack.com/SpotX-CLI/SpotX-Win/main/Install_New_theme.bat)
+
+or
+
+#### Run The following command in PowerShell:
+
+```ps1
+[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; iex "& { $((iwr -useb 'https://raw.githubusercontent.com/SpotX-CLI/SpotX-Win/main/Install.ps1').Content) } -new_theme"
+```
+
+</details>
+  
+
+<details>
+<summary><small>Usual installation (Old theme)</small></summary><p>
+  
+  #### During installation, you need to confirm some actions, also contains:
+  
+  - Old theme activated
+  - All [experimental features](https://github.com/SpotX-CLI/SpotX-Win/discussions/50) included
+
+  <h4> </h4>
+  
+#### Just download and run [Install.bat](https://raw.githack.com/SpotX-CLI/SpotX-Win/main/Install_Old_theme.bat)
 
 or
 
@@ -52,18 +76,20 @@ or
 ```
 
 </details>
-  
-  
+ 
 <details>
 <summary><small>Automatic full installation</small></summary><p>
   
   <h4>Automatic installation without confirmation, what does it do?</h4> 
   
+  - New theme activated (new right and left sidebar, some cover change)
+  - Hiding podcasts/episodes/audiobooks from the homepage
+  - Activated [static theme](https://github.com/SpotX-CLI/SpotX-Win/discussions/50#discussioncomment-4096066) <kbd>spotify</kbd> for lyrics
+  - Hiding [ad-like sections](https://github.com/SpotX-CLI/SpotX-Win/discussions/50#discussioncomment-4478943)
+  - All [experimental features](https://github.com/SpotX-CLI/SpotX-Win/discussions/50) included
   - Automatic removal of Spotify MS if it was found 
   - Automatic installation of the recommended version of Spotify (if another client has already been found, it will be installed over) 
-  - Hiding podcasts/episodes/audiobooks from the homepage 
   - Automatic blocking of Spotify updates
-  - All [experimental features](https://github.com/SpotX-CLI/SpotX-Win/discussions/50) included
   - After the installation is completed, the client will autorun.
   
 <h4> </h4>
@@ -75,7 +101,7 @@ or
 #### Run The following command in PowerShell:
 
 ```ps1
-[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; iex "& { $((iwr -useb 'https://raw.githubusercontent.com/SpotX-CLI/SpotX-Win/main/Install.ps1').Content) } -confirm_uninstall_ms_spoti -confirm_spoti_recomended_over -podcasts_off -cache_off -block_update_on -start_spoti"
+[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; iex "& { $((iwr -useb 'https://raw.githubusercontent.com/SpotX-CLI/SpotX-Win/main/Install.ps1').Content) } -confirm_uninstall_ms_spoti -confirm_spoti_recomended_over -podcasts_off -cache_off -block_update_on -start_spoti -new_theme -adsections_off -lyrics_stat spotify"
 ```
 
 </details>
@@ -88,6 +114,7 @@ or
   
   #### Automatic basic installation without confirmation, what does it do? 
   
+  - Old theme activated
   - Automatic removal of Spotify MS if it was found 
   - Automatic installation of the recommended version of Spotify (if another client has already been found, it will be installed over)
   - After the installation is completed, the client will autorun
@@ -110,7 +137,8 @@ or
 <summary><small>Installation for premium</small></summary><p>
   
   #### Usual installation only without ad blocking, for those who have a premium account, also contains:
-
+  
+  - New theme activated (new right and left sidebar, some cover change)
   - All [experimental features](https://github.com/SpotX-CLI/SpotX-Win/discussions/50) included
 
   <h4> </h4>
@@ -122,7 +150,7 @@ or
 #### Run The following command in PowerShell:
 
 ```ps1
-[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; iex "& { $((iwr -useb 'https://raw.githubusercontent.com/SpotX-CLI/SpotX-Win/main/Install.ps1').Content) } -premium"
+[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; iex "& { $((iwr -useb 'https://raw.githubusercontent.com/SpotX-CLI/SpotX-Win/main/Install.ps1').Content) } -premium -new_theme"
 ```
 
 </details>

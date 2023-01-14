@@ -73,7 +73,7 @@ param
     [switch]$device_picker_old,
 
     [Parameter(HelpMessage = 'Disable the new home structure and navigation.')]
-    [switch]$navalt_off,
+    [switch]$new_theme,
 
     [Parameter(HelpMessage = 'Enable new left sidebar.')]
     [switch]$left_sidebar_on,
@@ -447,7 +447,7 @@ function DesktopFolder {
 }
 
 # Recommended version for spotx
-$online = "1.2.2.582"
+$online = "1.2.3.1107"
 
 # Check version Spotify offline
 $offline = (Get-Item $spotifyExecutable).VersionInfo.FileVersion
@@ -608,7 +608,9 @@ if ($spotifyInstalled) {
             $txt = [IO.File]::ReadAllText($spotifyExecutable)
             $regex = "(\d+)\.(\d+)\.(\d+)\.(\d+)(\.g[0-9a-f]{8})"
             $v = $txt | Select-String $regex -AllMatches
-            $version = $v.Matches.Value
+            $version = $v.Matches.Value[0]
+            if ($version.Count -gt 1) { $version = $version[0] }
+
             $Parameters = @{
                 Uri    = 'https://docs.google.com/forms/d/e/1FAIpQLSegGsAgilgQ8Y36uw-N7zFF6Lh40cXNfyl1ecHPpZcpD8kdHg/formResponse'
                 Method = 'POST'
@@ -1019,11 +1021,7 @@ function Helper($paramname) {
                 $rem.remove('similarplaylist'), $rem.remove('leftsidebar'), $rem.remove('rightsidebar'), $rem.remove('badbunny'), $rem.remove('devicelocal'),
                 $rem.remove('silencetrimmer'), $rem.remove('forgetdevice'), $rem.remove('speedpodcasts') , $rem.remove('showfollows')
             }
-            if (!($left_sidebar_on)) { $rem.remove('leftsidebar') }
-            if (!($right_sidebar_on)) { $rem.remove('rightsidebar'), $rem.remove('lyricssidebar') }
-            if ($navalt_off) { $rem.remove('newhome'), $rem.remove('newhome2') }
-
-            $rem.remove('showfollows')
+            if (!($new_theme)) { $rem.remove('newhome'), $rem.remove('newhome2'), $rem.remove('leftsidebar'), $rem.remove('rightsidebar'), $rem.remove('lyricssidebar') }
 
             $name = "patches.json.exp."
             $n = "xpui.js"
@@ -1266,12 +1264,13 @@ if ($test_js) {
     if ($lyrics_stat) {
         if ($offline -lt "1.1.99.871") { 
             $name_file = 'xpui-routes-lyrics.css'
+            extract -counts 'one' -method 'nonezip' -name $name_file -helper 'Lyrics-color'
         }
-        if ($offline -ge "1.1.99.871") {
+        if ($offline -ge "1.1.99.871" -and $offline -le "1.2.2.582") {
             extract -counts 'one' -method 'nonezip' -name 'xpui.css' -helper 'Fix-New-Lirics'
-            $name_file = 'xpui-routes-lyrics.js'   
+            $name_file = 'xpui-routes-lyrics.js' 
+            extract -counts 'one' -method 'nonezip' -name $name_file -helper 'Lyrics-color'  
         }
-        extract -counts 'one' -method 'nonezip' -name $name_file -helper 'Lyrics-color'
         # mini lyrics
         if ($offline -ge "1.2.0.1155") {
             $name_file = 'xpui.js'   
@@ -1403,13 +1402,14 @@ If ($test_spa) {
         # old
         if ($offline -lt "1.1.99.871") { 
             $name_file = 'xpui-routes-lyrics.css'
+            extract -counts 'one' -method 'zip' -name $name_file -helper 'Lyrics-color'
         }
         # new 
-        if ($offline -ge "1.1.99.871") {
+        if ($offline -ge "1.1.99.871" -and $offline -le "1.2.2.582") {
             extract -counts 'one' -method 'zip' -name 'xpui.css' -helper 'Fix-New-Lirics'
             $name_file = 'xpui-routes-lyrics.js'   
+            extract -counts 'one' -method 'zip' -name $name_file -helper 'Lyrics-color'
         }
-        extract -counts 'one' -method 'zip' -name $name_file -helper 'Lyrics-color'
         # mini lyrics
         if ($offline -ge "1.2.0.1155") {
             $name_file = 'xpui.js'   

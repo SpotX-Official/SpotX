@@ -72,14 +72,8 @@ param
     [Parameter(HelpMessage = 'Return the old device picker')]
     [switch]$device_picker_old,
 
-    [Parameter(HelpMessage = 'Disable the new home structure and navigation.')]
+    [Parameter(HelpMessage = 'New theme activated (new right and left sidebar, some cover change)')]
     [switch]$new_theme,
-
-    [Parameter(HelpMessage = 'Enable new left sidebar.')]
-    [switch]$left_sidebar_on,
-     
-    [Parameter(HelpMessage = 'Enable new right sidebar.')]
-    [switch]$right_sidebar_on,
     
     [Parameter(HelpMessage = 'Do not create desktop shortcut.')]
     [switch]$no_shortcut,
@@ -338,11 +332,7 @@ function downloadScripts($param1) {
     if ($param1 -eq "Desktop") {
         Import-Module BitsTransfer
         
-        $l = "$PWD\links.tsv"
-        $old = [IO.File]::ReadAllText($l)
-        $links = $old -match "https:\/\/upgrade.scdn.co\/upgrade\/client\/win32-x86\/spotify_installer-$online\.g[0-9a-f]{8}-[0-9]{1,4}\.exe" 
-        $links = $Matches.Values
-        $links = $links -replace "upgrade.scdn", "download.scdn"
+        $links = "https://download.scdn.co/upgrade/client/win32-x86/spotify_installer-$onlineFull.exe"
     }
     if ($ru -and $param1 -eq "cache-spotify") {
         $links2 = "https://raw.githubusercontent.com/SpotX-CLI/SpotX-Win/main/scripts/cache/cache_spotify_ru.ps1"
@@ -353,10 +343,10 @@ function downloadScripts($param1) {
     
     $web_Url_prev = "https://github.com/mrpond/BlockTheSpot/releases/latest/download/chrome_elf.zip", $links, `
         $links2, "https://raw.githubusercontent.com/SpotX-CLI/SpotX-Win/main/scripts/cache/hide_window.vbs", `
-        "https://raw.githubusercontent.com/SpotX-CLI/SpotX-Win/main/scripts/cache/run_ps.bat", "https://docs.google.com/spreadsheets/d/e/2PACX-1vSFN2hWu4UO-ZWyVe8wlP9c0JsrduA49xBnRmSLOt8SWaOfIpCwjDLKXMTWJQ5aKj3WakQv6-Hnv9rz/pub?gid=0&single=true&output=tsv"
+        "https://raw.githubusercontent.com/SpotX-CLI/SpotX-Win/main/scripts/cache/run_ps.bat"
 
-    $local_Url_prev = "$PWD\chrome_elf.zip", "$PWD\SpotifySetup.exe", "$cache_folder\cache_spotify.ps1", "$cache_folder\hide_window.vbs", "$cache_folder\run_ps.bat", "$PWD\links.tsv"
-    $web_name_file_prev = "chrome_elf.zip", "SpotifySetup.exe", "cache_spotify.ps1", "hide_window.vbs", "run_ps.bat", "links.tsv"
+    $local_Url_prev = "$PWD\chrome_elf.zip", "$PWD\SpotifySetup.exe", "$cache_folder\cache_spotify.ps1", "$cache_folder\hide_window.vbs", "$cache_folder\run_ps.bat"
+    $web_name_file_prev = "chrome_elf.zip", "SpotifySetup.exe", "cache_spotify.ps1", "hide_window.vbs", "run_ps.bat"
 
     switch ( $param1 ) {
         "BTS" { $web_Url = $web_Url_prev[0]; $local_Url = $local_Url_prev[0]; $web_name_file = $web_name_file_prev[0] }
@@ -364,7 +354,6 @@ function downloadScripts($param1) {
         "cache-spotify" { $web_Url = $web_Url_prev[2]; $local_Url = $local_Url_prev[2]; $web_name_file = $web_name_file_prev[2] }
         "hide_window" { $web_Url = $web_Url_prev[3]; $local_Url = $local_Url_prev[3]; $web_name_file = $web_name_file_prev[3] }
         "run_ps" { $web_Url = $web_Url_prev[4]; $local_Url = $local_Url_prev[4]; $web_name_file = $web_name_file_prev[4] } 
-        "links.tsv" { $web_Url = $web_Url_prev[5]; $local_Url = $local_Url_prev[5]; $web_name_file = $web_name_file_prev[5] }
     }
 
     if ($param1 -eq "Desktop") {
@@ -373,16 +362,19 @@ function downloadScripts($param1) {
     }
     try { 
         if ($param1 -eq "Desktop" -and $curl_check) {
-            $stcode = curl.exe -I -s $web_Url --retry 1 --ssl-no-revoke
-            if (!($stcode -match "200 OK")) { throw ($lang).Download6 }
+            $stcode = curl.exe -s -w "%{http_code}" -o /dev/null $web_Url --retry 2 --ssl-no-revoke
+            if ($stcode -ne "200") { throw ($lang).Download6 }
             curl.exe $web_Url -o $local_Url --progress-bar --retry 3 --ssl-no-revoke
+            return
         }
-        if ($param1 -eq "Desktop" -and $null -ne (Get-Module -Name BitsTransfer -ListAvailable) -and !($curl_check )) {
+        if ($param1 -eq "Desktop" -and !($curl_check ) -and $null -ne (Get-Module -Name BitsTransfer -ListAvailable)) {
             $ProgressPreference = 'Continue'
             Start-BitsTransfer -Source  $web_Url -Destination $local_Url  -DisplayName ($lang).Download5 -Description "$online "
+            return
         }
-        if ($param1 -eq "Desktop" -and $null -eq (Get-Module -Name BitsTransfer -ListAvailable) -and !($curl_check )) {
+        if ($param1 -eq "Desktop" -and !($curl_check ) -and $null -eq (Get-Module -Name BitsTransfer -ListAvailable)) {
             $webClient.DownloadFile($web_Url, $local_Url) 
+            return
         }
         if ($param1 -ne "Desktop") {
             $ProgressPreference = 'SilentlyContinue' # Hiding Progress Bars
@@ -400,15 +392,18 @@ function downloadScripts($param1) {
         try { 
 
             if ($param1 -eq "Desktop" -and $curl_check) {
-                $stcode = curl.exe -I -s $web_Url --retry 1 --ssl-no-revoke
-                if (!($stcode -match "200 OK")) { throw ($lang).Download6 }
+                $stcode = curl.exe -s -w "%{http_code}" -o /dev/null $web_Url --retry 2 --ssl-no-revoke
+                if ($stcode -ne "200") { throw ($lang).Download6 }
                 curl.exe $web_Url -o $local_Url --progress-bar --retry 3 --ssl-no-revoke
+                return
             }
             if ($param1 -eq "Desktop" -and $null -ne (Get-Module -Name BitsTransfer -ListAvailable) -and !($curl_check )) {
                 Start-BitsTransfer -Source  $web_Url -Destination $local_Url  -DisplayName ($lang).Download5 -Description "$vernew "
+                return
             }
             if ($param1 -eq "Desktop" -and $null -eq (Get-Module -Name BitsTransfer -ListAvailable) -and !($curl_check )) {
                 $webClient.DownloadFile($web_Url, $local_Url) 
+                return
             }
             if ($param1 -ne "Desktop") {
                 $webClient.DownloadFile($web_Url, $local_Url) 
@@ -451,7 +446,8 @@ function DesktopFolder {
 }
 
 # Recommended version for spotx
-$online = "1.2.3.1111"
+$onlineFull = "1.2.3.1111.gce8e6576-270"
+$online = ($onlineFull -split ".g")[0]
 
 # Check version Spotify offline
 $offline = (Get-Item $spotifyExecutable).VersionInfo.FileVersion
@@ -547,7 +543,6 @@ if (!($premium) -and $bts) {
     [System.IO.Compression.ZipFileExtensions]::ExtractToDirectory($zip, $PWD)
     $zip.Dispose()
 }
-downloadScripts -param1 "links.tsv"
 
 $spotifyInstalled = (Test-Path -LiteralPath $spotifyExecutable)
 
@@ -1441,11 +1436,15 @@ If ($test_spa) {
     }
 
     # New UI fix
-    if (!($navalt_off)) {
-        $navaltfix = $webjson.others.navaltfix.add[0]
-        $navaltfix2 = $webjson.others.navaltfix.add[1]
-    }
-    if (!($navalt_off) -or !($premium)) {
+    if ($new_theme) {
+        if ($offline -ge "1.1.94.864" -and $offline -lt "1.2.3.1107") {
+            $navaltfix = $webjson.others.navaltfix.add[0]
+        }
+        if ($offline -ge "1.2.3.1107") {
+            $navaltfix = $webjson.others.navaltfix.add[1]
+        }
+        $navaltfix2 = $webjson.others.navaltfix.add[2]
+
         $css = $icon, $submenu, $very_high, $navaltfix, $navaltfix2
         extract -counts 'one' -method 'zip' -name 'xpui.css' -add $css
     }

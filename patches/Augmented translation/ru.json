@@ -1,0 +1,511 @@
+{
+    "lang": {
+        "version": "1.2.2.582.gfae9c59b",
+        "language": "Russian"
+    },
+    "1": {
+        "match": "\"To Enhance this playlist, you.ll need to go online.\"",
+        "replace": "\"Чтобы улучшить этот плейлист, вам нужно подключиться к интернету.\""
+    },
+    "2": {
+        "match": "\"Confirm your age\"",
+        "replace": "\"Подтвердите свой возраст\""
+    },
+    "3": {
+        "match": "\"%price%\/month after. Terms and conditions apply. One month free not available for users who have already tried Premium.\"",
+        "replace": "\"%price%/месяц спустя. Принять условия. Один месяц бесплатно, недоступно для пользователей, которые уже попробовали Premium.\""
+    },
+    "4": {
+        "match": "\"Enjoy ad-free music listening, offline listening, and more. Cancel anytime.\"",
+        "replace": "\"Наслаждайтесь прослушиванием музыки без рекламы, прослушиванием в офлайн режиме и многим другим. Отменить можно в любое время.\""
+    },
+    "5": {
+        "match": "\"Offline storage location\"",
+        "replace": "\"Хранилище скачанных треков\""
+    },
+    "6": {
+        "match": "\"Change location\"",
+        "replace": "\"Изменить место\""
+    },
+    "7": {
+        "match": "\"Expand folder\"",
+        "replace": "\"Раскрыть папку\""
+    },
+    "8": {
+        "match": "\"Collapse folder\"",
+        "replace": "\"Свернуть папку\""
+    },
+    "9": {
+        "match": "\"New Folder\"",
+        "replace": "\"Новая папка\""
+    },
+    "10": {
+        "match": "\"Show all\"",
+        "replace": "\"Показать все\""
+    },
+    "11": {
+        "match": "\"On Tour\"",
+        "replace": "\"В туре\""
+    },
+    "12": {
+        "match": "\"Credits\"",
+        "replace": "\"Участники\""
+    },
+    "13": {
+        "match": "\"Search in Albums\"",
+        "replace": "\"Искать в альбомах\""
+    },
+    "14": {
+        "match": "\"Search in Artists\"",
+        "replace": "\"Искать в исполнителях\""
+    },
+    "15": {
+        "match": "\"Search in Playlists\"",
+        "replace": "\"Искать в плейлистах\""
+    },
+    "16": {
+        "match": "\"Change speed\"",
+        "replace": "\"Изменение скорости\""
+    },
+    "17": {
+        "match": "\"You need to be at least 19 years old to listen to explicit content marked with\"",
+        "replace": "\"Вам должно быть не менее 19 лет, чтобы слушать непристойный контент, помеченный значком\""
+    },
+    "18": {
+        "match": "\"Add to another playlist\"",
+        "replace": "\"Добавить в другой плейлист\""
+    },
+    "19": {
+        "match": "\"Add to this playlist\"",
+        "replace": "\"Добавить в этот плейлист\""
+    },
+    "20": {
+        "match": "\"Couldn.t connect to Spotify.\"",
+        "replace": "\"Не удалось подключиться к Spotify.\""
+    },
+    "21": {
+        "match": "\"No connection\"",
+        "replace": "\"Нет соединения\""
+    },
+    "22": {
+        "match": "\"Reconnecting...\"",
+        "replace": "\"Повторное подключение...\""
+    },
+    "23": {
+        "match": "\"Character counter\"",
+        "replace": "\"Счетчик символов\""
+    },
+    "24": {
+        "match": "\"Toggle lightsaber hilt. Current is [{]0[}].\"",
+        "replace": "\"Переключить рукоять светового меча. Текущий {0}.\""
+    },
+    "25": {
+        "match": "\"Song not available\"",
+        "replace": "\"Песня недоступна\""
+    },
+    "26": {
+        "match": "\"The song you.re trying to listen to is not available in HiFi at this time.\"",
+        "replace": "\"Песня, которую вы пытаетесь прослушать, в настоящее время недоступна в HiFi.\""
+    },
+    "27": {
+        "match": "\"Current audio quality:\"",
+        "replace": "\"Текущее качество звука:\""
+    },
+    "28": {
+        "match": "\"Network connection\"",
+        "replace": "\"Подключение к сети\""
+    },
+    "29": {
+        "match": "\"Good\"",
+        "replace": "\"Хорошее\""
+    },
+    "30": {
+        "match": "\"Poor\"",
+        "replace": "\"Плохое\""
+    },
+    "31": {
+        "match": "\"Yes\"",
+        "replace": "\"Да\""
+    },
+    "32": {
+        "match": "\"No\"",
+        "replace": "\"Нет\""
+    },
+    "33": {
+        "match": "\"Unpin podcast\"",
+        "replace": "\"Открепить подкаст\""
+    },
+    "34": {
+        "match": "\"Unpin audiobook\"",
+        "replace": "\"Открепить аудиокнигу\""
+    },
+    "35": {
+        "match": "\"Rename\"",
+        "replace": "\"Переименовать\""
+    },
+    "36": {
+        "match": "\"Recents\"",
+        "replace": "\"Недавние\""
+    },
+    "37": {
+        "match": "\"Your Location\"",
+        "replace": "\"Ваше местоположение\""
+    },
+    "38": {
+        "match": "\"Network connection failed while playing this content.\"",
+        "replace": "\"Сбой сетевого подключения при воспроизведении этого контента.\""
+    },
+    "39": {
+        "match": "\"We.re not able to play this content in your current location.\"",
+        "replace": "\"Мы не можем воспроизвести этот контент в вашем текущем местоположении.\""
+    },
+    "40": {
+        "match": "\"This content is unavailable. Try another\\?\"",
+        "replace": "\"Этот контент недоступен. Попробуете другой?\""
+    },
+    "41": {
+        "match": "\"Sorry, we.re not able to play this content.\"",
+        "replace": "\"К сожалению, мы не можем воспроизвести этот контент.\""
+    },
+    "42": {
+        "match": "\"Hmm... we can.t seem to play this content. Try installing the latest version of Spotify.\"",
+        "replace": "\"Хм... похоже, мы не можем воспроизвести этот контент. Попробуйте установить последнюю версию Spotify.\""
+    },
+    "43": {
+        "match": "\"Please upgrade Spotify to play this content.\"",
+        "replace": "\"Пожалуйста, обновите Spotify, чтобы воспроизвести этот контент.\""
+    },
+    "44": {
+        "match": "\"This content cannot be played on your operating system version.\"",
+        "replace": "\"Этот контент нельзя воспроизвести в вашей версии операционной системы.\""
+    },
+    "45": {
+        "match": "\"Override certain user attributes to test regionalized content programming. The overrides are only active in this app.\"",
+        "replace": "\"Переопределите определенные атрибуты пользователя, чтобы протестировать региональное программирование контента. Переопределения активны только в этом приложении.\""
+    },
+    "46": {
+        "match": " was released this week!",
+        "replace": " был выпущен на этой неделе!"
+
+    },
+    "47": {
+        "match": "(\"one\": \"...name...) was released %years% year ago this week!\"",
+        "replace": "$1 был выпущен %years% год назад на этой неделе!\""
+    },
+    "48": {
+        "match": "(\"few\": \"...name...) was released %years% years ago this week!\"",
+        "replace": "$1 был выпущен %years% года назад на этой неделе!\""
+    },
+    "49": {
+        "match": "(\"many\": \"...name...) was released %years% years ago this week!\"",
+        "replace": "$1 был выпущен %years% лет назад на этой неделе!\""
+    },
+    "50": {
+        "match": "(\"other\": \"...name...) was released %years% years ago this week!\"",
+        "replace": "$1 был выпущен %years% года назад на этой неделе!\""
+    },
+    "51": {
+        "match": "\"Speed [{]0[}]×\"",
+        "replace": "\"Скорость {0}×\""
+    },
+    "52": {
+        "match": "\"This is a highly confidential test. Do not share details of this test or any song you create outside of Spotify.\"",
+        "replace": "\"Это очень конфиденциальный тест. Не делитесь подробностями этого теста или какой-либо песни, которую вы создаете, за пределами Spotify.\""
+    },
+    "53": {
+        "match": "\"Author\"",
+        "replace": "\"Автор\""
+    },
+    "54": {
+        "match": "\"Creator\"",
+        "replace": "\"По автору\""
+    },
+    "55": {
+        "match": "\"Custom order\"",
+        "replace": "\"Особая\""
+    },
+    "56": {
+        "match": "\"Alphabetical\"",
+        "replace": "\"По алфавиту\""
+    },
+    "57": {
+        "match": "\"Recently added\"",
+        "replace": "\"По дате добавления\""
+    },
+    "58": {
+        "match": "\"Recently played\"",
+        "replace": "\"По дате прослушивания\""
+    },
+    "59": {
+        "match": "\"Search in Podcasts . Shows\"",
+        "replace": "\"Искать в подкастах и шоу\""
+    },
+    "60": {
+        "match": "\"Recently updated\"",
+        "replace": "\"Недавно обновленные\""
+    },
+    "61": {
+        "match": "\"Most relevant\"",
+        "replace": "\"Наиболее актуальные\""
+    },
+    "62": {
+        "match": "\"Albums\",",
+        "replace": "\"Альбомы\","
+    },
+    "63": {
+        "match": "\"Artists\",",
+        "replace": "\"Исполнители\","
+    },
+    "64": {
+        "match": "\"Playlists\",",
+        "replace": "\"Плейлисты\","
+    },
+    "65": {
+        "match": "\"Podcasts . Shows\",",
+        "replace": "\"Подкасты и Шоу\","
+    },
+    "66": {
+        "match": "\"Audiobooks\",",
+        "replace": "\"Аудиокниги\","
+    },
+    "67": {
+        "match": "\"Downloaded\"",
+        "replace": "\"Скачано\""
+    },
+    "69": {
+        "match": "\"By you\"",
+        "replace": "\"Мои плелисты\""
+    },
+    "70": {
+        "match": "\"Unplayed\"",
+        "replace": "\"Невоспроизведенное\""
+    },
+    "71": {
+        "match": "\"Search in Audiobooks\"",
+        "replace": "\"Искать в аудиокнигах\""
+    },
+    "72": {
+        "match": "\"Liked Songs\"",
+        "replace": "\"Любимые треки\""
+    },
+    "73": {
+        "match": "\"Your Episodes\"",
+        "replace": "\"Мои выпуски\""
+    },
+    "74": {
+        "match": "\"Local Files\"",
+        "replace": "\"Локальные файлы\""
+    },
+    "75": {
+        "match": "\"Create and publish songs right on Spotify. Choose a song and genre, record your vocals, then edit the song to make it yours.\"",
+        "replace": "\"Создавайте и публикуйте песни прямо на Spotify. Выберите песню и жанр, запишите свой вокал, а затем отредактируйте песню, чтобы сделать ее своей.\""
+    },
+    "76": {
+        "match": "\"Podcast\"",
+        "replace": "\"Подкаст\""
+    },
+    "77": {
+        "match": "\"Saved & downloaded episodes\"",
+        "replace": "\"Сохраненные эпизоды\""
+    },
+    "78": {
+        "match": "\"Pinned\"",
+        "replace": "\"Закреплено\""
+    },
+    "79": {
+        "match": "(\"one\": \"[{]0[}]) track\"",
+        "replace": "$1 трек\""
+    },
+    "80": {
+        "match": "(\"few\": \"[{]0[}]) tracks\"",
+        "replace": "$1 трека\""
+    },
+    "81": {
+        "match": "(\"many\": \"[{]0[}]) tracks\"",
+        "replace": "$1 треков\""
+    },
+    "82": {
+        "match": "(\"other\": \"[{]0[}]) tracks\"",
+        "replace": "$1 трека\""
+    },
+    "83": {
+        "match": "(\"one\": \"[{]0[}]) song\"",
+        "replace": "$1 песня\""
+    },
+    "84": {
+        "match": "(\"few\": \"[{]0[}]) songs\"",
+        "replace": "$1 песни\""
+    },
+    "85": {
+        "match": "(\"many\": \"[{]0[}]) songs\"",
+        "replace": "$1 песен\""
+    },
+    "86": {
+        "match": "(\"other\": \"[{]0[}]) songs\"",
+        "replace": "$1 песни\""
+    },
+    "87": {
+        "match": "(\"one\": \"[{]0[}]) folder\"",
+        "replace": "$1 папка\""
+    },
+    "88": {
+        "match": "(\"few\": \"[{]0[}]) folders\"",
+        "replace": "$1 папки\""
+    },
+    "89": {
+        "match": "(\"many\": \"[{]0[}]) folders\"",
+        "replace": "$1 папок\""
+    },
+    "90": {
+        "match": "(\"other\": \"[{]0[}]) folders\"",
+        "replace": "$1 папки\""
+    },
+    "91": {
+        "match": "\"one\": \"[{]0[}] playlist\"",
+        "replace": "\"one\": \"{0} плейлист\""
+    },
+    "92": {
+        "match": "(\"few\": \"[{]0[}]) playlists\"",
+        "replace": "$1 плейлиста\""
+    },
+    "93": {
+        "match": "(\"many\": \"[{]0[}]) playlists\"",
+        "replace": "$1 плейлистов\""
+    },
+    "94": {
+        "match": "(\"other\": \"[{]0[}]) playlists\"",
+        "replace": "$1 плейлиста\""
+    },
+    "96": {
+        "match": "\"Audiobook\"",
+        "replace": "\"Аудиокнига\""
+    },
+    "97": {
+        "match": "\"Playlist\",",
+        "replace": "\"Плейлист\","
+    },
+    "98": {
+        "match": "\"Artist\"",
+        "replace": "\"Исполнитель\""
+    },
+    "99": {
+        "match": "\"Album\"",
+        "replace": "\"Альбом\""
+    },
+    "100": {
+        "match": "\"Create a playlist folder\"",
+        "replace": "\"Создать новую папку\""
+    },
+    "101": {
+        "match": "\"Create a new playlist\"",
+        "replace": "\"Создать новый плейлист\""
+    },
+    "102": {
+        "match": "\"Create\"",
+        "replace": "\"Создать\""
+    },
+    "103": {
+        "match": "\"Search in Your Library\"",
+        "replace": "\"Поиск в медиатеке\""
+    },
+    "104": {
+        "match": "\"Your Library\"",
+        "replace": "\"Моя медиатека\""
+    },
+    "105": {
+        "match": "Couldn.t find",
+        "replace": "Не удалось найти"
+    },
+    "106": {
+        "match": "\"By Spotify\"",
+        "replace": "\"Плейлисты Spotify\""
+    },
+    "107": {
+        "match": "\"Search in Downloaded\"",
+        "replace": "\"Поиск в загруженном\""
+    },
+    "108": {
+        "match": "\"It's easy, we.ll help you\"",
+        "replace": "\"Это просто, мы вам поможем\""
+    },
+    "109": {
+        "match": "\"Open queue\"",
+        "replace": "\"Открыть очередь\""
+    },
+    "110": {
+        "match": "\"Playing Next\"",
+        "replace": "\"Играет дальше\""
+    },
+    "111": {
+        "match": "\"Search for something new\"",
+        "replace": "\"Искать что-то новое\""
+    },
+    "112": {
+        "match": "\"Your queue is empty\"",
+        "replace": "\"Ваша очередь пуста\""
+    },
+    "113": {
+        "match": "\"Now Playing View\"",
+        "replace": "\"Сейчас играет\""
+    },
+    "114": {
+        "match": "\"In progress\"",
+        "replace": "\"В процессе\""
+    },
+    "115": {
+        "match": "\"Pin audiobook\"",
+        "replace": "\"Закрепить аудиокнигу\""
+    },
+    "116": {
+        "match": "\"Pin podcast\"",
+        "replace": "\"Закрепить подкаст\""
+    },
+    "117": {
+        "match": "\"Pin artist\"",
+        "replace": "\"Закрепить исполнителя\""
+    },
+    "118": {
+        "match": "\"Pin album\"",
+        "replace": "\"Закрепить альбом\""
+    },
+    "119": {
+        "match": "\"Pin playlist\"",
+        "replace": "\"Закрепить плейлист\""
+    },
+    "120": {
+        "match": "\"Pin folder\"",
+        "replace": "\"Закрепить папку\""
+    },
+    "121": {
+        "match": "\"Unpin folder\"",
+        "replace": "\"Открепить папку\""
+    },
+    "122": {
+        "match": "\"Unpin playlist\"",
+        "replace": "\"Открепить плейлист\""
+    },
+    "123": {
+        "match": "\"Unpin album\"",
+        "replace": "\"Открепить альбом\""
+    },
+    "125": {
+        "match": "\"Unpin artist\"",
+        "replace": "\"Открепить исполнителя\""
+    },
+    "126": {
+        "match": "\"Go back\"",
+        "replace": "\"Вернуться\""
+    },
+    "127": {
+        "match": "\"Start adding playlists by dragging and dropping\"",
+        "replace": "\"Начните добавлять плейлисты, перетаскивая и отпуская.\""
+    },
+    "128": {
+        "match": "\"This folder looks empty\"",
+        "replace": "\"Эта папка выглядит пустой\""
+    },
+    "129": {
+        "match": "\"(... )Tour Dates\"",
+        "replace": "\"$1Даты тура\""
+    }
+}

@@ -1426,6 +1426,7 @@ If ($test_spa) {
     extract -counts 'more' -name '*.js' -helper 'MinJs'
 
     # xpui.css
+    if ($new_theme -or !($premium)) {
     if (!($premium)) {
         # Hide download icon on different pages
         $icon = $webjson.others.downloadicon.add
@@ -1444,10 +1445,11 @@ If ($test_spa) {
             $navaltfix = $webjson.others.navaltfix.add[1]
         }
         $navaltfix2 = $webjson.others.navaltfix.add[2]
-
-        $css = $icon, $submenu, $very_high, $navaltfix, $navaltfix2
-        extract -counts 'one' -method 'zip' -name 'xpui.css' -add $css
     }
+
+    $css = $icon, $submenu, $very_high, $navaltfix, $navaltfix2
+    extract -counts 'one' -method 'zip' -name 'xpui.css' -add $css
+}
     
     # Old UI fix
     extract -counts 'one' -method 'zip' -name 'xpui.css' -helper "FixOldTheme"

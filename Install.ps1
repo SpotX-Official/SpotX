@@ -260,7 +260,7 @@ $lang = CallLang -clg $langCode
 # Set variable 'ru'.
 if ($langCode -eq 'ru') { 
     $ru = $true
-    $urlru = "https://raw.githubusercontent.com/SpotX-CLI/SpotX-commons/main/Augmented%20translation/ru.json"
+    $urlru = "https://raw.githubusercontent.com/amd64fox/SpotX/main/patches/Augmented%20translation/ru.json"
     $webjsonru = (Invoke-WebRequest -useb -Uri $urlru).Content | ConvertFrom-Json
 }
 
@@ -847,7 +847,7 @@ if (!($cache_on) -and !($cache_off)) {
 if ($exp_standart) { Write-Host ($lang).ExpStandart`n }
 if ($exp_spotify) { Write-Host ($lang).ExpSpotify`n }
 
-$url = "https://raw.githubusercontent.com/SpotX-CLI/SpotX-commons/main/patches.json"
+$url = "https://raw.githubusercontent.com/amd64fox/SpotX/main/patches/patches.json"
 $webjson = (Invoke-WebRequest -useb -Uri $url).Content | ConvertFrom-Json
 
 function Helper($paramname) {

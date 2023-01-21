@@ -446,7 +446,7 @@ function DesktopFolder {
 }
 
 # Recommended version for spotx
-$onlineFull = "1.2.3.1111.gce8e6576-270"
+$onlineFull = "1.2.3.1115.gd61a8f5c-384"
 $online = ($onlineFull -split ".g")[0]
 
 # Check version Spotify offline

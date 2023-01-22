@@ -113,7 +113,7 @@ function Format-LanguageCode {
     
     
     $supportLanguages = @(
-        'en', 'ru', 'it', 'tr', 'ka', 'pl', 'es', 'fr', 'hi', 'pt', 'id', 'vi', 'ro', 'de', 'hu', 'zh', 'zh-TW', 'ko', 'ua', 'fa', 'sr', 'lv', 'bn', 'el'
+        'en', 'ru', 'it', 'tr', 'ka', 'pl', 'es', 'fr', 'hi', 'pt', 'id', 'vi', 'ro', 'de', 'hu', 'zh', 'zh-TW', 'ko', 'ua', 'fa', 'sr', 'lv', 'bn', 'el', 'fi'
     )
     
     
@@ -213,6 +213,10 @@ function Format-LanguageCode {
         }
         '^el' {
             $returnCode = 'el'
+            break
+        }
+        '^fi' {
+            $returnCode = 'fi'
             break
         }
         Default {
@@ -1427,29 +1431,29 @@ If ($test_spa) {
 
     # xpui.css
     if ($new_theme -or !($premium)) {
-    if (!($premium)) {
-        # Hide download icon on different pages
-        $icon = $webjson.others.downloadicon.add
-        # Hide submenu item "download"
-        $submenu = $webjson.others.submenudownload.add
-        # Hide very high quality streaming
-        $very_high = $webjson.others.veryhighstream.add
-    }
-
-    # New UI fix
-    if ($new_theme) {
-        if ($offline -ge "1.1.94.864" -and $offline -lt "1.2.3.1107") {
-            $navaltfix = $webjson.others.navaltfix.add[0]
+        if (!($premium)) {
+            # Hide download icon on different pages
+            $icon = $webjson.others.downloadicon.add
+            # Hide submenu item "download"
+            $submenu = $webjson.others.submenudownload.add
+            # Hide very high quality streaming
+            $very_high = $webjson.others.veryhighstream.add
         }
-        if ($offline -ge "1.2.3.1107") {
-            $navaltfix = $webjson.others.navaltfix.add[1]
-        }
-        $navaltfix2 = $webjson.others.navaltfix.add[2]
-    }
 
-    $css = $icon, $submenu, $very_high, $navaltfix, $navaltfix2
-    extract -counts 'one' -method 'zip' -name 'xpui.css' -add $css
-}
+        # New UI fix
+        if ($new_theme) {
+            if ($offline -ge "1.1.94.864" -and $offline -lt "1.2.3.1107") {
+                $navaltfix = $webjson.others.navaltfix.add[0]
+            }
+            if ($offline -ge "1.2.3.1107") {
+                $navaltfix = $webjson.others.navaltfix.add[1]
+            }
+            $navaltfix2 = $webjson.others.navaltfix.add[2]
+        }
+
+        $css = $icon, $submenu, $very_high, $navaltfix, $navaltfix2
+        extract -counts 'one' -method 'zip' -name 'xpui.css' -add $css
+    }
     
     # Old UI fix
     extract -counts 'one' -method 'zip' -name 'xpui.css' -helper "FixOldTheme"

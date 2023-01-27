@@ -13,7 +13,7 @@
     Download6       = "Σφάλμα Curl"
     StopScrpit      = "Το Script έχει σταματήσει"
     MsSpoti         = "Εντοπίστηκε η έκδοση του Spotify του Microsoft Store η οποία δεν υποστηρίζεται"
-    MsSpoti2        = "Απεγκατάσταση Spotify έκδοσης Windows Store [Y/N]"
+    MsSpoti2        = "Απεγκατάσταση Spotify έκδοσης Microsoft Store [Y/N]"
     MsSpoti3        = "Αυτόματη απεγκατάσταση Spotify MS..."
     MsSpoti4        = "Απεγκατάσταση Spotify MS..."
     Prem            = "Τροποποίηση για premium λογαριασμό..."

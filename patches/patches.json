@@ -101,26 +101,18 @@
         "podcastsoff2": {
             "version": {
                 "from": "1.1.93",
-                "do": "1.1.96"
-            },
-            "match": "(\\!Array.isArray\\(.\\)\\|\\|.===..length)",
-            "replace": "$1||e.children[0].key.includes('episode')||e.children[0].key.includes('show')"
-        },
-        "podcastsoff3": {
-            "version": {
-                "from": "1.1.97",
                 "do": ""
             },
-            "match": "(\\!Array.isArray\\(.\\)\\|\\|.===..length)",
-            "replace": "$1||e[0].key.includes('episode')||e[0].key.includes('show')"
+            "match": "(\\!Array.isArray\\(.\\)\\|\\|.===..length\\)return null;)",
+            "replace": "$1 const key = e.children?.[0]?.key || e[0]?.key; if (!key || key.includes('episode') || key.includes('show')) {return null;};"
         },
         "adsectionsoff": {
             "version": {
                 "from": "1.1.93",
                 "do": ""
             },
-            "match": "(\"Carousel\".+?(.=(.).seeAllUri.+?UBIWrapper;|const{seeAllUri:.}=(.).+?id:.}\\);))",
-            "replace": ".seeAllUri.match(/(0JQ5DAnM3wGh0gz1MXnu3B|0JQ5IMCbQBLupUQrQFeCzx|0JQ5IMCbQBLqTJyy28YCa9|0JQ5IMCbQBLlC31GvtaB6w|0JQ5DAob0KOew1FBAMSmBz|0JQ5DAnM3wGh0gz1MXnu4w|0JQ5DAnM3wGh0gz1MXnu3C|0JQ5DAnM3wGh0gz1MXnu3n|0JQ5DAnM3wGh0gz1MXnu3s|0JQ5DAnM3wGh0gz1MXnu3M|0JQ5DAob0JCuWaGLU6ntFT|0JQ5DAnM3wGh0gz1MXnucG|0JQ5DAnM3wGh0gz1MXnu3E|0JQ5DAnM3wGh0gz1MXnu4h|0JQ5DAnM3wGh0gz1MXnu7R|0JQ5DAnM3wGh0gz1MXnu3w|0JQ5DAuChZYPe9iDhh2mJz)/)) {return null};"
+            "match": "(\"Carousel\".+?{seeAllUri:(.),index.+?(UBIWrapper;|id:.}\\);))",
+            "replace": "$1 if ($2.match(/(0JQ5DAnM3wGh0gz1MXnu3B|0JQ5IMCbQBLupUQrQFeCzx|0JQ5IMCbQBLqTJyy28YCa9|0JQ5IMCbQBLlC31GvtaB6w|0JQ5DAob0KOew1FBAMSmBz|0JQ5DAnM3wGh0gz1MXnu4w|0JQ5DAnM3wGh0gz1MXnu3C|0JQ5DAnM3wGh0gz1MXnu3n|0JQ5DAnM3wGh0gz1MXnu3s|0JQ5DAnM3wGh0gz1MXnu3M|0JQ5DAob0JCuWaGLU6ntFT|0JQ5DAnM3wGh0gz1MXnucG|0JQ5DAnM3wGh0gz1MXnu3E|0JQ5DAnM3wGh0gz1MXnu4h|0JQ5DAnM3wGh0gz1MXnu7R|0JQ5DAnM3wGh0gz1MXnu3w|0JQ5DAuChZYPe9iDhh2mJz)/)) {return null};"
         },
         "themelyrics": {
             "theme": {
@@ -789,7 +781,7 @@
         "addingplaylist": {
             "version": {
                 "from": "1.1.98",
-                "do": ""
+                "do": "1.2.3"
             },
             "match": "(Enable support for adding a playlist to another playlist\",default:)(!1)",
             "replace": "$1true"
@@ -813,7 +805,7 @@
         "badbunny": {
             "version": {
                 "from": "1.1.99",
-                "do": ""
+                "do": "1.2.3"
             },
             "match": "(Enable a different heart button for Bad Bunny\",default:)(!1)",
             "replace": "$1true"
@@ -849,8 +841,7 @@
             },
             "match": "(playback speed range from 0.5-3.5 with every 0.1 increment\",default:)(!1)",
             "replace": "$1true"
-        }
-        ,
+        },
         "showfollows": {
             "version": {
                 "from": "1.2.1",
@@ -858,6 +849,14 @@
             },
             "match": "(Enable a setting to control if followers and following lists are shown on profile\",default:)(!1)",
             "replace": "$1true"
+        },
+        "fraud": {
+            "version": {
+                "from": "1.2.3",
+                "do": ""
+            },
+            "match": "(Enable user fraud verification\",default:)(!1|!0)",
+            "replace": "$1false"
         }
     }
 }

@@ -965,16 +965,13 @@ function Helper($paramname) {
         "OffPodcasts" {  
             # Turn off podcasts
             if ($offline -le "1.1.92.647") { $contents = "podcastsoff" }
-            if ($offline -ge "1.1.93.896" -and $offline -le "1.1.96.785") { $contents = "podcastsoff2" }
-            if ($offline -ge "1.1.97.952") { $contents = "podcastsoff3" }
+            if ($offline -ge "1.1.93.896") { $contents = "podcastsoff2" }
             $n = $js
             $name = "patches.json.others."
             $json = $webjson.others
         }
         "OffAdSections" {  
             # Hiding Ad-like sections from the homepage
-            if ($offline -le "1.1.96.785") { $webjson.others.adsectionsoff.replace = '$1 if ($3' + $webjson.others.adsectionsoff.replace }
-            else { $webjson.others.adsectionsoff.replace = '$1 if ($4' + $webjson.others.adsectionsoff.replace }
             $n = $js
             $name = "patches.json.others."
             $contents = "adsectionsoff"

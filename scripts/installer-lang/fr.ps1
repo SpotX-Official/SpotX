@@ -13,7 +13,7 @@
     Download6       = "Erreur de curl"
     StopScrpit      = "Le script est arrêté"
     MsSpoti         = "La version Microsoft Store de Spotify a été détectée et n'est pas prise en charge"
-    MsSpoti2        = "Désinstaller la version Windows Store de Spotify [Y/N] ?"
+    MsSpoti2        = "Désinstaller la version Microsoft Store de Spotify [Y/N] ?"
     MsSpoti3        = "Désinstallation automatique de Spotify MS..."
     MsSpoti4        = "Désinstallation de Spotify MS..."
     Prem            = "Modification pour compte premium..."

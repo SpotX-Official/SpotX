@@ -13,7 +13,7 @@
     Download6       = "Curl error" #
     StopScrpit      = "El script se ha detenido"
     MsSpoti         = "La versión de Spotify de Microsoft Store se ha detectado y no es compatible"
-    MsSpoti2        = "Desinstalar Spotify edición Windows Store [Y/N]"
+    MsSpoti2        = "Desinstalar Spotify edición Microsoft Store [Y/N]"
     MsSpoti3        = "Desinstalación automática de Spotify de Microsoft Store..."
     MsSpoti4        = "Desinstalación de Spotify de Microsoft Store..."
     Prem            = "Modificación para la cuenta premium..."

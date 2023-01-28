@@ -13,7 +13,7 @@
     Download6       = "Kesalahan pada Curl"
     StopScrpit      = "Skrip dihentikan"
     MsSpoti         = "Versi Microsoft Store dari Spotify terdeteksi, versi ini tidak didukung"
-    MsSpoti2        = "Copot pemasangan Spotify edisi Windows Store [Y/N]"
+    MsSpoti2        = "Copot pemasangan Spotify edisi Microsoft Store [Y/N]"
     MsSpoti3        = "Menghapus instalan Spotify MS secara otomatis..."
     MsSpoti4        = "Menghapus Instalasi Spotify MS..."
     Prem            = "Modifikasi untuk akun premium..."

@@ -15,7 +15,7 @@
 - <strong>OS: Windows 7-11</strong>
 - <strong>Spotify: latest official [versions](https://cutt.ly/8EH6NuH)</strong>
 - <strong>For Windows Desktop only (Microsoft store version is not suitable).</strong>
-- <strong>PowerShell: 3 or higher</strong>
+- <strong>PowerShell: version 5 and above recommended</strong>
 
 <h1>Features</h1>
 
@@ -159,7 +159,7 @@ or
 <summary><small>Installing with Scoop</small></summary><p>
   
   #### Installing SpotX via the Scoop package manager includes:
-
+  - New theme activated (new right and left sidebar, some cover change)
   - Automatic removal of Spotify MS if it was found 
   - Automatic installation of the recommended version of Spotify (if another client has already been found, it will be installed over) 
   - Hiding podcasts/episodes/audiobooks from the homepage  

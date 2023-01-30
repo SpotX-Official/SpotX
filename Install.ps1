@@ -881,11 +881,10 @@ function Helper($paramname) {
             $contents = "minjson"
             $json = $webjson.others
         }
-        "FixOldTheme" { 
+        "FixCss" { 
             # Remove indent for old theme xpui.css
             $name = "patches.json.others."
             $n = "xpui.css"
-            $contents = "fix-old-theme"
             $json = $webjson.others
         }
         "RemovertlCssmin" { 
@@ -939,12 +938,6 @@ function Helper($paramname) {
             }
             $name = "patches.json.others."
             $n = $name_file
-            $json = $webjson.others
-        }
-        "Fix-New-Lirics" {
-            $name = "patches.json.others."
-            $contents = "fixcsslyricscolor2"
-            $n = "xpui.css"
             $json = $webjson.others
         }
         "Discriptions" {  
@@ -1267,7 +1260,8 @@ if ($test_js) {
             extract -counts 'one' -method 'nonezip' -name $name_file -helper 'Lyrics-color'
         }
         if ($offline -ge "1.1.99.871" -and $offline -le "1.2.2.582") {
-            extract -counts 'one' -method 'nonezip' -name 'xpui.css' -helper 'Fix-New-Lirics'
+            $contents = "fixcsslyricscolor2"
+            extract -counts 'one' -method 'nonezip' -name 'xpui.css' -helper 'FixCss'
             $name_file = 'xpui-routes-lyrics.js' 
             extract -counts 'one' -method 'nonezip' -name $name_file -helper 'Lyrics-color'  
         }
@@ -1281,15 +1275,18 @@ if ($test_js) {
     # xpui.css
     if (!($premium)) {
         # Hide download icon on different pages
-        $icon = $webjson.others.downloadicon.add
+        $css += $webjson.others.downloadicon.add
         # Hide submenu item "download"
-        $submenu = $webjson.others.submenudownload.add
+        $css += $webjson.others.submenudownload.add
         # Hide very high quality streaming
-        $very_high = $webjson.others.veryhighstream.add
-
-        $css = $icon, $submenu, $very_high
-        extract -counts 'one' -method 'nonezip' -name 'xpui.css' -add $css
+        $css += $webjson.others.veryhighstream.add
     }
+    if ($new_theme -and $offline -ge "1.2.3.1107") {
+        $css += $webjson.others.navaltfix.add[3]
+        $css += $webjson.others.navaltfix.add[4]
+    }
+    if ($null -ne $css ) { extract -counts 'one' -method 'nonezip' -name 'xpui.css' -add $css }
+    
 
     # licenses.html minification
     extract -counts 'one' -method 'nonezip' -name 'licenses.html' -helper 'HtmlLicMin'
@@ -1406,7 +1403,8 @@ If ($test_spa) {
         }
         # new 
         if ($offline -ge "1.1.99.871" -and $offline -le "1.2.2.582") {
-            extract -counts 'one' -method 'zip' -name 'xpui.css' -helper 'Fix-New-Lirics'
+            $contents = "fixcsslyricscolor2"
+            extract -counts 'one' -method 'zip' -name 'xpui.css' -helper 'FixCss'
             $name_file = 'xpui-routes-lyrics.js'   
             extract -counts 'one' -method 'zip' -name $name_file -helper 'Lyrics-color'
         }
@@ -1430,30 +1428,38 @@ If ($test_spa) {
     if ($new_theme -or !($premium)) {
         if (!($premium)) {
             # Hide download icon on different pages
-            $icon = $webjson.others.downloadicon.add
+            $css += $webjson.others.downloadicon.add
             # Hide submenu item "download"
-            $submenu = $webjson.others.submenudownload.add
+            $css += $webjson.others.submenudownload.add
             # Hide very high quality streaming
-            $very_high = $webjson.others.veryhighstream.add
+            $css += $webjson.others.veryhighstream.add
         }
 
         # New UI fix
         if ($new_theme) {
             if ($offline -ge "1.1.94.864" -and $offline -lt "1.2.3.1107") {
-                $navaltfix = $webjson.others.navaltfix.add[0]
+                $css += $webjson.others.navaltfix.add[0]
             }
             if ($offline -ge "1.2.3.1107") {
-                $navaltfix = $webjson.others.navaltfix.add[1]
+                $css += $webjson.others.navaltfix.add[1]
+                $css += $webjson.others.navaltfix.add[3]
+                $css += $webjson.others.navaltfix.add[4]
             }
-            $navaltfix2 = $webjson.others.navaltfix.add[2]
+            $css += $webjson.others.navaltfix.add[2]
         }
-
-        $css = $icon, $submenu, $very_high, $navaltfix, $navaltfix2
-        extract -counts 'one' -method 'zip' -name 'xpui.css' -add $css
+        if ($null -ne $css ) { extract -counts 'one' -method 'zip' -name 'xpui.css' -add $css }
+        
     }
     
     # Old UI fix
-    extract -counts 'one' -method 'zip' -name 'xpui.css' -helper "FixOldTheme"
+    $contents = "fix-old-theme"
+    extract -counts 'one' -method 'zip' -name 'xpui.css' -helper "FixCss"
+
+    # Fix scroll bug navylx
+    if ($offline -ge "1.2.4.893") {
+        $contents = "fix-scroll-bug-navylx"
+        extract -counts 'one' -method 'zip' -name 'xpui.css' -helper "FixCss"
+    }
 
     # Remove RTL and minification of all *.css
     extract -counts 'more' -name '*.css' -helper 'RemovertlCssmin'

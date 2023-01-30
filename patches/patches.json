@@ -378,7 +378,9 @@
             "add": [
                 " .nav-alt .Root__top-container {background: #00000085;gap: 6px;padding: 8px;}",
                 " .nav-ylx .Root__top-container {background: #00000085;}",
-                " .Root__fixed-top-bar {background-color: #00000000}"
+                " .Root__fixed-top-bar {background-color: #00000000}",
+                " .y7xcnM6yyOOrMwI77d5t{bottom:112px;}",
+                " .koyeY6AgGRPmyPITi7yO{top:64px !important;}"
             ]
         },
         "collaboration": {
@@ -552,6 +554,14 @@
             },
             "match": "((LKgm9fCDTO7wqig_5U1q|eFQFeXVbY8rrcTagg0oH){--left-sidebar-item-height.+?margin-top)(:\\d+px)",
             "replace": "$1:0px"
+        },
+        "fix-scroll-bug-navylx": {
+            "version": {
+                "from": "1.1.74",
+                "do": ""
+            },
+            "match": ".nav-ylx .contentSpacing{.+?}",
+            "replace": ""
         },
         "goofyhistory": {
             "version": {

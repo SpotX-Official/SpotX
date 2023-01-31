@@ -75,6 +75,9 @@ param
     [Parameter(HelpMessage = 'New theme activated (new right and left sidebar, some cover change)')]
     [switch]$new_theme,
     
+    [Parameter(HelpMessage = 'Returns old lyrics')]
+    [switch]$old_lyrics,
+    
     [Parameter(HelpMessage = 'Do not create desktop shortcut.')]
     [switch]$no_shortcut,
     
@@ -450,7 +453,7 @@ function DesktopFolder {
 }
 
 # Recommended version for spotx
-$onlineFull = "1.2.4.905.gaf3b1e64-104"
+$onlineFull = "1.2.4.907.g126451d5-139"
 $online = ($onlineFull -split ".g")[0]
 
 # Check version Spotify offline
@@ -852,8 +855,31 @@ if ($exp_standart) { Write-Host ($lang).ExpStandart`n }
 if ($exp_spotify) { Write-Host ($lang).ExpSpotify`n }
 
 $url = "https://raw.githubusercontent.com/amd64fox/SpotX/main/patches/patches.json"
-$webjson = (Invoke-WebRequest -useb -Uri $url).Content | ConvertFrom-Json
+$retries = 0
 
+while ($retries -lt 3) {
+    try {
+        $webjson = Invoke-WebRequest -UseBasicParsing -Uri $url | ConvertFrom-Json
+        break
+    }
+    catch {
+        Write-Warning "Request failed: $_"
+        $retries++
+        Start-Sleep -Seconds 3
+    }
+}
+
+if ($retries -eq 3) {
+
+    Write-Host "Failed to get patches.json" -ForegroundColor Red
+    Write-Host ($lang).StopScrpit
+    $tempDirectory = $PWD
+    Pop-Location
+    Start-Sleep -Milliseconds 200
+    Remove-Item -Recurse -LiteralPath $tempDirectory 
+    Pause
+    Exit
+}
 function Helper($paramname) {
 
     switch ( $paramname ) {
@@ -983,6 +1009,20 @@ function Helper($paramname) {
             $contents = $webjsonru.psobject.properties.name
             $json = $webjsonru
         }
+        "PodcastAd" { 
+            # Aodcast ad block
+            $name = "patches.json.others."
+            $n = "Spotify.exe"
+            $contents = "podcast_ad_block"
+            $json = $webjson.others
+        }
+        "BlockUpdate" { 
+            # Block Spotify client updates
+            $name = "patches.json.others."
+            $n = "Spotify.exe"
+            $contents = "block_update"
+            $json = $webjson.others
+        }
         "Collaborators" { 
             # Hide Collaborators icon
             $name = "patches.json.others."
@@ -1015,6 +1055,8 @@ function Helper($paramname) {
                 $rem.remove('silencetrimmer'), $rem.remove('forgetdevice'), $rem.remove('speedpodcasts') , $rem.remove('showfollows')
             }
             if (!($new_theme)) { $rem.remove('newhome'), $rem.remove('newhome2'), $rem.remove('leftsidebar'), $rem.remove('rightsidebar'), $rem.remove('lyricssidebar') }
+
+            if ($old_lyrics) { $rem.remove('lyricssidebar') } 
 
             $name = "patches.json.exp."
             $n = "xpui.js"
@@ -1072,7 +1114,7 @@ function Helper($paramname) {
     $paramdata
 }
 
-function extract ($counts, $method, $name, $helper, $add) {
+function extract ($counts, $method, $name, $helper, $add, $patch) {
     switch ( $counts ) {
         "one" { 
             if ($method -eq "zip") {
@@ -1112,6 +1154,12 @@ function extract ($counts, $method, $name, $helper, $add) {
                 $writer.Close()
             }
             $zip.Dispose()
+        }
+        "exe" {
+            $ANSI = [Text.Encoding]::GetEncoding(1251)
+            $xpui = [IO.File]::ReadAllText($spotifyExecutable, $ANSI)
+            $xpui = Helper -paramname $helper
+            [IO.File]::WriteAllText($spotifyExecutable, $xpui, $ANSI)
         }
     }
 }
@@ -1515,37 +1563,26 @@ If (!(Test-Path $start_menu)) {
     $Shortcut.Save()      
 }
 
-# Block updates
-$ErrorActionPreference = 'SilentlyContinue'
-$update_test_exe = Test-Path -Path $spotifyExecutable
+$ANSI = [Text.Encoding]::GetEncoding(1251)
+$old = [IO.File]::ReadAllText($spotifyExecutable, $ANSI)
 
-if ($block_update) {
+$rexex1 = $old -notmatch $webjson.others.block_update.add
+$rexex2 = $old -notmatch $webjson.others.podcast_ad_block.add
 
-    if ($update_test_exe) {
-        $exe = "$env:APPDATA\Spotify\Spotify.exe"
-        $ANSI = [Text.Encoding]::GetEncoding(1251)
-        $old = [IO.File]::ReadAllText($exe, $ANSI)
+if ($rexex1 -and $rexex2 ) {
 
-        if ($old -match "(?<=wg:\/\/desktop-update\/.)7(\/update)") {
-            Write-Host ($lang).UpdateBlocked`n
-        }
-        elseif ($old -match "(?<=wg:\/\/desktop-update\/.)2(\/update)") {
-            if (Test-Path -LiteralPath $exe_bak) { 
-                Remove-Item $exe_bak -Recurse -Force
-                Start-Sleep -Milliseconds 150
-            }
-            copy-Item $exe $exe_bak
-            $new = $old -replace "(?<=wg:\/\/desktop-update\/.)2(\/update)", '7/update'
-            [IO.File]::WriteAllText($exe, $new, $ANSI)
-        }
-        else {
-            Write-Host ($lang).UpdateError`n -ForegroundColor Red
-        }
+    if (Test-Path -LiteralPath $exe_bak) { 
+        Remove-Item $exe_bak -Recurse -Force
+        Start-Sleep -Milliseconds 150
     }
-    else {
-        Write-Host ($lang).NoSpotifyExe`n -ForegroundColor Red 
-    }
+    copy-Item $spotifyExecutable $exe_bak
 }
+
+# Podcast ad block
+extract -counts 'exe' -helper 'PodcastAd'
+
+# Block updates
+if ($block_update) { extract -counts 'exe' -helper 'BlockUpdate' }
 
 # Automatic cache clearing
 if ($cache_install) {

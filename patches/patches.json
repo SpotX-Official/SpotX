@@ -90,6 +90,24 @@
             "match": "((..createElement|children:\\(.{1,7}\\))\\(....,{source:).....get\\(\"about.copyright\",.\\),paragraphClassName:.}\\)",
             "replace": "$1\"<h3>More about SpotX</h3><a href='https://github.com/amd64fox/SpotX'>Github</a><br/><a href='https://telegra.ph/SpotX-FAQ-09-19'>FAQ</a><br/><a href='https://t.me/spotify_windows_mod'>Telegram channel</a><br/><a href='https://github.com/amd64fox/SpotX/issues/new?assignees=&labels=%E2%9D%8C+bug&template=bug_report.yml'>Create an issue report</a><br> <br/><h4>DISCLAIMER</h4>SpotX is a modified version of the official Spotify client, provided as an evaluation version, you use it at your own risk.\"})"
         },
+        "block_update": {
+            "version": {
+                "from": "1.1.58",
+                "do": ""
+            }, 
+            "add": "(?<=wg:\/\/desktop-update\/.)7(\/update)",
+            "match": "(?<=wg:\/\/desktop-update\/.)2(\/update)",
+            "replace": "7/update"
+        },
+        "podcast_ad_block": {
+            "version": {
+                "from": "1.1.68",
+                "do": ""
+            },
+            "add": "(?<=refresh_inventory...)slott",
+            "match": "(?<=refresh_inventory...)slots",
+            "replace": "slott"
+        },
         "podcastsoff": {
             "version": {
                 "from": "1.1.70",

@@ -77,8 +77,8 @@
                 "from": "1.2.0",
                 "do": ""
             },
-            "match": "(return)(!.\\|\\|..length<1)(\\?null:.+({|,)children:......get\\(\"artist-page.merch)",
-            "replace": "$1 true $3"
+            "match": "return\\!.\\|\\|..length\\<1",
+            "replace": "return true "
         }
     },
     "others": {

@@ -38,7 +38,7 @@
     UpdUnblock      = "Spotify-Updates sind nicht blockiert"
     UpdSelect       = "Möchten sie Spotify-Updates blockieren? [Y/N]"
     CacheOn         = "Automatische Cache-Bereinigung ist aktiviert ({0})"
-    CacheOff        = "utomatische Cache-Bereinigung ist deaktiviert"
+    CacheOff        = "Automatische Cache-Bereinigung ist deaktiviert"
     CacheSelect     = "Möchten Sie die automatische Cache-Bereinigung aktivieren? [Y/N]"
     CacheDays       = "Caches, die älter als die angegebene Anzahl Tage sind, werden bereinigt"
     CacheDays2      = "Geben Sie die Anzahl der Tage von 1 bis 100 ein"

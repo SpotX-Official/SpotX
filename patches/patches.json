@@ -77,7 +77,7 @@
                 "from": "1.2.0",
                 "do": ""
             },
-            "match": "(return( .&&\\(!.\\|\\|..length\\<1\\)&&..length\\>0&&\\(.=.\\),)?\\!.\\|\\|..length\\<1)",
+            "match": "(return( .&&\\(\\!.\\|\\|..length\\<1\\)&&..length\\>0&&\\(.=.\\),)?\\!.\\|\\|..length\\<1)",
             "replace": "return true "
         }
     },

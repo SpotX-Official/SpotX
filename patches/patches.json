@@ -575,8 +575,8 @@
         },
         "fix-scroll-bug-navylx": {
             "version": {
-                "from": "1.1.74",
-                "do": ""
+                "from": "1.2.4",
+                "do": "1.2.4"
             },
             "match": ".nav-ylx .contentSpacing{.+?}",
             "replace": ""
@@ -885,6 +885,14 @@
                 "do": ""
             },
             "match": "(Enable user fraud verification\",default:)(!1|!0)",
+            "replace": "$1false"
+        },
+        "fraud2": {
+            "version": {
+                "from": "1.2.5",
+                "do": ""
+            },
+            "match": "(Enable the IAV component make api requests\",default:)(!1|!0)",
             "replace": "$1false"
         }
     }

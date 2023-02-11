@@ -453,7 +453,7 @@ function DesktopFolder {
 }
 
 # Recommended version for spotx
-$onlineFull = "1.2.4.912.g949d5fd0-272"
+$onlineFull = "1.2.5.954.gf42f9f0a-666"
 $online = ($onlineFull -split ".g")[0]
 
 # Check version Spotify offline
@@ -1504,7 +1504,7 @@ If ($test_spa) {
     extract -counts 'one' -method 'zip' -name 'xpui.css' -helper "FixCss"
 
     # Fix scroll bug navylx
-    if ($offline -ge "1.2.4.893") {
+    if ($offline -ge "1.2.4.893" -or $offline -le "1.2.4.912") {
         $contents = "fix-scroll-bug-navylx"
         extract -counts 'one' -method 'zip' -name 'xpui.css' -helper "FixCss"
     }

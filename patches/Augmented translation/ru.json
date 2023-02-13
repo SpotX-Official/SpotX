@@ -49,7 +49,7 @@
     },
     "12": {
         "match": "\"Credits\"",
-        "replace": "\"Авторы трека\""
+        "replace": "\"Сведения о треке\""
     },
     "13": {
         "match": "\"Based on your listening\"",

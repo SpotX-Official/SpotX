@@ -340,7 +340,7 @@
         "replace": "\"Прослушано\""
     },
     "85": {
-        "match": "\"Data added\"",
+        "match": "\"Date Added\"",
         "replace": "\"Добавлено\""
     },
     "86": {

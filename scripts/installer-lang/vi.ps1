@@ -1,10 +1,10 @@
 [PSCustomObject]@{
     Welcome         = "
-╔══════════════════════════════╗
-║ Welcome to SpotX for Windows ║
-╚══════════════════════════════╝"
+╔═════════════════════════════════╗
+║ Chào Mừng tói SpotX cho Windows ║
+╚═════════════════════════════════╝"
     Incorrect       = "Ối, sai giá trị rồi,"
-    Incorrect2      = "nhập lại lần nữa "
+    Incorrect2      = "hãy thử lại "
     Download        = "Lỗi khi tải xuống"
     Download2       = "Tải lại sau 5 giây..."
     Download3       = "Tiếp tục lỗi"
@@ -57,5 +57,5 @@
     HostInfo        = "Các URL không mong muốn được tìm thấy trong tệp hosts"
     HostBak         = "Đang sao lưu hosts.bak..."
     HostDel         = "Đang gỡ các URL không mong muốn khỏi tệp hosts..."
-    HostError       = "Lỗi khi chỉnh sửa tệp hosts, hãy chỉnh sửa thủ công hoặc chạy bản vá bằng quyền administrator"
+    HostError       = "Ồ, có gì đó đã sai khi đang chỉnh sửa tệp hosts. Hãy tự sửa hoặc chạy tệp này với tư cách quản trị viên"
 }

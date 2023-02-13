@@ -1,6 +1,6 @@
 {
     "lang": {
-        "version": "1.2.4.893.gc9aee263",
+        "version": "1.2.5",
         "language": "Russian"
     },
     "1": {
@@ -49,11 +49,11 @@
     },
     "12": {
         "match": "\"Credits\"",
-        "replace": "\"Участники\""
+        "replace": "\"Авторы трека\""
     },
     "13": {
-        "match": "\"Our systems detect that you.re actually a human, but here.s a <a class=..className.. href=..link...Robo-Funk playlist..a. for you.\"",
-        "replace": "\"Наши системы определили, что вы на самом деле человек, вот <a class='%className%' href='%link%'>Плейлист Robo-Funk</a> для вас.\""
+        "match": "\"Based on your listening\"",
+        "replace": "\"На основе вашего прослушивания\""
     },
     "14": {
         "match": "\"Unpin artist\"",
@@ -326,5 +326,25 @@
     "81": {
         "match": "\"Now Playing View\"",
         "replace": "\"Сейчас играет\""
+    },
+    "82": {
+        "match": "\"Up Next\"",
+        "replace": "\"Далее\""
+    },
+    "83": {
+        "match": "\"... of ...\"",
+        "replace": "\"{0} из {1}\""
+    },
+    "84": {
+        "match": "\"Played\"",
+        "replace": "\"Прослушано\""
+    },
+    "85": {
+        "match": "\"Data added\"",
+        "replace": "\"Добавлено\""
+    },
+    "86": {
+        "match": "\"Title\"",
+        "replace": "\"Название\""
     }
 }

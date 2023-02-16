@@ -325,6 +325,14 @@
                     "hover": "#E5CB8B",
                     "background": "#121212",
                     "maxmatch": "#787878"
+                },
+                "turquoise": {
+                    "pasttext": "#00656aa0",
+                    "current": "#01dfea",
+                    "next": "#575757",
+                    "hover": "#a97aff",
+                    "background": "#121212",
+                    "maxmatch": "#00656a"
                 }
             }
         },

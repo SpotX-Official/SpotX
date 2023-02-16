@@ -453,7 +453,7 @@ function DesktopFolder {
 }
 
 # Recommended version for spotx
-$onlineFull = "1.2.5.954.gf42f9f0a-666"
+$onlineFull = "1.2.5.1006.g22820f93-1078"
 $online = ($onlineFull -split ".g")[0]
 
 # Check version Spotify offline
@@ -555,8 +555,25 @@ $spotifyInstalled = (Test-Path -LiteralPath $spotifyExecutable)
 
 if ($spotifyInstalled) {
 
+    # Version comparison
+    # converting strings to arrays of numbers using the -split operator and a ForEach-Object loop
+    $arr1 = $online -split '\.' | ForEach-Object { [int]$_ }
+    $arr2 = $offline -split '\.' | ForEach-Object { [int]$_ }
+
+    # compare each element of the array in order from most significant to least significant.
+    for ($i = 0; $i -lt $arr1.Length; $i++) {
+        if ($arr1[$i] -gt $arr2[$i]) {
+            $oldversion = $true
+            break
+        }
+        elseif ($arr1[$i] -lt $arr2[$i]) {
+            $testversion = $true
+            break
+        }
+    }
+
     # Old version Spotify
-    if ($online -gt $offline) {
+    if ($oldversion) {
         if ($confirm_spoti_recomended_over -or $confirm_spoti_recomended_unistall) {
             Write-Host ($lang).OldV`n
         }
@@ -608,7 +625,7 @@ if ($spotifyInstalled) {
     }
     
     # Unsupported version Spotify
-    if ($online -lt $offline) {
+    if ($testversion) {
         # Submit unsupported version of Spotify to google form for further processing
         try { 
             $txt = [IO.File]::ReadAllText($spotifyExecutable)

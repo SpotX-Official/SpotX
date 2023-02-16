@@ -1324,11 +1324,13 @@ if ($test_js) {
             $name_file = 'xpui-routes-lyrics.css'
             extract -counts 'one' -method 'nonezip' -name $name_file -helper 'Lyrics-color'
         }
-        if ($offline -ge "1.1.99.871" -and $offline -le "1.2.2.582") {
+        if ($offline -ge "1.1.99.871") {
             $contents = "fixcsslyricscolor2"
             extract -counts 'one' -method 'nonezip' -name 'xpui.css' -helper 'FixCss'
-            $name_file = 'xpui-routes-lyrics.js' 
-            extract -counts 'one' -method 'nonezip' -name $name_file -helper 'Lyrics-color'  
+            if ($offline -le "1.2.2.582") {
+                $name_file = 'xpui-routes-lyrics.js' 
+                extract -counts 'one' -method 'nonezip' -name $name_file -helper 'Lyrics-color'  
+            }
         }
         # mini lyrics
         if ($offline -ge "1.2.0.1155") {
@@ -1467,11 +1469,13 @@ If ($test_spa) {
             extract -counts 'one' -method 'zip' -name $name_file -helper 'Lyrics-color'
         }
         # new 
-        if ($offline -ge "1.1.99.871" -and $offline -le "1.2.2.582") {
+        if ($offline -ge "1.1.99.871") {
             $contents = "fixcsslyricscolor2"
             extract -counts 'one' -method 'zip' -name 'xpui.css' -helper 'FixCss'
-            $name_file = 'xpui-routes-lyrics.js'   
-            extract -counts 'one' -method 'zip' -name $name_file -helper 'Lyrics-color'
+            if ($offline -le "1.2.2.582") {
+                $name_file = 'xpui-routes-lyrics.js'   
+                extract -counts 'one' -method 'zip' -name $name_file -helper 'Lyrics-color'
+            }
         }
         # mini lyrics
         if ($offline -ge "1.2.0.1155") {

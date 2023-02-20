@@ -104,8 +104,8 @@
                 "from": "1.1.68",
                 "do": ""
             },
-            "add": "(?<=refresh_inventory...)slott",
-            "match": "(?<=refresh_inventory...)slots",
+            "add": "slott(?=...override_url)",
+            "match": "slots(?=...override_url)",
             "replace": "slott"
         },
         "podcastsoff": {

@@ -850,7 +850,7 @@
         "devicelocal": {
             "version": {
                 "from": "1.1.99",
-                "do": ""
+                "do": "1.2.5"
             },
             "match": "(Enable splitting the device list based on local network\",default:)(!1)",
             "replace": "$1true"
@@ -866,7 +866,7 @@
         "forgetdevice": {
             "version": {
                 "from": "1.2.0",
-                "do": ""
+                "do": "1.2.5"
             },
             "match": "(Enable the option to Forget Devices\",default:)(!1)",
             "replace": "$1true"
@@ -910,6 +910,14 @@
             },
             "match": "(Enable new permanent location for HPTO iframe to HptoHtml.js\",default:)(!1|!0)",
             "replace": "$1false"
+        },
+        "attacktitan": {
+            "version": {
+                "from": "1.2.6",
+                "do": ""
+            },
+            "match": "(Enable Attack on Titan Easter egg turning progress bar red when playing official soundtrack\",default:)(!1)",
+            "replace": "$1true"
         }
     }
 }

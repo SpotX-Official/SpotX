@@ -130,7 +130,7 @@
                 "do": ""
             },
             "match": "(\"Carousel\".+?{seeAllUri:(.),index.+?(UBIWrapper;|id:.}\\);))",
-            "replace": "$1 if ($2.match(/(0JQ5DAnM3wGh0gz1MXnu3B|0JQ5IMCbQBLupUQrQFeCzx|0JQ5IMCbQBLqTJyy28YCa9|0JQ5IMCbQBLlC31GvtaB6w|0JQ5DAob0KOew1FBAMSmBz|0JQ5DAnM3wGh0gz1MXnu4w|0JQ5DAnM3wGh0gz1MXnu3C|0JQ5DAnM3wGh0gz1MXnu3n|0JQ5DAnM3wGh0gz1MXnu3s|0JQ5DAnM3wGh0gz1MXnu3M|0JQ5DAob0JCuWaGLU6ntFT|0JQ5DAnM3wGh0gz1MXnucG|0JQ5DAnM3wGh0gz1MXnu3E|0JQ5DAnM3wGh0gz1MXnu4h|0JQ5DAnM3wGh0gz1MXnu7R|0JQ5DAnM3wGh0gz1MXnu3w|0JQ5DAuChZYPe9iDhh2mJz)/)) {return null};"
+            "replace": "$1 if ($2.match(/(0JQ5DAnM3wGh0gz1MXnu3B|0JQ5DAnM3wGh0gz1MXnu3D|0JQ5IMCbQBLupUQrQFeCzx|0JQ5IMCbQBLqTJyy28YCa9|0JQ5IMCbQBLlC31GvtaB6w|0JQ5DAob0KOew1FBAMSmBz|0JQ5DAnM3wGh0gz1MXnu4w|0JQ5DAnM3wGh0gz1MXnu3C|0JQ5DAnM3wGh0gz1MXnu3n|0JQ5DAnM3wGh0gz1MXnu3s|0JQ5DAnM3wGh0gz1MXnu3M|0JQ5DAob0JCuWaGLU6ntFT|0JQ5DAnM3wGh0gz1MXnucG|0JQ5DAnM3wGh0gz1MXnu3E|0JQ5DAnM3wGh0gz1MXnu4h|0JQ5DAnM3wGh0gz1MXnu7R|0JQ5DAnM3wGh0gz1MXnu3w|0JQ5DAuChZYPe9iDhh2mJz)/)) {return null};"
         },
         "themelyrics": {
             "theme": {

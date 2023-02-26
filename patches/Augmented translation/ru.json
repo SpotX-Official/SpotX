@@ -1,6 +1,6 @@
 {
     "lang": {
-        "version": "1.2.5",
+        "version": "1.2.6",
         "language": "Russian"
     },
     "1": {
@@ -28,16 +28,16 @@
         "replace": "\"Изменить место\""
     },
     "7": {
-        "match": "\"Downloading\"",
-        "replace": "\"Скачивание\""
+        "match": "\"Reduce Your Library\"",
+        "replace": "\"Уменьшить медиатеку\""
     },
     "8": {
-        "match": "\"You can have ... items pinned.\"",
-        "replace": "\"Вы можете закрепить {0} элементов.\""
+        "match": "\"Enlarge Your Library\"",
+        "replace": "\"Увеличить медиатеку\""
     },
     "9": {
-        "match": "\"You.re out of pins\"",
-        "replace": "\"У тебя закончились булавки\""
+        "match": "\"Clear filters\"",
+        "replace": "\"Очистить фильтры\""
     },
     "10": {
         "match": "\"Show all\"",
@@ -240,68 +240,8 @@
         "replace": "\"Создавайте и публикуйте песни прямо на Spotify. Выберите песню и жанр, запишите свой вокал, а затем отредактируйте песню, чтобы сделать ее своей.\""
     },
     "60": {
-        "match": "(\"one\": \"[{]0[}]) track\"",
-        "replace": "$1 трек\""
-    },
-    "61": {
-        "match": "(\"few\": \"[{]0[}]) tracks\"",
-        "replace": "$1 трека\""
-    },
-    "62": {
-        "match": "(\"many\": \"[{]0[}]) tracks\"",
-        "replace": "$1 треков\""
-    },
-    "63": {
-        "match": "(\"other\": \"[{]0[}]) tracks\"",
-        "replace": "$1 трека\""
-    },
-    "64": {
-        "match": "(\"one\": \"[{]0[}]) song\"",
-        "replace": "$1 песня\""
-    },
-    "65": {
-        "match": "(\"few\": \"[{]0[}]) songs\"",
-        "replace": "$1 песни\""
-    },
-    "66": {
-        "match": "(\"many\": \"[{]0[}]) songs\"",
-        "replace": "$1 песен\""
-    },
-    "67": {
-        "match": "(\"other\": \"[{]0[}]) songs\"",
-        "replace": "$1 песни\""
-    },
-    "68": {
-        "match": "(\"one\": \"[{]0[}]) folder\"",
-        "replace": "$1 папка\""
-    },
-    "69": {
-        "match": "(\"few\": \"[{]0[}]) folders\"",
-        "replace": "$1 папки\""
-    },
-    "70": {
-        "match": "(\"many\": \"[{]0[}]) folders\"",
-        "replace": "$1 папок\""
-    },
-    "71": {
-        "match": "(\"other\": \"[{]0[}]) folders\"",
-        "replace": "$1 папки\""
-    },
-    "72": {
-        "match": "\"one\": \"[{]0[}] playlist\"",
-        "replace": "\"one\": \"{0} плейлист\""
-    },
-    "73": {
-        "match": "(\"few\": \"[{]0[}]) playlists\"",
-        "replace": "$1 плейлиста\""
-    },
-    "74": {
-        "match": "(\"many\": \"[{]0[}]) playlists\"",
-        "replace": "$1 плейлистов\""
-    },
-    "75": {
-        "match": "(\"other\": \"[{]0[}]) playlists\"",
-        "replace": "$1 плейлиста\""
+        "match": "(\"Filter options\"",
+        "replace": "\"Параметры фильтрации\""
     },
     "76": {
         "match": "\"Artist\"",
@@ -334,17 +274,5 @@
     "83": {
         "match": "\"... of ...\"",
         "replace": "\"{0} из {1}\""
-    },
-    "84": {
-        "match": "\"Played\"",
-        "replace": "\"Прослушано\""
-    },
-    "85": {
-        "match": "\"Date Added\"",
-        "replace": "\"Добавлено\""
-    },
-    "86": {
-        "match": "\"Title\"",
-        "replace": "\"Название\""
     }
 }

@@ -1352,6 +1352,9 @@ if ($test_js) {
         $css += $webjson.others.navaltfix.add[3]
         $css += $webjson.others.navaltfix.add[4]
     }
+    if ($new_theme -and $offline -ge "1.2.6.861") {
+        $css += $webjson.others.leftsidebarfix.add
+    }
     if ($null -ne $css ) { extract -counts 'one' -method 'nonezip' -name 'xpui.css' -add $css }
     
 
@@ -1514,10 +1517,12 @@ If ($test_spa) {
                 $css += $webjson.others.navaltfix.add[3]
                 $css += $webjson.others.navaltfix.add[4]
             }
+            if ($offline -ge "1.2.6.861") {
+                $css += $webjson.others.leftsidebarfix.add
+            }
             $css += $webjson.others.navaltfix.add[2]
         }
         if ($null -ne $css ) { extract -counts 'one' -method 'zip' -name 'xpui.css' -add $css }
-        
     }
     
     # Old UI fix

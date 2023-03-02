@@ -409,6 +409,13 @@
                 " .koyeY6AgGRPmyPITi7yO{top:64px !important;}"
             ]
         },
+        "leftsidebarfix": {
+            "version": {
+                "from": "1.2.6",
+                "do": ""
+            },
+            "add": " .yOKoknIYYzAE90pe7_SE.Yn2Ei5QZn19gria6LjZj {pointer-events: none;}"
+        },
         "collaboration": {
             "version": {
                 "from": "1.1.73",

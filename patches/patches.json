@@ -412,7 +412,7 @@
         "leftsidebarfix": {
             "version": {
                 "from": "1.2.6",
-                "do": ""
+                "do": "1.2.6"
             },
             "add": " .yOKoknIYYzAE90pe7_SE.Yn2Ei5QZn19gria6LjZj {pointer-events: none;}"
         },
@@ -809,7 +809,7 @@
         "sidebar-fix": {
             "version": {
                 "from": "1.1.99",
-                "do": ""
+                "do": "1.2.6"
             },
             "match": "min:320,max:420",
             "replace": "min:250,max:400"
@@ -924,6 +924,22 @@
                 "do": ""
             },
             "match": "(Enable Attack on Titan Easter egg turning progress bar red when playing official soundtrack\",default:)(!1)",
+            "replace": "$1true"
+        },
+        "saveconcerts": {
+            "version": {
+                "from": "1.2.7",
+                "do": ""
+            },
+            "match": "(Enable Save & Retrieve feature for concerts\",default:)(!1)",
+            "replace": "$1true"
+        },
+        "showcreditsinsidebar": {
+            "version": {
+                "from": "1.2.7",
+                "do": ""
+            },
+            "match": "(Show credits in the right sidebar\",default:)(!1)",
             "replace": "$1true"
         }
     }

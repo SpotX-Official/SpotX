@@ -453,7 +453,7 @@ function DesktopFolder {
 }
 
 # Recommended version for spotx
-$onlineFull = "1.2.6.863.ge7902f05-163"
+$onlineFull = "1.2.7.1275.g586348e7-182"
 $online = ($onlineFull -split ".g")[0]
 
 # Check version Spotify offline
@@ -1352,7 +1352,7 @@ if ($test_js) {
         $css += $webjson.others.navaltfix.add[3]
         $css += $webjson.others.navaltfix.add[4]
     }
-    if ($new_theme -and $offline -ge "1.2.6.861") {
+    if ($new_theme -and $offline -ge "1.2.6.861" -and $offline -le "1.2.6.863") {
         $css += $webjson.others.leftsidebarfix.add
     }
     if ($null -ne $css ) { extract -counts 'one' -method 'nonezip' -name 'xpui.css' -add $css }
@@ -1517,7 +1517,7 @@ If ($test_spa) {
                 $css += $webjson.others.navaltfix.add[3]
                 $css += $webjson.others.navaltfix.add[4]
             }
-            if ($offline -ge "1.2.6.861") {
+            if ($offline -ge "1.2.6.861" -and $offline -le "1.2.6.863") {
                 $css += $webjson.others.leftsidebarfix.add
             }
             $css += $webjson.others.navaltfix.add[2]

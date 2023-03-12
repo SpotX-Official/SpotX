@@ -52,7 +52,7 @@
         "replace": "\"Сведения о треке\""
     },
     "13": {
-        "match": "\"Tired of this set?\"",
+        "match": "\"Tired of this set\\?\"",
         "replace": "\"Устали от этого сета?\""
     },
     "14": {

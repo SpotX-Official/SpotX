@@ -1,6 +1,6 @@
 {
     "lang": {
-        "version": "1.2.6",
+        "version": "1.2.7",
         "language": "Russian"
     },
     "1": {
@@ -28,16 +28,16 @@
         "replace": "\"Изменить место\""
     },
     "7": {
-        "match": "\"Reduce Your Library\"",
-        "replace": "\"Уменьшить медиатеку\""
+        "match": "\"Click to start listening\"",
+        "replace": "\"Нажмите, чтобы начать прослушивание\""
     },
     "8": {
-        "match": "\"Enlarge Your Library\"",
-        "replace": "\"Увеличить медиатеку\""
+        "match": "\"Let your DJ pick a mix of your current go-to's, old favorites, and new discoveries.\"",
+        "replace": "\"Позвольте вашему диджею создать микс из ваших текущих любимых треков, старых фаворитов и новых открытий.\""
     },
     "9": {
-        "match": "\"Clear filters\"",
-        "replace": "\"Очистить фильтры\""
+        "match": "\"Switch to a different set\"",
+        "replace": "\"Переключиться на другой сет\""
     },
     "10": {
         "match": "\"Show all\"",
@@ -52,16 +52,12 @@
         "replace": "\"Сведения о треке\""
     },
     "13": {
-        "match": "\"Based on your listening\"",
-        "replace": "\"На основе вашего прослушивания\""
+        "match": "\"Tired of this set?\"",
+        "replace": "\"Устали от этого сета?\""
     },
     "14": {
-        "match": "\"Unpin artist\"",
-        "replace": "\"Открепить исполнителя\""
-    },
-    "15": {
-        "match": "\"Unpin album\"",
-        "replace": "\"Открепить альбом\""
+        "match": "\"Tap for a different set from your DJ\"",
+        "replace": "\"Нажмите, чтобы выбрать другой сет от вашего диджея\""
     },
     "16": {
         "match": "\"Change speed\"",
@@ -131,22 +127,6 @@
         "match": "\"No\"",
         "replace": "\"Нет\""
     },
-    "33": {
-        "match": "\"Unpin podcast\"",
-        "replace": "\"Открепить подкаст\""
-    },
-    "34": {
-        "match": "\"Unpin audiobook\"",
-        "replace": "\"Открепить аудиокнигу\""
-    },
-    "35": {
-        "match": "\"Unpin playlist\"",
-        "replace": "\"Открепить плейлист\""
-    },
-    "36": {
-        "match": "\"Unpin folder\"",
-        "replace": "\"Открепить папку\""
-    },
     "37": {
         "match": "\"Your Location\"",
         "replace": "\"Ваше местоположение\""
@@ -207,38 +187,6 @@
         "match": "\"Speed [{]0[}]×\"",
         "replace": "\"Скорость {0}×\""
     },
-    "52": {
-        "match": "\"This is a highly confidential test. Do not share details of this test or any song you create outside of Spotify.\"",
-        "replace": "\"Это очень конфиденциальный тест. Не делитесь подробностями этого теста или какой-либо песни, которую вы создаете, за пределами Spotify.\""
-    },
-    "53": {
-        "match": "\"Pin folder\"",
-        "replace": "\"Закрепить папку\""
-    },
-    "54": {
-        "match": "\"Pin playlist\"",
-        "replace": "\"Закрепить плейлист\""
-    },
-    "55": {
-        "match": "\"Pin album\"",
-        "replace": "\"Закрепить альбом\""
-    },
-    "56": {
-        "match": "\"Pin artist\"",
-        "replace": "\"Закрепить исполнителя\""
-    },
-    "57": {
-        "match": "\"Pin podcast\"",
-        "replace": "\"Закрепить подкаст\""
-    },
-    "58": {
-        "match": "\"Pin audiobook\"",
-        "replace": "\"Закрепить аудиокнигу\""
-    },
-    "59": {
-        "match": "\"Create and publish songs right on Spotify. Choose a song and genre, record your vocals, then edit the song to make it yours.\"",
-        "replace": "\"Создавайте и публикуйте песни прямо на Spotify. Выберите песню и жанр, запишите свой вокал, а затем отредактируйте песню, чтобы сделать ее своей.\""
-    },
     "60": {
         "match": "(\"Filter options\"",
         "replace": "\"Параметры фильтрации\""
@@ -262,10 +210,6 @@
     "81": {
         "match": "\"Now Playing View\"",
         "replace": "\"Сейчас играет\""
-    },
-    "82": {
-        "match": "\"Up Next\"",
-        "replace": "\"Далее\""
     },
     "83": {
         "match": "\"... of ...\"",

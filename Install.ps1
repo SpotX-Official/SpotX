@@ -1348,16 +1348,12 @@ if ($test_js) {
         # Hide very high quality streaming
         $css += $webjson.others.veryhighstream.add
     }
-    if ($new_theme -and $offline -ge "1.2.3.1107") {
-        $css += $webjson.others.navaltfix.add[3]
-        $css += $webjson.others.navaltfix.add[4]
-    }
     if ($new_theme -and $offline -ge "1.2.6.861" -and $offline -le "1.2.6.863") {
         $css += $webjson.others.leftsidebarfix.add
     }
     if ($null -ne $css ) { extract -counts 'one' -method 'nonezip' -name 'xpui.css' -add $css }
     
-
+    
     # licenses.html minification
     extract -counts 'one' -method 'nonezip' -name 'licenses.html' -helper 'HtmlLicMin'
 }  
@@ -1514,8 +1510,6 @@ If ($test_spa) {
             }
             if ($offline -ge "1.2.3.1107") {
                 $css += $webjson.others.navaltfix.add[1]
-                $css += $webjson.others.navaltfix.add[3]
-                $css += $webjson.others.navaltfix.add[4]
             }
             if ($offline -ge "1.2.6.861" -and $offline -le "1.2.6.863") {
                 $css += $webjson.others.leftsidebarfix.add

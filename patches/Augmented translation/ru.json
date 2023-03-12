@@ -247,10 +247,6 @@
         "match": "\"Artist\"",
         "replace": "\"Исполнитель\""
     },
-    "77": {
-        "match": "\"Album\"",
-        "replace": "\"Альбом\""
-    },
     "78": {
         "match": "\"Open queue\"",
         "replace": "\"Открыть очередь\""

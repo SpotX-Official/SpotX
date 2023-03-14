@@ -467,7 +467,7 @@ $win8 = $win_os -match "\windows 8\b"
 
 # Recommended version for spotx
 if ($win10 -or $win11 -or $win12) { 
-    $onlineFull = "1.2.7.1275.g586348e7-182" 
+    $onlineFull = "1.2.7.1277.g2b3ce637-219" 
 }
 else { 
     $onlineFull = "1.2.5.1006.g22820f93-1078" 

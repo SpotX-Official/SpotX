@@ -452,8 +452,27 @@ function DesktopFolder {
     return $desktop_folder
 }
 
+# Check version Windows
+$os = Get-WmiObject -Class Win32_OperatingSystem
+$osCaption = $os.Caption
+$pattern = "\bWindows (7|8(\.1)?|10|11|12)\b"
+$reg = [regex]::Matches($osCaption, $pattern)
+$win_os = $reg.value
+
+$win12 = $win_os -match "\windows 12\b"
+$win11 = $win_os -match "\windows 11\b"
+$win10 = $win_os -match "\windows 10\b"
+$win8_1 = $win_os -match "\windows 8.1\b"
+$win8 = $win_os -match "\windows 8\b"
+
 # Recommended version for spotx
-$onlineFull = "1.2.7.1275.g586348e7-182"
+if ($win10 -or $win11 -or $win12) { 
+    $onlineFull = "1.2.7.1275.g586348e7-182" 
+}
+else { 
+    $onlineFull = "1.2.5.1006.g22820f93-1078" 
+}
+
 $online = ($onlineFull -split ".g")[0]
 
 # Check version Spotify offline
@@ -471,16 +490,10 @@ if ($psv -ge 7) {
     Import-Module Appx -UseWindowsPowerShell -WarningAction:SilentlyContinue
 }
 
-# Check version Windows
-$win_os = (get-itemproperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion" -Name ProductName).ProductName
-$win11 = $win_os -match "\windows 11\b"
-$win10 = $win_os -match "\windows 10\b"
-$win8_1 = $win_os -match "\windows 8.1\b"
-$win8 = $win_os -match "\windows 8\b"
+# Remove Spotify Windows Store If Any
 
-if ($win11 -or $win10 -or $win8_1 -or $win8) {
+if ($win10 -or $win11 -or $win8_1 -or $win8 -or $win12) {
 
-    # Remove Spotify Windows Store If Any
     if (Get-AppxPackage -Name SpotifyAB.SpotifyMusic) {
         Write-Host ($lang).MsSpoti`n
         

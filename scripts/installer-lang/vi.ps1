@@ -32,7 +32,7 @@
     DownSpoti2      = "Vui lòng chờ..."
     PodcatsOff      = "Tắt Podcasts"
     PodcastsOn      = "Bật Podcasts"
-    PodcatsSelect   = "Bạn có muốn xóa podcast (dài tập) và sách nói khỏi màn hình chính không"
+    PodcatsSelect   = "Bạn có muốn xóa podcast (dài tập) và sách nói khỏi màn hình chính không? [Y/N]"
     DowngradeNote   = "Nên chặn cập nhật vì bạn đang dùng bản Spotify cũ"
     UpdBlock        = "Đã chặn cập nhật Spotify"
     UpdUnblock      = "Cập nhật Spotify không bị chặn"

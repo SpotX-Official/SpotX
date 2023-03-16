@@ -10,7 +10,7 @@
     Download3       = "Lại bị lỗi"
     Download4       = "Hãy kiểm tra cài đặt mạng và chạy lại chương trình"
     Download5       = "Đang tải Spotify"
-    Download6       = "Lỗi trong khi truyền tải dữ liệu"
+    Download6       = "Lỗi curl"
     StopScrpit      = "Đã dừng bản vá"
     MsSpoti         = "Phát hiện phiên bản Spotify của Microsoft Store, bản này không được hỗ trợ"
     MsSpoti2        = "Gỡ Spotify của Microsoft Store [Y/N]"

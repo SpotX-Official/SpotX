@@ -1218,15 +1218,8 @@ Remove-Item -Recurse -LiteralPath $tempDirectory
 
 $xpui_spa_patch = "$env:APPDATA\Spotify\Apps\xpui.spa"
 $xpui_js_patch = "$env:APPDATA\Spotify\Apps\xpui\xpui.js"
-$xpui_css_patch = "$env:APPDATA\Spotify\Apps\xpui\xpui.css"
-$xpui_lic_patch = "$env:APPDATA\Spotify\Apps\xpui\licenses.html"
-if ($ru) { $xpui_ru_patch = "$env:APPDATA\Spotify\Apps\xpui\i18n\ru.json" }
 $test_spa = Test-Path -Path $xpui_spa_patch
 $test_js = Test-Path -Path $xpui_js_patch
-$xpui_js_bak_patch = "$env:APPDATA\Spotify\Apps\xpui\xpui.js.bak"
-$xpui_css_bak_patch = "$env:APPDATA\Spotify\Apps\xpui\xpui.css.bak"
-$xpui_lic_bak_patch = "$env:APPDATA\Spotify\Apps\xpui\licenses.html.bak"
-if ($ru) { $xpui_ru_bak_patch = "$env:APPDATA\Spotify\Apps\xpui\i18n\ru.json.bak" }
 $spotify_exe_bak_patch = "$env:APPDATA\Spotify\Spotify.bak"
 
 
@@ -1239,140 +1232,22 @@ if ($test_spa -and $test_js) {
 }
 
 if ($test_js) {
-    Write-Host ($lang).Spicetify`n
-
-    # Delete all files except "en", "ru" and "__longest"
-    if ($ru) {
-        $patch_lang = "$env:APPDATA\Spotify\Apps\xpui\i18n"
-        Remove-Item $patch_lang -Exclude *en*, *ru*, *__longest* -Recurse
-    }
-
-    $reader = New-Object -TypeName System.IO.StreamReader -ArgumentList $xpui_js_patch
-    $xpui_test_js = $reader.ReadToEnd()
-    $reader.Close()
-        
-    If ($xpui_test_js -match 'patched by spotx') {
-
-        $test_xpui_js_bak = Test-Path -Path $xpui_js_bak_patch
-        $test_xpui_css_bak = Test-Path -Path $xpui_css_bak_patch
-        $test_xpui_lic_bak = Test-Path -Path $xpui_lic_bak_patch
-        if ($ru) { $test_xpui_ru_bak = Test-Path -Path $xpui_ru_bak_patch }
-        $test_spotify_exe_bak = Test-Path -Path $spotify_exe_bak_patch
-
-        if ($test_xpui_js_bak -and $test_xpui_css_bak) {
-            
-            Remove-Item $xpui_js_patch -Recurse -Force
-            Rename-Item $xpui_js_bak_patch $xpui_js_patch
-            
-            Remove-Item $xpui_css_patch -Recurse -Force
-            Rename-Item $xpui_css_bak_patch $xpui_css_patch
-            
-            if ($test_xpui_lic_bak) {
-                Remove-Item $xpui_lic_patch -Recurse -Force
-                Rename-Item $xpui_lic_bak_patch $xpui_lic_patch
-            }
-            if ($test_xpui_ru_bak -and $ru) {
-                Remove-Item $xpui_ru_patch -Recurse -Force
-                Rename-Item $xpui_ru_bak_patch $xpui_ru_patch
-            }
-            if ($test_spotify_exe_bak) {
-                Remove-Item $spotifyExecutable -Recurse -Force
-                Rename-Item $spotify_exe_bak_patch $spotifyExecutable
-            }
-
-        }
-        else {
-            Write-Host ($lang).NoRestore`n
-            Pause
-            Exit
-        }
-
-    }
-
-    Copy-Item $xpui_js_patch $xpui_js_bak_patch
-    Copy-Item $xpui_css_patch $xpui_css_bak_patch
-    Copy-Item $xpui_lic_patch $xpui_lic_bak_patch
-    if ($ru) { Copy-Item $xpui_ru_patch $xpui_ru_bak_patch }
-
     
-    # Full screen mode activation and removing "Upgrade to premium" menu, upgrade button, disabling a playlist sponsor
-    if (!($premium)) { extract -counts 'one' -method 'nonezip' -name 'xpui.js' -helper 'OffadsonFullscreen' }   
+    do {
+        $ch = Read-Host -Prompt ($lang).Spicetify
+        Write-Host ""
+        if (!($ch -eq 'n' -or $ch -eq 'y')) { incorrectValue }
+    }
+    while ($ch -notmatch '^y$|^n$')
 
-    # Experimental Feature
-    if (!($exp_spotify)) { extract -counts 'one' -method 'nonezip' -name 'xpui.js' -helper 'ExpFeature' }
-
-    # Remove all languages except En and Ru from xpui.js
-    if ($ru) { extract -counts 'one' -method 'nonezip' -name 'xpui.js' -helper 'OffRujs' -add $webjson.others.byspotx.add }
-
-    # Russian additional translation
-    if ($ru) {
-        extract -counts 'one' -method 'nonezip' -name 'i18n\ru.json' -helper 'RuTranslate'
+    if ($ch -eq 'y') { 
+        $Url = "https://telegra.ph/SpotX-FAQ-09-19#Can-I-use-SpotX-and-Spicetify-together?"
+        Start-Process $Url
     }
 
-    extract -counts 'one' -method 'nonezip' -name 'xpui-desktop-modals.js' -helper 'Discriptions'
-
-    # Hide Collaborators icon
-    if (!($hide_col_icon_off) -and !($exp_spotify)) {
-        extract -counts 'one' -method 'nonezip' -name 'xpui-routes-playlist.js' -helper 'Collaborators'
-    }
-
-    # Turn off podcasts
-    if ($Podcast_off) { 
-        if ($offline -ge "1.1.93.896" -and $offline -le "1.1.97.962") { $js = "home-v2.js" }
-        if ($offline -le "1.1.92.647" -or $offline -ge "1.1.98.683") { $js = "xpui.js" }
-        extract -counts 'one' -method 'nonezip' -name $js -helper 'OffPodcasts'
-    }
-
-    # Hiding Ad-like sections from the homepage
-    if ($adsections_off) { 
-        if ($offline -ge "1.1.93.896" -and $offline -le "1.1.97.962") { $js = 'home-v2.js' }
-        if ($offline -ge "1.1.98.683") { $js = 'xpui.js' }
-        extract -counts 'one' -method 'nonezip' -name $js -helper 'OffAdSections'
-    }
-
-    # Accumulation of track listening history with Goofy
-    if ($urlform_goofy -and $idbox_goofy -and $offline -ge "1.1.90.859") { 
-        extract -counts 'one' -method 'nonezip' -name 'xpui.js' -helper 'Goofy-History'
-    }
-    
-    # Static color for lyrics
-    if ($lyrics_stat) {
-        if ($offline -lt "1.1.99.871") { 
-            $name_file = 'xpui-routes-lyrics.css'
-            extract -counts 'one' -method 'nonezip' -name $name_file -helper 'Lyrics-color'
-        }
-        if ($offline -ge "1.1.99.871") {
-            $contents = "fixcsslyricscolor2"
-            extract -counts 'one' -method 'nonezip' -name 'xpui.css' -helper 'FixCss'
-            if ($offline -le "1.2.2.582") {
-                $name_file = 'xpui-routes-lyrics.js' 
-                extract -counts 'one' -method 'nonezip' -name $name_file -helper 'Lyrics-color'  
-            }
-        }
-        # mini lyrics
-        if ($offline -ge "1.2.0.1155") {
-            $name_file = 'xpui.js'   
-            extract -counts 'one' -method 'nonezip' -name $name_file -helper 'Lyrics-color'
-        }
-    }
-    
-    # xpui.css
-    if (!($premium)) {
-        # Hide download icon on different pages
-        $css += $webjson.others.downloadicon.add
-        # Hide submenu item "download"
-        $css += $webjson.others.submenudownload.add
-        # Hide very high quality streaming
-        $css += $webjson.others.veryhighstream.add
-    }
-    if ($new_theme -and $offline -ge "1.2.6.861" -and $offline -le "1.2.6.863") {
-        $css += $webjson.others.leftsidebarfix.add
-    }
-    if ($null -ne $css ) { extract -counts 'one' -method 'nonezip' -name 'xpui.css' -add $css }
-    
-    
-    # licenses.html minification
-    extract -counts 'one' -method 'nonezip' -name 'licenses.html' -helper 'HtmlLicMin'
+    Write-Host ($lang).StopScrpit
+    Pause
+    Exit
 }  
 
 if (!($test_js) -and !($test_spa)) { 
@@ -1410,7 +1285,7 @@ If ($test_spa) {
             }
         }
         else {
-            Write-Host ($lang).NoRestore2`n
+            Write-Host ($lang).NoRestore`n
             Pause
             Exit
         }
@@ -1682,4 +1557,4 @@ if ($cache_install) {
 
 if ($start_spoti) { Start-Process -WorkingDirectory $spotifyDirectory -FilePath $spotifyExecutable }
 
-Write-Host ($lang).InstallComplete`n -ForegroundColor Green
+Write-Host ($lang).    InstallComplete`n -ForegroundColor Green

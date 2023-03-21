@@ -45,7 +45,7 @@
     ModSpoti        = "Spotify'a yama yapılıyor..."
     Error           = "Hata"
     FileLocBroken   = "Spotify dosyalarının konumu bozuk, istemciyi kaldırın ve kodu tekrar çalıştırın"
-    Spicetify       = "Spicetify detected, it must be installed after SpotX, open recommended actions in FAQ ?"
+    Spicetify       = "Spicetify detected, it must be installed after SpotX, open recommended actions in FAQ ? [Y/N]?"
     ExpSpotify      = "Spotify tarafından sunulan deneysel özellikler"
     ExpStandart     = "SpotX'in deneysel özellikleri dahil değildir"
     NoRestore       = "SpotX zaten kurulmuş, xpui.bak dosyası bulunamadı. `nLütfen Spotify istemcisini kaldırın ve Install.bat dosyasını tekrar çalıştırın"

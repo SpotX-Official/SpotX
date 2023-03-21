@@ -45,7 +45,7 @@
     ModSpoti        = "Крпљење Spotify-ја..."
     Error           = "Грешка"
     FileLocBroken   = "Локација фајлова Spotify-ја је нарушена, деинсталирајте клијент, па покрените скрипту поново"
-    Spicetify       = "Spicetify detected, it must be installed after SpotX, open recommended actions in FAQ ?"
+    Spicetify       = "Spicetify detected, it must be installed after SpotX, open recommended actions in FAQ ? [Y/N]?"
     ExpSpotify      = "Експерименталним могућностима управља Spotify"
     ExpStandart     = "Експерименталне могућности SpotX-а нису укључене"
     NoRestore       = "SpotX је већ био инсталиран, xpui.bak није нађен. `nМолимо деинсталирајте Spotify клијент и покрените Install.bat поново"

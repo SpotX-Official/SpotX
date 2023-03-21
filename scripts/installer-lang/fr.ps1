@@ -45,7 +45,7 @@
     ModSpoti        = "Modification de Spotify..."
     Error           = "Erreur"
     FileLocBroken   = "L'emplacement des fichiers est invalide, désinstaller le client et lancer de nouveau le script"
-    Spicetify       = "Spicetify detected, it must be installed after SpotX, open recommended actions in FAQ ?"
+    Spicetify       = "Spicetify detected, it must be installed after SpotX, open recommended actions in FAQ ? [Y/N]?"
     ExpSpotify      = "Fonctionnalités expérimentales exploitées par Spotify"
     ExpStandart     = "Fonctionnalités expérimentales de SpotX non incluses"
     NoRestore       = "SpotX a déjà été installé, xpui.bak introuvable. `nMerci de désinstaller le client Spotify et de lancer à nouveau Install.bat"

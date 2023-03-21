@@ -45,7 +45,7 @@
     ModSpoti        = "修补 Spotify..."
     Error           = "错误"
     FileLocBroken   = "Spotify 文件已损坏,请卸载客户端并重新运行脚本"
-    Spicetify       = "Spicetify detected, it must be installed after SpotX, open recommended actions in FAQ ?"
+    Spicetify       = "Spicetify detected, it must be installed after SpotX, open recommended actions in FAQ ? [Y/N]?"
     ExpSpotify      = "启用 Spotify 的实验性功能"
     ExpStandart     = "SpotX 的实验性功能未被启用"
     NoRestore       = "SpotX 已经安装, 但是找不到文件 xpui.bak . `n请重新安装 Spotify 客户端后再次运行 install.bat"

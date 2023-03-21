@@ -1088,7 +1088,7 @@ function Helper($paramname) {
                 $rem.remove('similarplaylist'), $rem.remove('leftsidebar'), $rem.remove('rightsidebar'), $rem.remove('badbunny'), $rem.remove('devicelocal'),
                 $rem.remove('silencetrimmer'), $rem.remove('forgetdevice'), $rem.remove('speedpodcasts') , $rem.remove('showfollows')
             }
-            if (!($new_theme)) { $rem.remove('newhome'), $rem.remove('newhome2'), $rem.remove('leftsidebar'), $rem.remove('rightsidebar'), $rem.remove('lyricssidebar') }
+            if (!($new_theme)) { $rem.remove('newhome'), $rem.remove('newhome2'), $rem.remove('leftsidebar'), $rem.remove('rightsidebar'), $rem.remove('lyricssidebar') , $rem.remove('showcreditsinsidebar')}
 
             if ($old_lyrics) { $rem.remove('lyricssidebar') } 
 
@@ -1557,4 +1557,4 @@ if ($cache_install) {
 
 if ($start_spoti) { Start-Process -WorkingDirectory $spotifyDirectory -FilePath $spotifyExecutable }
 
-Write-Host ($lang).    InstallComplete`n -ForegroundColor Green
+Write-Host ($lang).InstallComplete`n -ForegroundColor Green

@@ -45,7 +45,7 @@
     ModSpoti        = "স্পটিফাই প্যাচ করা হচ্ছে..."
     Error           = "সমস্যা হয়েছে"
     FileLocBroken   = "স্পটিফাই ফাইলের লোকেশনটি খুঁজে পাওয়া যাচ্ছে না, ব্যবহারকারী সংস্করণটি আনইনস্টল করুন এবং পুনরায় স্ক্রিপ্ট চালু করুন"
-   Spicetify       = "Spicetify detected, it must be installed after SpotX, open recommended actions in FAQ ? [Y/N]?"
+   Spicetify       = "Spicetify detected, it must be installed after SpotX, open recommended actions in FAQ ? [Y/N]"
     ExpSpotify      = "পরীক্ষামূলক ফিচারসমূহ স্পটিফাই দ্বারা পরিচালিত"
     ExpStandart     = "পরীক্ষামূলক ফিচারসমূহ অন্তর্ভুক্ত করা হয় নি"
     NoRestore       = "স্পটিফাই ইতোমধ্যে ইনস্টল করা আছে, xpui.bak ফাইলটি খুঁজে পাওয়া যায় নি। `nদয়া করে স্পটিফাই এর ব্যবহারকারী সংস্করণটি আনইন্সটল করুন এবং Install.bat ফাইলটি আবার রান করুন"

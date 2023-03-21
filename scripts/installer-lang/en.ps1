@@ -45,7 +45,7 @@
     ModSpoti        = "Patching Spotify..."
     Error           = "Error"
     FileLocBroken   = "Location of Spotify files is broken, uninstall Spotify client and run the script again"
-    Spicetify       = "Spicetify detected, it must be installed after SpotX, open recommended actions in FAQ ? [Y/N]?"
+    Spicetify       = "Spicetify detected, it must be installed after SpotX, open recommended actions in FAQ ? [Y/N]"
     ExpSpotify      = "Experimental features operated by Spotify"
     ExpStandart     = "Experimental features of SpotX are not included"
     InstallComplete = "installation completed"

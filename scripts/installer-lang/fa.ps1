@@ -45,7 +45,7 @@
     ModSpoti        = "در حال پچ کردن اسپاتیفای"
     Error           = "خطا"
     FileLocBroken   = "محل فایل های اسپاتیفای خراب است، کلاینت را حذف نصب کنید و اسکریپت را دوباره اجرا کنید"
-    Spicetify       = "Spicetify detected, it must be installed after SpotX, open recommended actions in FAQ ? [Y/N]?"
+    Spicetify       = "Spicetify detected, it must be installed after SpotX, open recommended actions in FAQ ? [Y/N]"
     ExpSpotify      = "ویژگی های آزمایشی توسط اسپاتیفای"
     ExpStandart     = "ویژگی های آزمایشی SpotX گنجانده نشده است"
     NoRestore       = "SpotX قبلاً نصب شده است، xpui.bak یافت نشد. `nلطفاً کلاینت Spotify را حذف نصب کنید و Install.bat را دوباره اجرا کنید"

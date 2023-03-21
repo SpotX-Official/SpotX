@@ -45,7 +45,7 @@
     ModSpoti        = "Patching Spotify..."
     Error           = "Errore"
     FileLocBroken   = "Il percorso dei file di Spotify non è stato trovato, disinstallare Spotify ed eseguire lo script"
-    Spicetify       = "Spicetify detected, it must be installed after SpotX, open recommended actions in FAQ ? [Y/N]?"
+    Spicetify       = "Spicetify detected, it must be installed after SpotX, open recommended actions in FAQ ? [Y/N]"
     ExpSpotify      = "Features sperimentali attivate da Spotify"
     ExpStandart     = "Features sperimentali di SpotX non incluse"
     NoRestore       = "SpotX è già stato installato, xpui.bak non trovato. `nPer favore, disinstalla Spotify e riapri il file Install.bat"

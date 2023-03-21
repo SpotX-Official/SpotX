@@ -45,7 +45,7 @@
     ModSpoti        = "Menambal Spotify..."
     Error           = "Kesalahan"
     FileLocBroken   = "Lokasi file Spotify rusak, hapus instalan klien dan jalankan skrip lagi"
-    Spicetify       = "Spicetify detected, it must be installed after SpotX, open recommended actions in FAQ ? [Y/N]?"
+    Spicetify       = "Spicetify detected, it must be installed after SpotX, open recommended actions in FAQ ? [Y/N]"
     ExpSpotify      = "Fitur eksperimental yang dioperasikan oleh Spotify"
     ExpStandart     = "Fitur eksperimental SpotX tidak termasuk"
     NoRestore       = "SpotX sudah terinstal, xpui.bak tidak ditemukan. `nHarap hapus instalan klien Spotify dan jalankan Install.bat lagi"

@@ -1078,7 +1078,15 @@ function Helper($paramname) {
             if ($equalizer_off) { $rem.remove('equalizer') }
             if (!($device_picker_old)) { $rem.remove('devicepickerold') }
             if ($made_for_you_off) { $rem.remove('madeforyou') }
-            if (!($new_theme)) { $rem.remove('newhome'), $rem.remove('newhome2'), $rem.remove('leftsidebar'), $rem.remove('rightsidebar'), $rem.remove('lyricssidebar') , $rem.remove('showcreditsinsidebar')}
+            if (!($new_theme)) {
+                $rem.remove('newhome'), $rem.remove('newhome2'), $rem.remove('lyricssidebar') , $rem.remove('showcreditsinsidebar');
+                $webjson.exp.rightsidebar.replace = "`$1false"
+                $webjson.exp.leftsidebar.replace = "`$1false"
+            }
+            else { 
+                $webjson.exp.rightsidebar.replace = "`$1true"
+                $webjson.exp.leftsidebar.replace = "`$1true"
+            }
             if ($old_lyrics) { $rem.remove('lyricssidebar') } 
 
             $name = "patches.json.exp."

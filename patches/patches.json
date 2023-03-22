@@ -767,11 +767,11 @@
         },
         "leftsidebar": {
             "version": {
-                "from": "1.1.94",
+                "from": "1.2.0",
                 "do": ""
             },
-            "match": "(Enable Your Library X view of the left sidebar\",default:)(!1)",
-            "replace": "$1true"
+            "match": "(Enable Your Library X view of the left sidebar\",default:)(!1|!0)",
+            "replace": ""
         },
         "lyricsenabled": {
             "version": {
@@ -802,8 +802,8 @@
                 "from": "1.1.98",
                 "do": ""
             },
-            "match": "(Enable the view on the right sidebar\",default:)(!1)",
-            "replace": "$1true"
+            "match": "(Enable the view on the right sidebar\",default:)(!1|!0)",
+            "replace": ""
         },
         "sidebar-fix": {
             "version": {

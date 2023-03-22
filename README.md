@@ -21,7 +21,6 @@
 <h1>Features</h1>
 
 - <strong>Blocks all banner, video and audio ads in the client</strong>
-- <strong>Unlocks the skip function of any track</strong>
 - <strong>Hiding podcasts, episodes and audiobooks from the homepage (optional)</strong>
 - <strong>Block Spotify automatic updates (optional)</strong>
 - <strong>Automatic clearing of [audio cache](https://github.com/amd64fox/SpotX/discussions/2) (optional)</strong>
@@ -109,30 +108,6 @@ or
 
 <details>
 <summary><small>Other types of installations</summary><p>
-
-<details>
-<summary><small>Automatic basic installation</small></summary><p>
-  
-  #### Automatic basic installation without confirmation, what does it do? 
-  
-  - Old theme activated
-  - Automatic removal of Spotify MS if it was found 
-  - Automatic installation of the recommended version of Spotify (if another client has already been found, it will be installed over)
-  - After the installation is completed, the client will autorun
-  
-<h4> </h4>
-
-#### Just download and run [Install_Basic.bat](https://raw.githack.com/amd64fox/SpotX/main/scripts/Install_Basic.bat)
-
-or
-
-#### Run The following command in PowerShell:
-
-```ps1
-[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; iex "& { $((iwr -useb 'https://raw.githubusercontent.com/amd64fox/SpotX/main/Install.ps1').Content) } -confirm_uninstall_ms_spoti -confirm_spoti_recomended_over -podcasts_on -cache_off -block_update_off -exp_standart -hide_col_icon_off -start_spoti"
-```
-
-</details>
 
 <details>
 <summary><small>Installation for premium</small></summary><p>

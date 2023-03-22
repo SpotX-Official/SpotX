@@ -41,9 +41,6 @@ param
     
     [Parameter(HelpMessage = 'Experimental features operated by Spotify.')]
     [switch]$exp_spotify,
-
-    [Parameter(HelpMessage = 'Experimental features of SpotX are not included')]
-    [switch]$exp_standart,
     
     [Parameter(HelpMessage = 'Do not hide the icon of collaborations in playlists.')]
     [switch]$hide_col_icon_off,
@@ -885,7 +882,6 @@ if (!($cache_on) -and !($cache_off)) {
     }
 }
 
-if ($exp_standart) { Write-Host ($lang).ExpStandart`n }
 if ($exp_spotify) { Write-Host ($lang).ExpSpotify`n }
 
 $url = "https://raw.githubusercontent.com/amd64fox/SpotX/main/patches/patches.json"
@@ -1082,14 +1078,7 @@ function Helper($paramname) {
             if ($equalizer_off) { $rem.remove('equalizer') }
             if (!($device_picker_old)) { $rem.remove('devicepickerold') }
             if ($made_for_you_off) { $rem.remove('madeforyou') }
-            if ($exp_standart) {
-                $rem.remove('enhanceliked'), $rem.remove('enhanceplaylist'), $rem.remove('disographyartist'), $rem.remove('lyricsmatch'), 
-                $rem.remove('equalizer'), $rem.remove('devicepicker'), $rem.remove('newhome'), $rem.remove('newhome2'), $rem.remove('madeforyou'),
-                $rem.remove('similarplaylist'), $rem.remove('leftsidebar'), $rem.remove('rightsidebar'), $rem.remove('badbunny'), $rem.remove('devicelocal'),
-                $rem.remove('silencetrimmer'), $rem.remove('forgetdevice'), $rem.remove('speedpodcasts') , $rem.remove('showfollows')
-            }
             if (!($new_theme)) { $rem.remove('newhome'), $rem.remove('newhome2'), $rem.remove('leftsidebar'), $rem.remove('rightsidebar'), $rem.remove('lyricssidebar') , $rem.remove('showcreditsinsidebar')}
-
             if ($old_lyrics) { $rem.remove('lyricssidebar') } 
 
             $name = "patches.json.exp."

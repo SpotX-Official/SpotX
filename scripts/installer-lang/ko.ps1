@@ -47,7 +47,6 @@
     FileLocBroken   = "Spotify 폴더의 파일이 손상되었습니다, Spotify를 제거하고 이 스크립트를 다시 실행하세요"
     Spicetify       = "Spicetify detected, it must be installed after SpotX, open recommended actions in FAQ ? [Y/N]"
     ExpSpotify      = "Spotify에서 제공되는 실험적 기능"
-    ExpStandart     = "SpotX의 실험적 기능은 포함되어 있지 않습니다"
     NoRestore       = "SpotX가 이미 설치되었지만, xpui.bak 파일을 찾을 수 없습니다. `nSpotify를 제거하고 Install.bat을 다시 실행해주세요"
     InstallComplete = "설치가 완료되었습니다"
     HostInfo        = "hosts 파일에서 불필요한 URL이 감지되었습니다"

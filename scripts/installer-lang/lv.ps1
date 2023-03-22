@@ -47,7 +47,6 @@
     FileLocBroken   = "Spotify failu atrašanās vieta ir bojāta, atinstalējiet klientu un palaidiet skriptu vēlreiz"
     Spicetify       = "Spicetify detected, it must be installed after SpotX, open recommended actions in FAQ ? [Y/N]"
     ExpSpotify      = "Eksperimentālās funkcijas, kuras operē Spotify"
-    ExpStandart     = "SpotX eksperimentālās funkcijas nav iekļautas"
     NoRestore       = "SpotX ir jau instalēts, bet xpui.bak nebija atrasts. `nLūdzu izdzēs Spotify klientu un palaid Install.bat vēlreiz"
     InstallComplete = "Instalācija pabeigta"
     HostInfo        = "hosts failā atrasti nevēlami URL"

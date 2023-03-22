@@ -47,7 +47,6 @@
     FileLocBroken   = "Spotify ფაილების ლოკაცია არის გადეხილი, წაშალეთ კლიენტი და თავიდან გაუშვით სკრიპტი"
     Spicetify       = "Spicetify detected, it must be installed after SpotX, open recommended actions in FAQ ? [Y/N]"
     ExpSpotify      = "ექსპერიმენტული ფუნქციები, რომელსაც მართავს Spotify"
-    ExpStandart     = "ექსპერიმენტული ფუნქციები SpotX არ მოითავსება"
     NoRestore       = "SpotX უკვე დაინსტალირებულია, xpui.bak ვერ მოიძებნა. `nგთხოვთ, წაშალოთ Spotify აპლიკაცია და თავიდან გაუშვით Install.bat"
     InstallComplete = "ინსტალაცია დასრულდა"
     HostInfo        = "არასასურველი URL-ები ნაპოვნი მასპინძელის ფაილში"

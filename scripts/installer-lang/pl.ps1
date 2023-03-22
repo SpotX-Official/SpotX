@@ -47,7 +47,6 @@
     FileLocBroken   = "Lokalizacje plików Spotify są zepsute, odinstaluj klienta i uruchom ponownie skrypt"
     Spicetify       = "Spicetify detected, it must be installed after SpotX, open recommended actions in FAQ ? [Y/N]"
     ExpSpotify      = "Eksperymentalne funkcje obsługiwane przez Spotify"
-    ExpStandart     = "Eksperymentalne funkcje SpotX nie są uwzględnione"
     NoRestore       = "SpotX został pobrany, ale xpui.bak nie znaleziony. `nProszę odinstalować klienta Spotify i uruchomić Install.bat ponownie"
     InstallComplete = "Instalacja została zakończona"
     HostInfo        = "Niepożądane adresy URL znalezione w plikach hosts"

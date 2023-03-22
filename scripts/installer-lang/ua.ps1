@@ -47,7 +47,6 @@
     FileLocBroken   = "Помилки у шляху до файлів Spotify, видаліть клієнт та запустіть скрипт ще раз."
     Spicetify       = "Spicetify detected, it must be installed after SpotX, open recommended actions in FAQ ? [Y/N]"
     ExpSpotify      = "Експериментальні функції відSpotify"
-    ExpStandart     = "Експериментальні функції від SpotX не включено"
     NoRestore       = "SpotX вже встановлено, але файл xpui.bak не знайдено. `nБудь-ласка, видаліть клієнт Spotify та запустіть скрипт ще раз."
     InstallComplete = "встановлення завершене"
     HostInfo        = "Небажані посилання знайдені у файлі hosts"

@@ -47,7 +47,6 @@
     FileLocBroken   = "Location of Spotify files is broken, uninstall Spotify client and run the script again"
     Spicetify       = "Spicetify detected, it must be installed after SpotX, open recommended actions in FAQ ? [Y/N]"
     ExpSpotify      = "Experimental features operated by Spotify"
-    ExpStandart     = "Experimental features of SpotX are not included"
     InstallComplete = "installation completed"
     HostInfo        = "Unwanted URLs found in hosts file"
     HostBak         = "Backing up hosts.bak..."

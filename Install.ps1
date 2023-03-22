@@ -1396,8 +1396,8 @@ If ($test_spa) {
         }
 
         # New UI fix
-        if ($new_theme) {
-            if ($offline -ge "1.1.94.864" -and $offline -lt "1.2.3.1107") {
+        if ($offline -ge "1.1.94.864" -and $new_theme) {
+            if ($offline -lt "1.2.3.1107") {
                 $css += $webjson.others.navaltfix.add[0]
             }
             if ($offline -ge "1.2.3.1107") {
@@ -1407,6 +1407,7 @@ If ($test_spa) {
                 $css += $webjson.others.leftsidebarfix.add
             }
             $css += $webjson.others.navaltfix.add[2]
+            $css += $webjson.others.navaltfix.add[3]
         }
         if ($null -ne $css ) { extract -counts 'one' -method 'zip' -name 'xpui.css' -add $css }
     }

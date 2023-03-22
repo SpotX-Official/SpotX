@@ -404,7 +404,8 @@
             "add": [
                 " .nav-alt .Root__top-container {background: #00000085;gap: 6px;padding: 8px;}",
                 " .nav-ylx .Root__top-container {background: #00000085;}",
-                " .Root__fixed-top-bar {background-color: #00000000}"
+                " .Root__fixed-top-bar {background-color: #00000000}",
+                " .Root__nav-bar{background-color: #0000}"
             ]
         },
         "leftsidebarfix": {

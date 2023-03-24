@@ -954,7 +954,7 @@
                 "from": "1.2.6",
                 "do": ""
             },
-            "match": "(Enables the \"Your DJ\" feature\",default:)(!1)",
+            "match": "(Enables the \"Your DJ\" feature',default:)(!1)",
             "replace": "$1true"
         }
     }

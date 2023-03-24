@@ -940,6 +940,22 @@
             },
             "match": "(Show credits in the right sidebar\",default:)(!1)",
             "replace": "$1true"
+        },
+        "enableWhatsNewFeed": {
+            "version": {
+                "from": "1.2.8",
+                "do": ""
+            },
+            "match": "(Enable the what.s new feed panel\",default:)(!1)",
+            "replace": "$1true"
+        },
+        "enableYourDJ": {
+            "version": {
+                "from": "1.2.6",
+                "do": ""
+            },
+            "match": "(Enables the \"Your DJ\" feature\",default:)(!1)",
+            "replace": "$1true"
         }
     }
 }

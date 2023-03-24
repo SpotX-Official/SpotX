@@ -466,10 +466,11 @@ $win10 = $win_os -match "\windows 10\b"
 $win8_1 = $win_os -match "\windows 8.1\b"
 $win8 = $win_os -match "\windows 8\b"
 
-# Recommended version for spotx
+# Recommended version for Win 10-12
 if ($win10 -or $win11 -or $win12) { 
-    $onlineFull = "1.2.7.1277.g2b3ce637-219" 
+    $onlineFull = "1.2.8.907.g36fbeacc-1076" 
 }
+# Recommended version for Win 7-8.1
 else { 
     $onlineFull = "1.2.5.1006.g22820f93-1078" 
 }
@@ -1079,10 +1080,11 @@ function Helper($paramname) {
             if (!($device_picker_old)) { $rem.remove('devicepickerold') }
             if ($made_for_you_off) { $rem.remove('madeforyou') }
             if (!($new_theme)) {
-                $rem.remove('newhome'), $rem.remove('newhome2'), $rem.remove('lyricssidebar') , $rem.remove('showcreditsinsidebar');
+                $rem.remove('newhome'), $rem.remove('newhome2'), $rem.remove('lyricssidebar') , $rem.remove('showcreditsinsidebar'), $rem.remove('enableWhatsNewFeed');
                 $webjson.exp.rightsidebar.replace = "`$1false"
                 $webjson.exp.leftsidebar.replace = "`$1false"
             }
+            # Old theme
             else { 
                 $webjson.exp.rightsidebar.replace = "`$1true"
                 $webjson.exp.leftsidebar.replace = "`$1true"
@@ -1423,8 +1425,9 @@ If ($test_spa) {
     extract -counts 'more' -name '*.css' -helper 'RemovertlCssmin'
     
     # licenses.html minification
-    extract -counts 'one' -method 'zip' -name 'licenses.html' -helper 'HtmlLicMin'
-
+    if ($offline -le "1.2.7.1277") {
+        extract -counts 'one' -method 'zip' -name 'licenses.html' -helper 'HtmlLicMin'
+    }
     # blank.html minification
     extract -counts 'one' -method 'zip' -name 'blank.html' -helper 'HtmlBlank'
     

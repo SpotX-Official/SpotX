@@ -77,9 +77,6 @@ param
     
     [Parameter(HelpMessage = 'Do not create desktop shortcut.')]
     [switch]$no_shortcut,
-    
-    [Parameter(HelpMessage = 'Use bts patch.')]
-    [switch]$bts,
 
     [Parameter(HelpMessage = 'Static color for lyrics.')]
     [string]$lyrics_stat,
@@ -349,19 +346,17 @@ function downloadScripts($param1) {
         $links2 = "https://raw.githubusercontent.com/amd64fox/SpotX/main/scripts/cache/cache_spotify.ps1"
     }
     
-    $web_Url_prev = "https://github.com/mrpond/BlockTheSpot/releases/latest/download/chrome_elf.zip", $links, `
-        $links2, "https://raw.githubusercontent.com/amd64fox/SpotX/main/scripts/cache/hide_window.vbs", `
+    $web_Url_prev = $links, $links2, "https://raw.githubusercontent.com/amd64fox/SpotX/main/scripts/cache/hide_window.vbs", `
         "https://raw.githubusercontent.com/amd64fox/SpotX/main/scripts/cache/run_ps.bat"
 
-    $local_Url_prev = "$PWD\chrome_elf.zip", "$PWD\SpotifySetup.exe", "$cache_folder\cache_spotify.ps1", "$cache_folder\hide_window.vbs", "$cache_folder\run_ps.bat"
-    $web_name_file_prev = "chrome_elf.zip", "SpotifySetup.exe", "cache_spotify.ps1", "hide_window.vbs", "run_ps.bat"
+    $local_Url_prev = "$PWD\SpotifySetup.exe", "$cache_folder\cache_spotify.ps1", "$cache_folder\hide_window.vbs", "$cache_folder\run_ps.bat"
+    $web_name_file_prev = "SpotifySetup.exe", "cache_spotify.ps1", "hide_window.vbs", "run_ps.bat"
 
     switch ( $param1 ) {
-        "BTS" { $web_Url = $web_Url_prev[0]; $local_Url = $local_Url_prev[0]; $web_name_file = $web_name_file_prev[0] }
-        "Desktop" { $web_Url = $web_Url_prev[1]; $local_Url = $local_Url_prev[1]; $web_name_file = $web_name_file_prev[1] }
-        "cache-spotify" { $web_Url = $web_Url_prev[2]; $local_Url = $local_Url_prev[2]; $web_name_file = $web_name_file_prev[2] }
-        "hide_window" { $web_Url = $web_Url_prev[3]; $local_Url = $local_Url_prev[3]; $web_name_file = $web_name_file_prev[3] }
-        "run_ps" { $web_Url = $web_Url_prev[4]; $local_Url = $local_Url_prev[4]; $web_name_file = $web_name_file_prev[4] } 
+        "Desktop" { $web_Url = $web_Url_prev[0]; $local_Url = $local_Url_prev[0]; $web_name_file = $web_name_file_prev[0] }
+        "cache-spotify" { $web_Url = $web_Url_prev[1]; $local_Url = $local_Url_prev[1]; $web_name_file = $web_name_file_prev[1] }
+        "hide_window" { $web_Url = $web_Url_prev[2]; $local_Url = $local_Url_prev[2]; $web_name_file = $web_name_file_prev[2] }
+        "run_ps" { $web_Url = $web_Url_prev[3]; $local_Url = $local_Url_prev[3]; $web_name_file = $web_name_file_prev[3] } 
     }
 
     if ($param1 -eq "Desktop") {
@@ -468,7 +463,7 @@ $win8 = $win_os -match "\windows 8\b"
 
 # Recommended version for Win 10-12
 if ($win10 -or $win11 -or $win12) { 
-    $onlineFull = "1.2.8.907.g36fbeacc-1076" 
+    $onlineFull = "1.2.8.913.g6ef350af-1141" 
 }
 # Recommended version for Win 7-8.1
 else { 
@@ -557,13 +552,6 @@ New-Item -Type Directory -Name "SpotX_Temp-$(Get-Date -UFormat '%Y-%m-%d_%H-%M-%
 
 if ($premium) {
     Write-Host ($lang).Prem`n
-}
-if (!($premium) -and $bts) {
-    downloadScripts -param1 "BTS"
-    Add-Type -Assembly 'System.IO.Compression.FileSystem'
-    $zip = [System.IO.Compression.ZipFile]::Open("$PWD\chrome_elf.zip", 'read')
-    [System.IO.Compression.ZipFileExtensions]::ExtractToDirectory($zip, $PWD)
-    $zip.Dispose()
 }
 
 $spotifyInstalled = (Test-Path -LiteralPath $spotifyExecutable)
@@ -1006,7 +994,6 @@ function Helper($paramname) {
         }
         "OffadsonFullscreen" { 
             # Full screen mode activation and removing "Upgrade to premium" menu, upgrade button, disabling a playlist sponsor
-            if ($bts) { $webjson.free.psobject.properties.remove('bilboard'), $webjson.free.psobject.properties.remove('audioads') }
             $name = "patches.json.free."
             $n = "xpui.js"
             $contents = $webjson.free.psobject.properties.name
@@ -1200,15 +1187,6 @@ function extract ($counts, $method, $name, $helper, $add, $patch) {
 Write-Host ($lang).ModSpoti`n
 
 
-if (!($premium) -and $bts) {
-    $patchFiles = "$PWD\dpapi.dll", "$PWD\config.ini"
-    Copy-Item -LiteralPath $patchFiles -Destination "$spotifyDirectory"
-}
-else {
-    $ErrorActionPreference = 'SilentlyContinue' 
-    $test_bts = (Test-Path -Path "$spotifyDirectory\dpapi.dll") -or (Test-Path -Path "$spotifyDirectory\config.ini")
-    if ($test_bts) { Remove-Item "$spotifyDirectory\dpapi.dll", "$spotifyDirectory\config.ini" -Recurse -Force }
-}
 $tempDirectory = $PWD
 Pop-Location
 
@@ -1425,9 +1403,8 @@ If ($test_spa) {
     extract -counts 'more' -name '*.css' -helper 'RemovertlCssmin'
     
     # licenses.html minification
-    if ($offline -le "1.2.7.1277") {
-        extract -counts 'one' -method 'zip' -name 'licenses.html' -helper 'HtmlLicMin'
-    }
+
+    extract -counts 'one' -method 'zip' -name 'licenses.html' -helper 'HtmlLicMin'
     # blank.html minification
     extract -counts 'one' -method 'zip' -name 'blank.html' -helper 'HtmlBlank'
     

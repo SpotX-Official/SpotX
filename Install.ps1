@@ -463,7 +463,7 @@ $win8 = $win_os -match "\windows 8\b"
 
 # Recommended version for Win 10-12
 if ($win10 -or $win11 -or $win12) { 
-    $onlineFull = "1.2.8.913.g6ef350af-1141" 
+    $onlineFull = "1.2.8.923.g4f94bf0d-1195" 
 }
 # Recommended version for Win 7-8.1
 else { 

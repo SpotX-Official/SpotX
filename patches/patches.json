@@ -366,7 +366,7 @@
             "match": [
                 "(.--lyrics-color-background.:(..|..colors.)background)",
                 "(.--lyrics-color-passed.:)(..passed|.{5,8}fromCSS.+?RGBA\\))",
-                "(.--lyrics-color-active.:)((?:.\\?.\\.passed:.{2,13}active|.{2,13}active|.{2,13}colors.activeText))",
+                "(.--lyrics-color-active.:)((?:.\\?.\\.passed:.{2,13}active(Text)?|.{2,13}active|.{2,13}colors.activeText))",
                 "(.--lyrics-color-inactive.:)(..inactive|..colors.text)",
                 "(.--lyrics-color-background.:)((..|..colors.)background)",
                 "(.--lyrics-color-hover.:)(\"xxx\")",

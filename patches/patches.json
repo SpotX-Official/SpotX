@@ -122,7 +122,7 @@
                 "do": ""
             },
             "match": "(\\!Array.isArray\\(.\\)\\|\\|.===..length\\)return null;)",
-            "replace": "$1 for (let i = 0; i < (e.children ? e.children.length : e.length); i++) {const key = (e.children?.[i] || e[i])?.key; if (!key || key.match(/(episode|show)/) || t.match((/podcasts/i))) { return null;}};"
+            "replace": "$1 for (let i=0; i<(e.children?e.children.length:e.length); i++) {const key=(e.children?.[i]||e[i])?.key; if(!key||key.match(/(episode|show)/)||(e.title||t)?.match(/podcasts/i)) return null;};"
         },
         "adsectionsoff": {
             "version": {

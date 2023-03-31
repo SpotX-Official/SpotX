@@ -449,7 +449,7 @@ function DesktopFolder {
 }
 
 # Check version Windows
-$os = Get-WmiObject -Class Win32_OperatingSystem
+$os = Get-CimInstance -ClassName Win32_OperatingSystem
 $osCaption = $os.Caption
 $pattern = "\bWindows (7|8(\.1)?|10|11|12)\b"
 $reg = [regex]::Matches($osCaption, $pattern)

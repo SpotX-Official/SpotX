@@ -239,6 +239,77 @@ function Format-LanguageCode {
     return $returnCode 
 }
 
+
+# Check version Windows
+$os = Get-CimInstance -ClassName Win32_OperatingSystem
+$osCaption = $os.Caption
+$pattern = "\bWindows (7|8(\.1)?|10|11|12)\b"
+$reg = [regex]::Matches($osCaption, $pattern)
+$win_os = $reg.value
+
+$win12 = $win_os -match "\windows 12\b"
+$win11 = $win_os -match "\windows 11\b"
+$win10 = $win_os -match "\windows 10\b"
+$win8_1 = $win_os -match "\windows 8.1\b"
+$win8 = $win_os -match "\windows 8\b"
+
+# Recommended version for Win 10-12
+if ($win10 -or $win11 -or $win12) { 
+    $onlineFull = "1.2.8.923.g4f94bf0d-1195" 
+}
+# Recommended version for Win 7-8.1
+else { 
+    $onlineFull = "1.2.5.1006.g22820f93-1078" 
+}
+
+$online = ($onlineFull -split ".g")[0]
+
+# Check version Spotify offline
+$offline = (Get-Item $spotifyExecutable).VersionInfo.FileVersion
+
+# Check version Spotify.bak
+$offline_bak = (Get-Item $exe_bak).VersionInfo.FileVersion
+
+# Check version Powershell
+$psv = $PSVersionTable.PSVersion.major
+if ($psv -ge 7) {
+    Import-Module Appx -UseWindowsPowerShell -WarningAction:SilentlyContinue
+}
+
+# Country check
+$country = [System.Globalization.RegionInfo]::CurrentRegion.EnglishName
+
+# add Tls12
+[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+
+
+function ErrorSend {
+
+    $errorform = 'https://docs.google.com/forms/u/0/d/e/1FAIpQLSd9US-0Ip50gVJTnUxHpLhDBA45OM_sUd3TcpKF7TIBPlA9bg/formResponse'
+
+    # save the main error
+    $mainError = $error[0]
+
+    # remove it from the $error array
+    $otherError = $error | Select-Object -Skip 1
+
+    # collect all errors in one line with headers
+    $errors = "Main error:`n$mainError`n`nOther errors:`n" + ($otherError | Out-String)
+
+    $Parameters = @{
+        Uri    = $errorform
+        Method = 'POST'
+        Body   = @{ 
+            'entry.2067427976' = $errors
+            'entry.1374621205' = $country
+            'entry.537085741'  = $offline
+            'entry.1022188007' = $win_os
+            'entry.181474156'  = $psv  
+        }
+    }
+    Invoke-WebRequest -UseBasicParsing @Parameters | Out-Null
+}
+
 function CallLang($clg) {
 
     [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
@@ -250,11 +321,11 @@ function CallLang($clg) {
     }
     catch {
         Write-Host "Error loading $clg language"
+        ErrorSend
         Pause
         Exit
     }
 }
-
 
 
 # Set language code for script.
@@ -422,6 +493,7 @@ function downloadScripts($param1) {
             ($lang).StopScrpit
             $tempDirectory = $PWD
             Pop-Location
+            ErrorSend
             Start-Sleep -Milliseconds 200
             Remove-Item -Recurse -LiteralPath $tempDirectory
             Pause
@@ -448,47 +520,10 @@ function DesktopFolder {
     return $desktop_folder
 }
 
-# Check version Windows
-$os = Get-CimInstance -ClassName Win32_OperatingSystem
-$osCaption = $os.Caption
-$pattern = "\bWindows (7|8(\.1)?|10|11|12)\b"
-$reg = [regex]::Matches($osCaption, $pattern)
-$win_os = $reg.value
-
-$win12 = $win_os -match "\windows 12\b"
-$win11 = $win_os -match "\windows 11\b"
-$win10 = $win_os -match "\windows 10\b"
-$win8_1 = $win_os -match "\windows 8.1\b"
-$win8 = $win_os -match "\windows 8\b"
-
-# Recommended version for Win 10-12
-if ($win10 -or $win11 -or $win12) { 
-    $onlineFull = "1.2.8.923.g4f94bf0d-1195" 
-}
-# Recommended version for Win 7-8.1
-else { 
-    $onlineFull = "1.2.5.1006.g22820f93-1078" 
-}
-
-$online = ($onlineFull -split ".g")[0]
-
-# Check version Spotify offline
-$offline = (Get-Item $spotifyExecutable).VersionInfo.FileVersion
-
-# Check version Spotify.bak
-$offline_bak = (Get-Item $exe_bak).VersionInfo.FileVersion
-
-# add Tls12
-[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
-
 Stop-Process -Name Spotify
-$psv = $PSVersionTable.PSVersion.major
-if ($psv -ge 7) {
-    Import-Module Appx -UseWindowsPowerShell -WarningAction:SilentlyContinue
-}
+
 
 # Remove Spotify Windows Store If Any
-
 if ($win10 -or $win11 -or $win8_1 -or $win8 -or $win12) {
 
     if (Get-AppxPackage -Name SpotifyAB.SpotifyMusic) {
@@ -642,9 +677,10 @@ if ($spotifyInstalled) {
                 Method = 'POST'
                 Body   = @{
                     'entry.620327948'  = $version
+                    'entry.1951747592' = $country
                     'entry.1402903593' = $win_os
                     'entry.860691305'  = $psv
-                    'entry.2067427976' = $online + " меньше чем " + $offline
+                    'entry.2067427976' = $online + " < " + $offline
                 }   
             }
             Invoke-WebRequest -useb @Parameters | Out-Null
@@ -758,6 +794,37 @@ if (-not $spotifyInstalled -or $upgrade_client) {
 
     # Upgrade check version Spotify.bak
     $offline_bak = (Get-Item $exe_bak).VersionInfo.FileVersion
+}
+
+# SpotX installation statistics
+$mainform = 'https://docs.google.com/forms/u/0/d/e/1FAIpQLSeBwhkkm4irGpusfRDIXLIdb2iQZOVR0tch2R37pn7z5IiMPg/formResponse'
+
+$Parameters = @{
+    Uri    = $mainform
+    Method = 'POST'
+    Body   = @{ 
+        'entry.2067427976' = $country
+        'entry.620327948'  = $offline
+        'entry.1402903593' = $win_os
+        'entry.860691305'  = $psv
+    }
+}
+
+$retries = 0
+
+while ($retries -lt 2) {
+
+    try {
+        Invoke-WebRequest -UseBasicParsing @Parameters | Out-Null
+        break
+    }
+    catch {
+        $retries++
+        Start-Sleep -Seconds 2
+    }
+}
+if ($retries -eq 2) {
+    ErrorSend
 }
 
 # Delete Spotify shortcut if it is on desktop
@@ -894,6 +961,7 @@ if ($retries -eq 3) {
     Write-Host ($lang).StopScrpit
     $tempDirectory = $PWD
     Pop-Location
+    ErrorSend
     Start-Sleep -Milliseconds 200
     Remove-Item -Recurse -LiteralPath $tempDirectory 
     Pause

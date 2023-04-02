@@ -275,9 +275,6 @@ $online = ($onlineFull -split ".g")[0]
 # Check version Spotify offline
 $offline = (Get-Item $spotifyExecutable).VersionInfo.FileVersion
 
-# Check version Spotify.bak
-$offline_bak = (Get-Item $exe_bak).VersionInfo.FileVersion
-
 # Check version Powershell
 $psv = $PSVersionTable.PSVersion.major
 if ($psv -ge 7) {

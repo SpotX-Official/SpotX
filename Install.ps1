@@ -239,6 +239,14 @@ function Format-LanguageCode {
     return $returnCode 
 }
 
+$spotifyDirectory = "$env:APPDATA\Spotify"
+$spotifyDirectory2 = "$env:LOCALAPPDATA\Spotify"
+$spotifyExecutable = "$spotifyDirectory\Spotify.exe"
+$exe_bak = "$spotifyDirectory\Spotify.bak"
+$cache_folder = "$env:APPDATA\Spotify\cache"
+$spotifyUninstall = "$env:TEMP\SpotifyUninstall.exe"
+$start_menu = "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Spotify.lnk"
+$upgrade_client = $false
 
 # Check version Windows
 $os = Get-CimInstance -ClassName Win32_OperatingSystem
@@ -358,14 +366,6 @@ catch {
     catch { }
 }
 
-$spotifyDirectory = "$env:APPDATA\Spotify"
-$spotifyDirectory2 = "$env:LOCALAPPDATA\Spotify"
-$spotifyExecutable = "$spotifyDirectory\Spotify.exe"
-$exe_bak = "$spotifyDirectory\Spotify.bak"
-$cache_folder = "$env:APPDATA\Spotify\cache"
-$spotifyUninstall = "$env:TEMP\SpotifyUninstall.exe"
-$start_menu = "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Spotify.lnk"
-$upgrade_client = $false
 
 function incorrectValue {
 

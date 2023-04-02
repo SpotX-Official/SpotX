@@ -272,9 +272,6 @@ else {
 
 $online = ($onlineFull -split ".g")[0]
 
-# Check version Spotify offline
-$offline = (Get-Item $spotifyExecutable).VersionInfo.FileVersion
-
 # Check version Powershell
 $psv = $PSVersionTable.PSVersion.major
 if ($psv -ge 7) {
@@ -589,7 +586,10 @@ if ($premium) {
 $spotifyInstalled = (Test-Path -LiteralPath $spotifyExecutable)
 
 if ($spotifyInstalled) {
-
+    
+# Check version Spotify offline
+$offline = (Get-Item $spotifyExecutable).VersionInfo.FileVersion
+ 
     # Version comparison
     # converting strings to arrays of numbers using the -split operator and a ForEach-Object loop
     $arr1 = $online -split '\.' | ForEach-Object { [int]$_ }

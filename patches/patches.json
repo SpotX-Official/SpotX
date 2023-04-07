@@ -956,6 +956,22 @@
             },
             "match": "(Enables the \"Your DJ\" feature',default:)(!1)",
             "replace": "$1true"
+        },
+        "RightSidebarAnimations": {
+            "version": {
+                "from": "1.2.8",
+                "do": ""
+            },
+            "match": "(Enable the slide-in/out transition on the right sidebar\",default:)(!1)",
+            "replace": "$1true"
+        },
+        "RemoteDownloads": {
+            "version": {
+                "from": "1.2.8",
+                "do": ""
+            },
+            "match": "(Enable the slide-in/out transition on the right sidebar\",default:)(!1)",
+            "replace": "$1true"
         }
     }
 }

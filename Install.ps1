@@ -263,7 +263,7 @@ $win8 = $win_os -match "\windows 8\b"
 
 # Recommended version for Win 10-12
 if ($win10 -or $win11 -or $win12) { 
-    $onlineFull = "1.2.8.923.g4f94bf0d-1195" 
+    $onlineFull = "1.2.9.739.g0da2e75a-104" 
 }
 # Recommended version for Win 7-8.1
 else { 
@@ -360,7 +360,6 @@ catch {
     catch { }
 }
 
-
 function incorrectValue {
 
     Write-Host ($lang).Incorrect"" -ForegroundColor Red -NoNewline
@@ -375,25 +374,25 @@ function incorrectValue {
     Clear-Host
 } 
 
-function unlockFolder {
-
-    $ErrorActionPreference = 'SilentlyContinue'
-    $block_File_update = "$env:LOCALAPPDATA\Spotify\Update"
-    $Check_folder = Get-ItemProperty -Path $block_File_update | Select-Object Attributes 
-    $folder_update_access = Get-Acl $block_File_update
-
-    # Check folder Update if it exists
-    if ($Check_folder -match '\bDirectory\b') {  
-
-        # If the rights of the Update folder are blocked, then unblock 
-        if ($folder_update_access.AccessToString -match 'Deny') {
-                ($ACL = Get-Acl $block_File_update).access | ForEach-Object {
-                $Users = $_.IdentityReference 
-                $ACL.PurgeAccessRules($Users) }
-            $ACL | Set-Acl $block_File_update
+function Unlock-Folder {
+    $blockFileUpdate = "$env:LOCALAPPDATA\Spotify\Update"
+    
+    if (Test-Path $blockFileUpdate -PathType Container) {
+        $folderUpdateAccess = Get-Acl $blockFileUpdate
+        $hasDenyAccessRule = $false
+        
+        foreach ($accessRule in $folderUpdateAccess.Access) {
+            if ($accessRule.AccessControlType -eq 'Deny') {
+                $hasDenyAccessRule = $true
+                $folderUpdateAccess.RemoveAccessRule($accessRule)
+            }
+        }
+        
+        if ($hasDenyAccessRule) {
+            Set-Acl $blockFileUpdate $folderUpdateAccess
         }
     }
-}     
+}
 
 function downloadScripts($param1) {
 
@@ -514,8 +513,7 @@ function DesktopFolder {
     return $desktop_folder
 }
 
-Stop-Process -Name Spotify
-
+taskkill /f /im Spotify.exe /t > $null 2>&1
 
 # Remove Spotify Windows Store If Any
 if ($win10 -or $win11 -or $win8_1 -or $win8 -or $win12) {
@@ -587,8 +585,8 @@ $spotifyInstalled = (Test-Path -LiteralPath $spotifyExecutable)
 
 if ($spotifyInstalled) {
     
-# Check version Spotify offline
-$offline = (Get-Item $spotifyExecutable).VersionInfo.FileVersion
+    # Check version Spotify offline
+    $offline = (Get-Item $spotifyExecutable).VersionInfo.FileVersion
  
     # Version comparison
     # converting strings to arrays of numbers using the -split operator and a ForEach-Object loop
@@ -644,7 +642,7 @@ $offline = (Get-Item $spotifyExecutable).VersionInfo.FileVersion
             if ($confirm_spoti_recomended_over) { $ch = 'n' }
             if ($ch -eq 'y') {
                 Write-Host ($lang).DelOld`n 
-                unlockFolder
+                Unlock-Folder | Out-Null
                 cmd /c $spotifyExecutable /UNINSTALL /SILENT
                 wait-process -name SpotifyUninstall
                 Start-Sleep -Milliseconds 200
@@ -735,7 +733,7 @@ $offline = (Get-Item $spotifyExecutable).VersionInfo.FileVersion
                 if ($confirm_spoti_recomended_over) { $ch = 'n' }
                 if ($ch -eq 'y') {
                     Write-Host ($lang).DelNew`n
-                    unlockFolder
+                    Unlock-Folder | Out-Null
                     cmd /c $spotifyExecutable /UNINSTALL /SILENT
                     wait-process -name SpotifyUninstall
                     Start-Sleep -Milliseconds 200
@@ -767,9 +765,9 @@ if (-not $spotifyInstalled -or $upgrade_client) {
     
     # Delete old version files of Spotify before installing, leave only profile files
     $ErrorActionPreference = 'SilentlyContinue'
-    Stop-Process -Name Spotify 
+    taskkill /f /im Spotify.exe /t > $null 2>&1
     Start-Sleep -Milliseconds 600
-    unlockFolder
+    Unlock-Folder | Out-Null
     Start-Sleep -Milliseconds 200
     Get-ChildItem $spotifyDirectory -Exclude 'Users', 'prefs', 'cache' | Remove-Item -Recurse -Force 
     Start-Sleep -Milliseconds 200
@@ -784,7 +782,8 @@ if (-not $spotifyInstalled -or $upgrade_client) {
     Start-Process -FilePath explorer.exe -ArgumentList $PWD\SpotifySetup.exe
     while (-not (get-process | Where-Object { $_.ProcessName -eq 'SpotifySetup' })) {}
     wait-process -name SpotifySetup
-    Stop-Process -Name Spotify
+    taskkill /f /im Spotify.exe /t > $null 2>&1
+
 
     # Upgrade check version Spotify offline
     $offline = (Get-Item $spotifyExecutable).VersionInfo.FileVersion

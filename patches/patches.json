@@ -970,7 +970,7 @@
                 "from": "1.2.8",
                 "do": ""
             },
-            "match": "(Enable the slide-in/out transition on the right sidebar\",default:)(!1)",
+            "match": "(Enable remote download support through the offline2 system\",default:)(!1)",
             "replace": "$1true"
         }
     }

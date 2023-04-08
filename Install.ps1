@@ -1141,6 +1141,7 @@ function Helper($paramname) {
                 $webjson.exp.leftsidebar.replace = "`$1true"
             }
             if ($old_lyrics) { $rem.remove('lyricssidebar') } 
+            if (!$premium) { $rem.remove('RemoteDownloads') }
 
             $name = "patches.json.exp."
             $n = "xpui.js"

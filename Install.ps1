@@ -254,11 +254,15 @@ $start_menu = "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Spotify.lnk"
 $upgrade_client = $false
 
 # Check version Windows
-$os = Get-CimInstance -ClassName Win32_OperatingSystem
-$osCaption = $os.Caption
+$os = Get-CimInstance -ClassName "Win32_OperatingSystem" -ErrorAction SilentlyContinue
+if ($os) {
+    $osCaption = $os.Caption
+} else {
+    $osCaption = (Get-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion" -Name ProductName).ProductName
+}
 $pattern = "\bWindows (7|8(\.1)?|10|11|12)\b"
 $reg = [regex]::Matches($osCaption, $pattern)
-$win_os = $reg.value
+$win_os = $reg.Value
 
 $win12 = $win_os -match "\windows 12\b"
 $win11 = $win_os -match "\windows 11\b"

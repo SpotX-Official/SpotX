@@ -285,33 +285,6 @@ $country = [System.Globalization.RegionInfo]::CurrentRegion.EnglishName
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 
 
-function ErrorSend {
-
-    $errorform = 'https://docs.google.com/forms/u/0/d/e/1FAIpQLSd9US-0Ip50gVJTnUxHpLhDBA45OM_sUd3TcpKF7TIBPlA9bg/formResponse'
-
-    # save the main error
-    $mainError = $error[0]
-
-    # remove it from the $error array
-    $otherError = $error | Select-Object -Skip 1
-
-    # collect all errors in one line with headers
-    $errors = "Main error:`n$mainError`n`nOther errors:`n" + ($otherError | Out-String)
-
-    $Parameters = @{
-        Uri    = $errorform
-        Method = 'POST'
-        Body   = @{ 
-            'entry.2067427976' = $errors
-            'entry.1374621205' = $country
-            'entry.537085741'  = $offline
-            'entry.1022188007' = $win_os
-            'entry.181474156'  = $psv  
-        }
-    }
-    Invoke-WebRequest -UseBasicParsing @Parameters | Out-Null
-}
-
 function CallLang($clg) {
 
     [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
@@ -323,7 +296,6 @@ function CallLang($clg) {
     }
     catch {
         Write-Host "Error loading $clg language"
-        ErrorSend
         Pause
         Exit
     }
@@ -486,7 +458,6 @@ function downloadScripts($param1) {
             ($lang).StopScript
             $tempDirectory = $PWD
             Pop-Location
-            ErrorSend
             Start-Sleep -Milliseconds 200
             Remove-Item -Recurse -LiteralPath $tempDirectory
             Pause
@@ -792,36 +763,7 @@ if (-not $spotifyInstalled -or $upgrade_client) {
     $offline_bak = (Get-Item $exe_bak).VersionInfo.FileVersion
 }
 
-# SpotX installation statistics
-$mainform = 'https://docs.google.com/forms/u/0/d/e/1FAIpQLSeBwhkkm4irGpusfRDIXLIdb2iQZOVR0tch2R37pn7z5IiMPg/formResponse'
 
-$Parameters = @{
-    Uri    = $mainform
-    Method = 'POST'
-    Body   = @{ 
-        'entry.2067427976' = $country
-        'entry.620327948'  = $offline
-        'entry.1402903593' = $win_os
-        'entry.860691305'  = $psv
-    }
-}
-
-$retries = 0
-
-while ($retries -lt 2) {
-
-    try {
-        Invoke-WebRequest -UseBasicParsing @Parameters | Out-Null
-        break
-    }
-    catch {
-        $retries++
-        Start-Sleep -Seconds 2
-    }
-}
-if ($retries -eq 2) {
-    ErrorSend
-}
 
 # Delete Spotify shortcut if it is on desktop
 if ($no_shortcut) {
@@ -957,7 +899,6 @@ if ($retries -eq 3) {
     Write-Host ($lang).StopScript
     $tempDirectory = $PWD
     Pop-Location
-    ErrorSend
     Start-Sleep -Milliseconds 200
     Remove-Item -Recurse -LiteralPath $tempDirectory 
     Pause

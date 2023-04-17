@@ -11,7 +11,7 @@
     Download4       = "Sprawdź swoje połączenie z siecią i spróbuj ponownie"
     Download5       = "Pobieranie Spotify"
     Download6       = "Błąd Curl"
-    StopScrpit      = "Skrypt wstrzymany"
+    StopScript      = "Skrypt wstrzymany"
     MsSpoti         = "Wersja Spotify ze Sklepu Microsoft została wykryta i nie jest wspierana"
     MsSpoti2        = "Odinstalować wersję Spotify ze Sklepu Microsoft? [Y/N]"
     MsSpoti3        = "Automatyczne odinstalowywanie Spotify z MS..."

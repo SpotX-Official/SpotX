@@ -11,7 +11,7 @@
     Download4       = "Проверите своје поставке мреже и покрените инсталацију још једном"
     Download5       = "Преузимање Spotify-ја"
     Download6       = "Curl грешка"
-    StopScrpit      = "Скрипта заустављена"
+    StopScript      = "Скрипта заустављена"
     MsSpoti         = "Детектована је верзија Spotify-ја из Microsoft Store-а, што није подржано"
     MsSpoti2        = "Деинсталирати верзију Spotify-ја из Microsoft Store-а? [Y/N]"
     MsSpoti3        = "Аутоматска деинсталација Spotify MS..."

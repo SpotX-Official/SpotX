@@ -11,7 +11,7 @@
     Download4       = "Ellenőrizze a hálózati beállításokat, és futtassa újra a telepítést"
     Download5       = "Spotify letöltése"
     Download6       = "Curl hiba"
-    StopScrpit      = "A script leállt"
+    StopScript      = "A script leállt"
     MsSpoti         = "A Spotify Microsoft Store verziója van telepítve, amely nem támogatott"
     MsSpoti2        = "A Spotify Microsoft Store kiadásának eltávolítása [Y/N]"
     MsSpoti3        = "A Spotify MS automatikus eltávolítása..."

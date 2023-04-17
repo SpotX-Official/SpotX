@@ -483,7 +483,7 @@ function downloadScripts($param1) {
             $Error[0].Exception
             Write-Host ""
             Write-Host ($lang).Download4`n
-            ($lang).StopScrpit
+            ($lang).StopScript
             $tempDirectory = $PWD
             Pop-Location
             ErrorSend
@@ -540,7 +540,7 @@ if ($win10 -or $win11 -or $win8_1 -or $win8 -or $win12) {
             Get-AppxPackage -Name SpotifyAB.SpotifyMusic | Remove-AppxPackage
         }
         if ($ch -eq 'n') {
-            Read-Host ($lang).StopScrpit 
+            Read-Host ($lang).StopScript 
             Pause
             Exit
         }
@@ -745,7 +745,7 @@ if ($spotifyInstalled) {
             }
 
             if ($ch -eq 'n') {
-                Write-Host ($lang).StopScrpit
+                Write-Host ($lang).StopScript
                 $tempDirectory = $PWD
                 Pop-Location
                 Start-Sleep -Milliseconds 200
@@ -954,7 +954,7 @@ while ($retries -lt 3) {
 if ($retries -eq 3) {
 
     Write-Host "Failed to get patches.json" -ForegroundColor Red
-    Write-Host ($lang).StopScrpit
+    Write-Host ($lang).StopScript
     $tempDirectory = $PWD
     Pop-Location
     ErrorSend
@@ -1268,7 +1268,7 @@ $spotify_exe_bak_patch = "$env:APPDATA\Spotify\Spotify.bak"
 if ($test_spa -and $test_js) {
     Write-Host ($lang).Error -ForegroundColor Red
     Write-Host ($lang).FileLocBroken
-    Write-Host ($lang).StopScrpit
+    Write-Host ($lang).StopScript
     pause
     Exit
 }
@@ -1287,14 +1287,14 @@ if ($test_js) {
         Start-Process $Url
     }
 
-    Write-Host ($lang).StopScrpit
+    Write-Host ($lang).StopScript
     Pause
     Exit
 }  
 
 if (!($test_js) -and !($test_spa)) { 
     Write-Host "xpui.spa not found, reinstall Spotify"
-    Write-Host ($lang).StopScrpit
+    Write-Host ($lang).StopScript
     Pause
     Exit
 }

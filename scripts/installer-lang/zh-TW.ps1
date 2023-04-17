@@ -11,7 +11,7 @@
     Download4       = "檢查您的網路設定後再次嘗試安裝"
     Download5       = "下載 Spotify"
     Download6       = "Curl 錯誤"
-    StopScrpit      = "腳本已停止"
+    StopScript      = "腳本已停止"
     MsSpoti         = "偵測到不支援的 Spotify 微軟商店版本"
     MsSpoti2        = "解除安裝微軟商店的 Spotify [Y/N]"
     MsSpoti3        = "自動解除安裝 Spotify 的微軟商店版本..."

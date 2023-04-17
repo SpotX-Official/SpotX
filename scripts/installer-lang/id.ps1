@@ -11,7 +11,7 @@
     Download4       = "Periksa pengaturan jaringan/internet anda dan jalankan instalasi lagi"
     Download5       = "Mengunduh Spotify"
     Download6       = "Kesalahan pada Curl"
-    StopScrpit      = "Skrip dihentikan"
+    StopScript      = "Skrip dihentikan"
     MsSpoti         = "Versi Microsoft Store dari Spotify terdeteksi, versi ini tidak didukung"
     MsSpoti2        = "Copot pemasangan Spotify edisi Microsoft Store [Y/N]"
     MsSpoti3        = "Menghapus instalan Spotify MS secara otomatis..."

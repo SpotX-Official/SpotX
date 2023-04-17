@@ -11,7 +11,7 @@
     Download4       = "შეამოწმეთ თქვენი კავშირი ქსელთან და თავიდან სცადე ინსტალაცია"
     Download5       = "Spotify იწერება"
     Download6       = "Curl error" #
-    StopScrpit      = "სკრიპტი ჩერდება"
+    StopScript      = "სკრიპტი ჩერდება"
     MsSpoti         = "Microsoft Store-ის ვერსია მოიძებნა რომელიც არ არის მხარდაჯერილი" 
     MsSpoti2        = "წავშალოთ Spotify Microsoft Store-ის ვერსია [Y/N]"
     MsSpoti3        = "ავტუმატურად იშლება Spotify MS..."

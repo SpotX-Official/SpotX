@@ -11,7 +11,7 @@
     Download4       = "Pārbaudi savus tīkla iestatījumus un mēģini instalēt vēlreiz"
     Download5       = "Lejuplādejam Spotify"
     Download6       = "Curl kļūda"
-    StopScrpit      = "Skripts ir apstājies"
+    StopScript      = "Skripts ir apstājies"
     MsSpoti         = "Microsoft veikala Spotify versija tika konstatēta, un nav atbalstīta."
     MsSpoti2        = "Izdzēst Spotify Microsoft Store versiju [Y/N]"
     MsSpoti3        = "Automātiski izdzēš Spotify MS..."

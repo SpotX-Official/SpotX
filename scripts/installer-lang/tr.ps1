@@ -11,7 +11,7 @@
     Download4       = "Ağ ayarlarınızı kontrol edin ve kurulumu tekrar çalıştırın"
     Download5       = "Spotify indiriliyor"
     Download6       = "Curl hatası"
-    StopScrpit      = "Komut dosyası durduruldu"
+    StopScript      = "Komut dosyası durduruldu"
     MsSpoti         = "Spotify'ın desteklenmeyen Microsoft Store sürümü tespit edildi"
     MsSpoti2        = "Spotify'ın Microsoft Store sürümünü kaldır [Y/N]"
     MsSpoti3        = "Spotify MS otomatik olarak kaldırlıyor..."

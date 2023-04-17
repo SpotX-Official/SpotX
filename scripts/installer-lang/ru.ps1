@@ -11,7 +11,7 @@
     Download4       = "Проверьте настройки вашей сети и снова запустите установку"
     Download5       = "Загрузка Spotify"
     Download6       = "Curl error"
-    StopScrpit      = "Cкрипт остановлен"
+    StopScript      = "Cкрипт остановлен"
     MsSpoti         = "Обнаружена версия Spotify из Microsoft Store, которая не поддерживается"
     MsSpoti2        = "Хотите удалить Spotify Microsoft Store ? [Y/N]"
     MsSpoti3        = "Автоматическое удаление Spotify MS..."

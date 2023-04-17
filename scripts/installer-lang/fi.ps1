@@ -11,7 +11,7 @@
     Download4       = "Tarkista verkkoasetuksesi ja suorita asennus uudelleen"
     Download5       = "Ladataan Spotify:tä"
     Download6       = "Curl virhe"
-    StopScrpit      = "Skripti on pysäytetty"
+    StopScript      = "Skripti on pysäytetty"
     MsSpoti         = "Spotifyn Microsoft Store -versio on havaittu, jota ei tueta"
     MsSpoti2        = "Poista Spotifyn Windows Store -versio [Y/N]"
     MsSpoti3        = "Spotifyn Microsoft Store -version automaattinen poistaminen..."

@@ -11,7 +11,7 @@
     Download4       = "ネットワークの設定を確認し再度インストールを実行してくささい"
     Download5       = "Spotify のダウンロード中"
     Download6       = "Curl のエラー"
-    StopScrpit      = "スクリプトが停止しました"
+    StopScript      = "スクリプトが停止しました"
     MsSpoti         = "Microsoft Store 版の Spotify には対応していません"
     MsSpoti2        = "Microsoft Store 版の Spotifyをアンインストールしますか ? [Y/N]"
     MsSpoti3        = "Spotify MS 版を自動でアンインストール中..."

@@ -11,7 +11,7 @@
     Download4       = "네트워크 설정을 확인하시고 다시 실행해주세요"
     Download5       = "Spotify 다운로드 중"
     Download6       = "Curl 오류"
-    StopScrpit      = "스크립트가 중단되었습니다"
+    StopScript      = "스크립트가 중단되었습니다"
     MsSpoti         = "Microsoft Store 버전의 Spotify가 감지되었으며 이는 지원되지 않습니다"
     MsSpoti2        = "Spotify Microsoft Store 버전을 제거할까요? [Y/N]"
     MsSpoti3        = "Spotify Microsoft Store 버전을 자동으로 제거하는 중..."

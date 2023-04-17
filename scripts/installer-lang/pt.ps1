@@ -11,7 +11,7 @@
     Download4       = "Verifique suas configurações de rede e tente executar a instalação novamente"
     Download5       = "Baixando o Spotify"
     Download6       = "Erro de Curl"
-    StopScrpit      = "O script foi interrompido"
+    StopScript      = "O script foi interrompido"
     MsSpoti         = "A versão do Spotify da Microsoft Store foi detectada, a qual não é suportada"
     MsSpoti2        = "Desinstalar edição do Spotify da Microsoft Store [Y/N]"
     MsSpoti3        = "Desinstalação automática do Spotify da MS..."

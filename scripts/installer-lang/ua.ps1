@@ -11,7 +11,7 @@
     Download4       = "Перевірте налаштування вашого з'єднання та запустіть інсталятор знову"
     Download5       = "Завантаження Spotify"
     Download6       = "Помилка Curl"
-    StopScrpit      = "Скрипт зупинено"
+    StopScript      = "Скрипт зупинено"
     MsSpoti         = "Знайдено версію Spotify з Microsoft Store, яка не підтримується"
     MsSpoti2        = "Видалити версію Spotify з Microsoft Store [Y/N]"
     MsSpoti3        = "Автоматичне видалення Spotify MS..."

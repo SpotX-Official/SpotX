@@ -212,7 +212,7 @@ function Format-LanguageCode {
             $returnCode = 'el'
             break
         }
-        '^fi' {
+        '^fi$' {
             $returnCode = 'fi'
             break
         }

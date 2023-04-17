@@ -1,10 +1,5 @@
 @echo off
 SETLOCAL ENABLEDELAYEDEXPANSION
-echo *****************
-echo Author: @amd64fox
-echo *****************
-echo Removing Patch...
-
 
 if exist "%Appdata%\Spotify\dpapi.dll" ( 
     del /s /q "%Appdata%\Spotify\dpapi.dll" > NUL 2>&1
@@ -30,24 +25,6 @@ if exist "%Appdata%\Spotify\Apps\xpui.bak" (
 if exist "%Appdata%\Spotify\Apps\xpui\xpui.js.bak" (
     del /s /q "%Appdata%\Spotify\Apps\xpui\xpui.js" > NUL 2>&1
 	move "%Appdata%\Spotify\Apps\xpui\xpui.js.bak" "%Appdata%\Spotify\Apps\xpui\xpui.js" > NUL 2>&1
-)
-
-
-if exist "%Appdata%\Spotify\Apps\xpui\xpui.css.bak" (
-    del /s /q "%Appdata%\Spotify\Apps\xpui\xpui.css" > NUL 2>&1
-	move "%Appdata%\Spotify\Apps\xpui\xpui.css.bak" "%Appdata%\Spotify\Apps\xpui\xpui.css" > NUL 2>&1
-)
-
-
-if exist "%Appdata%\Spotify\Apps\xpui\licenses.html.bak" (
-    del /s /q "%Appdata%\Spotify\Apps\xpui\licenses.html" > NUL 2>&1
-	move "%Appdata%\Spotify\Apps\xpui\licenses.html.bak" "%Appdata%\Spotify\Apps\xpui\licenses.html" > NUL 2>&1
-)
-
-
-if exist "%Appdata%\Spotify\Apps\xpui\i18n\ru.json.bak" (
-    del /s /q "%Appdata%\Spotify\Apps\xpui\i18n\ru.json" > NUL 2>&1
-	move "%Appdata%\Spotify\Apps\xpui\i18n\ru.json.bak" "%Appdata%\Spotify\Apps\xpui\i18n\ru.json" > NUL 2>&1
 )
 
 

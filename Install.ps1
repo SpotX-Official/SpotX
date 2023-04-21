@@ -257,7 +257,8 @@ $upgrade_client = $false
 $os = Get-CimInstance -ClassName "Win32_OperatingSystem" -ErrorAction SilentlyContinue
 if ($os) {
     $osCaption = $os.Caption
-} else {
+}
+else {
     $osCaption = (Get-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion" -Name ProductName).ProductName
 }
 $pattern = "\bWindows (7|8(\.1)?|10|11|12)\b"
@@ -1105,9 +1106,9 @@ function Helper($paramname) {
 
     $contents | ForEach-Object { 
 
-        if ( $json.$PSItem.version.do ) { $do = $json.$PSItem.version.do -ge $offline_patch } else { $do = $true }
-        if ( $json.$PSItem.version.from ) { $from = $json.$PSItem.version.from -le $offline_patch } else { $from = $false }
-
+        if ( $json.$PSItem.version.do ) { $do = [version]$json.$PSItem.version.do -ge [version]$offline_patch } else { $do = $true }
+        if ( $json.$PSItem.version.from ) { $from = [version]$json.$PSItem.version.from -le [version]$offline_patch } else { $from = $false }
+        
         $checkVer = $from -and $do; $translate = $paramname -eq "RuTranslate"
 
         if ($checkVer -or $translate) {

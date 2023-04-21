@@ -975,11 +975,11 @@ function Helper($paramname) {
             $hover = $webjson.others.themelyrics.theme.$lyrics_stat.hover
             $maxmatch = $webjson.others.themelyrics.theme.$lyrics_stat.maxmatch
 
-            if ($offline -lt "1.1.99.871") { $lyrics = "lyricscolor1"; $contents = $lyrics }
-            if ($offline -ge "1.1.99.871") { $lyrics = "lyricscolor2"; $contents = $lyrics }
+            if ([version]$offline -lt [version]"1.1.99.871") { $lyrics = "lyricscolor1"; $contents = $lyrics }
+            if ([version]$offline -ge [version]"1.1.99.871") { $lyrics = "lyricscolor2"; $contents = $lyrics }
 
             # xpui-routes-lyrics.js
-            if ($offline -ge "1.1.99.871") {
+            if ([version]$offline -ge [version]"1.1.99.871") {
                 $webjson.others.$lyrics.replace[1] = '$1' + '"' + $pasttext + '"'  
                 $webjson.others.$lyrics.replace[2] = '$1' + '"' + $current + '"'  
                 $webjson.others.$lyrics.replace[3] = '$1' + '"' + $next + '"'  
@@ -989,7 +989,7 @@ function Helper($paramname) {
             }
 
             # xpui-routes-lyrics.css
-            if ($offline -lt "1.1.99.871") {
+            if ([version]$offline -lt [version]"1.1.99.871") {
                 $webjson.others.$lyrics.replace[0] = '$1' + $pasttext
                 $webjson.others.$lyrics.replace[1] = '$1' + $current
                 $webjson.others.$lyrics.replace[2] = '$1' + $next
@@ -1017,8 +1017,8 @@ function Helper($paramname) {
         }
         "OffPodcasts" {  
             # Turn off podcasts
-            if ($offline -le "1.1.92.647") { $contents = "podcastsoff" }
-            if ($offline -ge "1.1.93.896") { $contents = "podcastsoff2" }
+            if ([version]$offline -le [version]"1.1.92.647") { $contents = "podcastsoff" }
+            if ([version]$offline -ge [version]"1.1.93.896") { $contents = "podcastsoff2" }
             $n = $js
             $name = "patches.json.others."
             $json = $webjson.others
@@ -1323,15 +1323,15 @@ If ($test_spa) {
 
     # Turn off podcasts
     if ($podcast_off) { 
-        if ($offline -ge "1.1.93.896" -and $offline -le "1.1.97.962") { $js = 'home-v2.js' }
-        if ($offline -le "1.1.92.647" -or $offline -ge "1.1.98.683") { $js = 'xpui.js' }
+        if ([version]$offline -ge [version]"1.1.93.896" -and [version]$offline -le [version]"1.1.97.962") { $js = 'home-v2.js' }
+        if ([version]$offline -le [version]"1.1.92.647" -or [version]$offline -ge [version]"1.1.98.683") { $js = 'xpui.js' }
         extract -counts 'one' -method 'zip' -name $js -helper 'OffPodcasts'
     }
 
     # Hiding Ad-like sections from the homepage
     if ($adsections_off) { 
-        if ($offline -ge "1.1.93.896" -and $offline -le "1.1.97.962") { $js = 'home-v2.js' }
-        if ($offline -ge "1.1.98.683") { $js = 'xpui.js' }
+        if ([version]$offline -ge [version]"1.1.93.896" -and [version]$offline -le [version]"1.1.97.962") { $js = 'home-v2.js' }
+        if ([version]$offline -ge [version]"1.1.98.683") { $js = 'xpui.js' }
         extract -counts 'one' -method 'zip' -name $js -helper 'OffAdSections'
     }
 
@@ -1349,21 +1349,21 @@ If ($test_spa) {
     # Static color for lyrics
     if ($lyrics_stat) {
         # old
-        if ($offline -lt "1.1.99.871") { 
+        if ([version]$offline -lt [version]"1.1.99.871") { 
             $name_file = 'xpui-routes-lyrics.css'
             extract -counts 'one' -method 'zip' -name $name_file -helper 'Lyrics-color'
         }
         # new 
-        if ($offline -ge "1.1.99.871") {
+        if ([version]$offline -ge [version]"1.1.99.871") {
             $contents = "fixcsslyricscolor2"
             extract -counts 'one' -method 'zip' -name 'xpui.css' -helper 'FixCss'
-            if ($offline -le "1.2.2.582") {
+            if ([version]$offline -le [version]"1.2.2.582") {
                 $name_file = 'xpui-routes-lyrics.js'   
                 extract -counts 'one' -method 'zip' -name $name_file -helper 'Lyrics-color'
             }
         }
         # mini lyrics
-        if ($offline -ge "1.2.0.1155") {
+        if ([version]$offline -ge [version]"1.2.0.1155") {
             $name_file = 'xpui.js'   
             extract -counts 'one' -method 'zip' -name $name_file -helper 'Lyrics-color'
         }
@@ -1390,14 +1390,14 @@ If ($test_spa) {
         }
 
         # New UI fix
-        if ($offline -ge "1.1.94.864" -and $new_theme) {
-            if ($offline -lt "1.2.3.1107") {
+        if ([version]$offline -ge [version]"1.1.94.864" -and $new_theme) {
+            if ([version]$offline -lt [version]"1.2.3.1107") {
                 $css += $webjson.others.navaltfix.add[0]
             }
-            if ($offline -ge "1.2.3.1107") {
+            if ([version]$offline -ge [version]"1.2.3.1107") {
                 $css += $webjson.others.navaltfix.add[1]
             }
-            if ($offline -ge "1.2.6.861" -and $offline -le "1.2.6.863") {
+            if ([version]$offline -ge [version]"1.2.6.861" -and [version]$offline -le [version]"1.2.6.863") {
                 $css += $webjson.others.leftsidebarfix.add
             }
             $css += $webjson.others.navaltfix.add[2]
@@ -1411,7 +1411,7 @@ If ($test_spa) {
     extract -counts 'one' -method 'zip' -name 'xpui.css' -helper "FixCss"
 
     # Fix scroll bug navylx
-    if ($offline -ge "1.2.4.893" -or $offline -le "1.2.4.912") {
+    if ([version]$offline -ge [version]"1.2.4.893" -or [version]$offline -le [version]"1.2.4.912") {
         $contents = "fix-scroll-bug-navylx"
         extract -counts 'one' -method 'zip' -name 'xpui.css' -helper "FixCss"
     }

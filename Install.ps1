@@ -270,14 +270,15 @@ $win11 = $win_os -match "\windows 11\b"
 $win10 = $win_os -match "\windows 10\b"
 $win8_1 = $win_os -match "\windows 8.1\b"
 $win8 = $win_os -match "\windows 8\b"
+$win7 = $win_os -match "\windows 7\b"
 
-# Recommended version for Win 10-12
-if ($win10 -or $win11 -or $win12) { 
-    $onlineFull = "1.2.9.743.g85d9593d-295" 
-}
 # Recommended version for Win 7-8.1
-else { 
-    $onlineFull = "1.2.5.1006.g22820f93-1078" 
+if ($win7 -or $win8 -or $win8_1) { 
+    $onlineFull = "1.2.5.1006.g22820f93-1078"
+}
+# Recommended version for Win 10-12
+else {  
+    $onlineFull = "1.2.10.751.g9ce1ecb2-918" 
 }
 
 $online = ($onlineFull -split ".g")[0]

@@ -909,6 +909,14 @@
             "match": "(Enable the IAV component make api requests\",default:)(!1|!0)",
             "replace": "$1false"
         },
+        "fraud3": {
+            "version": {
+                "from": "1.2.10",
+                "do": ""
+            },
+            "match": "(Enable user fraud signals\",default:)(!1|!0)",
+            "replace": "$1false"
+        },
         "hptolocation": {
             "version": {
                 "from": "1.2.1",
@@ -972,6 +980,22 @@
             },
             "match": "(Enable remote download support through the offline2 system\",default:)(!1)",
             "replace": "$1true"
+        },
+        "DesktopMusicLeavebehinds": {
+            "version": {
+                "from": "1.2.10",
+                "do": ""
+            },
+            "match": "(Enable music leavebehinds on eligible playlists for desktop\",default:)(!1|!0)",
+            "replace": "$1false"
+        },
+        "enableEsperantoMigration": {
+            "version": {
+                "from": "1.2.10",
+                "do": ""
+            },
+            "match": "(Enable esperanto Migration for Ad Formats\",default:)(!1|!0)",
+            "replace": "$1false"
         }
     }
 }

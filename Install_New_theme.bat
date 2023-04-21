@@ -3,7 +3,7 @@
 ping www.github.com >nul 2>&1
 if %errorlevel% neq 0 (
   color 0C 
-  echo Please Connect to the Internet First.
+  echo Please Check your Internet Connection and try Again.
   pause
   color 07 
   exit /b 1

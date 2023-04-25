@@ -40,6 +40,15 @@
             "match": "allSponsorships",
             "replace": ""
         },
+        "forcedDisabledExp": {
+            "version": {
+                "from": "1.1.92",
+                "do": ""
+            },
+            "match": "(VK.fromJSON\\(.\\)\\);)(return.+value:{localConfiguration:(.))",
+            "exp": "['enableInAppMessaging','Enable pick and shuffle','enableDesktopMusicLeavebehinds','enableHptoLocationRefactor','enableUserFraudSignals','enableUserFraudVerificationRequest','enableUserFraudVerification','enableEsperantoMigration']",
+            "replace": ""
+        },
         "connectold": {
             "version": {
                 "from": "1.1.70",
@@ -632,7 +641,7 @@
         "quicksilver": {
             "version": {
                 "from": "1.1.70",
-                "do": ""
+                "do": "1.1.91"
             },
             "match": "(Enables quicksilver in-app messaging modal\",default:)(!0)",
             "replace": "$1false"
@@ -717,14 +726,6 @@
             "match": "(Enable showing a new and improved device picker UI\",default:)(!1)",
             "replace": "$1true"
         },
-        "devicepickerold": {
-            "version": {
-                "from": "1.1.96",
-                "do": "1.1.97"
-            },
-            "match": "(Enable showing a new and improved device picker UI\",default:)(!0)",
-            "replace": "$1false"
-        },
         "newhome": {
             "version": {
                 "from": "1.1.94",
@@ -771,7 +772,7 @@
                 "do": ""
             },
             "match": "(Enable Your Library X view of the left sidebar\",default:)(!1|!0)",
-            "replace": ""
+            "replace": "$1true"
         },
         "lyricsenabled": {
             "version": {
@@ -803,7 +804,7 @@
                 "do": ""
             },
             "match": "(Enable the view on the right sidebar\",default:)(!1|!0)",
-            "replace": ""
+            "replace": "$1true"
         },
         "sidebar-fix": {
             "version": {
@@ -812,14 +813,6 @@
             },
             "match": "min:320,max:420",
             "replace": "min:250,max:400"
-        },
-        "audiobooks": {
-            "version": {
-                "from": "1.1.74",
-                "do": ""
-            },
-            "match": "(Enable Audiobooks feature on ClientX\",default:)(!1)",
-            "replace": "$1true"
         },
         "addingplaylist": {
             "version": {
@@ -893,38 +886,6 @@
             "match": "(Enable a setting to control if followers and following lists are shown on profile\",default:)(!1)",
             "replace": "$1true"
         },
-        "fraud": {
-            "version": {
-                "from": "1.2.3",
-                "do": ""
-            },
-            "match": "(Enable user fraud verification\",default:)(!1|!0)",
-            "replace": "$1false"
-        },
-        "fraud2": {
-            "version": {
-                "from": "1.2.5",
-                "do": ""
-            },
-            "match": "(Enable the IAV component make api requests\",default:)(!1|!0)",
-            "replace": "$1false"
-        },
-        "fraud3": {
-            "version": {
-                "from": "1.2.10",
-                "do": ""
-            },
-            "match": "(Enable user fraud signals\",default:)(!1|!0)",
-            "replace": "$1false"
-        },
-        "hptolocation": {
-            "version": {
-                "from": "1.2.1",
-                "do": ""
-            },
-            "match": "(Enable new permanent location for HPTO iframe to HptoHtml.js\",default:)(!1|!0)",
-            "replace": "$1false"
-        },
         "attacktitan": {
             "version": {
                 "from": "1.2.6",
@@ -980,22 +941,6 @@
             },
             "match": "(Enable remote download support through the offline2 system\",default:)(!1)",
             "replace": "$1true"
-        },
-        "DesktopMusicLeavebehinds": {
-            "version": {
-                "from": "1.2.10",
-                "do": ""
-            },
-            "match": "(Enable music leavebehinds on eligible playlists for desktop\",default:)(!1|!0)",
-            "replace": "$1false"
-        },
-        "enableEsperantoMigration": {
-            "version": {
-                "from": "1.2.10",
-                "do": ""
-            },
-            "match": "(Enable esperanto Migration for Ad Formats\",default:)(!1|!0)",
-            "replace": "$1false"
         }
     }
 }

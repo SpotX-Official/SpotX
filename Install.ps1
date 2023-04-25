@@ -65,9 +65,6 @@ param
 
     [Parameter(HelpMessage = 'Enable audio equalizer for Desktop.')]
     [switch]$equalizer_off,
-    
-    [Parameter(HelpMessage = 'Return the old device picker')]
-    [switch]$device_picker_old,
 
     [Parameter(HelpMessage = 'New theme activated (new right and left sidebar, some cover change)')]
     [switch]$new_theme,
@@ -278,7 +275,7 @@ if ($win7 -or $win8 -or $win8_1) {
 }
 # Recommended version for Win 10-12
 else {  
-    $onlineFull = "1.2.10.751.g9ce1ecb2-918" 
+    $onlineFull = "1.2.10.760.g52970952-1106" 
 }
 
 $online = ($onlineFull -split ".g")[0]
@@ -1014,6 +1011,15 @@ function Helper($paramname) {
             $n = "xpui.js"
             $contents = $webjson.free.psobject.properties.name
             $json = $webjson.free
+            
+            $expforced = $webjson.free.forcedDisabledExp.exp
+
+            if (!($new_theme)) {
+                $expforced = $expforced.Substring(0, $expforced.Length - 1) + ",'enableYLXSidebar']"
+            }
+
+            $repl = "`$1 var keys=$expforced; keys.forEach(function(key) {`$3.values.set(key, false);});`$2"
+            $webjson.free.forcedDisabledExp.replace = $repl
         }
         "OffPodcasts" {  
             # Turn off podcasts
@@ -1080,17 +1086,11 @@ function Helper($paramname) {
             if ($new_artist_pages_off) { $rem.remove('disographyartist') }
             if ($new_lyrics_off) { $rem.remove('lyricsmatch') }
             if ($equalizer_off) { $rem.remove('equalizer') }
-            if (!($device_picker_old)) { $rem.remove('devicepickerold') }
             if ($made_for_you_off) { $rem.remove('madeforyou') }
-            if (!($new_theme)) {
-                $rem.remove('newhome'), $rem.remove('newhome2'), $rem.remove('lyricssidebar') , $rem.remove('showcreditsinsidebar'), $rem.remove('enableWhatsNewFeed');
-                $webjson.exp.rightsidebar.replace = "`$1false"
-                $webjson.exp.leftsidebar.replace = "`$1false"
-            }
             # Old theme
-            else { 
-                $webjson.exp.rightsidebar.replace = "`$1true"
-                $webjson.exp.leftsidebar.replace = "`$1true"
+            if (!($new_theme)) {
+                $rem.remove('newhome'), $rem.remove('newhome2'), $rem.remove('lyricssidebar'), $rem.remove('showcreditsinsidebar'), 
+                $rem.remove('enableWhatsNewFeed'), $rem.remove('rightsidebar'), $rem.remove('leftsidebar');
             }
             if ($old_lyrics) { $rem.remove('lyricssidebar') } 
             if (!$premium) { $rem.remove('RemoteDownloads') }

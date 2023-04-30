@@ -45,7 +45,7 @@
     ModSpoti        = "Spotify にパッチ適用中..."
     Error           = "エラー"
     FileLocBroken   = "Spotify のファイルの場所が壊れています。Spotify クライアントをアンインストールし再度スクリプトを実行してください"
-    Spicetify       = "Spicetify detected, it must be installed after SpotX, open recommended actions in FAQ ? [Y/N]"
+    Spicetify       = "Spicetify が検出されましたが、SpotX の後にインストールする必要があります。推奨方法の解説ページを開きますか? [Y/N]"
     ExpSpotify      = "Spotify が計画している実験的な機能"
     NoRestore       = "SpotXはインストール済みですが xpui.bak が見つかりません。`nSpotify クライアントをアンインストールし、再度 Install.bat を実行してください"
     InstallComplete = "インストール完了"

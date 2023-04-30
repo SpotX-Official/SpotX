@@ -1,6 +1,6 @@
 {
     "lang": {
-        "version": "1.2.7",
+        "version": "1.2.10",
         "language": "Russian"
     },
     "1": {
@@ -24,199 +24,131 @@
         "replace": "\"Хранилище скачанных треков\""
     },
     "6": {
-        "match": "\"Change location\"",
-        "replace": "\"Изменить место\""
-    },
-    "7": {
         "match": "\"Click to start listening\"",
         "replace": "\"Нажмите, чтобы начать прослушивание\""
     },
-    "8": {
-        "match": "\"Let your DJ pick a mix of your current go-to's, old favorites, and new discoveries.\"",
-        "replace": "\"Позвольте вашему диджею создать микс из ваших текущих любимых треков, старых фаворитов и новых открытий.\""
-    },
-    "9": {
-        "match": "\"Switch to a different set\"",
-        "replace": "\"Переключиться на другой сет\""
-    },
-    "10": {
-        "match": "\"Show all\"",
-        "replace": "\"Показать все\""
-    },
-    "11": {
-        "match": "\"On Tour\"",
-        "replace": "\"В туре\""
-    },
-    "12": {
-        "match": "\"Credits\"",
-        "replace": "\"Сведения о треке\""
-    },
-    "13": {
-        "match": "\"Tired of this set\\?\"",
-        "replace": "\"Устали от этого сета?\""
-    },
-    "14": {
-        "match": "\"Tap for a different set from your DJ\"",
-        "replace": "\"Нажмите, чтобы выбрать другой сет от вашего диджея\""
-    },
-    "16": {
+    "7": {
         "match": "\"Change speed\"",
         "replace": "\"Изменение скорости\""
     },
-    "17": {
+    "8": {
         "match": "\"You need to be at least 19 years old to listen to explicit content marked with\"",
         "replace": "\"Вам должно быть не менее 19 лет, чтобы слушать непристойный контент, помеченный значком\""
     },
-    "18": {
+    "9": {
         "match": "\"Add to another playlist\"",
         "replace": "\"Добавить в другой плейлист\""
     },
-    "19": {
+    "10": {
         "match": "\"Add to this playlist\"",
         "replace": "\"Добавить в этот плейлист\""
     },
-    "20": {
+    "11": {
         "match": "\"Couldn.t connect to Spotify.\"",
         "replace": "\"Не удалось подключиться к Spotify.\""
     },
-    "21": {
+    "12": {
         "match": "\"No connection\"",
         "replace": "\"Нет соединения\""
     },
-    "22": {
+    "13": {
         "match": "\"Reconnecting...\"",
         "replace": "\"Повторное подключение...\""
     },
-    "23": {
+    "14": {
         "match": "\"Character counter\"",
         "replace": "\"Счетчик символов\""
     },
-    "24": {
+    "15": {
         "match": "\"Toggle lightsaber hilt. Current is [{]0[}].\"",
         "replace": "\"Переключить рукоять светового меча. Текущий {0}.\""
     },
-    "25": {
+    "16": {
         "match": "\"Song not available\"",
         "replace": "\"Песня недоступна\""
     },
-    "26": {
+    "17": {
         "match": "\"The song you.re trying to listen to is not available in HiFi at this time.\"",
         "replace": "\"Песня, которую вы пытаетесь прослушать, в настоящее время недоступна в HiFi.\""
     },
-    "27": {
-        "match": "\"Current audio quality:\"",
-        "replace": "\"Текущее качество звука:\""
-    },
-    "28": {
-        "match": "\"Network connection\"",
-        "replace": "\"Подключение к сети\""
-    },
-    "29": {
-        "match": "\"Good\"",
-        "replace": "\"Хорошее\""
-    },
-    "30": {
-        "match": "\"Poor\"",
-        "replace": "\"Плохое\""
-    },
-    "31": {
-        "match": "\"Yes\"",
-        "replace": "\"Да\""
-    },
-    "32": {
-        "match": "\"No\"",
-        "replace": "\"Нет\""
-    },
-    "37": {
+    "18": {
         "match": "\"Your Location\"",
         "replace": "\"Ваше местоположение\""
     },
-    "38": {
+    "19": {
         "match": "\"Network connection failed while playing this content.\"",
         "replace": "\"Сбой сетевого подключения при воспроизведении этого контента.\""
     },
-    "39": {
+    "20": {
         "match": "\"We.re not able to play this content in your current location.\"",
         "replace": "\"Мы не можем воспроизвести этот контент в вашем текущем местоположении.\""
     },
-    "40": {
+    "21": {
         "match": "\"This content is unavailable. Try another\\?\"",
         "replace": "\"Этот контент недоступен. Попробуете другой?\""
     },
-    "41": {
+    "22": {
         "match": "\"Sorry, we.re not able to play this content.\"",
         "replace": "\"К сожалению, мы не можем воспроизвести этот контент.\""
     },
-    "42": {
+    "23": {
         "match": "\"Hmm... we can.t seem to play this content. Try installing the latest version of Spotify.\"",
         "replace": "\"Хм... похоже, мы не можем воспроизвести этот контент. Попробуйте установить последнюю версию Spotify.\""
     },
-    "43": {
+    "24": {
         "match": "\"Please upgrade Spotify to play this content.\"",
         "replace": "\"Пожалуйста, обновите Spotify, чтобы воспроизвести этот контент.\""
     },
-    "44": {
+    "25": {
         "match": "\"This content cannot be played on your operating system version.\"",
         "replace": "\"Этот контент нельзя воспроизвести в вашей версии операционной системы.\""
     },
-    "45": {
+    "26": {
         "match": "\"Override certain user attributes to test regionalized content programming. The overrides are only active in this app.\"",
         "replace": "\"Переопределите определенные атрибуты пользователя, чтобы протестировать региональное программирование контента. Переопределения активны только в этом приложении.\""
     },
-    "46": {
+    "27": {
         "match": " was released this week!",
         "replace": " был выпущен на этой неделе!"
     },
-    "47": {
+    "28": {
         "match": "(\"one\": \"...name...) was released %years% year ago this week!\"",
         "replace": "$1 был выпущен %years% год назад на этой неделе!\""
     },
-    "48": {
+    "29": {
         "match": "(\"few\": \"...name...) was released %years% years ago this week!\"",
         "replace": "$1 был выпущен %years% года назад на этой неделе!\""
     },
-    "49": {
+    "30": {
         "match": "(\"many\": \"...name...) was released %years% years ago this week!\"",
         "replace": "$1 был выпущен %years% лет назад на этой неделе!\""
     },
-    "50": {
+    "31": {
         "match": "(\"other\": \"...name...) was released %years% years ago this week!\"",
         "replace": "$1 был выпущен %years% года назад на этой неделе!\""
     },
-    "51": {
+    "32": {
         "match": "\"Speed [{]0[}]×\"",
         "replace": "\"Скорость {0}×\""
     },
-    "60": {
+    "33": {
         "match": "(\"Filter options\"",
         "replace": "\"Параметры фильтрации\""
     },
-    "76": {
+    "34": {
         "match": "\"Artist\"",
         "replace": "\"Исполнитель\""
     },
-    "78": {
-        "match": "\"Open queue\"",
-        "replace": "\"Открыть очередь\""
-    },
-    "79": {
-        "match": "\"Search for something new\"",
-        "replace": "\"Искать что-то новое\""
-    },
-    "80": {
-        "match": "\"Your queue is empty\"",
-        "replace": "\"Ваша очередь пуста\""
-    },
-    "81": {
-        "match": "\"Now Playing View\"",
-        "replace": "\"Сейчас играет\""
-    },
-    "83": {
+    "35": {
         "match": "\"... of ...\"",
         "replace": "\"{0} из {1}\""
     },
-    "84": {
+    "36": {
         "match": "\"Не удалось изменить\"",
         "replace": "\"Не удалось обновить\""
+    },
+    "37": {
+        "match": "\"Load more\"",
+        "replace": "\"Загрузи больше\""
     }
 }

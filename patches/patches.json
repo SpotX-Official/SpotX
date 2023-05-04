@@ -1,5 +1,13 @@
 {
     "free": {
+        "EsperantoAds": {
+            "version": {
+                "from": "1.1.93",
+                "do": ""
+            },
+            "match": "(this._product_state=(.))",
+            "replace": "$1,$2.putOverridesValues({pairs:{ads:'0',catalogue:'premium',product:'premium',name:'Spotify'}})"
+        },
         "bilboard": {
             "version": {
                 "from": "1.1.70",
@@ -11,7 +19,7 @@
         "fullscreen": {
             "version": {
                 "from": "1.1.58",
-                "do": ""
+                "do": "1.1.92"
             },
             "match": "(return|.=.=>)\"free\"===(.+?)(return|.=.=>)\"premium\"===",
             "replace": "$1\"premium\"===$2$3\"free\"==="
@@ -19,7 +27,7 @@
         "audioads": {
             "version": {
                 "from": "1.1.58",
-                "do": ""
+                "do": "1.1.92"
             },
             "match": "(case .:|async enable\\(.\\){)(this.enabled=.+?\\(.{1,3},\"audio\"\\),|return this.enabled=...+?\\(.{1,3},\"audio\"\\))((;case 4:)?this.subscription=this.audioApi).+?this.onAdMessage\\)",
             "replace": "$1$3.cosmosConnector.increaseStreamTime(-100000000000)"
@@ -27,7 +35,7 @@
         "emptyblock": {
             "version": {
                 "from": "1.1.58",
-                "do": ""
+                "do": "1.1.92"
             },
             "match": "adsEnabled:!0",
             "replace": "adsEnabled:!1"
@@ -38,15 +46,6 @@
                 "do": ""
             },
             "match": "allSponsorships",
-            "replace": ""
-        },
-        "forcedDisabledExp": {
-            "version": {
-                "from": "1.1.92",
-                "do": ""
-            },
-            "match": "(VK.fromJSON\\(.\\)\\);)(return.+value:{localConfiguration:(.))",
-            "exp": "['enableInAppMessaging','Enable pick and shuffle','enableDesktopMusicLeavebehinds','enableHptoLocationRefactor','enableUserFraudSignals','enableUserFraudVerificationRequest','enableUserFraudVerification','enableEsperantoMigration']",
             "replace": ""
         },
         "connectold": {
@@ -98,6 +97,15 @@
             },
             "match": "((..createElement|children:\\(.{1,7}\\))\\(....,{source:).....get\\(\"about.copyright\",.\\),paragraphClassName:.}\\)",
             "replace": "$1\"<h3>More about SpotX</h3><a href='https://github.com/amd64fox/SpotX'>Github</a><br/><a href='https://telegra.ph/SpotX-FAQ-09-19'>FAQ</a><br/><a href='https://t.me/spotify_windows_mod'>Telegram channel</a><br/><a href='https://github.com/amd64fox/SpotX/issues/new?assignees=&labels=%E2%9D%8C+bug&template=bug_report.yml'>Create an issue report</a><br> <br/><h4>DISCLAIMER</h4>SpotX is a modified version of the official Spotify client, provided as an evaluation version, you use it at your own risk.\"})"
+        },
+        "forcedDisabledExp": {
+            "version": {
+                "from": "1.1.92",
+                "do": ""
+            },
+            "match": "(VK.fromJSON\\(.\\)\\);)(return.+value:{localConfiguration:(.))",
+            "exp": "['enableInAppMessaging','Enable pick and shuffle','enableDesktopMusicLeavebehinds','enableHptoLocationRefactor','enableUserFraudSignals','enableUserFraudVerificationRequest','enableUserFraudVerification','enableEsperantoMigration']",
+            "replace": ""
         },
         "block_update": {
             "version": {
@@ -375,7 +383,7 @@
             "match": [
                 "(.--lyrics-color-background.:(..|..colors.)background)",
                 "(.--lyrics-color-passed.:)(..passed|.{5,8}fromCSS.+?RGBA\\))",
-                "(.--lyrics-color-active.:)((?:.\\?.\\.passed:.{2,13}active(Text)?|.{2,13}active|.{2,13}colors.activeText))",
+                "(.--lyrics-color-active.:)((?:.\\?.\\.passed:.{2,13}active(Text)?|.{2,13}active(Text)?|.{2,13}colors.activeText))",
                 "(.--lyrics-color-inactive.:)(..inactive|..colors.text)",
                 "(.--lyrics-color-background.:)((..|..colors.)background)",
                 "(.--lyrics-color-hover.:)(\"xxx\")",

@@ -1011,15 +1011,22 @@ function Helper($paramname) {
             $n = "xpui.js"
             $contents = $webjson.free.psobject.properties.name
             $json = $webjson.free
-            
-            $expforced = $webjson.free.forcedDisabledExp.exp
+        }
+        "forcedDisabledExp" {  
+            # Forced disable some exp (xpui.js)
+            $name = "patches.json.others."
+            $n = "xpui.js"
+            $contents = "forcedDisabledExp"
+            $json = $webjson.others
+
+            $expforced = $webjson.others.forcedDisabledExp.exp
 
             if (!($new_theme)) {
                 $expforced = $expforced.Substring(0, $expforced.Length - 1) + ",'enableYLXSidebar']"
             }
 
             $repl = "`$1 var keys=$expforced; keys.forEach(function(key) {`$3.values.set(key, false);});`$2"
-            $webjson.free.forcedDisabledExp.replace = $repl
+            $webjson.others.forcedDisabledExp.replace = $repl
         }
         "OffPodcasts" {  
             # Turn off podcasts
@@ -1311,6 +1318,9 @@ If ($test_spa) {
     if (!($premium)) {
         extract -counts 'one' -method 'zip' -name 'xpui.js' -helper 'OffadsonFullscreen'
     }
+
+    # Forced disable some exp
+    extract -counts 'one' -method 'zip' -name 'xpui.js' -helper 'forcedDisabledExp'
     
     # Experimental Feature
     if (!($exp_spotify)) { extract -counts 'one' -method 'zip' -name 'xpui.js' -helper 'ExpFeature' }

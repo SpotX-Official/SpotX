@@ -95,7 +95,7 @@
                 "from": "1.1.70",
                 "do": ""
             },
-            "match": "((..createElement|children:\\(.{1,7}\\))\\(....,{source:).....get\\(\"about.copyright\",.\\),paragraphClassName:.}\\)",
+            "match": "((..createElement|children:\\(.{1,7}\\))\\(.{1,7},{source:).{1,7}get\\(\"about.copyright\",.\\),paragraphClassName:.}\\)",
             "replace": "$1\"<h3>More about SpotX</h3><a href='https://github.com/amd64fox/SpotX'>Github</a><br/><a href='https://telegra.ph/SpotX-FAQ-09-19'>FAQ</a><br/><a href='https://t.me/spotify_windows_mod'>Telegram channel</a><br/><a href='https://github.com/amd64fox/SpotX/issues/new?assignees=&labels=%E2%9D%8C+bug&template=bug_report.yml'>Create an issue report</a><br> <br/><h4>DISCLAIMER</h4>SpotX is a modified version of the official Spotify client, provided as an evaluation version, you use it at your own risk.\"})"
         },
         "forcedDisabledExp": {
@@ -948,6 +948,30 @@
                 "do": ""
             },
             "match": "(Enable remote download support through the offline2 system\",default:)(!1)",
+            "replace": "$1true"
+        },
+        "ConcertsForThisIsPlaylist": {
+            "version": {
+                "from": "1.2.11",
+                "do": ""
+            },
+            "match": "(Enable Tour Card on This is Playlist\",default:)(!1)",
+            "replace": "$1true"
+        },
+        "MandalorianEaster": {
+            "version": {
+                "from": "1.2.10",
+                "do": ""
+            },
+            "match": "(Enable the Mandalorian easter-egg\",values:.,default:)(..)DISABLED",
+            "replace": "$1$2HELMET_AND_SOUND"
+        },
+        "BetamaxSdkSubtitles": {
+            "version": {
+                "from": "1.1.70",
+                "do": ""
+            },
+            "match": "(Enables subtitles setting and rendering subtitles on the betamax SDK on DesktopX\",values:.,default:)(!1)",
             "replace": "$1true"
         }
     }

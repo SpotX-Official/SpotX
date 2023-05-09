@@ -63,7 +63,7 @@ param
     [Parameter(HelpMessage = 'Do not enable exception playlists from recommendations.')]
     [switch]$ignore_in_recommendations_off,
 
-    [Parameter(HelpMessage = 'Enable audio equalizer for Desktop.')]
+    [Parameter(HelpMessage = 'Disable built-in equalizer.')]
     [switch]$equalizer_off,
 
     [Parameter(HelpMessage = 'New theme activated (new right and left sidebar, some cover change)')]
@@ -275,7 +275,7 @@ if ($win7 -or $win8 -or $win8_1) {
 }
 # Recommended version for Win 10-12
 else {  
-    $onlineFull = "1.2.10.760.g52970952-1106" 
+    $onlineFull = "1.2.11.911.ga041e113-2164" 
 }
 
 $online = ($onlineFull -split ".g")[0]
@@ -1097,7 +1097,7 @@ function Helper($paramname) {
             # Old theme
             if (!($new_theme)) {
                 $rem.remove('newhome'), $rem.remove('newhome2'), $rem.remove('lyricssidebar'), $rem.remove('showcreditsinsidebar'), 
-                $rem.remove('enableWhatsNewFeed'), $rem.remove('rightsidebar'), $rem.remove('leftsidebar');
+                $rem.remove('rightsidebar'), $rem.remove('leftsidebar');
             }
             if ($old_lyrics) { $rem.remove('lyricssidebar') } 
             if (!$premium) { $rem.remove('RemoteDownloads') }

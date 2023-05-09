@@ -971,7 +971,7 @@
                 "from": "1.1.70",
                 "do": ""
             },
-            "match": "(Enables subtitles setting and rendering subtitles on the betamax SDK on DesktopX\",values:.,default:)(!1)",
+            "match": "(Enables subtitles setting and rendering subtitles on the betamax SDK on DesktopX\",default:)(!1)",
             "replace": "$1true"
         }
     }

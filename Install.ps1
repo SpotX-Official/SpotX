@@ -881,7 +881,7 @@ if (!($cache_on) -and !($cache_off)) {
     }
 }
 
-$url = "https://github.com/amd64fox/SpotX/blob/main/patches/patches.json"
+$url = "https://raw.githubusercontent.com/amd64fox/SpotX/main/patches/patches.json"
 $retries = 0
 
 while ($retries -lt 3) {

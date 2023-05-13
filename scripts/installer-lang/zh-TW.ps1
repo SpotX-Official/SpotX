@@ -46,7 +46,6 @@
     Error           = "錯誤"
     FileLocBroken   = "Spotify 檔案已損壞, 請解除安裝客戶端並重新運行腳本"
     Spicetify       = "偵測到 Spicetify，它必須在安裝 SpotX 後進行安裝。是否打開 FAQ 中的建議操作？ [Y/N]"
-    ExpSpotify      = "啟用 Spotify 的實驗性功能"
     NoRestore       = "SpotX 已經安裝, 但是找不到xpui.bak `n請重新安裝 Spotify 客戶端後再運行 Install.bat"
     InstallComplete = "安裝完成"
     HostInfo        = "在 hosts 檔案中發現不需要的 URL"

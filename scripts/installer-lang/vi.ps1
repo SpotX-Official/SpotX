@@ -46,7 +46,6 @@
     Error           = "Lỗi"
     FileLocBroken   = "Vị trí các tệp của Spotify đã bị hỏng, gỡ Spotify và chạy lại bản vá"
     Spicetify       = "Spicetify detected, it must be installed after SpotX, open recommended actions in FAQ ? [Y/N]"
-    ExpSpotify      = "Các tính năng thử nghiệm của Spotify"
     NoRestore       = "Đã cài SpotX nhưng không tìm thấy tập tin xpui.bak. `nGỡ Spotify và chạy lại Install.bat"
     InstallComplete = "cài đặt hoàn tất"
     HostInfo        = "Tìm thấy các URL không cần thiết trong tệp hosts"

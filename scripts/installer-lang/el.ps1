@@ -46,7 +46,6 @@
     Error           = "Σφάλμα"
     FileLocBroken   = "Η τοποθεσία των αρχείων Spotify είναι κατεστραμμένη, απεγκαταστήστε το πρόγραμμα Spotify και εκτελέστε ξανά το script"
     Spicetify       = "Spicetify detected, it must be installed after SpotX, open recommended actions in FAQ ? [Y/N]"
-    ExpSpotify      = "Πειραματικές λειτουργίες που διαχειρίζονται από το Spotify"
     NoRestore       = "Το SpotX έχει ήδη εγκατασταθεί, το xpui.bak δεν βρέθηκε. `nΠαρακαλώ απεγκαταστήστε το πρόγραμμα Spotify και εκτελέστε ξανά το Install.bat"
     InstallComplete = "Η εγκατάσταση ολοκληρώθηκε"
     HostInfo        = "Ανεπιθύμητες διευθύνσεις URL βρέθηκαν στο αρχείο hosts"

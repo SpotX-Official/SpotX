@@ -2,56 +2,56 @@
     "free": {
         "EsperantoAds": {
             "version": {
-                "from": "1.1.93",
-                "do": ""
+                "fr": "1.1.93",
+                "to": ""
             },
             "match": "(this._product_state=(.))",
             "replace": "$1,$2.putOverridesValues({pairs:{ads:'0',catalogue:'premium',product:'premium',name:'Spotify'}})"
         },
         "bilboard": {
             "version": {
-                "from": "1.1.70",
-                "do": ""
+                "fr": "1.1.70",
+                "to": ""
             },
             "match": ".(\\?\\[.{1,6}[a-zA-Z].leaderboard,)",
             "replace": "false$1"
         },
         "fullscreen": {
             "version": {
-                "from": "1.1.58",
-                "do": "1.1.92"
+                "fr": "1.1.58",
+                "to": "1.1.92"
             },
             "match": "(return|.=.=>)\"free\"===(.+?)(return|.=.=>)\"premium\"===",
             "replace": "$1\"premium\"===$2$3\"free\"==="
         },
         "audioads": {
             "version": {
-                "from": "1.1.58",
-                "do": "1.1.92"
+                "fr": "1.1.58",
+                "to": "1.1.92"
             },
             "match": "(case .:|async enable\\(.\\){)(this.enabled=.+?\\(.{1,3},\"audio\"\\),|return this.enabled=...+?\\(.{1,3},\"audio\"\\))((;case 4:)?this.subscription=this.audioApi).+?this.onAdMessage\\)",
             "replace": "$1$3.cosmosConnector.increaseStreamTime(-100000000000)"
         },
         "emptyblock": {
             "version": {
-                "from": "1.1.58",
-                "do": "1.1.92"
+                "fr": "1.1.58",
+                "to": "1.1.92"
             },
             "match": "adsEnabled:!0",
             "replace": "adsEnabled:!1"
         },
         "playlistsponsor": {
             "version": {
-                "from": "1.1.58",
-                "do": ""
+                "fr": "1.1.58",
+                "to": ""
             },
             "match": "allSponsorships",
             "replace": ""
         },
         "connectold": {
             "version": {
-                "from": "1.1.70",
-                "do": "1.1.97"
+                "fr": "1.1.70",
+                "to": "1.1.97"
             },
             "match": [
                 " connect-device-list-item--disabled",
@@ -66,24 +66,24 @@
         },
         "connectnew": {
             "version": {
-                "from": "1.1.91",
-                "do": ""
+                "fr": "1.1.91",
+                "to": ""
             },
             "match": "return (..isDisabled)(\\?(..createElement|\\(.{1,10}\\))\\(..,)",
             "replace": "return false$2"
         },
         "downloadquality": {
             "version": {
-                "from": "1.1.70",
-                "do": ""
+                "fr": "1.1.70",
+                "to": ""
             },
             "match": "(\\(.,..jsxs\\)\\(.{1,3}|(.\\(\\).|..)createElement\\(.{1,4}),{(filterMatchQuery|filter:.,title|(variant:\"viola\",semanticColor:\"textSubdued\"|..:\"span\",variant:.{3,6}mesto,color:.{3,6}),htmlFor:\"desktop.settings.downloadQuality.+?).{1,6}get\\(\"desktop.settings.downloadQuality.title.+?(children:.{1,2}\\(.,.\\).+?,|\\(.,.\\){3,4},|,.\\)}},.\\(.,.\\)\\),)",
             "replace": ""
         },
         "hidemerchsidebar": {
             "version": {
-                "from": "1.2.0",
-                "do": ""
+                "fr": "1.2.0",
+                "to": ""
             },
             "match": "(return( .&&\\(\\!.\\|\\|..length\\<1\\)&&..length\\>0&&\\(.=.\\),)?\\!.\\|\\|..length\\<1)",
             "replace": "return true "
@@ -92,34 +92,384 @@
     "others": {
         "discriptions": {
             "version": {
-                "from": "1.1.70",
-                "do": ""
+                "fr": "1.1.70",
+                "to": ""
             },
             "match": "((..createElement|children:\\(.{1,7}\\))\\(.{1,7},{source:).{1,7}get\\(\"about.copyright\",.\\),paragraphClassName:.}\\)",
             "replace": "$1\"<h3>More about SpotX</h3><a href='https://github.com/amd64fox/SpotX'>Github</a><br/><a href='https://telegra.ph/SpotX-FAQ-09-19'>FAQ</a><br/><a href='https://t.me/spotify_windows_mod'>Telegram channel</a><br/><a href='https://github.com/amd64fox/SpotX/issues/new?assignees=&labels=%E2%9D%8C+bug&template=bug_report.yml'>Create an issue report</a><br> <br/><h4>DISCLAIMER</h4>SpotX is a modified version of the official Spotify client, provided as an evaluation version, you use it at your own risk.\"})"
         },
-        "forcedDisabledExp": {
+        "ForcedExp": {
             "version": {
-                "from": "1.1.92",
-                "do": ""
+                "fr": "1.1.79",
+                "to": ""
             },
-            "match": "(VK.fromJSON\\(.\\)\\);)(return.+value:{localConfiguration:(.))",
-            "exp": "['enableInAppMessaging','Enable pick and shuffle','enableDesktopMusicLeavebehinds','enableHptoLocationRefactor','enableUserFraudSignals','enableUserFraudVerificationRequest','enableUserFraudVerification','enableEsperantoMigration']",
-            "replace": ""
+            "match": "(configuration:(.).getRemoteConfiguration.+?;)",
+            "replace": "$1const EnableExp=[],DisableExp=[],CustomExp=[],allExperiments=[EnableExp,DisableExp,CustomExp];allExperiments.forEach((expArray)=>{const values=$2.getRemoteConfiguration()?.values;if(values){expArray.forEach((exp)=>{if(expArray===EnableExp||expArray===DisableExp){values.set(exp,expArray===EnableExp);}else if(expArray===CustomExp){values.set(exp.name,exp.value);}});window.RemoteExp=values}});"
+        },
+        "DisableExp": {
+            "InAppMessaging": {
+                "name": "enableInAppMessaging",
+                "description": "Disable pop-up window for premium account purchase",
+                "native_description": "Enables quicksilver in-app messaging modal",
+                "version": {
+                    "fr": "1.1.70",
+                    "to": ""
+                }
+            },
+            "ContentInformationMessage": {
+                "name": "enableContentInformationMessage",
+                "description": "Disable covid messages between podcasts",
+                "native_description": "Enable showing content information messages for episodes",
+                "version": {
+                    "fr": "1.1.78",
+                    "to": ""
+                }
+            },
+            "PickShuffle": {
+                "name": "enablePickAndShuffle",
+                "description": "Removes restrictions on using the queue and listening to tracks in order",
+                "native_description": "Enable pick and shuffle",
+                "version": {
+                    "fr": "1.1.85",
+                    "to": ""
+                }
+            },
+            "MusicLeavebehinds": {
+                "name": "enableDesktopMusicLeavebehinds",
+                "description": "Disabling ad blocks in playlists",
+                "native_description": "Enable music leavebehinds on eligible playlists for desktop",
+                "version": {
+                    "fr": "1.2.10",
+                    "to": ""
+                }
+            },
+            "HptoLocationRefactor": {
+                "name": "enableHptoLocationRefactor",
+                "description": "Disabling in some cases the banner on the main page",
+                "native_description": "Enable new permanent location for HPTO iframe to HptoHtml.js",
+                "version": {
+                    "fr": "1.2.1",
+                    "to": ""
+                }
+            },
+            "UserFraudSignals": {
+                "name": "enableUserFraudSignals",
+                "description": "presumably protection against bots (reCAPTCHA)",
+                "native_description": "Enable user fraud signals",
+                "version": {
+                    "fr": "1.2.10",
+                    "to": ""
+                }
+            },
+            "UserFraudVerificationRequest": {
+                "name": "enableUserFraudVerificationRequest",
+                "description": "presumably protection against bots (reCAPTCHA)",
+                "native_description": "Enable the IAV component make api requests",
+                "version": {
+                    "fr": "1.2.5",
+                    "to": ""
+                }
+            },
+            "UserFraudVerification": {
+                "name": "enableUserFraudVerification",
+                "description": "presumably protection against bots (reCAPTCHA)",
+                "native_description": "Enable user fraud verification",
+                "version": {
+                    "fr": "1.2.3",
+                    "to": ""
+                }
+            },
+            "EsperantoMigration": {
+                "name": "enableEsperantoMigration",
+                "description": "presumably, the advertising management transition from Cosmos to Esperanto",
+                "native_description": "Enable esperanto Migration for Ad Formats",
+                "version": {
+                    "fr": "1.2.6",
+                    "to": ""
+                }
+            },
+            "RightSidebarMerchFallback": {
+                "name": "enableRightSidebarMerchFallback",
+                "description": "presumably, the advertising management transition from Cosmos to Esperanto",
+                "native_description": "Enable esperanto Migration for Ad Formats",
+                "version": {
+                    "fr": "1.2.5",
+                    "to": ""
+                }
+            }
+        },
+        "EnableExp": {
+            "EnhanceLikedSongs": {
+                "name": "enableEnhanceLikedSongs",
+                "description": "Enable Enhance Liked Songs UI and functionality",
+                "native_description": "Enable Enhance Liked Songs UI and functionality",
+                "version": {
+                    "fr": "1.1.86",
+                    "to": ""
+                }
+            },
+            "EnhancePlaylist": {
+                "name": "enableEnhancePlaylistProd",
+                "description": "Enable Enhance Playlist UI and functionality for end-users",
+                "native_description": "Enable Enhance Playlist UI and functionality for end-users",
+                "version": {
+                    "fr": "1.1.84",
+                    "to": ""
+                }
+            },
+            "IgnoreInRecommendations": {
+                "name": "enableIgnoreInRecommendations",
+                "description": "Exclude playlists from recommendations",
+                "native_description": "Enable Ignore In Recommendations for desktop and web",
+                "version": {
+                    "fr": "1.1.87",
+                    "to": ""
+                }
+            },
+            "Equalizer": {
+                "name": "enableEqualizer",
+                "description": "Enable audio equalizer for Desktop and Web Player",
+                "native_description": "Enable audio equalizer for Desktop and Web Player",
+                "version": {
+                    "fr": "1.1.88",
+                    "to": ""
+                }
+            },
+            "CarouselsOnHome": {
+                "name": "enableCarouselsOnHome",
+                "description": "Directly related to the blocking of podcasts and sections similar to ads on the main page",
+                "native_description": "Use carousels on Home",
+                "version": {
+                    "fr": "1.1.93",
+                    "to": ""
+                }
+            },
+            "AttackOnTitanEaster": {
+                "name": "enableAttackOnTitanEasterEgg",
+                "description": "Enable Attack on Titan Easter egg turning progress bar red when playing official soundtrack",
+                "native_description": "Enable Attack on Titan Easter egg turning progress bar red when playing official soundtrack",
+                "version": {
+                    "fr": "1.2.6",
+                    "to": ""
+                }
+            },
+            "AlbumReleaseAnniversaries": {
+                "name": "enableAlbumReleaseAnniversaries",
+                "description": "Enable showing balloons on album release date anniversaries",
+                "native_description": "Enable showing balloons on album release date anniversaries",
+                "version": {
+                    "fr": "1.1.89",
+                    "to": ""
+                }
+            },
+            "MadeForYou": {
+                "name": "enableMadeForYouEntryPoint",
+                "description": "Show 'Made For You' entry point in the left sidebar",
+                "native_description": "Show 'Made For You' entry point in the left sidebar",
+                "version": {
+                    "fr": "1.1.70",
+                    "to": "1.1.95"
+                }
+            },
+            "ClearAllDownloads": {
+                "name": "enableClearAllDownloads",
+                "description": "Enable option in settings to clear all downloads",
+                "native_description": "Enable option in settings to clear all downloads",
+                "version": {
+                    "fr": "1.1.92",
+                    "to": "1.1.98"
+                }
+            },
+            "LeftSidebar": {
+                "name": "enableYLXSidebar",
+                "description": "Enable Your Library X view of the left sidebar",
+                "native_description": "Enable Your Library X view of the left sidebar",
+                "version": {
+                    "fr": "1.2.0",
+                    "to": ""
+                }
+            },
+            "RightSidebar": {
+                "name": "enableRightSidebar",
+                "description": "Enable the view on the right sidebar",
+                "native_description": "Enable the view on the right sidebar",
+                "version": {
+                    "fr": "1.1.98",
+                    "to": ""
+                }
+            },
+            "AddPlaylistToPlaylist": {
+                "name": "enableAddPlaylistToPlaylist",
+                "description": "Enable support for adding a playlist to another playlist",
+                "native_description": "Enable support for adding a playlist to another playlist",
+                "version": {
+                    "fr": "1.1.98",
+                    "to": "1.2.3"
+                }
+            },
+            "RightSidebarLyrics": {
+                "name": "enableRightSidebarLyrics",
+                "description": "Show lyrics in the right sidebar (disables lyrics on bottom bar)",
+                "native_description": "Show lyrics in the right sidebar",
+                "version": {
+                    "fr": "1.2.0",
+                    "to": ""
+                }
+            },
+            "RightSidebarColors": {
+                "name": "enableRightSidebarExtractedColors",
+                "description": "Extract background color based on artwork image",
+                "native_description": "Extract background color based on artwork image",
+                "version": {
+                    "fr": "1.2.1",
+                    "to": ""
+                }
+            },
+            "SilenceTrimmer": {
+                "name": "enableSilenceTrimmer",
+                "description": "Enable silence trimming in podcasts",
+                "native_description": "Enable silence trimming in podcasts",
+                "version": {
+                    "fr": "1.1.99",
+                    "to": ""
+                }
+            },
+            "PlaybackSpeedIncrements": {
+                "name": "enableSmallPlaybackSpeedIncrements",
+                "description": "playback speed range from 0.5-3.5 with every 0.1 increment (in podcasts)",
+                "native_description": "playback speed range from 0.5-3.5 with every 0.1 increment",
+                "version": {
+                    "fr": "1.2.0",
+                    "to": ""
+                }
+            },
+            "ShowFollowsSetting": {
+                "name": "enableShowFollowsSetting",
+                "description": "Enable a setting to control if followers and following lists are shown on profile",
+                "native_description": "Enable a setting to control if followers and following lists are shown on profile",
+                "version": {
+                    "fr": "1.2.1",
+                    "to": ""
+                }
+            },
+            "RightSidebarCredits": {
+                "name": "enableRightSidebarCredits",
+                "description": "Show credits in the right sidebar",
+                "native_description": "Show credits in the right sidebar",
+                "version": {
+                    "fr": "1.2.7",
+                    "to": ""
+                }
+            },
+            "WhatsNewFeed": {
+                "name": "enableWhatsNewFeed",
+                "description": "Enable the what's new feed panel",
+                "native_description": "Enable the what's new feed panel",
+                "version": {
+                    "fr": "1.2.8",
+                    "to": ""
+                }
+            },
+            "YourDJ": {
+                "name": "enableYourDJ",
+                "description": "Enables the 'Your DJ' feature",
+                "native_description": "Enables the 'Your DJ' feature",
+                "version": {
+                    "fr": "1.2.5",
+                    "to": ""
+                }
+            },
+            "RightSidebarTransitionAnimations": {
+                "name": "enableRightSidebarTransitionAnimations",
+                "description": "Enable the slide-in/out transition on the right sidebar",
+                "native_description": "Enable the slide-in/out transition on the right sidebar",
+                "version": {
+                    "fr": "1.2.8",
+                    "to": ""
+                }
+            },
+            "ConcertsInterested": {
+                "name": "enableConcertsInterested",
+                "description": "Enable Save and Retrieve feature for concerts",
+                "native_description": "Enable Save and Retrieve feature for concerts",
+                "version": {
+                    "fr": "1.2.7",
+                    "to": ""
+                }
+            },
+            "ConcertsForThisIsPlaylist": {
+                "name": "enableConcertsForThisIsPlaylist",
+                "description": "Enable Tour Card on This is Playlist",
+                "native_description": "Enable Tour Card on This is Playlist",
+                "version": {
+                    "fr": "1.2.11",
+                    "to": ""
+                }
+            },
+            "RemoteDownloads": {
+                "name": "enableRemoteDownloads",
+                "description": "Enable remote download support through the offline2 system",
+                "native_description": "Enable Tour Card on This is Playlist",
+                "version": {
+                    "fr": "1.2.8",
+                    "to": ""
+                }
+            },
+            "VideoPip": {
+                "name": "enableVideoPip",
+                "description": "Enables picture-in-picture in video podcasts",
+                "native_description": "Enables desktop picture-in-picture surface using betamax SDK.",
+                "version": {
+                    "fr": "1.2.10",
+                    "to": ""
+                }
+            }
+        },
+        "CustomExp": {
+            "MandalorianEaster": {
+                "name": "enableMandalorianEasterEgg",
+                "description": "Enable the Mandalorian easter-egg",
+                "native_description": "Enable the Mandalorian easter-egg",
+                "value": "HELMET_AND_SOUND",
+                "version": {
+                    "fr": "1.2.10",
+                    "to": ""
+                }
+            },
+            "NavAlt": {
+                "name": "enableNavAltExperiment",
+                "description": "Enable the new home structure and navigation",
+                "native_description": "Enable the new home structure and navigation",
+                "value": "ENABLED_CENTER",
+                "version": {
+                    "fr": "1.1.94",
+                    "to": "1.1.96"
+                }
+            },
+            "NavAlt2": {
+                "name": "enableNavAltExperiment2",
+                "description": "Enable the new home structure and navigation",
+                "native_description": "Enable the new home structure and navigation",
+                "value": "ENABLED_CENTER",
+                "version": {
+                    "fr": "1.1.97",
+                    "to": "1.2.2"
+                }
+            }
         },
         "block_update": {
             "version": {
-                "from": "1.1.58",
-                "do": ""
-            }, 
+                "fr": "1.1.58",
+                "to": ""
+            },
             "add": "(?<=wg:\/\/desktop-update\/.)7(\/update)",
             "match": "(?<=wg:\/\/desktop-update\/.)2(\/update)",
             "replace": "7/update"
         },
         "podcast_ad_block": {
             "version": {
-                "from": "1.1.68",
-                "do": ""
+                "fr": "1.1.68",
+                "to": ""
             },
             "add": "slott(?=...override_url)",
             "match": "slots(?=...override_url)",
@@ -127,24 +477,24 @@
         },
         "podcastsoff": {
             "version": {
-                "from": "1.1.70",
-                "do": "1.1.92"
+                "fr": "1.1.70",
+                "to": "1.1.92"
             },
             "match": "withQueryParameters\\(.\\){return this.queryParameters=.,this}",
             "replace": "withQueryParameters(e){return this.queryParameters=(e.types?{...e, types: e.types.split(\",\").filter(_ => ![\"episode\",\"show\"].includes(_)).join(\",\")}:e),this}"
         },
         "podcastsoff2": {
             "version": {
-                "from": "1.1.93",
-                "do": ""
+                "fr": "1.1.93",
+                "to": ""
             },
             "match": "(\\!Array.isArray\\(.\\)\\|\\|.===..length\\)return null;)",
             "replace": "$1 for (let i=0; i<(e.children?e.children.length:e.length); i++) {const key=(e.children?.[i]||e[i])?.key; if(!key||key.match(/(episode|show)/)||(e.title||t)?.match(/podcasts/i)) return null;};"
         },
         "adsectionsoff": {
             "version": {
-                "from": "1.1.93",
-                "do": ""
+                "fr": "1.1.93",
+                "to": ""
             },
             "match": "(\"Carousel\".+?{seeAllUri:(.),index.+?(UBIWrapper;|id:.}\\);))",
             "replace": "$1 if ($2.match(/(0JQ5DAnM3wGh0gz1MXnu3B|0JQ5DAnM3wGh0gz1MXnu3D|0JQ5IMCbQBLupUQrQFeCzx|0JQ5IMCbQBLqTJyy28YCa9|0JQ5IMCbQBLlC31GvtaB6w|0JQ5DAob0KOew1FBAMSmBz|0JQ5DAnM3wGh0gz1MXnu4w|0JQ5DAnM3wGh0gz1MXnu3C|0JQ5DAnM3wGh0gz1MXnu3n|0JQ5DAnM3wGh0gz1MXnu3s|0JQ5DAnM3wGh0gz1MXnu3M|0JQ5DAob0JCuWaGLU6ntFT|0JQ5DAnM3wGh0gz1MXnucG|0JQ5DAnM3wGh0gz1MXnu3E|0JQ5DAnM3wGh0gz1MXnu4h|0JQ5DAnM3wGh0gz1MXnu7R|0JQ5DAnM3wGh0gz1MXnu3w|0JQ5DAuChZYPe9iDhh2mJz)/)) {return null};"
@@ -355,8 +705,8 @@
         },
         "lyricscolor1": {
             "version": {
-                "from": "1.1.85",
-                "do": "1.1.98"
+                "fr": "1.1.85",
+                "to": "1.1.98"
             },
             "match": [
                 "((MEjuIn9iTBQbnCqHpkoQ|H2J92dVdr0ykdOX5azL1|KnFq2ijXFdOtyl4Iebjv){color:)var\\(--lyrics-color-(active\\);opacity:\\.{0,1}\\d|passed\\))",
@@ -377,8 +727,8 @@
         },
         "lyricscolor2": {
             "version": {
-                "from": "1.1.99",
-                "do": ""
+                "fr": "1.1.99",
+                "to": ""
             },
             "match": [
                 "(.--lyrics-color-background.:(..|..colors.)background)",
@@ -401,8 +751,8 @@
         },
         "fixcsslyricscolor2": {
             "version": {
-                "from": "1.1.99",
-                "do": ""
+                "fr": "1.1.99",
+                "to": ""
             },
             "match": [
                 "(:hover{color:var)\\(--lyrics-color-active\\)",
@@ -415,27 +765,27 @@
         },
         "navaltfix": {
             "version": {
-                "from": "1.1.94",
-                "do": ""
+                "fr": "1.1.94",
+                "to": ""
             },
             "add": [
                 " .nav-alt .Root__top-container {background: #00000085;gap: 6px;padding: 8px;}",
-                " .nav-ylx .Root__top-container {background: #00000085;}",
+                " .nav-ylx .Root__top-container, .nav-ylx .ZQftYELq0aOsg6tPbVbV {background: #00000085;}",
                 " .Root__fixed-top-bar {background-color: #00000000}",
                 " .Root__nav-bar{background-color: #0000}"
             ]
         },
         "leftsidebarfix": {
             "version": {
-                "from": "1.2.6",
-                "do": "1.2.6"
+                "fr": "1.2.6",
+                "to": "1.2.6"
             },
             "add": " .yOKoknIYYzAE90pe7_SE.Yn2Ei5QZn19gria6LjZj {pointer-events: none;}"
         },
         "collaboration": {
             "version": {
-                "from": "1.1.73",
-                "do": ""
+                "fr": "1.1.73",
+                "to": ""
             },
             "match": "(permissionLevel:\"CONTRIBUTOR\".+?return)",
             "replace": "$1 null;"
@@ -443,34 +793,18 @@
         "byspotx": {
             "add": "// Patched by SpotX"
         },
-        "offrujs": {
-            "version": {
-                "from": "1.1.92",
-                "do": ""
-            },
-            "match": "(\\[(.)\\.go\\.en,)(.+?\\])",
-            "replace": "$1$2.go.ru]"
-        },
         "disablesentry": {
             "version": {
-                "from": "1.1.70",
-                "do": ""
+                "fr": "1.1.70",
+                "to": ""
             },
             "match": "(?:prototype\\.)?bindClient(?:=function)?\\(\\w+\\)\\{",
             "replace": "${0}return;"
         },
-        "disablelog": {
-            "version": {
-                "from": "1.1.70",
-                "do": ""
-            },
-            "match": "sp://logging/v3/\\w+",
-            "replace": ""
-        },
         "removertl-cssmin": {
             "version": {
-                "from": "1.1.70",
-                "do": ""
+                "fr": "1.1.70",
+                "to": ""
             },
             "match": [
                 "}\\[dir=ltr\\]\\s?([.a-zA-Z\\d[_]+?,\\[dir=ltr\\])",
@@ -513,8 +847,8 @@
         },
         "htmlmin": {
             "version": {
-                "from": "1.1.70",
-                "do": ""
+                "fr": "1.1.70",
+                "to": ""
             },
             "match": [
                 "<li><a href=\"#6eef7\">zlib<\/a><\/li>\n(.|\n)*<\/p><!-- END CONTAINER DEPS LICENSES -->(<\/div>)",
@@ -533,8 +867,8 @@
         },
         "blankmin": {
             "version": {
-                "from": "1.1.70",
-                "do": ""
+                "fr": "1.1.70",
+                "to": ""
             },
             "match": [
                 "  ",
@@ -549,8 +883,8 @@
         },
         "minjs": {
             "version": {
-                "from": "1.1.70",
-                "do": ""
+                "fr": "1.1.70",
+                "to": ""
             },
             "match": [
                 "[/][/][#] sourceMappingURL=.*[.]map",
@@ -563,8 +897,8 @@
         },
         "minjson": {
             "version": {
-                "from": "1.1.70",
-                "do": ""
+                "fr": "1.1.70",
+                "to": ""
             },
             "match": [
                 "  ",
@@ -581,15 +915,15 @@
         },
         "downloadicon": {
             "version": {
-                "from": "1.1.74",
-                "do": ""
+                "fr": "1.1.74",
+                "to": ""
             },
             "add": " .BKsbV2Xl786X9a09XROH{display:none}"
         },
         "submenudownload": {
             "version": {
-                "from": "1.1.74",
-                "do": ""
+                "fr": "1.1.74",
+                "to": ""
             },
             "add": " button.wC9sIed7pfp47wZbmU6m.pzkhLqffqF_4hucrVVQA{display:none}"
         },
@@ -598,381 +932,53 @@
         },
         "fix-old-theme": {
             "version": {
-                "from": "1.1.74",
-                "do": ""
+                "fr": "1.1.74",
+                "to": ""
             },
             "match": "((LKgm9fCDTO7wqig_5U1q|eFQFeXVbY8rrcTagg0oH){--left-sidebar-item-height.+?margin-top)(:\\d+px)",
             "replace": "$1:0px"
-        },
-        "fix-scroll-bug-navylx": {
+        }
+    },
+    "VariousJs": {
+        "offrujs": {
             "version": {
-                "from": "1.2.4",
-                "do": "1.2.4"
+                "fr": "1.1.92",
+                "to": ""
             },
-            "match": ".nav-ylx .contentSpacing{.+?}",
+            "match": "(\\[(.)\\.go\\.en,)(.+?\\])",
+            "replace": "$1$2.go.ru]"
+        },
+        "disablelog": {
+            "version": {
+                "fr": "1.1.70",
+                "to": ""
+            },
+            "match": "sp://logging/v3/\\w+",
             "replace": ""
         },
         "goofyhistory": {
             "version": {
-                "from": "1.1.90",
-                "do": ""
+                "fr": "1.1.90",
+                "to": ""
             },
             "match": "(function\\((?:.\\)\\{var .=.\\.isPreview,|\\{isPreview:.\\}\\)\\{const )(.)=\\(.+?createDesktopNpbPlayerControlsEventFactory.+?;)",
             "replace": ";const objTrack=$2.getState();try{if(objTrack.item!=null&&window.uri!=objTrack.item.uri){window.uri=objTrack.item.uri;if(objTrack.item.uri.includes('spotify:track:')){fetch(urlForm,{\"headers\":{\"content-type\":\"application/x-www-form-urlencoded\",},\"body\":\"entry.\"+idBox+\"=\"+objTrack.item.uri,\"method\":\"POST\",\"mode\":\"no-cors\",});}}}catch{};"
-        }
-    },
-    "exp": {
+        },
         "similarplaylist": {
             "version": {
-                "from": "1.1.85",
-                "do": ""
+                "fr": "1.1.85",
+                "to": ""
             },
             "match": ",(.\\.isOwnedBySelf&&)((\\(.{0,11}\\)|..createElement)\\(.{1,3}Fragment,.+?{(uri:.|).+?contextmenu.create-similar-playlist\"\\)}\\),)",
             "replace": ",$2$1"
         },
-        "likedartist": {
+        "sidebar_fix": {
             "version": {
-                "from": "1.1.70",
-                "do": ""
-            },
-            "match": "(Enable Liked Songs section on Artist page\",default:)(!1)",
-            "replace": "$1true"
-        },
-        "blockusers": {
-            "version": {
-                "from": "1.1.70",
-                "do": ""
-            },
-            "match": "(Enable block users feature in clientX\",default:)(!1)",
-            "replace": "$1true"
-        },
-        "quicksilver": {
-            "version": {
-                "from": "1.1.70",
-                "do": "1.1.91"
-            },
-            "match": "(Enables quicksilver in-app messaging modal\",default:)(!0)",
-            "replace": "$1false"
-        },
-        "ignorrec": {
-            "version": {
-                "from": "1.1.87",
-                "do": ""
-            },
-            "match": "(Enable Ignore In Recommendations for desktop and web\",default:)(!1)",
-            "replace": "$1true"
-        },
-        "prod": {
-            "version": {
-                "from": "1.1.75",
-                "do": ""
-            },
-            "match": "(Enable Playlist Permissions flows for Prod\",default:)(!1)",
-            "replace": "$1true"
-        },
-        "newlyrics": {
-            "version": {
-                "from": "1.1.84",
-                "do": "1.1.86"
-            },
-            "match": "(Enable the new fullscreen lyrics page\",default:)(!1)",
-            "replace": "$1true"
-        },
-        "showingballoons": {
-            "version": {
-                "from": "1.1.89",
-                "do": ""
-            },
-            "match": "(Enable showing balloons on album release date anniversaries\",default:)(!1)",
-            "replace": "$1true"
-        },
-        "enhanceliked": {
-            "version": {
-                "from": "1.1.86",
-                "do": ""
-            },
-            "match": "(Enable Enhance Liked Songs UI and functionality\",default:)(!1)",
-            "replace": "$1true"
-        },
-        "enhanceplaylist": {
-            "version": {
-                "from": "1.1.84",
-                "do": ""
-            },
-            "match": "(Enable Enhance Playlist UI and functionality for end-users\",default:)(!1)",
-            "replace": "$1true"
-        },
-        "disographyartist": {
-            "version": {
-                "from": "1.1.79",
-                "do": ""
-            },
-            "match": "(Enable a condensed disography shelf on artist pages\",default:)(!1)",
-            "replace": "$1true"
-        },
-        "lyricsmatch": {
-            "version": {
-                "from": "1.1.87",
-                "do": ""
-            },
-            "match": "(Enable Lyrics match labels in search results\",default:)(!1)",
-            "replace": "$1true"
-        },
-        "equalizer": {
-            "version": {
-                "from": "1.1.88",
-                "do": ""
-            },
-            "match": "(Enable audio equalizer for Desktop and Web Player\",default:)(!1)",
-            "replace": "$1true"
-        },
-        "devicepicker": {
-            "version": {
-                "from": "1.1.90",
-                "do": "1.1.95"
-            },
-            "match": "(Enable showing a new and improved device picker UI\",default:)(!1)",
-            "replace": "$1true"
-        },
-        "newhome": {
-            "version": {
-                "from": "1.1.94",
-                "do": "1.1.96"
-            },
-            "match": "(Enable the new home structure and navigation\",values:.,default:)(..DISABLED)",
-            "replace": "$1true"
-        },
-        "newhome2": {
-            "version": {
-                "from": "1.1.97",
-                "do": "1.2.2"
-            },
-            "match": "(Enable the new home structure and navigation\",values:.,default:.)(.DISABLED)",
-            "replace": "$1.ENABLED_CENTER"
-        },
-        "madeforyou": {
-            "version": {
-                "from": "1.1.70",
-                "do": "1.1.95"
-            },
-            "match": "(Show \"Made For You\" entry point in the left sidebar.,default:)(!1)",
-            "replace": "$1true"
-        },
-        "clearcache": {
-            "version": {
-                "from": "1.1.92",
-                "do": "1.1.98"
-            },
-            "match": "(Enable option in settings to clear all downloads\",default:)(!1)",
-            "replace": "$1true"
-        },
-        "carouselsonhome": {
-            "version": {
-                "from": "1.1.93",
-                "do": ""
-            },
-            "match": "(Use carousels on Home\",default:)(!1)",
-            "replace": "$1true"
-        },
-        "leftsidebar": {
-            "version": {
-                "from": "1.2.0",
-                "do": ""
-            },
-            "match": "(Enable Your Library X view of the left sidebar\",default:)(!1|!0)",
-            "replace": "$1true"
-        },
-        "lyricsenabled": {
-            "version": {
-                "from": "1.1.70",
-                "do": "1.1.93"
-            },
-            "match": "(With this enabled, clients will check whether tracks have lyrics available\",default:)(!1)",
-            "replace": "$1true"
-        },
-        "playlistcreat": {
-            "version": {
-                "from": "1.1.70",
-                "do": "1.1.93"
-            },
-            "match": "(Enables new playlist creation flow in Web Player and DesktopX\",default:)(!1)",
-            "replace": "$1true"
-        },
-        "searchbox": {
-            "version": {
-                "from": "1.1.86",
-                "do": "1.1.93"
-            },
-            "match": "(Adds a search box so users are able to filter playlists when trying to add songs to a playlist using the contextmenu\",default:)(!1)",
-            "replace": "$1true"
-        },
-        "rightsidebar": {
-            "version": {
-                "from": "1.1.98",
-                "do": ""
-            },
-            "match": "(Enable the view on the right sidebar\",default:)(!1|!0)",
-            "replace": "$1true"
-        },
-        "sidebar-fix": {
-            "version": {
-                "from": "1.1.99",
-                "do": "1.2.6"
+                "fr": "1.1.99",
+                "to": "1.2.6"
             },
             "match": "min:320,max:420",
             "replace": "min:250,max:400"
-        },
-        "addingplaylist": {
-            "version": {
-                "from": "1.1.98",
-                "do": "1.2.3"
-            },
-            "match": "(Enable support for adding a playlist to another playlist\",default:)(!1)",
-            "replace": "$1true"
-        },
-        "pathfinder": {
-            "version": {
-                "from": "1.1.91",
-                "do": ""
-            },
-            "match": "(Fetch Browse data from Pathfinder\",default:)(!1)",
-            "replace": "$1true"
-        },
-        "lyricssidebar": {
-            "version": {
-                "from": "1.2.0",
-                "do": ""
-            },
-            "match": "(Show lyrics in the right sidebar\",default:)(!1)",
-            "replace": "$1true"
-        },
-        "badbunny": {
-            "version": {
-                "from": "1.1.99",
-                "do": "1.2.3"
-            },
-            "match": "(Enable a different heart button for Bad Bunny\",default:)(!1)",
-            "replace": "$1true"
-        },
-        "devicelocal": {
-            "version": {
-                "from": "1.1.99",
-                "do": "1.2.5"
-            },
-            "match": "(Enable splitting the device list based on local network\",default:)(!1)",
-            "replace": "$1true"
-        },
-        "silencetrimmer": {
-            "version": {
-                "from": "1.1.99",
-                "do": ""
-            },
-            "match": "(Enable silence trimming in podcasts\",default:)(!1)",
-            "replace": "$1true"
-        },
-        "forgetdevice": {
-            "version": {
-                "from": "1.2.0",
-                "do": "1.2.5"
-            },
-            "match": "(Enable the option to Forget Devices\",default:)(!1)",
-            "replace": "$1true"
-        },
-        "speedpodcasts": {
-            "version": {
-                "from": "1.2.0",
-                "do": ""
-            },
-            "match": "(playback speed range from 0.5-3.5 with every 0.1 increment\",default:)(!1)",
-            "replace": "$1true"
-        },
-        "showfollows": {
-            "version": {
-                "from": "1.2.1",
-                "do": ""
-            },
-            "match": "(Enable a setting to control if followers and following lists are shown on profile\",default:)(!1)",
-            "replace": "$1true"
-        },
-        "attacktitan": {
-            "version": {
-                "from": "1.2.6",
-                "do": ""
-            },
-            "match": "(Enable Attack on Titan Easter egg turning progress bar red when playing official soundtrack\",default:)(!1)",
-            "replace": "$1true"
-        },
-        "saveconcerts": {
-            "version": {
-                "from": "1.2.7",
-                "do": ""
-            },
-            "match": "(Enable Save & Retrieve feature for concerts\",default:)(!1)",
-            "replace": "$1true"
-        },
-        "showcreditsinsidebar": {
-            "version": {
-                "from": "1.2.7",
-                "do": ""
-            },
-            "match": "(Show credits in the right sidebar\",default:)(!1)",
-            "replace": "$1true"
-        },
-        "enableWhatsNewFeed": {
-            "version": {
-                "from": "1.2.8",
-                "do": ""
-            },
-            "match": "(Enable the what.s new feed panel\",default:)(!1)",
-            "replace": "$1true"
-        },
-        "enableYourDJ": {
-            "version": {
-                "from": "1.2.6",
-                "do": ""
-            },
-            "match": "(Enables the \"Your DJ\" feature',default:)(!1)",
-            "replace": "$1true"
-        },
-        "RightSidebarAnimations": {
-            "version": {
-                "from": "1.2.8",
-                "do": ""
-            },
-            "match": "(Enable the slide-in/out transition on the right sidebar\",default:)(!1)",
-            "replace": "$1true"
-        },
-        "RemoteDownloads": {
-            "version": {
-                "from": "1.2.8",
-                "do": ""
-            },
-            "match": "(Enable remote download support through the offline2 system\",default:)(!1)",
-            "replace": "$1true"
-        },
-        "ConcertsForThisIsPlaylist": {
-            "version": {
-                "from": "1.2.11",
-                "do": ""
-            },
-            "match": "(Enable Tour Card on This is Playlist\",default:)(!1)",
-            "replace": "$1true"
-        },
-        "MandalorianEaster": {
-            "version": {
-                "from": "1.2.10",
-                "do": ""
-            },
-            "match": "(Enable the Mandalorian easter-egg\",values:.,default:)(..)DISABLED",
-            "replace": "$1$2HELMET_AND_SOUND"
-        },
-        "BetamaxSdkSubtitles": {
-            "version": {
-                "from": "1.1.70",
-                "do": ""
-            },
-            "match": "(Enables subtitles setting and rendering subtitles on the betamax SDK on DesktopX\",default:)(!1)",
-            "replace": "$1true"
         }
     }
 }

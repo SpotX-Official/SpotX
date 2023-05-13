@@ -46,7 +46,6 @@
     Error           = "خطا"
     FileLocBroken   = "محل فایل های اسپاتیفای خراب است، کلاینت را حذف نصب کنید و اسکریپت را دوباره اجرا کنید"
     Spicetify       = "Spicetify detected, it must be installed after SpotX, open recommended actions in FAQ ? [Y/N]"
-    ExpSpotify      = "ویژگی های آزمایشی توسط اسپاتیفای"
     NoRestore       = "SpotX قبلاً نصب شده است، xpui.bak یافت نشد. `nلطفاً کلاینت Spotify را حذف نصب کنید و Install.bat را دوباره اجرا کنید"
     InstallComplete = "نصب تکمیل شد"
     HostInfo        = "URL های ناخواسته در فایل هاست یافت می شود"

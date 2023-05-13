@@ -46,7 +46,6 @@
     Error           = "Kesalahan"
     FileLocBroken   = "Lokasi file Spotify rusak, hapus instalan klien dan jalankan skrip lagi"
     Spicetify       = "Spicetify terdeteksi, harus diinstal setelah SpotX, buka tindakan yang direkomendasikan di FAQ? [Y/N]"
-    ExpSpotify      = "Fitur eksperimental yang dioperasikan oleh Spotify"
     NoRestore       = "SpotX sudah terinstal, xpui.bak tidak ditemukan. `nHarap hapus instalan klien Spotify dan jalankan Install.bat lagi"
     InstallComplete = "instalasi selesai"
     HostInfo        = "URL yang tidak diinginkan ditemukan di file hosts"

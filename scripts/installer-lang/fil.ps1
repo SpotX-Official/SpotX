@@ -46,7 +46,6 @@
     Error           = "May nangyaring mali"
     FileLocBroken   = "Ang lokasyon ng mga file ng Spotify ay sira, mag-uninstall ng Spotify client at patakbuhin muli ang script."
     Spicetify       = "Nakadetect ang Spicetify, ito ay dapat na mai-install pagkatapos ng SpotX, buksan ang rekomendadong mga hakbang sa FAQ? [Y/N]"
-    ExpSpotify      = "Mga experimental na feature na pinapatakbo ng Spotify"
     NoRestore       = "Nakainstall na ang SpotX, hindi nakita ang xpui.bak. `nMangyaring mag-uninstall ng Spotify client at patakbuhin muli ang Install.bat"
     InstallComplete = "Ang pag-install ay tapos na"
     HostInfo        = "May mga hindi kinakailangang mga URL ay natagpuan sa hosts file"

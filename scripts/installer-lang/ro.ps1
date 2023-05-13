@@ -46,7 +46,6 @@
     Error           = "Eroare"
     FileLocBroken   = "Locația fișierelor Spotify este stricată, dezinstalați clientul și rulați din nou scriptul"
     Spicetify       = "Spicetify detected, it must be installed after SpotX, open recommended actions in FAQ ? [Y/N]"
-    ExpSpotify      = "Funcții experimentale operate de Spotify"
     NoRestore       = "SpotX a fost deja instalat, xpui.bak nu a fost găsit. `nVă rugăm să dezinstalați clientul Spotify și să rulați din nou Install.bat"
     InstallComplete = "Instalare completă!"
     HostInfo        = "URL-uri nedorite au fost găsite in fișierul hosts"

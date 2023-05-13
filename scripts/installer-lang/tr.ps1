@@ -46,7 +46,6 @@
     Error           = "Hata"
     FileLocBroken   = "Spotify dosyalarının konumu bozuk, istemciyi kaldırın ve kodu tekrar çalıştırın"
     Spicetify       = "Spicetify detected, it must be installed after SpotX, open recommended actions in FAQ ? [Y/N]"
-    ExpSpotify      = "Spotify tarafından sunulan deneysel özellikler"
     NoRestore       = "SpotX zaten kurulmuş, xpui.bak dosyası bulunamadı. `nLütfen Spotify istemcisini kaldırın ve Install.bat dosyasını tekrar çalıştırın"
     InstallComplete = "kurulum tamamlandı"
     HostInfo        = "Hosts dosyasında istenmeyen URL'ler bulundu"

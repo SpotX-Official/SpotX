@@ -46,7 +46,6 @@
     Error           = "Virhe"
     FileLocBroken   = "Spotify-tiedostojen sijainti on rikki, asenna spotify uudelleen ja suorita komentosarja uudelleen"
     Spicetify       = "Spicetify detected, it must be installed after SpotX, open recommended actions in FAQ ? [Y/N]"
-    ExpSpotify      = "Spotifyn ylläpitämät kokeelliset ominaisuudet"
     NoRestore       = "SpotX on jo asennettu, xpui.bak tiedostoa ei löynyt. `nAsenna spotify uudelleen ja suorita Install.bat tiedosto uudelleen"
     InstallComplete = "asennus suoritettu"
     HostInfo        = "Hosts-tiedostosta löytyi ei-toivottuja URL-osoitteita"

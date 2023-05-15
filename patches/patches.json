@@ -35,7 +35,7 @@
         "emptyblock": {
             "version": {
                 "fr": "1.1.58",
-                "to": "1.1.92"
+                "to": ""
             },
             "match": "adsEnabled:!0",
             "replace": "adsEnabled:!1"

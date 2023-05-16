@@ -1,13 +1,5 @@
 {
     "free": {
-        "EsperantoAds": {
-            "version": {
-                "fr": "1.1.93",
-                "to": ""
-            },
-            "match": "(this._product_state=(.))",
-            "replace": "$1,$2.putOverridesValues({pairs:{ads:'0',catalogue:'premium',product:'premium',name:'Spotify'}})"
-        },
         "bilboard": {
             "version": {
                 "fr": "1.1.70",
@@ -940,6 +932,16 @@
         }
     },
     "VariousJs": {
+        "product_state": {
+            "version": {
+                "fr": "1.1.93",
+                "to": ""
+            },
+            "match": "(this._product_state=(.))",
+            "replace": "$1,$2.putOverridesValues({0})",
+            "add": "ads:'0',catalogue:'premium',product:'premium',type:'premium',name:'Spotify'",
+            "add2": "'storage-size-config':'{0},90,500,3'"
+        },
         "offrujs": {
             "version": {
                 "fr": "1.1.92",

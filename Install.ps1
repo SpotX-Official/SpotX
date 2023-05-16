@@ -15,14 +15,9 @@ param
     [Parameter(HelpMessage = 'Do not block Spotify automatic updates.')]
     [switch]$block_update_off,
     
-    [Parameter(HelpMessage = 'Enable clear cache.')]
-    [switch]$cache_on,
-    
-    [Parameter(HelpMessage = 'Specify the number of days. Default is 7 days.')]
-    [int16]$number_days = 7,
-    
-    [Parameter(HelpMessage = 'Do not enable cache clearing.')]
-    [switch]$cache_off,
+    [Parameter(HelpMessage = 'Change limit for clearing audio cache.')]
+    [Alias('cl')]
+    [int]$cache_limit,
     
     [Parameter(HelpMessage = 'Automatic uninstallation of Spotify MS if it was found.')]
     [switch]$confirm_uninstall_ms_spoti,
@@ -233,7 +228,6 @@ $spotifyDirectory = Join-Path $env:APPDATA 'Spotify'
 $spotifyDirectory2 = Join-Path $env:LOCALAPPDATA 'Spotify'
 $spotifyExecutable = Join-Path $spotifyDirectory 'Spotify.exe'
 $exe_bak = Join-Path $spotifyDirectory 'Spotify.bak'
-$cache_folder = Join-Path $env:APPDATA 'Spotify\cache'
 $spotifyUninstall = Join-Path $env:TEMP 'SpotifyUninstall.exe'
 $start_menu = Join-Path $env:APPDATA 'Microsoft\Windows\Start Menu\Programs\Spotify.lnk'
 
@@ -363,58 +357,36 @@ function Unlock-Folder {
     }
 }
 
-function downloadScripts($param1) {
+function downloadSp() {
 
     $webClient = New-Object -TypeName System.Net.WebClient
 
-    if ($param1 -eq "Desktop") {
-        Import-Module BitsTransfer
+    Import-Module BitsTransfer
         
-        $links = "https://download.scdn.co/upgrade/client/win32-x86/spotify_installer-$onlineFull.exe"
-    }
-    if ($ru -and $param1 -eq "cache-spotify") {
-        $links2 = "https://raw.githubusercontent.com/amd64fox/SpotX/main/scripts/cache/cache_spotify_ru.ps1"
-    }
-    if (!($ru) -and $param1 -eq "cache-spotify" ) { 
-        $links2 = "https://raw.githubusercontent.com/amd64fox/SpotX/main/scripts/cache/cache_spotify.ps1"
-    }
+    $web_Url = "https://download.scdn.co/upgrade/client/win32-x86/spotify_installer-$onlineFull.exe"
+    $local_Url = "$PWD\SpotifySetup.exe" 
+    $web_name_file = "SpotifySetup.exe"
+
+    try { if (curl.exe -V) { $curl_check = $true } }
+    catch { $curl_check = $false }
     
-    $web_Url_prev = $links, $links2, "https://raw.githubusercontent.com/amd64fox/SpotX/main/scripts/cache/hide_window.vbs", `
-        "https://raw.githubusercontent.com/amd64fox/SpotX/main/scripts/cache/run_ps.bat"
-
-    $local_Url_prev = "$PWD\SpotifySetup.exe", "$cache_folder\cache_spotify.ps1", "$cache_folder\hide_window.vbs", "$cache_folder\run_ps.bat"
-    $web_name_file_prev = "SpotifySetup.exe", "cache_spotify.ps1", "hide_window.vbs", "run_ps.bat"
-
-    switch ( $param1 ) {
-        "Desktop" { $web_Url = $web_Url_prev[0]; $local_Url = $local_Url_prev[0]; $web_name_file = $web_name_file_prev[0] }
-        "cache-spotify" { $web_Url = $web_Url_prev[1]; $local_Url = $local_Url_prev[1]; $web_name_file = $web_name_file_prev[1] }
-        "hide_window" { $web_Url = $web_Url_prev[2]; $local_Url = $local_Url_prev[2]; $web_name_file = $web_name_file_prev[2] }
-        "run_ps" { $web_Url = $web_Url_prev[3]; $local_Url = $local_Url_prev[3]; $web_name_file = $web_name_file_prev[3] } 
-    }
-
-    if ($param1 -eq "Desktop") {
-        try { if (curl.exe -V) { $curl_check = $true } }
-        catch { $curl_check = $false }
-    }
     try { 
-        if ($param1 -eq "Desktop" -and $curl_check) {
+        if ($curl_check) {
             $stcode = curl.exe -s -w "%{http_code}" -o /dev/null $web_Url --retry 2 --ssl-no-revoke
-            if ($stcode -ne "200") { throw ($lang).Download6 }
+            if ($stcode -ne "200") {
+                Write-Host "Curl error code: $stcode"; throw
+            }
             curl.exe $web_Url -o $local_Url --progress-bar --retry 3 --ssl-no-revoke
             return
         }
-        if ($param1 -eq "Desktop" -and !($curl_check ) -and $null -ne (Get-Module -Name BitsTransfer -ListAvailable)) {
+        if (!($curl_check ) -and $null -ne (Get-Module -Name BitsTransfer -ListAvailable)) {
             $ProgressPreference = 'Continue'
             Start-BitsTransfer -Source  $web_Url -Destination $local_Url  -DisplayName ($lang).Download5 -Description "$online "
             return
         }
-        if ($param1 -eq "Desktop" -and !($curl_check ) -and $null -eq (Get-Module -Name BitsTransfer -ListAvailable)) {
+        if (!($curl_check ) -and $null -eq (Get-Module -Name BitsTransfer -ListAvailable)) {
             $webClient.DownloadFile($web_Url, $local_Url) 
             return
-        }
-        if ($param1 -ne "Desktop") {
-            $ProgressPreference = 'SilentlyContinue' # Hiding Progress Bars
-            $webClient.DownloadFile($web_Url, $local_Url) 
         }
     }
 
@@ -427,24 +399,22 @@ function downloadScripts($param1) {
         Start-Sleep -Milliseconds 5000 
         try { 
 
-            if ($param1 -eq "Desktop" -and $curl_check) {
+            if ($curl_check) {
                 $stcode = curl.exe -s -w "%{http_code}" -o /dev/null $web_Url --retry 2 --ssl-no-revoke
-                if ($stcode -ne "200") { throw ($lang).Download6 }
+                if ($stcode -ne "200") {
+                    Write-Host "Curl error code: $stcode"; throw
+                }
                 curl.exe $web_Url -o $local_Url --progress-bar --retry 3 --ssl-no-revoke
                 return
             }
-            if ($param1 -eq "Desktop" -and $null -ne (Get-Module -Name BitsTransfer -ListAvailable) -and !($curl_check )) {
-                Start-BitsTransfer -Source  $web_Url -Destination $local_Url  -DisplayName ($lang).Download5 -Description "$vernew "
+            if (!($curl_check ) -and $null -ne (Get-Module -Name BitsTransfer -ListAvailable) -and !($curl_check )) {
+                Start-BitsTransfer -Source  $web_Url -Destination $local_Url  -DisplayName ($lang).Download5 -Description "$online "
                 return
             }
-            if ($param1 -eq "Desktop" -and $null -eq (Get-Module -Name BitsTransfer -ListAvailable) -and !($curl_check )) {
+            if (!($curl_check ) -and $null -eq (Get-Module -Name BitsTransfer -ListAvailable) -and !($curl_check )) {
                 $webClient.DownloadFile($web_Url, $local_Url) 
                 return
             }
-            if ($param1 -ne "Desktop") {
-                $webClient.DownloadFile($web_Url, $local_Url) 
-            }
-
         }
         
         catch {
@@ -466,7 +436,6 @@ function downloadScripts($param1) {
 function DesktopFolder {
 
     # If the default Dekstop folder does not exist, then try to find it through the registry.
-    
     $ErrorActionPreference = 'SilentlyContinue' 
     if (Test-Path "$env:USERPROFILE\Desktop") {  
         $desktop_folder = "$env:USERPROFILE\Desktop"  
@@ -745,11 +714,11 @@ if (-not $spotifyInstalled -or $upgrade_client) {
     Start-Sleep -Milliseconds 600
     Unlock-Folder | Out-Null
     Start-Sleep -Milliseconds 200
-    Get-ChildItem $spotifyDirectory -Exclude 'Users', 'prefs', 'cache' | Remove-Item -Recurse -Force 
+    Get-ChildItem $spotifyDirectory -Exclude 'Users', 'prefs' | Remove-Item -Recurse -Force 
     Start-Sleep -Milliseconds 200
 
     # Client download
-    downloadScripts -param1 "Desktop"
+    downloadSp
     Write-Host ""
 
     Start-Sleep -Milliseconds 200
@@ -833,53 +802,6 @@ if ($ch -eq 'n') {
 }
 
 $ch = $null
-
-if ($cache_on) { 
-    Write-Host (($lang).CacheOn -f $number_days)`n 
-    $cache_install = $true
-}
-if ($cache_off) { 
-    Write-Host ($lang).CacheOff`n
-    $ErrorActionPreference = 'SilentlyContinue'
-    $desktop_folder = DesktopFolder
-    if (Test-Path -LiteralPath $cache_folder) {
-        remove-item $cache_folder -Recurse -Force
-        remove-item $desktop_folder\Spotify.lnk -Recurse -Force
-        remove-item $start_menu -Recurse -Force
-    } 
-}
-if (!($cache_on) -and !($cache_off)) {
-
-    do {
-        $ch = Read-Host -Prompt ($lang).CacheSelect
-        Write-Host ""
-        if (!($ch -eq 'n' -or $ch -eq 'y')) { incorrectValue }
-    }
-    while ($ch -notmatch '^y$|^n$')
-
-    if ($ch -eq 'y') {
-        $cache_install = $true 
-
-        do {
-            Write-Host ($lang).CacheDays
-            $ch = Read-Host -Prompt ($lang).CacheDays2
-            Write-Host ""
-            if (!($ch -match "^[1-9][0-9]?$|^100$")) { incorrectValue }
-        }
-        while ($ch -notmatch '^[1-9][0-9]?$|^100$')
-
-        if ($ch -match "^[1-9][0-9]?$|^100$") { $number_days = $ch }
-    }
-    if ($ch -eq 'n') {
-        $ErrorActionPreference = 'SilentlyContinue'
-        $desktop_folder = DesktopFolder
-        if (Test-Path -LiteralPath $cache_folder) {
-            remove-item $cache_folder -Recurse -Force
-            remove-item $desktop_folder\Spotify.lnk -Recurse -Force
-            remove-item $start_menu -Recurse -Force
-        }
-    }
-}
 
 $url = "https://raw.githubusercontent.com/amd64fox/SpotX/main/patches/patches.json"
 $retries = 0
@@ -1002,11 +924,11 @@ function Helper($paramname) {
         }
         "ForcedExp" {  
             # Forced disable some exp (xpui.js)
-
             $offline_patch = $offline -replace '(\d+\.\d+\.\d+)(.\d+)', '$1'
             $remEnable = $webjson.others.EnableExp.psobject.properties  
             $remCustom = $webjson.others.CustomExp.psobject.properties
-            
+
+            $remEnable.remove('WhatsNewFeed')
             if ($enhance_like_off) { $remEnable.remove('EnhanceLikedSongs') }
             if ($enhance_playlist_off) { $remEnable.remove('EnhancePlaylist') }
             # Old theme
@@ -1024,6 +946,7 @@ function Helper($paramname) {
             }
             if (!$premium) { $remEnable.remove('RemoteDownloads') }
 
+            # Disable unimportant exp
             if ($exp_spotify) {
                 $objects = @(
                     @{
@@ -1044,6 +967,7 @@ function Helper($paramname) {
                 }
 
             }
+
             $Exp = ($webjson.others.EnableExp, $webjson.others.DisableExp, $webjson.others.CustomExp)
 
             foreach ($item in $Exp) {
@@ -1076,14 +1000,12 @@ function Helper($paramname) {
                 $custname = $webjson.others.CustomExp.$item.name
                 $custvalue = $webjson.others.CustomExp.$item.value
 
-                # Создаем строку с нужным форматом
+                # Create a string with the desired format
                 $objectString = "{name:'$custname',value:'$custvalue'}"
-
-                # Выводим строку
                 $objectString
             }
                
-            # Преобразуем строки объектов в одну текстовую строку
+            # Convert the strings of objects into a single text string
             if ([string]::IsNullOrEmpty($customNames)) { $customTextVariable = '[]' }
             else { $customTextVariable = "[" + ($customNames -join ',') + "]" }
             if ([string]::IsNullOrEmpty($enableNames)) { $enableTextVariable = '[]' }
@@ -1149,6 +1071,7 @@ function Helper($paramname) {
             $json = $webjson.others
         }
         "VariousofXpui-js" { 
+
             $rem = $webjson.VariousJs.psobject.properties  
 
             if ($urlform_goofy -and $idbox_goofy) {
@@ -1157,6 +1080,27 @@ function Helper($paramname) {
             else { $rem.remove('goofyhistory') }
             
             if (!($ru)) { $rem.remove('offrujs') }
+
+            if (!($premium) -or ($cache_limit)) {
+                if (!($premium)) { 
+                    $adds += $webjson.VariousJs.product_state.add
+                }
+
+                if ($cache_limit) { 
+        
+                    if ($cache_limit -lt 500) { $cache_limit = 500 }
+                    if ($cache_limit -gt 20000) { $cache_limit = 20000 }
+                        
+                    $adds2 = $webjson.VariousJs.product_state.add2
+                    if (!([string]::IsNullOrEmpty($adds))) { $adds2 = ',' + $adds2 }
+                    $adds += $adds2 -f $cache_limit
+
+                }
+
+                $repl = $webjson.VariousJs.product_state.replace
+                $webjson.VariousJs.product_state.replace = $repl -f "{pairs:{$adds}}"
+
+            }
 
             $name = "patches.json.VariousJs."
             $n = "xpui.js"
@@ -1265,7 +1209,6 @@ function extract ($counts, $method, $name, $helper, $add, $patch) {
 }
 
 Write-Host ($lang).ModSpoti`n
-
 
 $tempDirectory = $PWD
 Pop-Location
@@ -1540,65 +1483,7 @@ extract -counts 'exe' -helper 'PodcastAd'
 # Block updates
 if ($block_update) { extract -counts 'exe' -helper 'BlockUpdate' }
 
-# Automatic cache clearing
-if ($cache_install) {
-    Start-Sleep -Milliseconds 200
-    New-Item -Path $env:APPDATA\Spotify\ -Name "cache" -ItemType "directory" | Out-Null
-
-    # Download cache script
-    downloadScripts -param1 "cache-spotify"
-    downloadScripts -param1 "hide_window"
-    downloadScripts -param1 "run_ps"
-
-
-    # Create a desktop shortcut
-    if (!($no_shortcut)) {
-        $source2 = "$cache_folder\hide_window.vbs"
-        $target2 = "$desktop_folder\Spotify.lnk"
-        $WorkingDir2 = "$cache_folder"
-        $WshShell2 = New-Object -comObject WScript.Shell
-        $Shortcut2 = $WshShell2.CreateShortcut($target2)
-        $Shortcut2.WorkingDirectory = $WorkingDir2
-        $Shortcut2.IconLocation = Join-Path $env:APPDATA 'Spotify\Spotify.exe'
-        $Shortcut2.TargetPath = $source2
-        $Shortcut2.Save()
-    }
-    # Create shortcut in start menu
-    $source2 = "$cache_folder\hide_window.vbs"
-    $target2 = $start_menu
-    $WorkingDir2 = "$cache_folder"
-    $WshShell2 = New-Object -comObject WScript.Shell
-    $Shortcut2 = $WshShell2.CreateShortcut($target2)
-    $Shortcut2.WorkingDirectory = $WorkingDir2
-    $Shortcut2.IconLocation = Join-Path $env:APPDATA 'Spotify\Spotify.exe'
-    $Shortcut2.TargetPath = $source2
-    $Shortcut2.Save()
-
-    if ($number_days -match "^[1-9][0-9]?$|^100$") {
-        $file_cache_spotify_ps1 = Get-Content $cache_folder\cache_spotify.ps1 -Raw
-        $new_file_cache_spotify_ps1 = $file_cache_spotify_ps1 -replace '7', $number_days
-        Set-Content -Path $cache_folder\cache_spotify.ps1 -Force -Value $new_file_cache_spotify_ps1
-        $contentcache_spotify_ps1 = [System.IO.File]::ReadAllText("$cache_folder\cache_spotify.ps1")
-        $contentcache_spotify_ps1 = $contentcache_spotify_ps1.Trim()
-        [System.IO.File]::WriteAllText("$cache_folder\cache_spotify.ps1", $contentcache_spotify_ps1)
-
-        $infile = "$cache_folder\cache_spotify.ps1"
-        $outfile = "$cache_folder\cache_spotify2.ps1"
-
-        $sr = New-Object System.IO.StreamReader($infile) 
-        $sw = New-Object System.IO.StreamWriter($outfile, $false, [System.Text.Encoding]::Default)
-        $sw.Write($sr.ReadToEnd())
-        $sw.Close()
-        $sr.Close() 
-        $sw.Dispose()
-        $sr.Dispose()
-
-        Start-Sleep -Milliseconds 200
-        Remove-item $infile -Recurse -Force
-        Rename-Item -path $outfile -NewName $infile
-    }
-}
-
+# Start Spotify
 if ($start_spoti) { Start-Process -WorkingDirectory $spotifyDirectory -FilePath $spotifyExecutable }
 
 Write-Host ($lang).InstallComplete`n -ForegroundColor Green

@@ -115,6 +115,7 @@ or
   #### Usual installation only without ad blocking, for those who have a premium account, also contains:
   
   - New theme activated (new right and left sidebar, some cover change)
+  - Disabled only audio ads in podcasts
   - All [experimental features](https://github.com/amd64fox/SpotX/discussions/50) included
 
   <h4> </h4>

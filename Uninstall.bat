@@ -26,25 +26,11 @@ if exist "%Appdata%\Spotify\blockthespot_log.txt" (
     del /s /q "%Appdata%\Spotify\blockthespot_log.txt" > NUL 2>&1
 )
 
-if exist "%Appdata%\Spotify\cache" (
-	rd /s /q %Appdata%\Spotify\cache > NUL 2>&1
-
-SET Esc_LinkDest=%Userprofile%\Desktop\Spotify.lnk
-SET Esc_LinkTarget=%Appdata%\Spotify\Spotify.exe
-SET Esc_WorkLinkTarget=%Appdata%\Spotify\
-SET cSctVBS=CreateShortcut.vbs
-((
-echo Set oWS = WScript.CreateObject^("WScript.Shell"^) 
-echo sLinkFile = oWS.ExpandEnvironmentStrings^("!Esc_LinkDest!"^)
-echo Set oLink = oWS.CreateShortcut^(sLinkFile^) 
-echo oLink.TargetPath = oWS.ExpandEnvironmentStrings^("!Esc_LinkTarget!"^)
-echo oLink.WorkingDirectory = oWS.ExpandEnvironmentStrings^("!Esc_WorkLinkTarget!"^)
-echo oLink.Save
-)1>!cSctVBS!
-cscript !cSctVBS!
-DEL !cSctVBS! /f /q
+if exist "%temp%\SpotX_Temp*" (
+    for /d %%i in ("%temp%\SpotX_Temp*") do (
+        rd /s/q "%%i" > NUL 2>&1
+    )
 )
-) 
 
 echo Patch successfully removed
 pause

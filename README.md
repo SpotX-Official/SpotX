@@ -23,7 +23,6 @@
 - <strong>Blocks all banner, video and audio ads in the client</strong>
 - <strong>Hiding podcasts, episodes and audiobooks from the homepage (optional)</strong>
 - <strong>Block Spotify automatic updates (optional)</strong>
-- <strong>Automatic clearing of [audio cache](https://github.com/amd64fox/SpotX/discussions/2) (optional)</strong>
 - <strong>More experimental features have been activated ([see the full list](https://github.com/amd64fox/SpotX/discussions/50))</strong>
 - <strong>Disabled Sentry (Prevented Sentry from sending console log/error/warning to Spotify developers)</strong>
 - <strong>Disabled logging (Stopped various elements to log user interaction)</strong>
@@ -101,7 +100,7 @@ or
 #### Run The following command in PowerShell:
 
 ```ps1
-[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; iex "& { $((iwr -useb 'https://raw.githubusercontent.com/amd64fox/SpotX/main/Install.ps1').Content) } -confirm_uninstall_ms_spoti -confirm_spoti_recomended_over -podcasts_off -cache_off -block_update_on -start_spoti -new_theme -adsections_off -lyrics_stat spotify"
+[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; iex "& { $((iwr -useb 'https://raw.githubusercontent.com/amd64fox/SpotX/main/Install.ps1').Content) } -confirm_uninstall_ms_spoti -confirm_spoti_recomended_over -podcasts_off -block_update_on -start_spoti -new_theme -adsections_off -lyrics_stat spotify"
 ```
 
 </details>

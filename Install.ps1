@@ -1096,11 +1096,10 @@ function Helper($paramname) {
                     $adds += $adds2 -f $cache_limit
 
                 }
-
                 $repl = $webjson.VariousJs.product_state.replace
                 $webjson.VariousJs.product_state.replace = $repl -f "{pairs:{$adds}}"
-
             }
+            else { $rem.remove('product_state') }
 
             $name = "patches.json.VariousJs."
             $n = "xpui.js"

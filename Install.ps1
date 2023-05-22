@@ -258,7 +258,7 @@ if ($win7 -or $win8 -or $win8_1) {
 }
 # Recommended version for Win 10-12
 else {  
-    $onlineFull = "1.2.11.916.geb595a67-2498" 
+    $onlineFull = "1.2.12.902.g1924b088-3133" 
 }
 
 $online = ($onlineFull -split ".g")[0]
@@ -928,7 +928,6 @@ function Helper($paramname) {
             $remEnable = $webjson.others.EnableExp.psobject.properties  
             $remCustom = $webjson.others.CustomExp.psobject.properties
 
-            $remEnable.remove('WhatsNewFeed')
             if ($enhance_like_off) { $remEnable.remove('EnhanceLikedSongs') }
             if ($enhance_playlist_off) { $remEnable.remove('EnhancePlaylist') }
             # Old theme

@@ -71,14 +71,6 @@
             },
             "match": "(\\(.,..jsxs\\)\\(.{1,3}|(.\\(\\).|..)createElement\\(.{1,4}),{(filterMatchQuery|filter:.,title|(variant:\"viola\",semanticColor:\"textSubdued\"|..:\"span\",variant:.{3,6}mesto,color:.{3,6}),htmlFor:\"desktop.settings.downloadQuality.+?).{1,6}get\\(\"desktop.settings.downloadQuality.title.+?(children:.{1,2}\\(.,.\\).+?,|\\(.,.\\){3,4},|,.\\)}},.\\(.,.\\)\\),)",
             "replace": ""
-        },
-        "hidemerchsidebar": {
-            "version": {
-                "fr": "1.2.0",
-                "to": ""
-            },
-            "match": "(return( .&&\\(\\!.\\|\\|..length\\<1\\)&&..length\\>0&&\\(.=.\\),)?\\!.\\|\\|..length\\<1)",
-            "replace": "return true "
         }
     },
     "others": {
@@ -182,10 +174,46 @@
             },
             "RightSidebarMerchFallback": {
                 "name": "enableRightSidebarMerchFallback",
-                "description": "presumably, the advertising management transition from Cosmos to Esperanto",
-                "native_description": "Enable esperanto Migration for Ad Formats",
+                "description": "Allow merch to fallback to artist level merch if track level does not exist",
+                "native_description": "Allow merch to fallback to artist level merch if track level does not exist",
                 "version": {
                     "fr": "1.2.5",
+                    "to": "1.2.11"
+                }
+            },
+            "ReportAudiobooks": {
+                "name": "enableReportAudiobooks",
+                "description": "Enable Report action for audiobooks",
+                "native_description": "Enable Report action for audiobooks",
+                "version": {
+                    "fr": "1.1.97",
+                    "to": ""
+                }
+            },
+            "ReportPodcastShows": {
+                "name": "enableReportPodcastShows",
+                "description": "Enable Report action for podcast shows",
+                "native_description": "Enable Report action for podcast shows",
+                "version": {
+                    "fr": "1.2.12",
+                    "to": ""
+                }
+            },
+            "ReportPodcastEpisodes": {
+                "name": "enableReportPodcastEpisodes",
+                "description": "Enable Report action for podcast episodes",
+                "native_description": "Enable Report action for podcast episodes",
+                "version": {
+                    "fr": "1.2.12",
+                    "to": ""
+                }
+            },
+            "ReportAudiobookChapters": {
+                "name": "enableReportAudiobookChapters",
+                "description": "Enable Report action for audiobook chapters",
+                "native_description": "Enable Report action for audiobook chapters",
+                "version": {
+                    "fr": "1.2.12",
                     "to": ""
                 }
             }
@@ -358,7 +386,7 @@
                 "description": "Enable the what's new feed panel",
                 "native_description": "Enable the what's new feed panel",
                 "version": {
-                    "fr": "1.2.8",
+                    "fr": "1.2.12",
                     "to": ""
                 }
             },
@@ -413,6 +441,24 @@
                 "native_description": "Enables desktop picture-in-picture surface using betamax SDK.",
                 "version": {
                     "fr": "1.2.10",
+                    "to": ""
+                }
+            },
+            "MyLittleMermaidEasterEgg": {
+                "name": "enableMyLittleMermaidEasterEgg",
+                "description": "Enable My Little Mermaid playlist easter egg",
+                "native_description": "Enable My Little Mermaid playlist easter egg",
+                "version": {
+                    "fr": "1.2.12",
+                    "to": ""
+                }
+            },
+            "MyLittleMermaidEasterEggVideo": {
+                "name": "enableMyLittleMermaidEasterEggVideo",
+                "description": "Enable My Little Mermaid playlist easter egg video background",
+                "native_description": "Enable My Little Mermaid playlist easter egg video background",
+                "version": {
+                    "fr": "1.2.12",
                     "to": ""
                 }
             }
@@ -941,6 +987,14 @@
             "replace": "$1,$2.putOverridesValues({0})",
             "add": "ads:'0',catalogue:'premium',product:'premium',type:'premium',name:'Spotify'",
             "add2": "'storage-size-config':'{0},90,500,3'"
+        },
+        "hidemerchsidebar": {
+            "version": {
+                "fr": "1.2.0",
+                "to": "1.2.11"
+            },
+            "match": "(return( .&&\\(\\!.\\|\\|..length\\<1\\)&&..length\\>0&&\\(.=.\\),)?\\!.\\|\\|..length\\<1)",
+            "replace": "return true "
         },
         "offrujs": {
             "version": {

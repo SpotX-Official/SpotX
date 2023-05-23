@@ -991,10 +991,10 @@
         "hidemerchsidebar": {
             "version": {
                 "fr": "1.2.0",
-                "to": "1.2.11"
+                "to": ""
             },
-            "match": "(return( .&&\\(\\!.\\|\\|..length\\<1\\)&&..length\\>0&&\\(.=.\\),)?\\!.\\|\\|..length\\<1)",
-            "replace": "return true "
+            "match": "((return|merch:.}\\)\\=\\>)( .&&\\(\\!.\\|\\|..length\\<1\\)&&..length\\>0&&\\(.=.\\),)?\\!.\\|\\|..length\\<1)",
+            "replace": "$2 true "
         },
         "offrujs": {
             "version": {

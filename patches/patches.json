@@ -808,9 +808,10 @@
             },
             "add": [
                 " .nav-alt .Root__top-container {background: #00000085;gap: 6px;padding: 8px;}",
-                " .nav-ylx .Root__top-container, .nav-ylx .ZQftYELq0aOsg6tPbVbV {background: #00000085;}",
+                " .nav-ylx .Root__top-container, .nav-ylx .ZQftYELq0aOsg6tPbVbV {background: #090909;}",
                 " .Root__fixed-top-bar {background-color: #00000000}",
-                " .Root__nav-bar{background-color: #0000}"
+                " .Root__nav-bar{background-color: #0000}",
+                " .nav-ylx .sqKERfoKl4KwrtHqcKOd { background: #090909;}"
             ]
         },
         "leftsidebarfix": {

@@ -1398,6 +1398,7 @@ If ($test_spa) {
             }
             $css += $webjson.others.navaltfix.add[2]
             $css += $webjson.others.navaltfix.add[3]
+            $css += $webjson.others.navaltfix.add[4]
         }
         if ($null -ne $css ) { extract -counts 'one' -method 'zip' -name 'xpui.css' -add $css }
     }

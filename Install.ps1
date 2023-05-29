@@ -214,7 +214,7 @@ function Format-LanguageCode {
         
     # Checking the long language code
     if ($long_code -and $returnCode -NotIn $supportLanguages) {
-        $returnCode = $PSUICulture.Remove(2)
+        $returnCode = $returnCode -split "-" | Select-Object -First 1
     }
     # Checking the short language code
     if ($returnCode -NotIn $supportLanguages) {

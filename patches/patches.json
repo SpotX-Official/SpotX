@@ -464,6 +464,15 @@
                     "fr": "1.2.12",
                     "to": ""
                 }
+            },
+            "AlbumCoverArtModal": {
+                "name": "enableAlbumCoverArtModal",
+                "description": "Enable the cover art modal on the Album page",
+                "native_description": "Enable the cover art modal on the Album page",
+                "version": {
+                    "fr": "1.2.13",
+                    "to": ""
+                }
             }
         },
         "CustomExp": {

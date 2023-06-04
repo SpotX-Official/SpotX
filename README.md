@@ -184,8 +184,12 @@ or
 
 <h1>FAQ</h1>
 
-- Read [FAQ](https://telegra.ph/SpotX-FAQ-09-19)
+ Read [FAQ](https://telegra.ph/SpotX-FAQ-09-19)
 
 <h1>Credits</h1>
 
-- Some tricks were taken from <a href="https://github.com/khanhas/spicetify-cli">spicetify-cli</a>, many thanks to the contributors
+ Some tricks were taken from <a href="https://github.com/khanhas/spicetify-cli">spicetify-cli</a>, many thanks to the contributors.
+
+<h1>Disclaimer</h1>
+
+ SpotX is a modified version of the official Spotify client, provided as an evaluation version, you use it at your own risk.

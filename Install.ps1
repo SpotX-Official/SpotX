@@ -911,6 +911,16 @@ function Helper($paramname) {
         }
         "Discriptions" {  
             # Add discriptions (xpui-desktop-modals.js)
+
+            $svg_tg = $webjson.others.discriptions.svgtg
+            $svg_git = $webjson.others.discriptions.svggit
+            $svg_faq = $webjson.others.discriptions.svgfaq
+            $replace = $webjson.others.discriptions.replace
+
+            $replacedText = $replace -f $svg_git, $svg_tg, $svg_faq
+
+            $webjson.others.discriptions.replace = '$1"' + $replacedText + '"})'
+
             $name = "patches.json.others."
             $n = "xpui-desktop-modals.js"
             $contents = "discriptions"

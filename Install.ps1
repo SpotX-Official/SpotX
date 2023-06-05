@@ -59,6 +59,10 @@ param
     [switch]$no_shortcut,
 
     [Parameter(HelpMessage = 'Static color for lyrics.')]
+    [ArgumentCompleter({ param($cmd, $param, $wordToComplete)
+            [array] $validValues = @('default', 'red', 'orange', 'yellow', 'spotify', 'blue', 'purple', 'strawberry', 'pumpkin', 'sandbar', 'radium', 'oceano', 'royal', 'github', 'discord', 'drot', 'forest', 'fresh', 'zing', 'pinkle', 'krux', 'blueberry', 'postlight', 'relish', 'turquoise')
+            $validValues -like "*$wordToComplete*"
+        })]
     [string]$lyrics_stat,
 
     [Parameter(HelpMessage = 'Accumulation of track listening history with Goofy.')]

@@ -1,10 +1,5 @@
 param
 (
-    [Parameter(HelpMessage = "set a specific version of Spotify.")]
-    [ValidatePattern("^\d+\.\d+\.\d+\.\d+\.g[0-9a-f]{8}-\d+$", ErrorMessage = "Invalid version format. Example: 1.2.13.661.ga588f749-4064")]
-    [Alias("v")]
-    [string]$version,
-
     [Parameter(HelpMessage = 'Hiding podcasts/episodes/audiobooks from homepage.')]
     [switch]$podcasts_off,
 
@@ -262,16 +257,13 @@ $win8 = $win_os -match "\windows 8\b"
 $win7 = $win_os -match "\windows 7\b"
 
 # Recommended version for Win 7-8.1
-if (!$version) {
-    if ($win7 -or $win8 -or $win8_1) { 
-        $onlineFull = "1.2.5.1006.g22820f93-1078"
-    }
-    # Recommended version for Win 10-12
-    else {  
-        $onlineFull = "1.2.13.661.ga588f749-4064" 
-    }
+if ($win7 -or $win8 -or $win8_1) { 
+    $onlineFull = "1.2.5.1006.g22820f93-1078"
 }
-else { $onlineFull = $version }
+# Recommended version for Win 10-12
+else {  
+    $onlineFull = "1.2.13.656.gd13f2059-3884" 
+}
 
 $online = ($onlineFull -split ".g")[0]
 
@@ -620,15 +612,15 @@ if ($spotifyInstalled) {
         try { 
             $txt = [IO.File]::ReadAllText($spotifyExecutable)
             $regex = "(\d+)\.(\d+)\.(\d+)\.(\d+)(\.g[0-9a-f]{8})"
-            $v_t = $txt | Select-String $regex -AllMatches
-            $ver = $v_t.Matches.Value[0]
-            if ($ver.Count -gt 1) { $ver = $ver[0] }
+            $v = $txt | Select-String $regex -AllMatches
+            $version = $v.Matches.Value[0]
+            if ($version.Count -gt 1) { $version = $version[0] }
 
             $Parameters = @{
                 Uri    = 'https://docs.google.com/forms/d/e/1FAIpQLSegGsAgilgQ8Y36uw-N7zFF6Lh40cXNfyl1ecHPpZcpD8kdHg/formResponse'
                 Method = 'POST'
                 Body   = @{
-                    'entry.620327948'  = $ver
+                    'entry.620327948'  = $version
                     'entry.1951747592' = $country
                     'entry.1402903593' = $win_os
                     'entry.860691305'  = $psv
@@ -995,9 +987,9 @@ function Helper($paramname) {
                 $itemProperties = $item | Get-Member -MemberType NoteProperty | Select-Object -ExpandProperty Name
             
                 foreach ($key in $itemProperties) {
-                    $vers = $item.$key.version
+                    $version = $item.$key.version
             
-                    if (!($vers.to -eq "" -or [version]$vers.to -ge [version]$offline_patch -and [version]$vers.fr -le [version]$offline_patch)) {
+                    if (!($version.to -eq "" -or [version]$version.to -ge [version]$offline_patch -and [version]$version.fr -le [version]$offline_patch)) {
                         if ($item.PSObject.Properties.Name -contains $key) {
                             $item.PSObject.Properties.Remove($key)
                         }

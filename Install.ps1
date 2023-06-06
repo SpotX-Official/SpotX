@@ -1,5 +1,10 @@
 param
 (
+
+    [Parameter(HelpMessage = "Change recommended version of Spotify.")]
+    [Alias("v")]
+    [string]$version,
+
     [Parameter(HelpMessage = 'Hiding podcasts/episodes/audiobooks from homepage.')]
     [switch]$podcasts_off,
 
@@ -237,36 +242,6 @@ $start_menu = Join-Path $env:APPDATA 'Microsoft\Windows\Start Menu\Programs\Spot
 
 $upgrade_client = $false
 
-# Check version Windows
-$os = Get-CimInstance -ClassName "Win32_OperatingSystem" -ErrorAction SilentlyContinue
-if ($os) {
-    $osCaption = $os.Caption
-}
-else {
-    $osCaption = (Get-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion" -Name ProductName).ProductName
-}
-$pattern = "\bWindows (7|8(\.1)?|10|11|12)\b"
-$reg = [regex]::Matches($osCaption, $pattern)
-$win_os = $reg.Value
-
-$win12 = $win_os -match "\windows 12\b"
-$win11 = $win_os -match "\windows 11\b"
-$win10 = $win_os -match "\windows 10\b"
-$win8_1 = $win_os -match "\windows 8.1\b"
-$win8 = $win_os -match "\windows 8\b"
-$win7 = $win_os -match "\windows 7\b"
-
-# Recommended version for Win 7-8.1
-if ($win7 -or $win8 -or $win8_1) { 
-    $onlineFull = "1.2.5.1006.g22820f93-1078"
-}
-# Recommended version for Win 10-12
-else {  
-    $onlineFull = "1.2.13.661.ga588f749-4064" 
-}
-
-$online = ($onlineFull -split ".g")[0]
-
 # Check version Powershell
 $psv = $PSVersionTable.PSVersion.major
 if ($psv -ge 7) {
@@ -312,19 +287,62 @@ if ($langCode -eq 'ru') {
 Write-Host ($lang).Welcome
 Write-Host ""
 
+# Check version Windows
+$os = Get-CimInstance -ClassName "Win32_OperatingSystem" -ErrorAction SilentlyContinue
+if ($os) {
+    $osCaption = $os.Caption
+}
+else {
+    $osCaption = (Get-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion" -Name ProductName).ProductName
+}
+$pattern = "\bWindows (7|8(\.1)?|10|11|12)\b"
+$reg = [regex]::Matches($osCaption, $pattern)
+$win_os = $reg.Value
+
+$win12 = $win_os -match "\windows 12\b"
+$win11 = $win_os -match "\windows 11\b"
+$win10 = $win_os -match "\windows 10\b"
+$win8_1 = $win_os -match "\windows 8.1\b"
+$win8 = $win_os -match "\windows 8\b"
+$win7 = $win_os -match "\windows 7\b"
+
+$match_v = "^\d+\.\d+\.\d+\.\d+\.g[0-9a-f]{8}-\d+$"
+if ($version) {
+    if ($version -match $match_v) {
+        $onlineFull = $version
+    }
+    else {      
+        Write-Warning "Invalid $($version) format. Example: 1.2.13.661.ga588f749-4064"
+        Write-Host ""
+    }
+}
+
+if (!($version -and $version -match $match_v)) {
+    # Recommended version for Win 7-8.1
+    if ($win7 -or $win8 -or $win8_1) { 
+        $onlineFull = "1.2.5.1006.g22820f93-1078"
+    }
+    # Recommended version for Win 10-12
+    else {  
+        $onlineFull = "1.2.13.661.ga588f749-4064" 
+    }
+}
+$online = ($onlineFull -split ".g")[0]
+
 # Sending a statistical web query to cutt.ly
 $ErrorActionPreference = 'SilentlyContinue'
 $cutt_url = "https://cutt.ly/DK8UQub"
-try {
-    $ProgressPreference = 'SilentlyContinue'
-    Invoke-WebRequest -useb -Uri $cutt_url | Out-Null
-}
-catch {
-    Start-Sleep -Milliseconds 2300
-    try { 
+$retries = 0
+
+while ($retries -lt 2) {
+    try {
         Invoke-WebRequest -useb -Uri $cutt_url | Out-Null
+        break
     }
-    catch { }
+    catch {
+        $retries++
+        Start-Sleep -Seconds 2
+    }
 }
 
 function incorrectValue {
@@ -613,14 +631,14 @@ if ($spotifyInstalled) {
             $txt = [IO.File]::ReadAllText($spotifyExecutable)
             $regex = "(\d+)\.(\d+)\.(\d+)\.(\d+)(\.g[0-9a-f]{8})"
             $v = $txt | Select-String $regex -AllMatches
-            $version = $v.Matches.Value[0]
-            if ($version.Count -gt 1) { $version = $version[0] }
+            $ver = $v.Matches.Value[0]
+            if ($ver.Count -gt 1) { $ver = $ver[0] }
 
             $Parameters = @{
                 Uri    = 'https://docs.google.com/forms/d/e/1FAIpQLSegGsAgilgQ8Y36uw-N7zFF6Lh40cXNfyl1ecHPpZcpD8kdHg/formResponse'
                 Method = 'POST'
                 Body   = @{
-                    'entry.620327948'  = $version
+                    'entry.620327948'  = $ver
                     'entry.1951747592' = $country
                     'entry.1402903593' = $win_os
                     'entry.860691305'  = $psv
@@ -987,9 +1005,9 @@ function Helper($paramname) {
                 $itemProperties = $item | Get-Member -MemberType NoteProperty | Select-Object -ExpandProperty Name
             
                 foreach ($key in $itemProperties) {
-                    $version = $item.$key.version
+                    $vers = $item.$key.version
             
-                    if (!($version.to -eq "" -or [version]$version.to -ge [version]$offline_patch -and [version]$version.fr -le [version]$offline_patch)) {
+                    if (!($vers.to -eq "" -or [version]$vers.to -ge [version]$offline_patch -and [version]$vers.fr -le [version]$offline_patch)) {
                         if ($item.PSObject.Properties.Name -contains $key) {
                             $item.PSObject.Properties.Remove($key)
                         }

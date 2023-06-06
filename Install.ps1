@@ -262,7 +262,7 @@ if ($win7 -or $win8 -or $win8_1) {
 }
 # Recommended version for Win 10-12
 else {  
-    $onlineFull = "1.2.13.656.gd13f2059-3884" 
+    $onlineFull = "1.2.13.661.ga588f749-4064" 
 }
 
 $online = ($onlineFull -split ".g")[0]

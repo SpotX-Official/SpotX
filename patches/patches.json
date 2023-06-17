@@ -219,6 +219,15 @@
                     "fr": "1.2.12",
                     "to": ""
                 }
+            },
+            "Dsa": {
+                "name": "enableDsa",
+                "description": "Enable showing DSA (Digital Services Act) context menu and modal for ads",
+                "native_description": "Enable showing DSA (Digital Services Act) context menu and modal for ads",
+                "version": {
+                    "fr": "1.2.12",
+                    "to": ""
+                }
             }
         },
         "EnableExp": {
@@ -309,7 +318,7 @@
                 "native_description": "Enable Your Library X view of the left sidebar",
                 "version": {
                     "fr": "1.2.0",
-                    "to": ""
+                    "to": "1.2.14"
                 }
             },
             "RightSidebar": {
@@ -363,7 +372,7 @@
                 "native_description": "playback speed range from 0.5-3.5 with every 0.1 increment",
                 "version": {
                     "fr": "1.2.0",
-                    "to": ""
+                    "to": "1.2.14"
                 }
             },
             "ShowFollowsSetting": {
@@ -399,6 +408,24 @@
                 "native_description": "Enables the 'Your DJ' feature",
                 "version": {
                     "fr": "1.2.5",
+                    "to": ""
+                }
+            },
+            "DJNudge": {
+                "name": "enableDJNudge",
+                "description": "Enable DJ educational nudge",
+                "native_description": "Enable DJ educational nudge",
+                "version": {
+                    "fr": "1.2.12",
+                    "to": ""
+                }
+            },
+            "YourDJToLibraryOnPlayback": {
+                "name": "addYourDJToLibraryOnPlayback",
+                "description": "Add Your DJ to library on playback",
+                "native_description": "Add Your DJ to library on playback",
+                "version": {
+                    "fr": "1.2.14",
                     "to": ""
                 }
             },
@@ -453,7 +480,7 @@
                 "native_description": "Enable My Little Mermaid playlist easter egg",
                 "version": {
                     "fr": "1.2.12",
-                    "to": ""
+                    "to": "1.2.13"
                 }
             },
             "MyLittleMermaidEasterEggVideo": {
@@ -462,7 +489,7 @@
                 "native_description": "Enable My Little Mermaid playlist easter egg video background",
                 "version": {
                     "fr": "1.2.12",
-                    "to": ""
+                    "to": "1.2.13"
                 }
             },
             "AlbumCoverArtModal": {
@@ -471,6 +498,60 @@
                 "native_description": "Enable the cover art modal on the Album page",
                 "version": {
                     "fr": "1.2.13",
+                    "to": ""
+                }
+            },
+            "SmartShuffle": {
+                "name": "enableSmartShuffle",
+                "description": "Enable Smart Shuffle in playlists",
+                "native_description": "Enable Smart Shuffle",
+                "version": {
+                    "fr": "1.2.14",
+                    "to": ""
+                }
+            },
+            "LiveEventsListView": {
+                "name": "enableLiveEventsListView",
+                "description": "Enable list view for Live Events feed",
+                "native_description": "Enable list view for Live Events feed",
+                "version": {
+                    "fr": "1.2.14",
+                    "to": ""
+                }
+            },
+            "DynamicNormalizer": {
+                "name": "enableDynamicNormalizer",
+                "description": "Enable the dynamic normalizer/compressor",
+                "native_description": "Enable the dynamic normalizer/compressor",
+                "version": {
+                    "fr": "1.2.14",
+                    "to": ""
+                }
+            },
+            "HeBringsNpb": {
+                "name": "enableHeBringsNpb",
+                "description": "he brings you playback progress",
+                "native_description": "he brings you playback progress",
+                "version": {
+                    "fr": "1.2.14",
+                    "to": ""
+                }
+            },
+            "SocialConnectOnDesktop": {
+                "name": "enableSocialConnectOnDesktop",
+                "description": "Enable the Social Connect API that powers group listening sessions for Desktop",
+                "native_description": "Enable the Social Connect API that powers group listening sessions for Desktop",
+                "version": {
+                    "fr": "1.2.14",
+                    "to": ""
+                }
+            },
+            "SocialConnectOnDesktopWebPlayer": {
+                "name": "enableSocialConnectOnDesktopWebPlayer",
+                "description": "Enable the Social Connect API that powers group listening sessions for Desktop Web Player",
+                "native_description": "Enable the Social Connect API that powers group listening sessions for Desktop Web Player",
+                "version": {
+                    "fr": "1.2.14",
                     "to": ""
                 }
             }
@@ -984,7 +1065,7 @@
         "fix-old-theme": {
             "version": {
                 "fr": "1.1.74",
-                "to": ""
+                "to": "1.2.13"
             },
             "match": "((LKgm9fCDTO7wqig_5U1q|eFQFeXVbY8rrcTagg0oH){--left-sidebar-item-height.+?margin-top)(:\\d+px)",
             "replace": "$1:0px"

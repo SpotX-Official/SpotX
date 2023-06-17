@@ -51,6 +51,12 @@ param
     [Parameter(HelpMessage = 'Do not enable enhance liked songs.')]
     [switch]$enhance_like_off,
 
+    [Parameter(HelpMessage = 'Disable smart shuffle in playlists.')]
+    [switch]$smartShuffle_off,
+
+    [Parameter(HelpMessage = 'enable funny progress bar.')]
+    [switch]$funnyprogressBar,
+
     [Parameter(HelpMessage = 'New theme activated (new right and left sidebar, some cover change)')]
     [switch]$new_theme,
 
@@ -324,7 +330,7 @@ if (!($version -and $version -match $match_v)) {
     }
     # Recommended version for Win 10-12
     else {  
-        $onlineFull = "1.2.13.661.ga588f749-4064" 
+        $onlineFull = "1.2.14.1141.gaab16bfe-881" 
     }
 }
 $online = ($onlineFull -split ".g")[0]
@@ -815,6 +821,10 @@ if (!($block_update_on) -and !($block_update_off)) {
 }
 if ($ch -eq 'y') { $block_update = $true }
 
+if (!($new_theme -and [version]$offline -ge [version]"1.2.14.1141")) {
+    Write-Host "This version does not support the old theme, use version 1.2.13.661 or below`n"
+}
+
 if ($ch -eq 'n') {
     $ErrorActionPreference = 'SilentlyContinue'
     if ((Test-Path -LiteralPath $exe_bak) -and $offline -eq $offline_bak) {
@@ -962,8 +972,10 @@ function Helper($paramname) {
 
             if ($enhance_like_off) { $remEnable.remove('EnhanceLikedSongs') }
             if ($enhance_playlist_off) { $remEnable.remove('EnhancePlaylist') }
+            if ($smartShuffle_off) { $remEnable.remove('SmartShuffle') }
+            if (!($funnyprogressBar)) { $remEnable.remove('HeBringsNpb') }
             # Old theme
-            if (!($new_theme)) {
+            if (!($new_theme -and [version]$offline -le [version]"1.2.13.661")) {
                 $LeftSidebar = $webjson.others.EnableExp.LeftSidebar
                 $webjson.others.DisableExp | Add-Member -MemberType NoteProperty -Name "LeftSidebar" -Value $LeftSidebar
 

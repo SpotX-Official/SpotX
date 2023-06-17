@@ -821,7 +821,7 @@ if (!($block_update_on) -and !($block_update_off)) {
 }
 if ($ch -eq 'y') { $block_update = $true }
 
-if (!($new_theme -and [version]$offline -ge [version]"1.2.14.1141")) {
+if (!($new_theme) -and [version]$offline -ge [version]"1.2.14.1141") {
     Write-Host "This version does not support the old theme, use version 1.2.13.661 or below`n"
 }
 
@@ -975,7 +975,7 @@ function Helper($paramname) {
             if ($smartShuffle_off) { $remEnable.remove('SmartShuffle') }
             if (!($funnyprogressBar)) { $remEnable.remove('HeBringsNpb') }
             # Old theme
-            if (!($new_theme -and [version]$offline -le [version]"1.2.13.661")) {
+            if (!($new_theme) -and [version]$offline -le [version]"1.2.13.661") {
                 $LeftSidebar = $webjson.others.EnableExp.LeftSidebar
                 $webjson.others.DisableExp | Add-Member -MemberType NoteProperty -Name "LeftSidebar" -Value $LeftSidebar
 

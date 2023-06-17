@@ -58,8 +58,9 @@ or
 <summary><small>Usual installation (Old theme)</small></summary><p>
   
   #### During installation, you need to confirm some actions, also contains:
-  
+  - Forced installation of version 1.2.13 (since the old theme was removed in subsequent versions)
   - Old theme activated
+  - Automatic blocking of Spotify updates
   - All [experimental features](https://github.com/amd64fox/SpotX/discussions/50) included
 
   <h4> </h4>
@@ -71,7 +72,7 @@ or
 #### Run The following command in PowerShell:
 
 ```ps1
-[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; (iwr -useb 'https://raw.githubusercontent.com/amd64fox/SpotX/main/Install.ps1').Content | iex
+[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; iex "& { $((iwr -useb 'https://raw.githubusercontent.com/amd64fox/SpotX/main/Install.ps1').Content) } -v 1.2.13.661.ga588f749-4064 -confirm_spoti_recomended_over -block_update_on"
 ```
 
 </details>

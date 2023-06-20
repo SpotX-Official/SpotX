@@ -1,6 +1,6 @@
 {
     "lang": {
-        "version": "1.2.10",
+        "version": "1.2.14",
         "language": "Russian"
     },
     "1": {
@@ -76,79 +76,51 @@
         "replace": "\"Ваше местоположение\""
     },
     "19": {
-        "match": "\"Network connection failed while playing this content.\"",
-        "replace": "\"Сбой сетевого подключения при воспроизведении этого контента.\""
-    },
-    "20": {
-        "match": "\"We.re not able to play this content in your current location.\"",
-        "replace": "\"Мы не можем воспроизвести этот контент в вашем текущем местоположении.\""
-    },
-    "21": {
-        "match": "\"This content is unavailable. Try another\\?\"",
-        "replace": "\"Этот контент недоступен. Попробуете другой?\""
-    },
-    "22": {
-        "match": "\"Sorry, we.re not able to play this content.\"",
-        "replace": "\"К сожалению, мы не можем воспроизвести этот контент.\""
-    },
-    "23": {
-        "match": "\"Hmm... we can.t seem to play this content. Try installing the latest version of Spotify.\"",
-        "replace": "\"Хм... похоже, мы не можем воспроизвести этот контент. Попробуйте установить последнюю версию Spotify.\""
-    },
-    "24": {
-        "match": "\"Please upgrade Spotify to play this content.\"",
-        "replace": "\"Пожалуйста, обновите Spotify, чтобы воспроизвести этот контент.\""
-    },
-    "25": {
-        "match": "\"This content cannot be played on your operating system version.\"",
-        "replace": "\"Этот контент нельзя воспроизвести в вашей версии операционной системы.\""
-    },
-    "26": {
         "match": "\"Override certain user attributes to test regionalized content programming. The overrides are only active in this app.\"",
         "replace": "\"Переопределите определенные атрибуты пользователя, чтобы протестировать региональное программирование контента. Переопределения активны только в этом приложении.\""
     },
-    "27": {
+    "20": {
         "match": " was released this week!",
         "replace": " был выпущен на этой неделе!"
     },
-    "28": {
+    "21": {
         "match": "(\"one\": \"...name...) was released %years% year ago this week!\"",
         "replace": "$1 был выпущен %years% год назад на этой неделе!\""
     },
-    "29": {
+    "22": {
         "match": "(\"few\": \"...name...) was released %years% years ago this week!\"",
         "replace": "$1 был выпущен %years% года назад на этой неделе!\""
     },
-    "30": {
+    "23": {
         "match": "(\"many\": \"...name...) was released %years% years ago this week!\"",
         "replace": "$1 был выпущен %years% лет назад на этой неделе!\""
     },
-    "31": {
+    "24": {
         "match": "(\"other\": \"...name...) was released %years% years ago this week!\"",
         "replace": "$1 был выпущен %years% года назад на этой неделе!\""
     },
-    "32": {
+    "25": {
         "match": "\"Speed [{]0[}]×\"",
         "replace": "\"Скорость {0}×\""
     },
-    "33": {
+    "26": {
         "match": "(\"Filter options\"",
         "replace": "\"Параметры фильтрации\""
     },
-    "34": {
+    "27": {
         "match": "\"Artist\"",
         "replace": "\"Исполнитель\""
     },
-    "35": {
+    "28": {
         "match": "\"... of ...\"",
         "replace": "\"{0} из {1}\""
     },
-    "36": {
+    "29": {
         "match": "\"Не удалось изменить\"",
         "replace": "\"Не удалось обновить\""
     },
-    "37": {
-        "match": "\"Load more\"",
-        "replace": "\"Загрузи больше\""
+    "30": {
+        "match": "}(?![^,]*,)",
+        "replace": ",\"desktop.settings.dynamicNormalizer\": \"Динамический нормализатор - активно регулирует громкость, выравнивая разницу между тихими и громкими частями аудио.\"}"
     }
 }

@@ -894,26 +894,6 @@
                 "$1(--lyrics-color-maxmatch)!important"
             ]
         },
-        "navaltfix": {
-            "version": {
-                "fr": "1.1.94",
-                "to": ""
-            },
-            "add": [
-                " .nav-alt .Root__top-container {background: #00000085;gap: 6px;padding: 8px;}",
-                " .nav-ylx .Root__top-container, .nav-ylx .ZQftYELq0aOsg6tPbVbV {background: #090909;}",
-                " .Root__fixed-top-bar {background-color: #00000000}",
-                " .Root__nav-bar{background-color: #0000}",
-                " .nav-ylx .sqKERfoKl4KwrtHqcKOd { background: #090909;}"
-            ]
-        },
-        "leftsidebarfix": {
-            "version": {
-                "fr": "1.2.6",
-                "to": "1.2.6"
-            },
-            "add": " .yOKoknIYYzAE90pe7_SE.Yn2Ei5QZn19gria6LjZj {pointer-events: none;}"
-        },
         "collaboration": {
             "version": {
                 "fr": "1.1.73",

@@ -45,6 +45,9 @@ param
     [Parameter(HelpMessage = 'Do not hide the icon of collaborations in playlists.')]
     [switch]$hide_col_icon_off,
     
+    [Parameter(HelpMessage = 'disable new right sidebar.')]
+    [switch]$rightsidebar_off,
+
     [Parameter(HelpMessage = 'Do not enable enhance playlist.')]
     [switch]$enhance_playlist_off,
     
@@ -985,8 +988,14 @@ function Helper($paramname) {
             }
             # New theme
             else {
-                if (!($rightsidebarcolor)) { $remEnable.remove('RightSidebarColors') }
-                if ($old_lyrics) { $remEnable.remove('RightSidebarLyrics') } 
+                if ($rightsidebar_off) { 
+                    $RightSidebar = $webjson.others.EnableExp.RightSidebar
+                    $webjson.others.DisableExp | Add-Member -MemberType NoteProperty -Name "RightSidebar" -Value $RightSidebar
+                }
+                else {
+                    if (!($rightsidebarcolor)) { $remEnable.remove('RightSidebarColors') }
+                    if ($old_lyrics) { $remEnable.remove('RightSidebarLyrics') } 
+                }
             }
             if (!$premium) { $remEnable.remove('RemoteDownloads') }
 
@@ -1430,21 +1439,6 @@ If ($test_spa) {
             $css += $webjson.others.veryhighstream.add
         }
 
-        # New UI fix
-        if ([version]$offline -ge [version]"1.1.94.864" -and $new_theme) {
-            if ([version]$offline -lt [version]"1.2.3.1107") {
-                $css += $webjson.others.navaltfix.add[0]
-            }
-            if ([version]$offline -ge [version]"1.2.3.1107") {
-                $css += $webjson.others.navaltfix.add[1]
-            }
-            if ([version]$offline -ge [version]"1.2.6.861" -and [version]$offline -le [version]"1.2.6.863") {
-                $css += $webjson.others.leftsidebarfix.add
-            }
-            $css += $webjson.others.navaltfix.add[2]
-            $css += $webjson.others.navaltfix.add[3]
-            $css += $webjson.others.navaltfix.add[4]
-        }
         if ($null -ne $css ) { extract -counts 'one' -method 'zip' -name 'xpui.css' -add $css }
     }
     

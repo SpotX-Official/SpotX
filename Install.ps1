@@ -981,7 +981,9 @@ function Helper($paramname) {
             # Old theme
             if (!($new_theme) -and [version]$offline -le [version]"1.2.13.661") {
                 $LeftSidebar = $webjson.others.EnableExp.LeftSidebar
+                $RightSidebar = $webjson.others.EnableExp.RightSidebar
                 $webjson.others.DisableExp | Add-Member -MemberType NoteProperty -Name "LeftSidebar" -Value $LeftSidebar
+                $webjson.others.DisableExp | Add-Member -MemberType NoteProperty -Name "RightSidebar" -Value $RightSidebar
 
                 $remCustom.remove('NavAlt'), $remCustom.remove('NavAlt2'), $remEnable.remove('RightSidebarLyrics'), $remEnable.remove('RightSidebarCredits'), 
                 $remEnable.remove('RightSidebar'), $remEnable.remove('LeftSidebar'), $remEnable.remove('RightSidebarColors');

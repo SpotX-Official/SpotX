@@ -602,8 +602,8 @@
                 "fr": "1.1.68",
                 "to": ""
             },
-            "add": "slott(?=...override_url)",
-            "match": "slots(?=...override_url)",
+            "add": "slots(?=.{3,8}override_url)",
+            "match": "slots(?=.{3,8}override_url)",
             "replace": "slott"
         },
         "podcastsoff": {

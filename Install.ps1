@@ -407,7 +407,7 @@ function downloadSp() {
             if ($stcode -ne "200") {
                 Write-Host "Curl error code: $stcode"; throw
             }
-            curl.exe $web_Url -o $local_Url --progress-bar --retry 3 --ssl-no-revoke
+            curl.exe -q $web_Url -o $local_Url --progress-bar --retry 3 --ssl-no-revoke
             return
         }
         if (!($curl_check ) -and $null -ne (Get-Module -Name BitsTransfer -ListAvailable)) {
@@ -435,7 +435,7 @@ function downloadSp() {
                 if ($stcode -ne "200") {
                     Write-Host "Curl error code: $stcode"; throw
                 }
-                curl.exe $web_Url -o $local_Url --progress-bar --retry 3 --ssl-no-revoke
+                curl.exe -q $web_Url -o $local_Url --progress-bar --retry 3 --ssl-no-revoke
                 return
             }
             if (!($curl_check ) -and $null -ne (Get-Module -Name BitsTransfer -ListAvailable) -and !($curl_check )) {

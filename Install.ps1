@@ -333,7 +333,7 @@ if (!($version -and $version -match $match_v)) {
     }
     # Recommended version for Win 10-12
     else {  
-        $onlineFull = "1.2.14.1149.ga3ae422d-1027" 
+        $onlineFull = "1.2.15.828.g79f41970-1030" 
     }
 }
 $online = ($onlineFull -split ".g")[0]

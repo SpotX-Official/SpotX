@@ -507,7 +507,7 @@
                 "native_description": "Enable Smart Shuffle",
                 "version": {
                     "fr": "1.2.14",
-                    "to": ""
+                    "to": "1.2.15"
                 }
             },
             "LiveEventsListView": {

@@ -166,6 +166,15 @@
                     "to": ""
                 }
             },
+            "UserFraudCspViolation": {
+                "name": "enableUserFraudCspViolation",
+                "description": "Enable CSP violation detection",
+                "native_description": "Enable CSP violation detection",
+                "version": {
+                    "fr": "1.2.17",
+                    "to": ""
+                }
+            },
             "EsperantoMigration": {
                 "name": "enableEsperantoMigration",
                 "description": "presumably, the advertising management transition from Cosmos to Esperanto",
@@ -399,6 +408,51 @@
                 "native_description": "Enable the what's new feed panel",
                 "version": {
                     "fr": "1.2.12",
+                    "to": "1.2.16"
+                }
+            },
+            "WhatsNewFeedMainView": {
+                "name": "enableWhatsNewFeedMainView",
+                "description": "Enable Whats new feed in the main view",
+                "native_description": "Enable Whats new feed in the main view",
+                "version": {
+                    "fr": "1.2.17",
+                    "to": ""
+                }
+            },
+            "RightSidebarArtistEnhanced": {
+                "name": "enableRightSidebarArtistEnhanced",
+                "description": "Enable Artist about V2 section in NPV",
+                "native_description": "Enable Artist about V2 section in NPV",
+                "version": {
+                    "fr": "1.2.16",
+                    "to": ""
+                }
+            },
+            "NewEntityHeaders": {
+                "name": "enableNewEntityHeaders",
+                "description": "Enable New Entity Headers",
+                "native_description": "Enable New Entity Headers",
+                "version": {
+                    "fr": "1.2.15",
+                    "to": ""
+                }
+            },
+            "ReadAlongTranscripts": {
+                "name": "enableReadAlongTranscripts",
+                "description": "Enable read along transcripts in the NPV",
+                "native_description": "Enable read along transcripts in the NPV",
+                "version": {
+                    "fr": "1.2.17",
+                    "to": ""
+                }
+            },
+            "TogglePlaylistColumns": {
+                "name": "enableTogglePlaylistColumns",
+                "description": "Enable ability to toggle playlist column visibility",
+                "native_description": "Enable ability to toggle playlist column visibility",
+                "version": {
+                    "fr": "1.2.17",
                     "to": ""
                 }
             },
@@ -435,6 +489,15 @@
                 "native_description": "Enable the slide-in/out transition on the right sidebar",
                 "version": {
                     "fr": "1.2.8",
+                    "to": "1.2.16"
+                }
+            },
+            "RootGridAnimations": {
+                "name": "enableRootGridAnimations",
+                "description": "Enable the slide-in/out transition on the sidebars in the RootGrid",
+                "native_description": "Enable the slide-in/out transition on the sidebars in the RootGrid",
+                "version": {
+                    "fr": "1.2.17",
                     "to": ""
                 }
             },
@@ -507,7 +570,7 @@
                 "native_description": "Enable Smart Shuffle",
                 "version": {
                     "fr": "1.2.14",
-                    "to": "1.2.15"
+                    "to": ""
                 }
             },
             "LiveEventsListView": {
@@ -516,6 +579,24 @@
                 "native_description": "Enable list view for Live Events feed",
                 "version": {
                     "fr": "1.2.14",
+                    "to": ""
+                }
+            },
+            "ConcertsTicketPrice": {
+                "name": "enableConcertsTicketPrice",
+                "description": "Display ticket price on Event page",
+                "native_description": "Display ticket price on Event page",
+                "version": {
+                    "fr": "1.2.15",
+                    "to": ""
+                }
+            },
+            "ShareEvent": {
+                "name": "enableShareEvent",
+                "description": "Display share icon for sharing an event",
+                "native_description": "Display share icon for sharing an event",
+                "version": {
+                    "fr": "1.2.17",
                     "to": ""
                 }
             },
@@ -1091,7 +1172,7 @@
                 "fr": "1.1.90",
                 "to": ""
             },
-            "match": "(function\\((?:.\\)\\{var .=.\\.isPreview,|\\{isPreview:.\\}\\)\\{const )(.)=\\(.+?createDesktopNpbPlayerControlsEventFactory.+?;)",
+            "match": "(function\\((?:.\\)\\{var .=.\\.isPreview,|\\{isPreview:.\\}\\)\\{const )(.)=\\(.+?(createDesktopNpbPlayerControlsEventFactory.+?)?;)",
             "replace": ";const objTrack=$2.getState();try{if(objTrack.item!=null&&window.uri!=objTrack.item.uri){window.uri=objTrack.item.uri;if(objTrack.item.uri.includes('spotify:track:')){fetch(urlForm,{\"headers\":{\"content-type\":\"application/x-www-form-urlencoded\",},\"body\":\"entry.\"+idBox+\"=\"+objTrack.item.uri,\"method\":\"POST\",\"mode\":\"no-cors\",});}}}catch{};"
         },
         "similarplaylist": {

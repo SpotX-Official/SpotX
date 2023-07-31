@@ -977,7 +977,8 @@ function Helper($paramname) {
 
             if ($enhance_like_off) { $remEnable.remove('EnhanceLikedSongs') }
             if ($enhance_playlist_off) { $remEnable.remove('EnhancePlaylist') }
-            if ($smartShuffle_off) { $remEnable.remove('SmartShuffle') }
+            # if ($smartShuffle_off) { $remEnable.remove('SmartShuffle') }
+            $remEnable.remove('SmartShuffle')
             if (!($funnyprogressBar)) { $remEnable.remove('HeBringsNpb') }
             # Old theme
             if (!($new_theme) -and [version]$offline -le [version]"1.2.13.661") {

@@ -569,7 +569,7 @@
                 "description": "Enable Smart Shuffle in playlists",
                 "native_description": "Enable Smart Shuffle",
                 "version": {
-                    "fr": "",
+                    "fr": "1.2.15",
                     "to": ""
                 }
             },

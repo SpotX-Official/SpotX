@@ -208,11 +208,11 @@
         "replace": "\"Сборка {0} доступна\""
     },
     "52": {
-        "match": "\"Downloading build {0}...\"",
+        "match": "\"Downloading build .0....\"",
         "replace": "\"Загрузка сборки {0}...\""
     },
     "53": {
-        "match": "\"Build {0} is ready to install\"",
+        "match": "\"Build .0. is ready to install\"",
         "replace": "\"Сборка {0} готова к установке\""
     },
     "54": {

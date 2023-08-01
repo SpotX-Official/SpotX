@@ -288,8 +288,7 @@ $lang = CallLang -clg $langCode
 
 # Set variable 'ru'.
 if ($langCode -eq 'ru') { 
-    # временная заглушка для бага русского
-    $ru = $false
+    $ru = $true
     $urlru = "https://raw.githubusercontent.com/amd64fox/SpotX/main/patches/Augmented%20translation/ru.json"
     $webjsonru = (Invoke-WebRequest -useb -Uri $urlru).Content | ConvertFrom-Json
 }

@@ -198,5 +198,29 @@
     "49": {
         "match": "\"End session\"",
         "replace": "\"Завершить сессию\""
+    },
+    "50": {
+        "match": "\"Leave\"",
+        "replace": "\"Покинуть\""
+    },
+    "51": {
+        "match": "\"Build .0. is available\"",
+        "replace": "\"Сборка {0} доступна\""
+    },
+    "52": {
+        "match": "\"Downloading build {0}...\"",
+        "replace": "\"Загрузка сборки {0}...\""
+    },
+    "53": {
+        "match": "\"Build {0} is ready to install\"",
+        "replace": "\"Сборка {0} готова к установке\""
+    },
+    "54": {
+        "match": "\".host..s group session\"",
+        "replace": "\"Групповой сеанс %host%\""
+    },
+    "55": {
+        "match": "\"Participants ..0..\"",
+        "replace": "\"Участники ({0})\""
     }
 }

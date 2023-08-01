@@ -184,7 +184,7 @@
         "replace": "\"Логотип групповой сессии\""
     },
     "46": {
-        "match": "\"Leave the group session?\"",
+        "match": "\"Leave the group session.\"",
         "replace": "\"Покинуть групповую сессию?\""
     },
     "47": {
@@ -192,7 +192,7 @@
         "replace": "\"Завершить\""
     },
     "48": {
-        "match": "\"Are you sure you want to end the session for everyone?\"",
+        "match": "\"Are you sure you want to end the session for everyone.\"",
         "replace": "\"Вы уверены, что хотите завершить сеанс для всех?\""
     },
     "49": {

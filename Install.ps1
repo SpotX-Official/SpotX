@@ -288,14 +288,13 @@ $lang = CallLang -clg $langCode
 
 # Set variable 'ru'.
 if ($langCode -eq 'ru') { 
-    # временная заглушка для бага русского
-    $ru = $false
+    $ru = $true
     $urlru = "https://raw.githubusercontent.com/amd64fox/SpotX/main/patches/Augmented%20translation/ru.json"
     $webjsonru = (Invoke-WebRequest -useb -Uri $urlru).Content | ConvertFrom-Json
 }
 
 Write-Host ($lang).Welcome
-Write-Host ""
+Write-Host
 
 # Check version Windows
 $os = Get-CimInstance -ClassName "Win32_OperatingSystem" -ErrorAction SilentlyContinue
@@ -323,18 +322,34 @@ if ($version) {
     }
     else {      
         Write-Warning "Invalid $($version) format. Example: 1.2.13.661.ga588f749-4064"
-        Write-Host ""
+        Write-Host
     }
 }
 
+$old_os = $win7 -or $win8 -or $win8_1
+
+# Recommended version for Win 7-8.1
+$last_win7_full = "1.2.5.1006.g22820f93-1078"
+
 if (!($version -and $version -match $match_v)) {
-    # Recommended version for Win 7-8.1
-    if ($win7 -or $win8 -or $win8_1) { 
-        $onlineFull = "1.2.5.1006.g22820f93-1078"
+    if ($old_os) { 
+        $onlineFull = $last_win7_full
     }
-    # Recommended version for Win 10-12
     else {  
-        $onlineFull = "1.2.16.947.gcfbaa410-105" 
+        # Recommended version for Win 10-12
+        $onlineFull = "1.2.17.834.g26ee1129-632" 
+    }
+}
+else {
+    if ($old_os) {
+        $last_win7 = "1.2.5.1006"
+        if ([version]($onlineFull -split ".g")[0] -gt [version]$last_win7) { 
+
+            Write-Warning ("Version {0} is only supported on Windows 10 and above" -f ($onlineFull -split ".g")[0])   
+            Write-Warning ("The recommended version has been automatically changed to {0}, the latest supported version for Windows 7-8.1" -f $last_win7)
+            Write-Host
+            $onlineFull = $last_win7_full
+        }
     }
 }
 $online = ($onlineFull -split ".g")[0]
@@ -423,10 +438,10 @@ function downloadSp() {
     }
 
     catch {
-        Write-Host ""
+        Write-Host
         Write-Host ($lang).Download $web_name_file -ForegroundColor RED
         $Error[0].Exception
-        Write-Host ""
+        Write-Host
         Write-Host ($lang).Download2`n
         Start-Sleep -Milliseconds 5000 
         try { 
@@ -452,7 +467,7 @@ function downloadSp() {
         catch {
             Write-Host ($lang).Download3 -ForegroundColor RED
             $Error[0].Exception
-            Write-Host ""
+            Write-Host
             Write-Host ($lang).Download4`n
             ($lang).StopScript
             $tempDirectory = $PWD
@@ -493,7 +508,7 @@ if ($win10 -or $win11 -or $win8_1 -or $win8 -or $win12) {
         if (!($confirm_uninstall_ms_spoti)) {
             do {
                 $ch = Read-Host -Prompt ($lang).MsSpoti2
-                Write-Host ""
+                Write-Host
                 if (!($ch -eq 'n' -or $ch -eq 'y')) {
                     incorrectValue
                 }
@@ -591,7 +606,7 @@ if ($spotifyInstalled) {
             do {
                 Write-Host (($lang).OldV2 -f $offline, $online)
                 $ch = Read-Host -Prompt ($lang).OldV3
-                Write-Host ""
+                Write-Host
                 if (!($ch -eq 'n' -or $ch -eq 'y')) {
                     incorrectValue
                 }
@@ -608,7 +623,7 @@ if ($spotifyInstalled) {
             if (!($confirm_spoti_recomended_over) -and !($confirm_spoti_recomended_unistall)) {
                 do {
                     $ch = Read-Host -Prompt (($lang).DelOrOver -f $offline)
-                    Write-Host ""
+                    Write-Host
                     if (!($ch -eq 'n' -or $ch -eq 'y')) {
                         incorrectValue
                     }
@@ -669,7 +684,7 @@ if ($spotifyInstalled) {
             do {
                 Write-Host (($lang).NewV2 -f $offline, $online)
                 $ch = Read-Host -Prompt (($lang).NewV3 -f $offline)
-                Write-Host ""
+                Write-Host
                 if (!($ch -eq 'n' -or $ch -eq 'y')) {
                     incorrectValue
                 }
@@ -682,7 +697,7 @@ if ($spotifyInstalled) {
             if (!($confirm_spoti_recomended_over) -and !($confirm_spoti_recomended_unistall)) {
                 do {
                     $ch = Read-Host -Prompt (($lang).Recom -f $online)
-                    Write-Host ""
+                    Write-Host
                     if (!($ch -eq 'n' -or $ch -eq 'y')) {
                         incorrectValue
                     }
@@ -699,7 +714,7 @@ if ($spotifyInstalled) {
                 if (!($confirm_spoti_recomended_over) -and !($confirm_spoti_recomended_unistall)) {
                     do {
                         $ch = Read-Host -Prompt (($lang).DelOrOver -f $offline)
-                        Write-Host ""
+                        Write-Host
                         if (!($ch -eq 'n' -or $ch -eq 'y')) {
                             incorrectValue
                         }
@@ -751,7 +766,7 @@ if (-not $spotifyInstalled -or $upgrade_client) {
 
     # Client download
     downloadSp
-    Write-Host ""
+    Write-Host
 
     Start-Sleep -Milliseconds 200
 
@@ -793,7 +808,7 @@ if (!($podcasts_off) -and !($podcasts_on)) {
 
     do {
         $ch = Read-Host -Prompt ($lang).PodcatsSelect
-        Write-Host ""
+        Write-Host
         if (!($ch -eq 'n' -or $ch -eq 'y')) { incorrectValue }
     }
     while ($ch -notmatch '^y$|^n$')
@@ -818,7 +833,7 @@ if (!($block_update_on) -and !($block_update_off)) {
     do {
         $text_upd = [string]($lang).UpdSelect + $upd
         $ch = Read-Host -Prompt $text_upd
-        Write-Host ""
+        Write-Host
         if (!($ch -eq 'n' -or $ch -eq 'y')) { incorrectValue } 
     }
     while ($ch -notmatch '^y$|^n$')
@@ -977,7 +992,8 @@ function Helper($paramname) {
 
             if ($enhance_like_off) { $remEnable.remove('EnhanceLikedSongs') }
             if ($enhance_playlist_off) { $remEnable.remove('EnhancePlaylist') }
-            if ($smartShuffle_off) { $remEnable.remove('SmartShuffle') }
+            # if ($smartShuffle_off) { $remEnable.remove('SmartShuffle') }
+            $remEnable.remove('SmartShuffle')
             if (!($funnyprogressBar)) { $remEnable.remove('HeBringsNpb') }
             # Old theme
             if (!($new_theme) -and [version]$offline -le [version]"1.2.13.661") {
@@ -1290,7 +1306,7 @@ if ($test_js) {
     
     do {
         $ch = Read-Host -Prompt ($lang).Spicetify
-        Write-Host ""
+        Write-Host
         if (!($ch -eq 'n' -or $ch -eq 'y')) { incorrectValue }
     }
     while ($ch -notmatch '^y$|^n$')

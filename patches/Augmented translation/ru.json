@@ -1,6 +1,6 @@
 {
     "lang": {
-        "version": "1.2.14",
+        "version": "1.2.17",
         "language": "Russian"
     },
     "1": {
@@ -120,7 +120,107 @@
         "replace": "\"Не удалось обновить\""
     },
     "30": {
-        "match": "}(?![^,]*,)",
-        "replace": ",\"desktop.settings.dynamicNormalizer\": \"Динамический нормализатор - активно регулирует громкость, выравнивая разницу между тихими и громкими частями аудио.\"}"
+        "match": "Dynamic normalizer - Actively adjust the volume by leveling out the difference between quiet and loud parts of the audio",
+        "replace": "Динамический нормализатор - активно регулирует громкость, выравнивая разницу между тихими и громкими частями аудио"
+    },
+    "31": {
+        "match": "\"Log in or sign up\"",
+        "replace": "\"Войдите или зарегистрируйтесь\""
+    },
+    "32": {
+        "match": "\"Load more\"",
+        "replace": "\"Загрузить еще\""
+    },
+    "33": {
+        "match": "\"Sign up free\"",
+        "replace": "\"Бесплатная регистрация\""
+    },
+    "34": {
+        "match": "\"Session link copied to clipboard\"",
+        "replace": "\"Ссылка на сеанс скопирована в буфер обмена\""
+    },
+    "35": {
+        "match": "\"Listen together on Spotify\"",
+        "replace": "\"Слушайте вместе в Spotify\""
+    },
+    "36": {
+        "match": "\"Invite others to your group session, and listen together from anywhere.\"",
+        "replace": "\"Пригласите других в вашу групповую сессию и слушайте вместе откуда угодно.\""
+    },
+    "37": {
+        "match": "\"Copy link\"",
+        "replace": "\"Скопировать ссылку\""
+    },
+    "38": {
+        "match": "\"Cancel\"",
+        "replace": "\"Отмена\""
+    },
+    "39": {
+        "match": "\"Join .host..s group session\"",
+        "replace": "\"Присоединиться к групповому сеансу %host%\""
+    },
+    "40": {
+        "match": "\"Continue on this computer\"",
+        "replace": "\"Продолжить на этом компьютере\""
+    },
+    "41": {
+        "match": "\"Join\"",
+        "replace": "\"Присоединиться\""
+    },
+    "42": {
+        "match": "\"Not now\"",
+        "replace": "\"Не сейчас\""
+    },
+    "43": {
+        "match": "\"People in the session will see your username, profile picture, and suggested songs based on your taste profile.\"",
+        "replace": "\"Люди в сессии увидят ваше имя пользователя, аватар и предложенные песни на основе вашего музыкального профиля.\""
+    },
+    "44": {
+        "match": "\"Read along\"",
+        "replace": "\"Читайте вместе\""
+    },
+    "45": {
+        "match": "\"Group session logo\"",
+        "replace": "\"Логотип групповой сессии\""
+    },
+    "46": {
+        "match": "\"Leave the group session.\"",
+        "replace": "\"Покинуть групповую сессию?\""
+    },
+    "47": {
+        "match": "\"End\"",
+        "replace": "\"Завершить\""
+    },
+    "48": {
+        "match": "\"Are you sure you want to end the session for everyone.\"",
+        "replace": "\"Вы уверены, что хотите завершить сеанс для всех?\""
+    },
+    "49": {
+        "match": "\"End session\"",
+        "replace": "\"Завершить сессию\""
+    },
+    "50": {
+        "match": "\"Leave\"",
+        "replace": "\"Покинуть\""
+    },
+    "51": {
+        "match": "\"Build .0. is available\"",
+        "replace": "\"Сборка {0} доступна\""
+    },
+    "52": {
+        "match": "\"Downloading build .0....\"",
+        "replace": "\"Загрузка сборки {0}...\""
+    },
+    "53": {
+        "match": "\"Build .0. is ready to install\"",
+        "replace": "\"Сборка {0} готова к установке\""
+    },
+    "54": {
+        "match": "\".host..s group session\"",
+        "replace": "\"Групповой сеанс %host%\""
+    },
+    "55": {
+        "match": "\"Participants ..0..\"",
+        "replace": "\"Участники ({0})\""
     }
 }

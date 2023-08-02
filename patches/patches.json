@@ -456,33 +456,6 @@
                     "to": ""
                 }
             },
-            "YourDJ": {
-                "name": "enableYourDJ",
-                "description": "Enables the 'Your DJ' feature",
-                "native_description": "Enables the 'Your DJ' feature",
-                "version": {
-                    "fr": "1.2.5",
-                    "to": ""
-                }
-            },
-            "DJNudge": {
-                "name": "enableDJNudge",
-                "description": "Enable DJ educational nudge",
-                "native_description": "Enable DJ educational nudge",
-                "version": {
-                    "fr": "1.2.12",
-                    "to": ""
-                }
-            },
-            "YourDJToLibraryOnPlayback": {
-                "name": "addYourDJToLibraryOnPlayback",
-                "description": "Add Your DJ to library on playback",
-                "native_description": "Add Your DJ to library on playback",
-                "version": {
-                    "fr": "1.2.14",
-                    "to": ""
-                }
-            },
             "RightSidebarTransitionAnimations": {
                 "name": "enableRightSidebarTransitionAnimations",
                 "description": "Enable the slide-in/out transition on the right sidebar",

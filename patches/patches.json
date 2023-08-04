@@ -656,7 +656,7 @@
                 "fr": "1.1.68",
                 "to": ""
             },
-            "add": "slots(?=.{3,8}override_url)",
+            "add": "slott(?=.{3,8}override_url)",
             "match": "slots(?=.{3,8}override_url)",
             "replace": "slott"
         },

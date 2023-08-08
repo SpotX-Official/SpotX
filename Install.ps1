@@ -945,6 +945,12 @@ function Helper($paramname) {
                 $webjson.others.$lyrics.replace[4] = '$1' + '"' + $background + '"'
                 $webjson.others.$lyrics.replace[5] = '$1' + '"' + $hover + '"'   
                 $webjson.others.$lyrics.replace[6] = '$1' + '"' + $maxmatch + '"'
+                if ([version]$offline -ge [version]"1.2.6.861") {
+                    $webjson.others.$lyrics.replace[7] = '$1' + '"' + $maxmatch + '"' + '$3'
+                }
+                else {
+                    $webjson.others.$lyrics.match = $webjson.others.$lyrics.match | Where-Object { $_ -ne $webjson.others.$lyrics.match[7] }
+                }
             }
 
             # xpui-routes-lyrics.css

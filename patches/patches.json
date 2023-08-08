@@ -922,10 +922,12 @@
                 "(.--lyrics-color-inactive.:)(..inactive|..colors.text)",
                 "(.--lyrics-color-background.:)((..|..colors.)background)",
                 "(.--lyrics-color-hover.:)(\"xxx\")",
-                "(.--lyrics-color-maxmatch.:)(\"xxx\")"
+                "(.--lyrics-color-maxmatch.:)(\"xxx\")",
+                "(color:)(.{1,4}colors.text)(},children:.{1,8}get\\(\"web-player.lyrics.unsynced\"\\))"
             ],
             "replace": [
                 "$1,\"--lyrics-color-hover\":\"xxx\",\"--lyrics-color-maxmatch\":\"xxx\"",
+                "",
                 "",
                 "",
                 "",

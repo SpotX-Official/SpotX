@@ -403,6 +403,21 @@ function Unlock-Folder {
         }
     }
 }
+function Mod-F {
+    param(
+        [string] $template,
+        [object[]] $arguments
+    )
+    
+    $result = $template
+    for ($i = 0; $i -lt $arguments.Length; $i++) {
+        $placeholder = "{${i}}"
+        $value = $arguments[$i]
+        $result = $result -replace [regex]::Escape($placeholder), $value
+    }
+    
+    return $result
+}
 
 function downloadSp() {
 
@@ -937,8 +952,14 @@ function Helper($paramname) {
             if ([version]$offline -lt [version]"1.1.99.871") { $lyrics = "lyricscolor1"; $contents = $lyrics }
             if ([version]$offline -ge [version]"1.1.99.871") { $lyrics = "lyricscolor2"; $contents = $lyrics }
 
-            # xpui-routes-lyrics.js
+            # xpui.js or xpui-routes-lyrics.js
             if ([version]$offline -ge [version]"1.1.99.871") {
+
+                $full_previous = Mod-F -template $webjson.others.$lyrics.add[0] -arguments $pasttext 
+                $full_current = Mod-F -template $webjson.others.$lyrics.add[1] -arguments $current
+                $full_next = Mod-F -template $webjson.others.$lyrics.add[2] -arguments $next
+                $full_lyrics = Mod-F -template $webjson.others.$lyrics.add[3] -arguments $full_previous, $full_current, $full_next
+                $webjson.others.$lyrics.add[3] = $full_lyrics
                 $webjson.others.$lyrics.replace[1] = '$1' + '"' + $pasttext + '"'  
                 $webjson.others.$lyrics.replace[2] = '$1' + '"' + $current + '"'  
                 $webjson.others.$lyrics.replace[3] = '$1' + '"' + $next + '"'  
@@ -950,6 +971,9 @@ function Helper($paramname) {
                 }
                 else {
                     $webjson.others.$lyrics.match = $webjson.others.$lyrics.match | Where-Object { $_ -ne $webjson.others.$lyrics.match[7] }
+                }
+                if ([version]$offline -ge [version]"1.2.3.1107") {
+                    $webjson.others.$lyrics.replace[8] = $webjson.others.$lyrics.replace[8] -f $background
                 }
             }
 
@@ -1454,18 +1478,20 @@ If ($test_spa) {
     extract -counts 'more' -name '*.js' -helper 'MinJs'
 
     # xpui.css
-    if ($new_theme -or !($premium)) {
-        if (!($premium)) {
-            # Hide download icon on different pages
-            $css += $webjson.others.downloadicon.add
-            # Hide submenu item "download"
-            $css += $webjson.others.submenudownload.add
-            # Hide very high quality streaming
-            $css += $webjson.others.veryhighstream.add
-        }
-
-        if ($null -ne $css ) { extract -counts 'one' -method 'zip' -name 'xpui.css' -add $css }
+    if (!($premium)) {
+        # Hide download icon on different pages
+        $css += $webjson.others.downloadicon.add
+        # Hide submenu item "download"
+        $css += $webjson.others.submenudownload.add
+        # Hide very high quality streaming
+        $css += $webjson.others.veryhighstream.add
     }
+    # Full screen lyrics
+    if ($lyrics_stat -and [version]$offline -ge [version]"1.2.3.1107") {
+        $css += $webjson.others.lyricscolor2.add[3]
+    }
+    if ($null -ne $css ) { extract -counts 'one' -method 'zip' -name 'xpui.css' -add $css }
+    
     
     # Old UI fix
     $contents = "fix-old-theme"

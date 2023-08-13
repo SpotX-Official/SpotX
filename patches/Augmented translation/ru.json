@@ -1,6 +1,6 @@
 {
     "lang": {
-        "version": "1.2.17",
+        "version": "1.2.18",
         "language": "Russian"
     },
     "1": {
@@ -124,103 +124,147 @@
         "replace": "Динамический нормализатор - активно регулирует громкость, выравнивая разницу между тихими и громкими частями аудио"
     },
     "31": {
-        "match": "\"Log in or sign up\"",
-        "replace": "\"Войдите или зарегистрируйтесь\""
-    },
-    "32": {
         "match": "\"Load more\"",
         "replace": "\"Загрузить еще\""
     },
-    "33": {
+    "32": {
         "match": "\"Sign up free\"",
         "replace": "\"Бесплатная регистрация\""
     },
-    "34": {
+    "33": {
         "match": "\"Session link copied to clipboard\"",
         "replace": "\"Ссылка на сеанс скопирована в буфер обмена\""
     },
-    "35": {
+    "34": {
         "match": "\"Listen together on Spotify\"",
         "replace": "\"Слушайте вместе в Spotify\""
     },
-    "36": {
+    "35": {
         "match": "\"Invite others to your group session, and listen together from anywhere.\"",
         "replace": "\"Пригласите других в вашу групповую сессию и слушайте вместе откуда угодно.\""
     },
-    "37": {
+    "36": {
         "match": "\"Copy link\"",
         "replace": "\"Скопировать ссылку\""
     },
-    "38": {
+    "37": {
         "match": "\"Cancel\"",
         "replace": "\"Отмена\""
     },
-    "39": {
+    "38": {
         "match": "\"Join .host..s group session\"",
         "replace": "\"Присоединиться к групповому сеансу %host%\""
     },
-    "40": {
+    "39": {
         "match": "\"Continue on this computer\"",
         "replace": "\"Продолжить на этом компьютере\""
     },
-    "41": {
+    "40": {
         "match": "\"Join\"",
         "replace": "\"Присоединиться\""
     },
-    "42": {
+    "41": {
         "match": "\"Not now\"",
         "replace": "\"Не сейчас\""
     },
-    "43": {
+    "42": {
         "match": "\"People in the session will see your username, profile picture, and suggested songs based on your taste profile.\"",
         "replace": "\"Люди в сессии увидят ваше имя пользователя, аватар и предложенные песни на основе вашего музыкального профиля.\""
     },
-    "44": {
+    "43": {
         "match": "\"Read along\"",
         "replace": "\"Читайте вместе\""
     },
-    "45": {
+    "44": {
         "match": "\"Group session logo\"",
         "replace": "\"Логотип групповой сессии\""
     },
-    "46": {
+    "45": {
         "match": "\"Leave the group session.\"",
         "replace": "\"Покинуть групповую сессию?\""
     },
-    "47": {
+    "46": {
         "match": "\"End\"",
         "replace": "\"Завершить\""
     },
-    "48": {
+    "47": {
         "match": "\"Are you sure you want to end the session for everyone.\"",
         "replace": "\"Вы уверены, что хотите завершить сеанс для всех?\""
     },
-    "49": {
+    "48": {
         "match": "\"End session\"",
         "replace": "\"Завершить сессию\""
     },
-    "50": {
+    "49": {
         "match": "\"Leave\"",
         "replace": "\"Покинуть\""
     },
-    "51": {
+    "50": {
         "match": "\"Build .0. is available\"",
         "replace": "\"Сборка {0} доступна\""
     },
-    "52": {
+    "51": {
         "match": "\"Downloading build .0....\"",
         "replace": "\"Загрузка сборки {0}...\""
     },
-    "53": {
+    "52": {
         "match": "\"Build .0. is ready to install\"",
         "replace": "\"Сборка {0} готова к установке\""
     },
-    "54": {
+    "53": {
         "match": "\".host..s group session\"",
         "replace": "\"Групповой сеанс %host%\""
     },
+    "54": {
+        "match": "\"Invite or remove people from your group session\"",
+        "replace": "\"Приглашайте или удаляйте пользователей из вашей групповой сессии\""
+    },
     "55": {
-        "match": "\"Participants ..0..\"",
-        "replace": "\"Участники ({0})\""
+        "match": "\"Invite people to .host..s group session\"",
+        "replace": "\"Пригласить пользователей в групповой сеанс %host%\""
+    },
+    "56": {
+        "match": "\"Are you sure you want to remove .displayName. from the group session\\?\"",
+        "replace": "\"Вы уверены, что хотите удалить %displayName% из группового сеанса?\""
+    },
+    "57": {
+        "match": "\"Remove\"",
+        "replace": "\"Удалить\""
+    },
+    "58": {
+        "match": "\"New playlist\"",
+        "replace": "\"Новый плейлист\""
+    },
+    "59": {
+        "match": "\"Feature Spotlight\"",
+        "replace": "\"Особенности\""
+    },
+    "60": {
+        "match": "\"Start a group session\"",
+        "replace": "\"Начать групповую сессию\""
+    },
+    "61": {
+        "match": "\"View as\"",
+        "replace": "\"Посмотреть как\""
+    },
+    "62": {
+        "match": "\"Add to playlist\"",
+        "replace": "\"Добавить в плейлист\""
+    },
+    "63": {
+        "match": "\"Find a playlist\"",
+        "replace": "\"Найти плейлист\""
+    },
+    "64": {
+        "match": "\"New playlist\"",
+        "replace": "\"Новый плейлист\""
+    },
+    "65": {
+        "match": "\"Done\"",
+        "replace": "\"Готово\""
+    },
+    "66": {
+        "match": "\"Invite\"",
+        "replace": "\"Пригласить\""
     }
 }

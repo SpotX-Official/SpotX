@@ -237,6 +237,33 @@
                     "fr": "1.2.12",
                     "to": ""
                 }
+            },
+            "NewAdsNpv": {
+                "name": "enableNewAdsNpv",
+                "description": "Enable showing new ads NPV",
+                "native_description": "Enable showing new ads NPV",
+                "version": {
+                    "fr": "1.2.18",
+                    "to": ""
+                }
+            },
+            "NewAdsNpvVideoTakeover": {
+                "name": "enableNewAdsNpvVideoTakeover",
+                "description": "Enable redesigned VideoTakeover for new ads NPV",
+                "native_description": "Enable redesigned VideoTakeover for new ads NPV",
+                "version": {
+                    "fr": "1.2.18",
+                    "to": ""
+                }
+            },
+            "NewAdsNpvColorExtraction": {
+                "name": "enableNewAdsNpvColorExtraction",
+                "description": "Enable CTA card color extraction for new ads NPV",
+                "native_description": "Enable CTA card color extraction for new ads NPV",
+                "version": {
+                    "fr": "1.2.18",
+                    "to": ""
+                }
             }
         },
         "EnableExp": {
@@ -462,7 +489,7 @@
                 "native_description": "Enable the slide-in/out transition on the right sidebar",
                 "version": {
                     "fr": "1.2.8",
-                    "to": "1.2.16"
+                    "to": ""
                 }
             },
             "RootGridAnimations": {
@@ -471,6 +498,24 @@
                 "native_description": "Enable the slide-in/out transition on the sidebars in the RootGrid",
                 "version": {
                     "fr": "1.2.17",
+                    "to": "1.2.17"
+                }
+            },
+            "YLXEnhancements": {
+                "name": "enableYLXEnhancements",
+                "description": "Enable Your Library X Enhancements",
+                "native_description": "Enable Your Library X Enhancements",
+                "version": {
+                    "fr": "1.2.18",
+                    "to": ""
+                }
+            },
+            "SmallerLineHeight": {
+                "name": "enableSmallerLineHeight",
+                "description": "Enable line height 1.5 on the <body />",
+                "native_description": "Enable line height 1.5 on the <body />",
+                "version": {
+                    "fr": "1.2.18",
                     "to": ""
                 }
             },

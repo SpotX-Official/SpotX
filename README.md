@@ -1,12 +1,12 @@
   <p align="center">
-  <a href="https://github.com/amd64fox/SpotX/releases"><img src="https://raw.githubusercontent.com/amd64fox/SpotX/main/.github/Pic/logo.png" />
+  <a href="https://github.com/amd64fox/SpotX/releases"><img src="https://cdn.statically.io/gh/amd64fox/SpotX/main/.github/Pic/logo.png" />
 </p>
 
 <p align="center">        
-      <a href="https://t.me/spotify_windows_mod"><img src="https://raw.githubusercontent.com/amd64fox/SpotX/main/.github/Pic/Shields/SpotX_Channel.svg"></a>
-      <a href="https://t.me/SpotxCommunity"><img src="https://raw.githubusercontent.com/amd64fox/SpotX/main/.github/Pic/Shields/SpotX_Community.svg"></a>
-      <a href="https://github.com/jetfir3/SpotX-Bash"><img src="https://raw.githubusercontent.com/amd64fox/SpotX/main/.github/Pic/Shields/SpotX_for_Mac&Linux.svg"></a>
-      <a href="https://telegra.ph/SpotX-FAQ-09-19"><img src="https://raw.githubusercontent.com/amd64fox/SpotX/main/.github/Pic/Shields/faq.svg"></a>
+      <a href="https://t.me/spotify_windows_mod"><img src="https://cdn.statically.io/gh/amd64fox/SpotX/main/.github/Pic/Shields/SpotX_Channel.svg"></a>
+      <a href="https://t.me/SpotxCommunity"><img src="https://cdn.statically.io/gh/amd64fox/SpotX/main/.github/Pic/Shields/SpotX_Community.svg"></a>
+      <a href="https://github.com/jetfir3/SpotX-Bash"><img src="https://cdn.statically.io/gh/amd64fox/SpotX/main/.github/Pic/Shields/SpotX_for_Mac&Linux.svg"></a>
+      <a href="https://telegra.ph/SpotX-FAQ-09-19"><img src="https://cdn.statically.io/gh/amd64fox/SpotX/main/.github/Pic/Shields/faq.svg"></a>
       </p>
 
    <h2> <div align="center"><b> Modified Spotify Client for Windows </b></div> </h2>
@@ -48,7 +48,7 @@ or
 #### Run The following command in PowerShell:
 
 ```ps1
-[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; iex "& { $((iwr -useb 'https://raw.githubusercontent.com/amd64fox/SpotX/main/Install.ps1').Content) } -new_theme"
+[Net.ServicePointManager]::SecurityProtocol = 3072; iex "& { $((iwr -useb 'https://cdn.statically.io/gh/amd64fox/SpotX/main/Install.ps1').Content) } -new_theme"
 ```
 
 </details>
@@ -72,7 +72,7 @@ or
 #### Run The following command in PowerShell:
 
 ```ps1
-[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; iex "& { $((iwr -useb 'https://raw.githubusercontent.com/amd64fox/SpotX/main/Install.ps1').Content) } -v 1.2.13.661.ga588f749-4064 -confirm_spoti_recomended_over -block_update_on"
+[Net.ServicePointManager]::SecurityProtocol = 3072; iex "& { $((iwr -useb 'https://cdn.statically.io/gh/amd64fox/SpotX/main/Install.ps1').Content) } -v 1.2.13.661.ga588f749-4064 -confirm_spoti_recomended_over -block_update_on"
 ```
 
 </details>
@@ -101,7 +101,7 @@ or
 #### Run The following command in PowerShell:
 
 ```ps1
-[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; iex "& { $((iwr -useb 'https://raw.githubusercontent.com/amd64fox/SpotX/main/Install.ps1').Content) } -confirm_uninstall_ms_spoti -confirm_spoti_recomended_over -podcasts_off -block_update_on -start_spoti -new_theme -adsections_off -lyrics_stat spotify"
+[Net.ServicePointManager]::SecurityProtocol = 3072; iex "& { $((iwr -useb 'https://cdn.statically.io/gh/amd64fox/SpotX/main/Install.ps1').Content) } -confirm_uninstall_ms_spoti -confirm_spoti_recomended_over -podcasts_off -block_update_on -start_spoti -new_theme -adsections_off -lyrics_stat spotify"
 ```
 
 </details>
@@ -127,7 +127,7 @@ or
 #### Run The following command in PowerShell:
 
 ```ps1
-[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; iex "& { $((iwr -useb 'https://raw.githubusercontent.com/amd64fox/SpotX/main/Install.ps1').Content) } -premium -new_theme"
+[Net.ServicePointManager]::SecurityProtocol = 3072; iex "& { $((iwr -useb 'https://cdn.statically.io/gh/amd64fox/SpotX/main/Install.ps1').Content) } -premium -new_theme"
 ```
 
 </details>

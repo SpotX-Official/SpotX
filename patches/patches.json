@@ -264,6 +264,15 @@
                     "fr": "1.2.18",
                     "to": ""
                 }
+            },
+            "AudiobookAdExclusivity": {
+                "name": "enableAudiobookAdExclusivity",
+                "description": "Enable Audiobook Ad Formats Exclusivity",
+                "native_description": "Enable Audiobook Ad Formats Exclusivity",
+                "version": {
+                    "fr": "1.2.19",
+                    "to": ""
+                }
             }
         },
         "EnableExp": {
@@ -597,7 +606,7 @@
                 "native_description": "Enable list view for Live Events feed",
                 "version": {
                     "fr": "1.2.14",
-                    "to": ""
+                    "to": "1.2.18"
                 }
             },
             "ConcertsTicketPrice": {
@@ -676,6 +685,16 @@
                     "to": "1.1.96"
                 }
             },
+            "LyricsUpsell": {
+                "name": "forceLyricsUpsell",
+                "description": "Force Lyrics Upsell for testing",
+                "native_description": "Force Lyrics Upsell for testing",
+                "value": "CONTROL",
+                "version": {
+                    "fr": "1.2.19",
+                    "to": ""
+                }
+            },
             "NavAlt2": {
                 "name": "enableNavAltExperiment2",
                 "description": "Enable the new home structure and navigation",
@@ -692,8 +711,8 @@
                 "fr": "1.1.58",
                 "to": ""
             },
-            "add": "(?<=wg:\/\/desktop-update\/.)7(\/update)",
-            "match": "(?<=wg:\/\/desktop-update\/.)2(\/update)",
+            "add": "(?<=desktop-update\/.)7(\/update)",
+            "match": "(?<=desktop-update\/.)2(\/update)",
             "replace": "7/update"
         },
         "podcast_ad_block": {

@@ -257,17 +257,13 @@ if ($psv -ge 7) {
     Import-Module Appx -UseWindowsPowerShell -WarningAction:SilentlyContinue
 }
 
-# Country check
-$country = [System.Globalization.RegionInfo]::CurrentRegion.EnglishName
-
 # add Tls12
-[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+[Net.ServicePointManager]::SecurityProtocol = 3072
 
 
 function CallLang($clg) {
 
-    [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
-    $urlLang = "https://raw.githubusercontent.com/amd64fox/SpotX/main/scripts/installer-lang/$clg.ps1"
+    $urlLang = "https://cdn.statically.io/gh/amd64fox/SpotX/main/scripts/installer-lang/$clg.ps1"
     $ProgressPreference = 'SilentlyContinue'
     
     try {
@@ -289,7 +285,7 @@ $lang = CallLang -clg $langCode
 # Set variable 'ru'.
 if ($langCode -eq 'ru') { 
     $ru = $true
-    $urlru = "https://raw.githubusercontent.com/amd64fox/SpotX/main/patches/Augmented%20translation/ru.json"
+    $urlru = "https://cdn.statically.io/gh/amd64fox/SpotX/main/patches/Augmented%20translation/ru.json"
     $webjsonru = (Invoke-WebRequest -useb -Uri $urlru).Content | ConvertFrom-Json
 }
 
@@ -337,7 +333,7 @@ if (!($version -and $version -match $match_v)) {
     }
     else {  
         # Recommended version for Win 10-12
-        $onlineFull = "1.2.18.999.g9b38fc27-20" 
+        $onlineFull = "1.2.19.937.gf6e7cff9-258" 
     }
 }
 else {
@@ -361,7 +357,7 @@ $retries = 0
 
 while ($retries -lt 2) {
     try {
-        Invoke-WebRequest -useb -Uri $cutt_url | Out-Null
+        $null = Invoke-WebRequest -useb -Uri $cutt_url 
         break
     }
     catch {
@@ -596,9 +592,10 @@ if ($spotifyInstalled) {
     $offline = (Get-Item $spotifyExecutable).VersionInfo.FileVersion
  
     # Version comparison
-    # converting strings to arrays of numbers using the -split operator and a ForEach-Object loop
-    $arr1 = $online -split '\.' | ForEach-Object { [int]$_ }
-    $arr2 = $offline -split '\.' | ForEach-Object { [int]$_ }
+    # converting strings to arrays of numbers using the -split operator and a foreach loop
+    
+    $arr1 = $online -split '\.' | foreach { [int]$_ }
+    $arr2 = $offline -split '\.' | foreach { [int]$_ }
 
     # compare each element of the array in order from most significant to least significant.
     for ($i = 0; $i -lt $arr1.Length; $i++) {
@@ -649,7 +646,7 @@ if ($spotifyInstalled) {
             if ($confirm_spoti_recomended_over) { $ch = 'n' }
             if ($ch -eq 'y') {
                 Write-Host ($lang).DelOld`n 
-                Unlock-Folder | Out-Null
+                $null = Unlock-Folder 
                 cmd /c $spotifyExecutable /UNINSTALL /SILENT
                 wait-process -name SpotifyUninstall
                 Start-Sleep -Milliseconds 200
@@ -668,6 +665,10 @@ if ($spotifyInstalled) {
     if ($testversion) {
         # Submit unsupported version of Spotify to google form for further processing
         try { 
+            
+            # Country check
+            $country = [System.Globalization.RegionInfo]::CurrentRegion.EnglishName
+
             $txt = [IO.File]::ReadAllText($spotifyExecutable)
             $regex = "(\d+)\.(\d+)\.(\d+)\.(\d+)(\.g[0-9a-f]{8})"
             $v = $txt | Select-String $regex -AllMatches
@@ -685,7 +686,7 @@ if ($spotifyInstalled) {
                     'entry.2067427976' = $online + " < " + $offline
                 }   
             }
-            Invoke-WebRequest -useb @Parameters | Out-Null
+            $null = Invoke-WebRequest -useb @Parameters 
         }
         catch {
             Write-Host 'Unable to submit new version of Spotify' 
@@ -740,7 +741,7 @@ if ($spotifyInstalled) {
                 if ($confirm_spoti_recomended_over) { $ch = 'n' }
                 if ($ch -eq 'y') {
                     Write-Host ($lang).DelNew`n
-                    Unlock-Folder | Out-Null
+                    $null = Unlock-Folder
                     cmd /c $spotifyExecutable /UNINSTALL /SILENT
                     wait-process -name SpotifyUninstall
                     Start-Sleep -Milliseconds 200
@@ -774,7 +775,7 @@ if (-not $spotifyInstalled -or $upgrade_client) {
     $ErrorActionPreference = 'SilentlyContinue'
     taskkill /f /im Spotify.exe /t > $null 2>&1
     Start-Sleep -Milliseconds 600
-    Unlock-Folder | Out-Null
+    $null = Unlock-Folder 
     Start-Sleep -Milliseconds 200
     Get-ChildItem $spotifyDirectory -Exclude 'Users', 'prefs' | Remove-Item -Recurse -Force 
     Start-Sleep -Milliseconds 200
@@ -870,7 +871,7 @@ if ($ch -eq 'n') {
 
 $ch = $null
 
-$url = "https://raw.githubusercontent.com/amd64fox/SpotX/main/patches/patches.json"
+$url = "https://cdn.statically.io/gh/amd64fox/SpotX/main/patches/patches.json"
 $retries = 0
 
 while ($retries -lt 3) {
@@ -1063,7 +1064,7 @@ function Helper($paramname) {
 
                 foreach ($obj in $objects) {
                     $propertiesToRemove = $obj.Object.Name | Where-Object { $_ -notin $obj.PropertiesToKeep }
-                    $propertiesToRemove | ForEach-Object {
+                    $propertiesToRemove | foreach {
                         $obj.Object.Remove($_)
                     }
                 }
@@ -1213,7 +1214,7 @@ function Helper($paramname) {
     $novariable = "Didn't find variable "
     $offline_patch = $offline -replace '(\d+\.\d+\.\d+)(.\d+)', '$1'
 
-    $contents | ForEach-Object { 
+    $contents | foreach { 
 
         if ( $json.$PSItem.version.to ) { $to = [version]$json.$PSItem.version.to -ge [version]$offline_patch } else { $to = $true }
         if ( $json.$PSItem.version.fr ) { $fr = [version]$json.$PSItem.version.fr -le [version]$offline_patch } else { $fr = $false }
@@ -1280,7 +1281,7 @@ function extract ($counts, $method, $name, $helper, $add, $patch) {
             if ($method -eq "nonezip") { $writer = New-Object System.IO.StreamWriter -ArgumentList $file }
             $writer.BaseStream.SetLength(0)
             $writer.Write($xpui)
-            if ($add) { $add | ForEach-Object { $writer.Write([System.Environment]::NewLine + $PSItem ) } }
+            if ($add) { $add | foreach { $writer.Write([System.Environment]::NewLine + $PSItem ) } }
             $writer.Close()  
             if ($method -eq "zip") { $zip.Dispose() }
         }
@@ -1288,7 +1289,7 @@ function extract ($counts, $method, $name, $helper, $add, $patch) {
             Add-Type -Assembly 'System.IO.Compression.FileSystem'
             $xpui_spa_patch = Join-Path (Join-Path $env:APPDATA 'Spotify\Apps') 'xpui.spa'
             $zip = [System.IO.Compression.ZipFile]::Open($xpui_spa_patch, 'update') 
-            $zip.Entries | Where-Object FullName -like $name | ForEach-Object {
+            $zip.Entries | Where-Object FullName -like $name | foreach {
                 $reader = New-Object System.IO.StreamReader($_.Open())
                 $xpui = $reader.ReadToEnd()
                 $reader.Close()
@@ -1402,12 +1403,12 @@ If ($test_spa) {
 
     # Remove all languages except En and Ru from xpui.spa
     if ($ru) {
-        [Reflection.Assembly]::LoadWithPartialName('System.IO.Compression') | Out-Null
+        $null = [Reflection.Assembly]::LoadWithPartialName('System.IO.Compression')
         $stream = New-Object IO.FileStream($xpui_spa_patch, [IO.FileMode]::Open)
         $mode = [IO.Compression.ZipArchiveMode]::Update
         $zip_xpui = New-Object IO.Compression.ZipArchive($stream, $mode)
 
-    ($zip_xpui.Entries | Where-Object { $_.FullName -match "i18n" -and $_.FullName -inotmatch "(ru|en.json|longest)" }) | ForEach-Object { $_.Delete() }
+    ($zip_xpui.Entries | Where-Object { $_.FullName -match "i18n" -and $_.FullName -inotmatch "(ru|en.json|longest)" }) | foreach { $_.Delete() }
 
         $zip_xpui.Dispose()
         $stream.Close()

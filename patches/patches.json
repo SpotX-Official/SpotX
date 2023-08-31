@@ -685,6 +685,16 @@
                     "to": "1.1.96"
                 }
             },
+            "NavAlt2": {
+                "name": "enableNavAltExperiment2",
+                "description": "Enable the new home structure and navigation",
+                "native_description": "Enable the new home structure and navigation",
+                "value": "ENABLED_CENTER",
+                "version": {
+                    "fr": "1.1.97",
+                    "to": "1.2.2"
+                }
+            },
             "LyricsUpsell": {
                 "name": "forceLyricsUpsell",
                 "description": "Force Lyrics Upsell for testing",
@@ -695,14 +705,14 @@
                     "to": ""
                 }
             },
-            "NavAlt2": {
-                "name": "enableNavAltExperiment2",
-                "description": "Enable the new home structure and navigation",
-                "native_description": "Enable the new home structure and navigation",
-                "value": "ENABLED_CENTER",
+            "TrackRecommender": {
+                "name": "enableTrackInternalLinkRecommender",
+                "description": "Enable internal link recommender component for track entity pages",
+                "native_description": "Enable internal link recommender component for track entity pages",
+                "value": "canonical-top-position",
                 "version": {
-                    "fr": "1.1.97",
-                    "to": "1.2.2"
+                    "fr": "1.2.18",
+                    "to": ""
                 }
             }
         },

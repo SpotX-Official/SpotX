@@ -133,40 +133,6 @@ or
 </details>
 
 <details>
-<summary><small>Installing with Scoop</small></summary><p>
-  
-  #### Installing SpotX via the Scoop package manager includes:
-  - New theme activated (new right and left sidebar, some cover change)
-  - Automatic removal of Spotify MS if it was found 
-  - Automatic installation of the recommended version of Spotify (if another client has already been found, it will be installed over) 
-  - Hiding podcasts/episodes/audiobooks from the homepage  
-  - Automatic blocking of Spotify updates
-  - All [experimental features](https://github.com/amd64fox/SpotX/discussions/50) included 
-  
-  <h4> </h4>
-  
-#### Installing SpotX with Scoop
-Just run these commands in the command prompt or powershell:
-<br>
-<br>```scoop bucket add nonportable```
-<br>```scoop install spotx-np```
-
-#### Updating SpotX with Scoop
-
-To update SpotX or check for updates run this command in the command prompt or powershell:
-
-```scoop update spotx-np```
-
-#### Uninstalling SpotX with Scoop
-
-To fully uninstall SpotX and Spotify run this command in the command prompt or powershell:
-
-```scoop uninstall spotx-np```
-
-</details>
-
-
-<details>
 <summary><small>Installing with parameters</small></summary><p>
 
 You can specify various parameters for a more flexible installation, more [details here](https://github.com/amd64fox/SpotX/discussions/60)

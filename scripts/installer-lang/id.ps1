@@ -4,7 +4,7 @@
 ║ Welcome to SpotX for Windows ║
 ╚══════════════════════════════╝"
     Incorrect       = "Oops, nilai salah,"
-    Incorrect2      = "masukkan lagi melalui "
+    Incorrect2      = "masukkan lagi "
     Download        = "Error saat mengunduh"
     Download2       = "Akan meminta ulang dalam 5 detik..."
     Download3       = "Error lagi"

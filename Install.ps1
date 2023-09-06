@@ -257,9 +257,6 @@ if ($psv -ge 7) {
     Import-Module Appx -UseWindowsPowerShell -WarningAction:SilentlyContinue
 }
 
-# add Tls12
-[Net.ServicePointManager]::SecurityProtocol = 3072
-
 
 function CallLang($clg) {
 

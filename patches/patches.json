@@ -662,6 +662,15 @@
                     "fr": "1.2.14",
                     "to": ""
                 }
+            },
+            "AlbumPrerelease": {
+                "name": "enableAlbumPrerelease",
+                "description": "Enable album prerelease pages",
+                "native_description": "Enable album prerelease pages",
+                "version": {
+                    "fr": "1.2.18",
+                    "to": ""
+                }
             }
         },
         "CustomExp": {

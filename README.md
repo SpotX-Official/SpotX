@@ -48,7 +48,7 @@ or
 #### Run The following command in PowerShell:
 
 ```ps1
-iex "& {$(irm -useb 'https://cdn.jsdelivr.net/gh/amd64fox/SpotX@main/Install.ps1')} -new_theme"
+[Net.ServicePointManager]::SecurityProtocol = 3072; iex "& {$(irm -useb 'https://cdn.jsdelivr.net/gh/amd64fox/SpotX@main/Install.ps1')} -new_theme"
 ```
 
 </details>
@@ -72,7 +72,7 @@ or
 #### Run The following command in PowerShell:
 
 ```ps1
-iex "& {$(irm -useb 'https://cdn.jsdelivr.net/gh/amd64fox/SpotX@main/Install.ps1')} -v 1.2.13.661.ga588f749-4064 -confirm_spoti_recomended_over -block_update_on"
+[Net.ServicePointManager]::SecurityProtocol = 3072; iex "& {$(irm -useb 'https://cdn.jsdelivr.net/gh/amd64fox/SpotX@main/Install.ps1')} -v 1.2.13.661.ga588f749-4064 -confirm_spoti_recomended_over -block_update_on"
 ```
 
 </details>
@@ -101,7 +101,7 @@ or
 #### Run The following command in PowerShell:
 
 ```ps1
-iex "& {$(irm -useb 'https://cdn.jsdelivr.net/gh/amd64fox/SpotX@main/Install.ps1')} -confirm_uninstall_ms_spoti -confirm_spoti_recomended_over -podcasts_off -block_update_on -start_spoti -new_theme -adsections_off -lyrics_stat spotify"
+[Net.ServicePointManager]::SecurityProtocol = 3072; iex "& {$(irm -useb 'https://cdn.jsdelivr.net/gh/amd64fox/SpotX@main/Install.ps1')} -confirm_uninstall_ms_spoti -confirm_spoti_recomended_over -podcasts_off -block_update_on -start_spoti -new_theme -adsections_off -lyrics_stat spotify"
 ```
 
 </details>
@@ -127,7 +127,7 @@ or
 #### Run The following command in PowerShell:
 
 ```ps1
-iex "& {$(irm -useb 'https://cdn.jsdelivr.net/gh/amd64fox/SpotX@main/Install.ps1')} -premium -new_theme"
+[Net.ServicePointManager]::SecurityProtocol = 3072; iex "& {$(irm -useb 'https://cdn.jsdelivr.net/gh/amd64fox/SpotX@main/Install.ps1')} -premium -new_theme"
 ```
 
 </details>

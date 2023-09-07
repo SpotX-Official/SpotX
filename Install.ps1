@@ -260,11 +260,13 @@ if ($psv -ge 7) {
 
 function CallLang($clg) {
 
-    $urlLang = "https://cdn.jsdelivr.net/gh/amd64fox/SpotX@main/scripts/installer-lang/$clg.ps1"
+    $urlLang = "https://cdn.jsdelivr.net/gh/amd64fox/SpotX@latest/scripts/installer-lang/$clg.ps1"
     $ProgressPreference = 'SilentlyContinue'
     
     try {
-       Invoke-RestMethod -useb $urlLang | Invoke-Expression 
+        $response = Invoke-WebRequest -Uri $urlLang -UseBasicParsing
+        $scriptContent = [System.Text.Encoding]::UTF8.GetString($response.Content)
+        Invoke-Expression $scriptContent
     }
     catch {
         Write-Host "Error loading $clg language"
@@ -282,7 +284,7 @@ $lang = CallLang -clg $langCode
 # Set variable 'ru'.
 if ($langCode -eq 'ru') { 
     $ru = $true
-    $urlru = "https://cdn.jsdelivr.net/gh/amd64fox/SpotX@main/patches/Augmented%20translation/ru.json"
+    $urlru = "https://cdn.jsdelivr.net/gh/amd64fox/SpotX@latest/patches/Augmented%20translation/ru.json"
     $webjsonru = Invoke-RestMethod -useb -Uri $urlru
 }
 
@@ -873,7 +875,7 @@ $retries = 0
 
 while ($retries -lt 3) {
     try {
-        $webjson = irm -useb "https://cdn.jsdelivr.net/gh/amd64fox/SpotX@main/patches/patches.json"
+        $webjson = irm -useb "https://cdn.jsdelivr.net/gh/amd64fox/SpotX@latest/patches/patches.json"
         break
     }
     catch {

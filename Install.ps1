@@ -263,11 +263,11 @@ if ($psv -ge 7) {
 
 function CallLang($clg) {
 
-    $urlLang = "https://cdn.jsdelivr.net/gh/amd64fox/SpotX@main/scripts/installer-lang/$clg.ps1"
+    $urlLang = "https://raw.githubusercontent.com/amd64fox/SpotX/main/scripts/installer-lang/$clg.ps1"
     $ProgressPreference = 'SilentlyContinue'
     
     try {
-       Invoke-RestMethod -useb $urlLang | Invoke-Expression 
+(Invoke-WebRequest -useb $urlLang).Content | Invoke-Expression 
     }
     catch {
         Write-Host "Error loading $clg language"
@@ -285,8 +285,8 @@ $lang = CallLang -clg $langCode
 # Set variable 'ru'.
 if ($langCode -eq 'ru') { 
     $ru = $true
-    $urlru = "https://cdn.jsdelivr.net/gh/amd64fox/SpotX@main/patches/Augmented%20translation/ru.json"
-    $webjsonru = Invoke-RestMethod -useb -Uri $urlru
+    $urlru = "https://raw.githubusercontent.com/amd64fox/SpotX/main/patches/Augmented%20translation/ru.json"
+    $webjsonru = (Invoke-WebRequest -useb -Uri $urlru).Content | ConvertFrom-Json
 }
 
 Write-Host ($lang).Welcome
@@ -350,18 +350,18 @@ else {
 }
 $online = ($onlineFull -split ".g")[0]
 
+# Sending a statistical web query to cutt.ly
 $ErrorActionPreference = 'SilentlyContinue'
-$cutt_url = "https://cutt.ly/PwlLDSBF"
-$retriess = 0
-$maxRetries = 3
+$cutt_url = "https://cutt.ly/DK8UQub"
+$retries = 0
 
-while ($retriess -lt $maxRetries) {
+while ($retries -lt 2) {
     try {
-        $null = Invoke-WebRequest -UseBasicParsing -Uri $cutt_url
+        $null = Invoke-WebRequest -useb -Uri $cutt_url 
         break
     }
     catch {
-        $retriess++
+        $retries++
         Start-Sleep -Seconds 2
     }
 }
@@ -871,12 +871,12 @@ if ($ch -eq 'n') {
 
 $ch = $null
 
-
+$url = "https://raw.githubusercontent.com/amd64fox/SpotX/main/patches/patches.json"
 $retries = 0
 
 while ($retries -lt 3) {
     try {
-        $webjson = irm -useb "https://cdn.jsdelivr.net/gh/amd64fox/SpotX@main/patches/patches.json"
+        $webjson = Invoke-WebRequest -UseBasicParsing -Uri $url | ConvertFrom-Json
         break
     }
     catch {

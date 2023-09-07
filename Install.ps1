@@ -263,11 +263,13 @@ if ($psv -ge 7) {
 
 function CallLang($clg) {
 
-    $urlLang = "https://raw.githubusercontent.com/amd64fox/SpotX/main/scripts/installer-lang/$clg.ps1"
+    $urlLang = "https://amd64fox.github.io/SpotX/scripts/installer-lang/$clg.ps1"
     $ProgressPreference = 'SilentlyContinue'
     
     try {
-(Invoke-WebRequest -useb $urlLang).Content | Invoke-Expression 
+        $response = (iwr -Uri $urlLang -UseBasicParsing).Content
+        $scriptContent = [System.Text.Encoding]::UTF8.GetString($response)
+        Invoke-Expression $scriptContent
     }
     catch {
         Write-Host "Error loading $clg language"
@@ -285,7 +287,7 @@ $lang = CallLang -clg $langCode
 # Set variable 'ru'.
 if ($langCode -eq 'ru') { 
     $ru = $true
-    $urlru = "https://raw.githubusercontent.com/amd64fox/SpotX/main/patches/Augmented%20translation/ru.json"
+    $urlru = "https://amd64fox.github.io/SpotX/patches/Augmented%20translation/ru.json"
     $webjsonru = (Invoke-WebRequest -useb -Uri $urlru).Content | ConvertFrom-Json
 }
 
@@ -352,7 +354,7 @@ $online = ($onlineFull -split ".g")[0]
 
 # Sending a statistical web query to cutt.ly
 $ErrorActionPreference = 'SilentlyContinue'
-$cutt_url = "https://cutt.ly/DK8UQub"
+$cutt_url = "https://cutt.ly/rwl6sXuQ"
 $retries = 0
 
 while ($retries -lt 2) {
@@ -871,7 +873,7 @@ if ($ch -eq 'n') {
 
 $ch = $null
 
-$url = "https://raw.githubusercontent.com/amd64fox/SpotX/main/patches/patches.json"
+$url = "https://amd64fox.github.io/SpotX/patches/patches.json"
 $retries = 0
 
 while ($retries -lt 3) {

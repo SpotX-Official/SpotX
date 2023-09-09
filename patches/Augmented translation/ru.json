@@ -284,7 +284,7 @@
         "replace": "\"Изменить\""
     },
     "71": {
-        "match": "\"Disable Smart Shuffle for \{0\}\"",
+        "match": "\"Disable Smart Shuffle for .0.\"",
         "replace": "\"Отключить умное перемешивание для {0}\""
     },
     "72": {
@@ -332,11 +332,11 @@
         "replace": "\"Изменения сохранены\""
     },
     "83": {
-        "match": "\"Added to \{0\}\"",
+        "match": "\"Added to .0.\"",
         "replace": "\"Добавлено в {0}\""
     },
     "84": {
-        "match": "\"Removed from \{0\}"",
+        "match": "\"Removed from .0.\"",
         "replace": "\"Удалено из {0}\""
     },
     "85": {

@@ -1,302 +1,354 @@
 {
-    "lang":  {
-                 "version":  "1.2.19",
-                 "language":  "Russian"
-             },
-    "1":  {
-              "match":  "\"To Enhance this playlist, you.ll need to go online.\"",
-              "replace":  "\"Чтобы улучшить этот плейлист, вам нужно подключиться к интернету.\""
-          },
-    "2":  {
-              "match":  "\"Confirm your age\"",
-              "replace":  "\"Подтвердите свой возраст\""
-          },
-    "3":  {
-              "match":  "\"%price%/month after. Terms and conditions apply. One month free not available for users who have already tried Premium.\"",
-              "replace":  "\"%price%/месяц спустя. Принять условия. Один месяц бесплатно, недоступно для пользователей, которые уже попробовали Premium.\""
-          },
-    "4":  {
-              "match":  "\"Enjoy ad-free music listening, offline listening, and more. Cancel anytime.\"",
-              "replace":  "\"Наслаждайтесь прослушиванием музыки без рекламы, прослушиванием в офлайн режиме и многим другим. Отменить можно в любое время.\""
-          },
-    "5":  {
-              "match":  "\"Offline storage location\"",
-              "replace":  "\"Хранилище скачанных треков\""
-          },
-    "6":  {
-              "match":  "\"Click to start listening\"",
-              "replace":  "\"Нажмите, чтобы начать прослушивание\""
-          },
-    "7":  {
-              "match":  "\"Change speed\"",
-              "replace":  "\"Изменение скорости\""
-          },
-    "8":  {
-              "match":  "\"You need to be at least 19 years old to listen to explicit content marked with\"",
-              "replace":  "\"Вам должно быть не менее 19 лет, чтобы слушать непристойный контент, помеченный значком\""
-          },
-    "9":  {
-              "match":  "\"Add to another playlist\"",
-              "replace":  "\"Добавить в другой плейлист\""
-          },
-    "10":  {
-               "match":  "\"Add to this playlist\"",
-               "replace":  "\"Добавить в этот плейлист\""
-           },
-    "11":  {
-               "match":  "\"Couldn.t connect to Spotify.\"",
-               "replace":  "\"Не удалось подключиться к Spotify.\""
-           },
-    "12":  {
-               "match":  "\"No connection\"",
-               "replace":  "\"Нет соединения\""
-           },
-    "13":  {
-               "match":  "\"Reconnecting...\"",
-               "replace":  "\"Повторное подключение...\""
-           },
-    "14":  {
-               "match":  "\"Character counter\"",
-               "replace":  "\"Счетчик символов\""
-           },
-    "15":  {
-               "match":  "\"Toggle lightsaber hilt. Current is [{]0[}].\"",
-               "replace":  "\"Переключить рукоять светового меча. Текущий {0}.\""
-           },
-    "16":  {
-               "match":  "\"Song not available\"",
-               "replace":  "\"Песня недоступна\""
-           },
-    "17":  {
-               "match":  "\"The song you.re trying to listen to is not available in HiFi at this time.\"",
-               "replace":  "\"Песня, которую вы пытаетесь прослушать, в настоящее время недоступна в HiFi.\""
-           },
-    "18":  {
-               "match":  "\"Your Location\"",
-               "replace":  "\"Ваше местоположение\""
-           },
-    "19":  {
-               "match":  "\"Override certain user attributes to test regionalized content programming. The overrides are only active in this app.\"",
-               "replace":  "\"Переопределите определенные атрибуты пользователя, чтобы протестировать региональное программирование контента. Переопределения активны только в этом приложении.\""
-           },
-    "20":  {
-               "match":  " was released this week!",
-               "replace":  " был выпущен на этой неделе!"
-           },
-    "21":  {
-               "match":  "(\"one\": \"...name...) was released %years% year ago this week!\"",
-               "replace":  "$1 был выпущен %years% год назад на этой неделе!\""
-           },
-    "22":  {
-               "match":  "(\"few\": \"...name...) was released %years% years ago this week!\"",
-               "replace":  "$1 был выпущен %years% года назад на этой неделе!\""
-           },
-    "23":  {
-               "match":  "(\"many\": \"...name...) was released %years% years ago this week!\"",
-               "replace":  "$1 был выпущен %years% лет назад на этой неделе!\""
-           },
-    "24":  {
-               "match":  "(\"other\": \"...name...) was released %years% years ago this week!\"",
-               "replace":  "$1 был выпущен %years% года назад на этой неделе!\""
-           },
-    "25":  {
-               "match":  "\"Speed [{]0[}]×\"",
-               "replace":  "\"Скорость {0}×\""
-           },
-    "26":  {
-               "match":  "(\"Filter options\"",
-               "replace":  "\"Параметры фильтрации\""
-           },
-    "27":  {
-               "match":  "\"Artist\"",
-               "replace":  "\"Исполнитель\""
-           },
-    "28":  {
-               "match":  "\"... of ...\"",
-               "replace":  "\"{0} из {1}\""
-           },
-    "29":  {
-               "match":  "\"Не удалось изменить\"",
-               "replace":  "\"Не удалось обновить\""
-           },
-    "30":  {
-               "match":  "Dynamic normalizer - Actively adjust the volume by leveling out the difference between quiet and loud parts of the audio",
-               "replace":  "Динамический нормализатор - активно регулирует громкость, выравнивая разницу между тихими и громкими частями аудио"
-           },
-    "31":  {
-               "match":  "\"Load more\"",
-               "replace":  "\"Загрузить еще\""
-           },
-    "32":  {
-               "match":  "\"Sign up free\"",
-               "replace":  "\"Бесплатная регистрация\""
-           },
-    "33":  {
-               "match":  "\"Session link copied to clipboard\"",
-               "replace":  "\"Ссылка на сеанс скопирована в буфер обмена\""
-           },
-    "34":  {
-               "match":  "\"Listen together on Spotify\"",
-               "replace":  "\"Слушайте вместе в Spotify\""
-           },
-    "35":  {
-               "match":  "\"Invite others to your group session, and listen together from anywhere.\"",
-               "replace":  "\"Пригласите других в вашу групповую сессию и слушайте вместе откуда угодно.\""
-           },
-    "36":  {
-               "match":  "\"Copy link\"",
-               "replace":  "\"Скопировать ссылку\""
-           },
-    "37":  {
-               "match":  "\"Cancel\"",
-               "replace":  "\"Отмена\""
-           },
-    "38":  {
-               "match":  "\"Join .host..s group session\"",
-               "replace":  "\"Присоединиться к групповому сеансу %host%\""
-           },
-    "39":  {
-               "match":  "\"Continue on this computer\"",
-               "replace":  "\"Продолжить на этом компьютере\""
-           },
-    "40":  {
-               "match":  "\"Join\"",
-               "replace":  "\"Присоединиться\""
-           },
-    "41":  {
-               "match":  "\"Not now\"",
-               "replace":  "\"Не сейчас\""
-           },
-    "42":  {
-               "match":  "\"People in the session will see your username, profile picture, and suggested songs based on your taste profile.\"",
-               "replace":  "\"Люди в сессии увидят ваше имя пользователя, аватар и предложенные песни на основе вашего музыкального профиля.\""
-           },
-    "43":  {
-               "match":  "\"Group session logo\"",
-               "replace":  "\"Логотип групповой сессии\""
-           },
-    "44":  {
-               "match":  "\"Leave the group session.\"",
-               "replace":  "\"Покинуть групповую сессию?\""
-           },
-    "45":  {
-               "match":  "\"End\"",
-               "replace":  "\"Завершить\""
-           },
-    "46":  {
-               "match":  "\"Are you sure you want to end the session for everyone.\"",
-               "replace":  "\"Вы уверены, что хотите завершить сеанс для всех?\""
-           },
-    "47":  {
-               "match":  "\"End session\"",
-               "replace":  "\"Завершить сессию\""
-           },
-    "48":  {
-               "match":  "\"Leave\"",
-               "replace":  "\"Покинуть\""
-           },
-    "49":  {
-               "match":  "\"Build .0. is available\"",
-               "replace":  "\"Сборка {0} доступна\""
-           },
-    "50":  {
-               "match":  "\"Downloading build .0....\"",
-               "replace":  "\"Загрузка сборки {0}...\""
-           },
-    "51":  {
-               "match":  "\"Build .0. is ready to install\"",
-               "replace":  "\"Сборка {0} готова к установке\""
-           },
-    "52":  {
-               "match":  "\".host..s group session\"",
-               "replace":  "\"Групповой сеанс %host%\""
-           },
-    "53":  {
-               "match":  "\"Invite or remove people from your group session\"",
-               "replace":  "\"Приглашайте или удаляйте пользователей из вашей групповой сессии\""
-           },
-    "54":  {
-               "match":  "\"Invite people to .host..s group session\"",
-               "replace":  "\"Пригласить пользователей в групповой сеанс %host%\""
-           },
-    "55":  {
-               "match":  "\"Are you sure you want to remove .displayName. from the group session\\?\"",
-               "replace":  "\"Вы уверены, что хотите удалить %displayName% из группового сеанса?\""
-           },
-    "56":  {
-               "match":  "\"Remove\"",
-               "replace":  "\"Удалить\""
-           },
-    "57":  {
-               "match":  "\"New playlist\"",
-               "replace":  "\"Новый плейлист\""
-           },
-    "58":  {
-               "match":  "\"Feature Spotlight\"",
-               "replace":  "\"Особенности\""
-           },
-    "59":  {
-               "match":  "\"Start a group session\"",
-               "replace":  "\"Начать групповую сессию\""
-           },
-    "60":  {
-               "match":  "\"View as\"",
-               "replace":  "\"Просмотреть как\""
-           },
-    "61":  {
-               "match":  "\"Add to playlist\"",
-               "replace":  "\"Добавить в плейлист\""
-           },
-    "62":  {
-               "match":  "\"Find a playlist\"",
-               "replace":  "\"Найти плейлист\""
-           },
-    "63":  {
-               "match":  "\"Done\"",
-               "replace":  "\"Готово\""
-           },
-    "64":  {
-               "match":  "\"Invite\"",
-               "replace":  "\"Пригласить\""
-           },
-    "65":  {
-               "match":  "\"The host has ended this group session\"",
-               "replace":  "\"Хост завершил эту групповую сессию\""
-           },
-    "66":  {
-               "match":  "\"Got it\"",
-               "replace":  "\"Понятно\""
-           },
-    "67":  {
-               "match":  "\"Video playing in the mini-player\"",
-               "replace":  "\"Видео воспроизводится в мини-плеере\""
-           },
-    "68":  {
-               "match":  "\"Play here instead\"",
-               "replace":  "\"Лучше воспроизвести здесь\""
-           },
-    "69":  {
-               "match":  "\"Participants ..0..\"",
-               "replace":  "\"Участники ({0})\""
-           },
-    "70":  {
-               "match":  "\"Remove from Your Library\"",
-               "replace":  "\"Удалить из вашей библиотеки\""
-           },
-    "71":  {
-               "match":  "\"Add to Liked Songs\"",
-               "replace":  "\"Добавить в понравившиеся песни\""
-           },
-    "72":  {
-               "match":  "\"Add to Your Episodes\"",
-               "replace":  "\"Добавить в ваши эпизоды\""
-           },
-    "73":  {
-               "match":  "\"Add to Your Library\"",
-               "replace":  "\"Добавить в вашу библиотеку\""
-           },
-    "74":  {
-               "match":  "\"Add to playlist menu\"",
-               "replace":  "\"Добавить в меню плейлиста\""
-           }
+    "lang": {
+        "version": "1.2.20",
+        "language": "Russian"
+    },
+    "1": {
+        "match": "\"To Enhance this playlist, you.ll need to go online.\"",
+        "replace": "\"Чтобы улучшить этот плейлист, вам нужно подключиться к интернету.\""
+    },
+    "2": {
+        "match": "\"Confirm your age\"",
+        "replace": "\"Подтвердите свой возраст\""
+    },
+    "3": {
+        "match": "\"%price%/month after. Terms and conditions apply. One month free not available for users who have already tried Premium.\"",
+        "replace": "\"%price%/месяц спустя. Принять условия. Один месяц бесплатно, недоступно для пользователей, которые уже попробовали Premium.\""
+    },
+    "4": {
+        "match": "\"Enjoy ad-free music listening, offline listening, and more. Cancel anytime.\"",
+        "replace": "\"Наслаждайтесь прослушиванием музыки без рекламы, прослушиванием в офлайн режиме и многим другим. Отменить можно в любое время.\""
+    },
+    "5": {
+        "match": "\"Offline storage location\"",
+        "replace": "\"Хранилище скачанных треков\""
+    },
+    "6": {
+        "match": "\"Click to start listening\"",
+        "replace": "\"Нажмите, чтобы начать прослушивание\""
+    },
+    "7": {
+        "match": "\"Change speed\"",
+        "replace": "\"Изменение скорости\""
+    },
+    "8": {
+        "match": "\"You need to be at least 19 years old to listen to explicit content marked with\"",
+        "replace": "\"Вам должно быть не менее 19 лет, чтобы слушать непристойный контент, помеченный значком\""
+    },
+    "9": {
+        "match": "\"Add to another playlist\"",
+        "replace": "\"Добавить в другой плейлист\""
+    },
+    "10": {
+        "match": "\"Add to this playlist\"",
+        "replace": "\"Добавить в этот плейлист\""
+    },
+    "11": {
+        "match": "\"Couldn.t connect to Spotify.\"",
+        "replace": "\"Не удалось подключиться к Spotify.\""
+    },
+    "12": {
+        "match": "\"No connection\"",
+        "replace": "\"Нет соединения\""
+    },
+    "13": {
+        "match": "\"Reconnecting...\"",
+        "replace": "\"Повторное подключение...\""
+    },
+    "14": {
+        "match": "\"Character counter\"",
+        "replace": "\"Счетчик символов\""
+    },
+    "15": {
+        "match": "\"Toggle lightsaber hilt. Current is [{]0[}].\"",
+        "replace": "\"Переключить рукоять светового меча. Текущий {0}.\""
+    },
+    "16": {
+        "match": "\"Song not available\"",
+        "replace": "\"Песня недоступна\""
+    },
+    "17": {
+        "match": "\"The song you.re trying to listen to is not available in HiFi at this time.\"",
+        "replace": "\"Песня, которую вы пытаетесь прослушать, в настоящее время недоступна в HiFi.\""
+    },
+    "18": {
+        "match": "\"Your Location\"",
+        "replace": "\"Ваше местоположение\""
+    },
+    "19": {
+        "match": "\"Override certain user attributes to test regionalized content programming. The overrides are only active in this app.\"",
+        "replace": "\"Переопределите определенные атрибуты пользователя, чтобы протестировать региональное программирование контента. Переопределения активны только в этом приложении.\""
+    },
+    "20": {
+        "match": " was released this week!",
+        "replace": " был выпущен на этой неделе!"
+    },
+    "21": {
+        "match": "(\"one\": \"...name...) was released %years% year ago this week!\"",
+        "replace": "$1 был выпущен %years% год назад на этой неделе!\""
+    },
+    "22": {
+        "match": "(\"few\": \"...name...) was released %years% years ago this week!\"",
+        "replace": "$1 был выпущен %years% года назад на этой неделе!\""
+    },
+    "23": {
+        "match": "(\"many\": \"...name...) was released %years% years ago this week!\"",
+        "replace": "$1 был выпущен %years% лет назад на этой неделе!\""
+    },
+    "24": {
+        "match": "(\"other\": \"...name...) was released %years% years ago this week!\"",
+        "replace": "$1 был выпущен %years% года назад на этой неделе!\""
+    },
+    "25": {
+        "match": "\"Speed [{]0[}]×\"",
+        "replace": "\"Скорость {0}×\""
+    },
+    "26": {
+        "match": "(\"Filter options\"",
+        "replace": "\"Параметры фильтрации\""
+    },
+    "27": {
+        "match": "\"Artist\"",
+        "replace": "\"Исполнитель\""
+    },
+    "28": {
+        "match": "\"... of ...\"",
+        "replace": "\"{0} из {1}\""
+    },
+    "29": {
+        "match": "\"Не удалось изменить\"",
+        "replace": "\"Не удалось обновить\""
+    },
+    "30": {
+        "match": "Dynamic normalizer - Actively adjust the volume by leveling out the difference between quiet and loud parts of the audio",
+        "replace": "Динамический нормализатор - активно регулирует громкость, выравнивая разницу между тихими и громкими частями аудио"
+    },
+    "31": {
+        "match": "\"Load more\"",
+        "replace": "\"Загрузить еще\""
+    },
+    "32": {
+        "match": "\"Sign up free\"",
+        "replace": "\"Бесплатная регистрация\""
+    },
+    "33": {
+        "match": "\"Listen together on Spotify\"",
+        "replace": "\"Слушайте вместе в Spotify\""
+    },
+    "34": {
+        "match": "\"Copy link\"",
+        "replace": "\"Скопировать ссылку\""
+    },
+    "35": {
+        "match": "\"Cancel\"",
+        "replace": "\"Отмена\""
+    },
+    "36": {
+        "match": "\"Join\"",
+        "replace": "\"Присоединиться\""
+    },
+    "37": {
+        "match": "\"Not now\"",
+        "replace": "\"Не сейчас\""
+    },
+    "38": {
+        "match": "\"End\"",
+        "replace": "\"Завершить\""
+    },
+    "39": {
+        "match": "\"Build .0. is available\"",
+        "replace": "\"Сборка {0} доступна\""
+    },
+    "40": {
+        "match": "\"Downloading build .0....\"",
+        "replace": "\"Загрузка сборки {0}...\""
+    },
+    "41": {
+        "match": "\"Build .0. is ready to install\"",
+        "replace": "\"Сборка {0} готова к установке\""
+    },
+    "42": {
+        "match": "\"Remove\"",
+        "replace": "\"Удалить\""
+    },
+    "43": {
+        "match": "\"New playlist\"",
+        "replace": "\"Новый плейлист\""
+    },
+    "44": {
+        "match": "\"Feature Spotlight\"",
+        "replace": "\"Особенности\""
+    },
+    "45": {
+        "match": "\"Add to playlist\"",
+        "replace": "\"Добавить в плейлист\""
+    },
+    "46": {
+        "match": "\"Find a playlist\"",
+        "replace": "\"Найти плейлист\""
+    },
+    "47": {
+        "match": "\"Done\"",
+        "replace": "\"Готово\""
+    },
+    "48": {
+        "match": "\"Invite\"",
+        "replace": "\"Пригласить\""
+    },
+    "49": {
+        "match": "\"Got it\"",
+        "replace": "\"Понятно\""
+    },
+    "50": {
+        "match": "\"Video playing in the mini-player\"",
+        "replace": "\"Видео воспроизводится в мини-плеере\""
+    },
+    "51": {
+        "match": "\"Play here instead\"",
+        "replace": "\"Лучше воспроизвести здесь\""
+    },
+    "52": {
+        "match": "\"Remove from Your Library\"",
+        "replace": "\"Удалить из вашей библиотеки\""
+    },
+    "53": {
+        "match": "\"Add to Liked Songs\"",
+        "replace": "\"Добавить в понравившиеся песни\""
+    },
+    "54": {
+        "match": "\"Add to Your Episodes\"",
+        "replace": "\"Добавить в ваши эпизоды\""
+    },
+    "55": {
+        "match": "\"Add to Your Library\"",
+        "replace": "\"Добавить в вашу библиотеку\""
+    },
+    "56": {
+        "match": "\"Add to playlist menu\"",
+        "replace": "\"Добавить в меню плейлиста\""
+    },
+    "57": {
+        "match": "\"user% ended the Jam\"",
+        "replace": "\"%user% завершил сессию\""
+    },
+    "58": {
+        "match": "\"DJ isn.t available in the web player yet\"",
+        "replace": "\"DJ пока не доступен в веб-плеере\""
+    },
+    "59": {
+        "match": "\"We.re working on it. In the meantime, you can find your DJ in the desktop and mobile apps.\"",
+        "replace": "\"Мы работаем над этим. В промежутке времени вы можете найти вашего DJ в приложениях для компьютера и мобильных устройств.\""
+    },
+    "60": {
+        "match": "\"We.re working on it. In the meantime, check out some playlists based on your listening in the Made for You hub.\"",
+        "replace": "\"Мы работаем над этим. В промежутке времени вы можете ознакомиться с некоторыми плейлистами, основанными на вашем прослушивании, в разделе \"Для тебя\".\""
+    },
+    "61": {
+        "match": "\"Go to Made for You\"",
+        "replace": "\"Перейдите в раздел \"Для тебя\".\""
+    },
+    "62": {
+        "match": "\"The host has ended the Jam\"",
+        "replace": "\"Хост завершил сессию\""
+    },
+    "63": {
+        "match": "\"In this Jam\"",
+        "replace": "\"В этой сессии\""
+    },
+    "64": {
+        "match": "\"Listen and add songs together in real time, from anywhere.\"",
+        "replace": "\"Слушайте и добавляйте песни в реальном времени совместно, откуда угодно\""
+    },
+    "65": {
+        "match": "\"Are you sure you want to remove %displayName% from the Jam.\"",
+        "replace": "\"Вы уверены, что хотите удалить %displayName% из сессии?\""
+    },
+    "66": {
+        "match": "\"Switch To Video\"",
+        "replace": "\"Переключиться на видео\""
+    },
+    "67": {
+        "match": "\"Switch To Audio\"",
+        "replace": "\"Переключиться на аудио\""
+    },
+    "68": {
+        "match": "\"Added to Your Library\"",
+        "replace": "\"Добавлено в вашу библиотеку\""
+    },
+    "69": {
+        "match": "\"Add to playlist menu\"",
+        "replace": "\"Добавить в меню плейлиста\""
+    },
+    "70": {
+        "match": "\"Change\"",
+        "replace": "\"Изменить\""
+    },
+    "71": {
+        "match": "\"Disable Smart Shuffle for {0}\"",
+        "replace": "\"Отключить умное перемешивание для {0}\""
+    },
+    "72": {
+        "match": "\"Disable Smart Shuffle\"",
+        "replace": "\"Отключить умное перемешивание\""
+    },
+    "73": {
+        "match": "\"Invite others to your Jam, and listen together from anywhere.\"",
+        "replace": "\"Пригласите других в вашу сессию, и слушайте вместе откуда угодно.\""
+    },
+    "74": {
+        "match": "\"this computer\"",
+        "replace": "\"Этот компьютер\""
+    },
+    "75": {
+        "match": "\"this web browser\"",
+        "replace": "\"этот веб-плеер\""
+    },
+    "76": {
+        "match": "\"Link copied to clipboard\"",
+        "replace": "\"Ссылка скопирована в буфер обмена\""
+    },
+    "77": {
+        "match": "\"Join %host%.s Jam\"",
+        "replace": "\"Присоединяйтесь к сессии %host%\""
+    },
+    "78": {
+        "match": "\"Continue on %device%\"",
+        "replace": "\"Продолжить на устройстве %device%\""
+    },
+    "79": {
+        "match": "\"People in the Jam will see your username, profile picture, and suggested songs based on your taste profile.\"",
+        "replace": "\"Участники сессии увидят ваше имя пользователя, изображение профиля и рекомендации песен на основе вашего музыкального вкуса.\""
+    },
+    "80": {
+        "match": "\"Start a Jam\"",
+        "replace": "\"Начать сессию\""
+    },
+    "81": {
+        "match": "\"Jam logo\"",
+        "replace": "\"Логотип сессии\""
+    },
+    "82": {
+        "match": "\"Changes saved\"",
+        "replace": "\"Изменения сохранены\""
+    },
+    "83": {
+        "match": "\"Added to {0}\"",
+        "replace": "\"Добавлено в {0}\""
+    },
+    "84": {
+        "match": "\"Are you sure you want to end the Jam for everyone.\"",
+        "replace": "\"Вы уверены, что хотите завершить сессию для всех?\""
+    },
+    "85": {
+        "match": "\"End Jam\"",
+        "replace": "\"Завершить сессию\""
+    },
+    "86": {
+        "match": "\"Leave Jam\"",
+        "replace": "\"Покинуть сессию\""
+    },
+    "87": {
+        "match": "\"Are you sure you want to leave the Jam.\"",
+        "replace": "\"Вы уверены, что хотите покинуть сессию?\""
+    }
 }

@@ -691,7 +691,7 @@
                 }
             },
             "NpvAboutPodcast": {
-                "name": "saveButtonAlwaysVisible",
+                "name": "enableNpvAboutPodcast",
                 "description": "Enable About Podcast section in  NPV",
                 "native_description": "Enable About Podcast section in  NPV",
                 "version": {

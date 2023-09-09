@@ -273,6 +273,15 @@
                     "fr": "1.2.19",
                     "to": ""
                 }
+            },
+            "DSASetting": {
+                "name": "enableDSASetting",
+                "description": "Enable DSA (Digital Service Act) features for desktop and web",
+                "native_description": "Enable DSA (Digital Service Act) features for desktop and web",
+                "version": {
+                    "fr": "1.2.20",
+                    "to": ""
+                }
             }
         },
         "EnableExp": {
@@ -669,6 +678,24 @@
                 "native_description": "Enable album prerelease pages",
                 "version": {
                     "fr": "1.2.18",
+                    "to": ""
+                }
+            },
+            "ButtonAlwaysVisible": {
+                "name": "saveButtonAlwaysVisible",
+                "description": "Display save button always in whats new feed",
+                "native_description": "Display save button always in whats new feed",
+                "version": {
+                    "fr": "1.2.20",
+                    "to": ""
+                }
+            },
+            "NpvAboutPodcast": {
+                "name": "saveButtonAlwaysVisible",
+                "description": "Enable About Podcast section in  NPV",
+                "native_description": "Enable About Podcast section in  NPV",
+                "version": {
+                    "fr": "1.2.20",
                     "to": ""
                 }
             }

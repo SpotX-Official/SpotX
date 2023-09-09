@@ -228,7 +228,7 @@
         "replace": "\"Добавить в меню плейлиста\""
     },
     "57": {
-        "match": "\"user% ended the Jam\"",
+        "match": "\"%user% ended the Jam\"",
         "replace": "\"%user% завершил сессию\""
     },
     "58": {
@@ -284,7 +284,7 @@
         "replace": "\"Изменить\""
     },
     "71": {
-        "match": "\"Disable Smart Shuffle for {0}\"",
+        "match": "\"Disable Smart Shuffle for \{0\}\"",
         "replace": "\"Отключить умное перемешивание для {0}\""
     },
     "72": {
@@ -332,22 +332,26 @@
         "replace": "\"Изменения сохранены\""
     },
     "83": {
-        "match": "\"Added to {0}\"",
+        "match": "\"Added to \{0\}\"",
         "replace": "\"Добавлено в {0}\""
     },
     "84": {
+        "match": "\"Removed from \{0\}"",
+        "replace": "\"Удалено из {0}\""
+    },
+    "85": {
         "match": "\"Are you sure you want to end the Jam for everyone.\"",
         "replace": "\"Вы уверены, что хотите завершить сессию для всех?\""
     },
-    "85": {
+    "86": {
         "match": "\"End Jam\"",
         "replace": "\"Завершить сессию\""
     },
-    "86": {
+    "87": {
         "match": "\"Leave Jam\"",
         "replace": "\"Покинуть сессию\""
     },
-    "87": {
+    "88": {
         "match": "\"Are you sure you want to leave the Jam.\"",
         "replace": "\"Вы уверены, что хотите покинуть сессию?\""
     }

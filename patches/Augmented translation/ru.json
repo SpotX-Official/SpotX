@@ -276,82 +276,78 @@
         "replace": "\"Добавлено в вашу библиотеку\""
     },
     "69": {
-        "match": "\"Add to playlist menu\"",
-        "replace": "\"Добавить в меню плейлиста\""
-    },
-    "70": {
         "match": "\"Change\"",
         "replace": "\"Изменить\""
     },
-    "71": {
+    "70": {
         "match": "\"Disable Smart Shuffle for .0.\"",
         "replace": "\"Отключить умное перемешивание для {0}\""
     },
-    "72": {
+    "71": {
         "match": "\"Disable Smart Shuffle\"",
         "replace": "\"Отключить умное перемешивание\""
     },
-    "73": {
+    "72": {
         "match": "\"Invite others to your Jam, and listen together from anywhere.\"",
         "replace": "\"Пригласите других в вашу сессию, и слушайте вместе откуда угодно.\""
     },
-    "74": {
+    "73": {
         "match": "\"this computer\"",
         "replace": "\"Этот компьютер\""
     },
-    "75": {
+    "74": {
         "match": "\"this web browser\"",
         "replace": "\"этот веб-плеер\""
     },
-    "76": {
+    "75": {
         "match": "\"Link copied to clipboard\"",
         "replace": "\"Ссылка скопирована в буфер обмена\""
     },
-    "77": {
+    "76": {
         "match": "\"Join %host%.s Jam\"",
         "replace": "\"Присоединяйтесь к сессии %host%\""
     },
-    "78": {
+    "77": {
         "match": "\"Continue on %device%\"",
         "replace": "\"Продолжить на устройстве %device%\""
     },
-    "79": {
+    "78": {
         "match": "\"People in the Jam will see your username, profile picture, and suggested songs based on your taste profile.\"",
         "replace": "\"Участники сессии увидят ваше имя пользователя, изображение профиля и рекомендации песен на основе вашего музыкального вкуса.\""
     },
-    "80": {
+    "79": {
         "match": "\"Start a Jam\"",
         "replace": "\"Начать сессию\""
     },
-    "81": {
+    "80": {
         "match": "\"Jam logo\"",
         "replace": "\"Логотип сессии\""
     },
-    "82": {
+    "81": {
         "match": "\"Changes saved\"",
         "replace": "\"Изменения сохранены\""
     },
-    "83": {
+    "82": {
         "match": "\"Added to .0.\"",
         "replace": "\"Добавлено в {0}\""
     },
-    "84": {
+    "83": {
         "match": "\"Removed from .0.\"",
         "replace": "\"Удалено из {0}\""
     },
-    "85": {
+    "84": {
         "match": "\"Are you sure you want to end the Jam for everyone.\"",
         "replace": "\"Вы уверены, что хотите завершить сессию для всех?\""
     },
-    "86": {
+    "85": {
         "match": "\"End Jam\"",
         "replace": "\"Завершить сессию\""
     },
-    "87": {
+    "86": {
         "match": "\"Leave Jam\"",
         "replace": "\"Покинуть сессию\""
     },
-    "88": {
+    "87": {
         "match": "\"Are you sure you want to leave the Jam.\"",
         "replace": "\"Вы уверены, что хотите покинуть сессию?\""
     }

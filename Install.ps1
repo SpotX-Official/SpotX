@@ -1056,11 +1056,11 @@ function Helper($paramname) {
                 $objects = @(
                     @{
                         Object           = $webjson.others.CustomExp.psobject.properties
-                        PropertiesToKeep = @('NavAlt', 'NavAlt2')
+                        PropertiesToKeep = @('LyricsUpsell')
                     },
                     @{
                         Object           = $webjson.others.EnableExp.psobject.properties
-                        PropertiesToKeep = @('RightSidebarColors', 'RightSidebarCredits', 'RightSidebarLyrics', 'RightSidebar', 'LeftSidebar', 'CarouselsOnHome')
+                        PropertiesToKeep = @('CarouselsOnHome')
                     }
                 )
 

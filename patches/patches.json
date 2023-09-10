@@ -235,6 +235,15 @@
                 "native_description": "Enable showing DSA (Digital Services Act) context menu and modal for ads",
                 "version": {
                     "fr": "1.2.12",
+                    "to": "1.2.19"
+                }
+            },
+            "Dsa2": {
+                "name": "enableDsaAds",
+                "description": "Enable showing DSA (Digital Services Act) context menu and modal for ads",
+                "native_description": "Enable showing DSA (Digital Services Act) context menu and modal for ads",
+                "version": {
+                    "fr": "1.2.20",
                     "to": ""
                 }
             },

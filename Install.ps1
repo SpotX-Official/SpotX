@@ -522,17 +522,12 @@ if ($win10 -or $win11 -or $win8_1 -or $win8 -or $win12) {
             do {
                 $ch = Read-Host -Prompt ($lang).MsSpoti2
                 Write-Host
-                if($ch -eq ''){
-                    $ch = 'y'
-                    break
-                }
-
                 if (!($ch -eq 'n' -or $ch -eq 'y')) {
                     incorrectValue
                 }
             }
     
-            while ($ch -notmatch '^y$|^n$|^$')
+            while ($ch -notmatch '^y$|^n$')
         }
         if ($confirm_uninstall_ms_spoti) { $ch = 'y' }
         if ($ch -eq 'y') {      
@@ -626,11 +621,6 @@ if ($spotifyInstalled) {
                 Write-Host (($lang).OldV2 -f $offline, $online)
                 $ch = Read-Host -Prompt ($lang).OldV3
                 Write-Host
-                if($ch -eq ''){
-                    $ch = 'y'
-                    break
-                }
-
                 if (!($ch -eq 'n' -or $ch -eq 'y')) {
                     incorrectValue
                 }
@@ -648,11 +638,6 @@ if ($spotifyInstalled) {
                 do {
                     $ch = Read-Host -Prompt (($lang).DelOrOver -f $offline)
                     Write-Host
-                    if ($ch -eq ''){
-                        $ch = 'y'
-                        break
-                    }
-
                     if (!($ch -eq 'n' -or $ch -eq 'y')) {
                         incorrectValue
                     }
@@ -718,11 +703,6 @@ if ($spotifyInstalled) {
                 Write-Host (($lang).NewV2 -f $offline, $online)
                 $ch = Read-Host -Prompt (($lang).NewV3 -f $offline)
                 Write-Host
-                if ($ch -eq ''){
-                    $ch = 'n'
-                    break
-                }
-
                 if (!($ch -eq 'n' -or $ch -eq 'y')) {
                     incorrectValue
                 }
@@ -736,11 +716,6 @@ if ($spotifyInstalled) {
                 do {
                     $ch = Read-Host -Prompt (($lang).Recom -f $online)
                     Write-Host
-                    if ($ch -eq ''){
-                        $ch = 'y'
-                        break
-                    }
-                
                     if (!($ch -eq 'n' -or $ch -eq 'y')) {
                         incorrectValue
                     }
@@ -758,11 +733,6 @@ if ($spotifyInstalled) {
                     do {
                         $ch = Read-Host -Prompt (($lang).DelOrOver -f $offline)
                         Write-Host
-                        if ($ch -eq ''){
-                            $ch = 'y'
-                            break
-                        }
-
                         if (!($ch -eq 'n' -or $ch -eq 'y')) {
                             incorrectValue
                         }
@@ -857,12 +827,6 @@ if (!($podcasts_off) -and !($podcasts_on)) {
     do {
         $ch = Read-Host -Prompt ($lang).PodcatsSelect
         Write-Host
-
-        if ($ch -eq ''){
-            $ch = 'n'
-            break
-        }
-
         if (!($ch -eq 'n' -or $ch -eq 'y')) { incorrectValue }
     }
     while ($ch -notmatch '^y$|^n$')
@@ -888,12 +852,6 @@ if (!($block_update_on) -and !($block_update_off)) {
         $text_upd = [string]($lang).UpdSelect + $upd
         $ch = Read-Host -Prompt $text_upd
         Write-Host
-
-        if ($ch -eq ''){
-            $ch = 'n'
-            break
-        }
-
         if (!($ch -eq 'n' -or $ch -eq 'y')) { incorrectValue } 
     }
     while ($ch -notmatch '^y$|^n$')
@@ -1382,12 +1340,6 @@ if ($test_js) {
     do {
         $ch = Read-Host -Prompt ($lang).Spicetify
         Write-Host
-
-        if ($ch -eq ''){
-            $ch = 'y'
-            break
-        }
-
         if (!($ch -eq 'n' -or $ch -eq 'y')) { incorrectValue }
     }
     while ($ch -notmatch '^y$|^n$')

@@ -136,7 +136,7 @@
                 "native_description": "Enable new permanent location for HPTO iframe to HptoHtml.js",
                 "version": {
                     "fr": "1.2.1",
-                    "to": ""
+                    "to": "1.2.20"
                 }
             },
             "UserFraudSignals": {
@@ -663,24 +663,6 @@
                     "to": ""
                 }
             },
-            "SocialConnectOnDesktop": {
-                "name": "enableSocialConnectOnDesktop",
-                "description": "Enable the Social Connect API that powers group listening sessions for Desktop",
-                "native_description": "Enable the Social Connect API that powers group listening sessions for Desktop",
-                "version": {
-                    "fr": "1.2.14",
-                    "to": ""
-                }
-            },
-            "SocialConnectOnDesktopWebPlayer": {
-                "name": "enableSocialConnectOnDesktopWebPlayer",
-                "description": "Enable the Social Connect API that powers group listening sessions for Desktop Web Player",
-                "native_description": "Enable the Social Connect API that powers group listening sessions for Desktop Web Player",
-                "version": {
-                    "fr": "1.2.14",
-                    "to": ""
-                }
-            },
             "AlbumPrerelease": {
                 "name": "enableAlbumPrerelease",
                 "description": "Enable album prerelease pages",
@@ -707,9 +689,56 @@
                     "fr": "1.2.20",
                     "to": ""
                 }
+            },
+            "QueueOnRightPanel": {
+                "name": "enableQueueOnRightPanel",
+                "description": "Enable Queue on the right panel",
+                "native_description": "Enable About Podcast section in  NPV",
+                "version": {
+                    "fr": "1.2.21",
+                    "to": ""
+                }
+            },
+            "RecentlyPlayedShortcut": {
+                "name": "enableRecentlyPlayedShortcut",
+                "description": "Show Recently Played shortcut in home view. Also increase max number of shortcuts to 8",
+                "native_description": "Show Recently Played shortcut in home view. Also increase max number of shortcuts to 8",
+                "version": {
+                    "fr": "1.2.21",
+                    "to": ""
+                }
+            },
+            "EncoreCards": {
+                "name": "enableEncoreCards",
+                "description": "Enables all cards throughout app to be Encore Cards",
+                "native_description": "Enables all cards throughout app to be Encore Cards",
+                "version": {
+                    "fr": "1.2.21",
+                    "to": ""
+                }
             }
         },
         "CustomExp": {
+            "SocialConnectOnDesktop": {
+                "name": "enableSocialConnectOnDesktop",
+                "description": "Enable the Social Connect API that powers group listening sessions for Desktop",
+                "native_description": "Enable the Social Connect API that powers group listening sessions for Desktop",
+                "value": "ENABLED",
+                "version": {
+                    "fr": "1.2.21",
+                    "to": ""
+                }
+            },
+            "SocialConnectOnDesktopWebPlayer": {
+                "name": "enableSocialConnectOnDesktopWebPlayer",
+                "description": "Enable the Social Connect API that powers group listening sessions for Desktop Web Player",
+                "native_description": "Enable the Social Connect API that powers group listening sessions for Desktop Web Player",
+                "value": "ENABLED",
+                "version": {
+                    "fr": "1.2.21",
+                    "to": ""
+                }
+            },
             "MandalorianEaster": {
                 "name": "enableMandalorianEasterEgg",
                 "description": "Enable the Mandalorian easter-egg",
@@ -1240,7 +1269,7 @@
                 "fr": "1.1.93",
                 "to": ""
             },
-            "match": "(this._product_state=(.))",
+            "match": "(this\\._product_state(?:|_service)=(.))",
             "replace": "$1,$2.putOverridesValues({0})",
             "add": "ads:'0',catalogue:'premium',product:'premium',type:'premium',name:'Spotify'",
             "add2": "'storage-size-config':'{0},90,500,3'"

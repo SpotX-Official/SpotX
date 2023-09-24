@@ -1027,6 +1027,7 @@ function Helper($paramname) {
             if ($enhance_playlist_off) { $remEnable.remove('EnhancePlaylist') }
             # if ($smartShuffle_off) { $remEnable.remove('SmartShuffle') }
             $remEnable.remove('SmartShuffle')
+            $remEnable.remove('RecentlyPlayedShortcut')
             if (!($funnyprogressBar)) { $remEnable.remove('HeBringsNpb') }
             # Old theme
             if (!($new_theme) -and [version]$offline -le [version]"1.2.13.661") {
@@ -1159,6 +1160,13 @@ function Helper($paramname) {
             $name = "patches.json.others."
             $n = "Spotify.exe"
             $contents = "podcast_ad_block"
+            $json = $webjson.others
+        }
+        "BannerHome" { 
+            # Remove banner on home page
+            $name = "patches.json.others."
+            $n = "home-hpto.js"
+            $contents = "BannerHome"
             $json = $webjson.others
         }
         "BlockUpdate" { 
@@ -1441,6 +1449,9 @@ If ($test_spa) {
         if ([version]$offline -ge [version]"1.1.98.683") { $js = 'xpui.js' }
         extract -counts 'one' -method 'zip' -name $js -helper 'OffAdSections'
     }
+
+    # Remove banner on home page
+    extract -counts 'one' -method 'zip' -name 'home-hpto.js' -helper 'BannerHome'
 
     # Hide Collaborators icon
     if (!($hide_col_icon_off) -and !($exp_spotify)) {

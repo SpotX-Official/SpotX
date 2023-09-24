@@ -1028,6 +1028,7 @@ function Helper($paramname) {
             # if ($smartShuffle_off) { $remEnable.remove('SmartShuffle') }
             $remEnable.remove('SmartShuffle')
             $remEnable.remove('RecentlyPlayedShortcut')
+            $remEnable.remove('EncoreCards')
             if (!($funnyprogressBar)) { $remEnable.remove('HeBringsNpb') }
             # Old theme
             if (!($new_theme) -and [version]$offline -le [version]"1.2.13.661") {

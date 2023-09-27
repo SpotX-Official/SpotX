@@ -1,5 +1,5 @@
   <p align="center">
-  <a href="https://github.com/amd64fox/SpotX/releases"><img src="https://raw.githubusercontent.com/amd64fox/SpotX/main/.github/Pic/logo.png" />
+  <a href="https://github.com/SpotX-Official/SpotX/releases"><img src="https://raw.githubusercontent.com/amd64fox/SpotX/main/.github/Pic/logo.png" />
 </p>
 
 <p align="center">        
@@ -23,7 +23,7 @@
 - <strong>Blocks all banner, video and audio ads in the client</strong>
 - <strong>Hiding podcasts, episodes and audiobooks from the homepage (optional)</strong>
 - <strong>Block Spotify automatic updates (optional)</strong>
-- <strong>More experimental features have been activated ([see the full list](https://github.com/amd64fox/SpotX/discussions/50))</strong>
+- <strong>More experimental features have been activated ([see the full list](https://github.com/SpotX-Official/SpotX/discussions/50))</strong>
 - <strong>Disabled Sentry (Prevented Sentry from sending console log/error/warning to Spotify developers)</strong>
 - <strong>Disabled logging (Stopped various elements to log user interaction)</strong>
 - <strong>Removed RTL rules (Removed all right-to-left CSS rules to simplify CSS files)</strong>
@@ -37,7 +37,7 @@
   #### During installation, you need to confirm some actions, also contains:
   
   - New theme activated (new right and left sidebar, some cover change)
-  - All [experimental features](https://github.com/amd64fox/SpotX/discussions/50) included
+  - All [experimental features](https://github.com/SpotX-Official/SpotX/discussions/50) included
 
   <h4> </h4>
   
@@ -61,7 +61,7 @@ or
   - Forced installation of version 1.2.13 (since the old theme was removed in subsequent versions)
   - Old theme activated
   - Automatic blocking of Spotify updates
-  - All [experimental features](https://github.com/amd64fox/SpotX/discussions/50) included
+  - All [experimental features](https://github.com/SpotX-Official/SpotX/discussions/50) included
 
   <h4> </h4>
   
@@ -84,9 +84,9 @@ or
   
   - New theme activated (new right and left sidebar, some cover change)
   - Hiding podcasts/episodes/audiobooks from the homepage
-  - Activated [static theme](https://github.com/amd64fox/SpotX/discussions/50#discussioncomment-4096066) <kbd>spotify</kbd> for lyrics
-  - Hiding [ad-like sections](https://github.com/amd64fox/SpotX/discussions/50#discussioncomment-4478943)
-  - All [experimental features](https://github.com/amd64fox/SpotX/discussions/50) included
+  - Activated [static theme](https://github.com/SpotX-Official/SpotX/discussions/50#discussioncomment-4096066) <kbd>spotify</kbd> for lyrics
+  - Hiding [ad-like sections](https://github.com/SpotX-Official/SpotX/discussions/50#discussioncomment-4478943)
+  - All [experimental features](https://github.com/SpotX-Official/SpotX/discussions/50) included
   - Automatic removal of Spotify MS if it was found 
   - Automatic installation of the recommended version of Spotify (if another client has already been found, it will be installed over) 
   - Automatic blocking of Spotify updates
@@ -116,7 +116,7 @@ or
   
   - New theme activated (new right and left sidebar, some cover change)
   - Disabled only audio ads in podcasts
-  - All [experimental features](https://github.com/amd64fox/SpotX/discussions/50) included
+  - All [experimental features](https://github.com/SpotX-Official/SpotX/discussions/50) included
 
   <h4> </h4>
   
@@ -135,7 +135,7 @@ or
 <details>
 <summary><small>Installing with parameters</small></summary><p>
 
-You can specify various parameters for a more flexible installation, more [details here](https://github.com/amd64fox/SpotX/discussions/60)
+You can specify various parameters for a more flexible installation, more [details here](https://github.com/SpotX-Official/SpotX/discussions/60)
 
 </details>
 
@@ -147,7 +147,7 @@ You can specify various parameters for a more flexible installation, more [detai
 
 or
 
-- Reinstall Spotify ([Full uninstall Spotify](https://github.com/amd64fox/Uninstall-Spotify) recommended)
+- Reinstall Spotify ([Full uninstall Spotify](https://github.com/SpotX-Official/Uninstall-Spotify) recommended)
 
 <h1>FAQ</h1>
 

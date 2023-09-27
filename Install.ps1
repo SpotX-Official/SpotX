@@ -354,7 +354,7 @@ $online = ($onlineFull -split ".g")[0]
 
 # Sending a statistical web query to cutt.ly
 $ErrorActionPreference = 'SilentlyContinue'
-$cutt_url = "https://cutt.ly/rwl6sXuQ"
+$cutt_url = "https://cutt.ly/8wv60QTL"
 $retries = 0
 
 while ($retries -lt 2) {

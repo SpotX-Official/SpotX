@@ -6,7 +6,7 @@ body:
   id: lang
   attributes:
     label: What language do you want to translate into?
-    description: Also note the already added <a href="https://github.com/amd64fox/SpotX/tree/main/scripts/installer-lang">languages</a>
+    description: Also note the already added <a href="https://github.com/SpotX-Official/SpotX/tree/main/scripts/installer-lang">languages</a>
     placeholder: e.g. English 
   validations:
     required: true

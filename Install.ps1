@@ -263,7 +263,7 @@ if ($psv -ge 7) {
 
 function CallLang($clg) {
 
-    $urlLang = "https://amd64fox.github.io/SpotX/scripts/installer-lang/$clg.ps1"
+    $urlLang = "https://spotx-official.github.io/SpotX/scripts/installer-lang/$clg.ps1"
     $ProgressPreference = 'SilentlyContinue'
     
     try {
@@ -287,7 +287,7 @@ $lang = CallLang -clg $langCode
 # Set variable 'ru'.
 if ($langCode -eq 'ru') { 
     $ru = $true
-    $urlru = "https://amd64fox.github.io/SpotX/patches/Augmented%20translation/ru.json"
+    $urlru = "https://spotx-official.github.io/SpotX/patches/Augmented%20translation/ru.json"
     $webjsonru = (Invoke-WebRequest -useb -Uri $urlru).Content | ConvertFrom-Json
 }
 
@@ -873,7 +873,7 @@ if ($ch -eq 'n') {
 
 $ch = $null
 
-$url = "https://amd64fox.github.io/SpotX/patches/patches.json"
+$url = "https://spotx-official.github.io/SpotX/patches/patches.json"
 $retries = 0
 
 while ($retries -lt 3) {

@@ -1,0 +1,36 @@
+name: Update github.io
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'Install.ps1'
+
+jobs:
+  copy_file:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout SpotX repo
+        uses: actions/checkout@v2
+        with:
+          repository: SpotX-Official/SpotX
+
+      - name: Checkout spotx-official.github.io repo
+        uses: actions/checkout@v2
+        with:
+          repository: SpotX-Official/spotx-official.github.io
+          path: spotx-official.github.io
+          token: ${{ secrets.ORGPAT }}
+
+      - name: Copy Install.ps1 file
+        run: cp Install.ps1 spotx-official.github.io/Install.ps1
+
+      - name: Push changes
+        run: |
+          cd spotx-official.github.io
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git add Install.ps1
+          git commit -m "Update Install.ps1"
+          git push

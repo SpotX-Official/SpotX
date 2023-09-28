@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   push:
     paths:
-      - 'Install.ps1'
+      - 'run.ps1'
 
 jobs:
   copy_file:
@@ -23,14 +23,14 @@ jobs:
           path: spotx-official.github.io
           token: ${{ secrets.ORGPAT }}
 
-      - name: Copy Install.ps1 file
-        run: cp Install.ps1 spotx-official.github.io/Install.ps1
+      - name: Copy run.ps1 file
+        run: cp run.ps1 spotx-official.github.io/run.ps1
 
       - name: Push changes
         run: |
           cd spotx-official.github.io
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
-          git add Install.ps1
-          git commit -m "Update Install.ps1"
+          git add run.ps1
+          git commit -m "Update run.ps1"
           git push

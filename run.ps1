@@ -356,21 +356,6 @@ else {
 }
 $online = ($onlineFull -split ".g")[0]
 
-# Sending a statistical web query to cutt.ly
-$ErrorActionPreference = 'SilentlyContinue'
-$cutt_url = "https://cutt.ly/8wv60QTL"
-$retries = 0
-
-while ($retries -lt 2) {
-    try {
-        $null = Invoke-WebRequest -useb -Uri $cutt_url 
-        break
-    }
-    catch {
-        $retries++
-        Start-Sleep -Seconds 2
-    }
-}
 
 function incorrectValue {
 

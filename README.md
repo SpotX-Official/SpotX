@@ -147,7 +147,7 @@ You can specify various parameters for a more flexible installation, more [detai
 
 or
 
-- Reinstall Spotify ([Full uninstall Spotify](https://github.com/SpotX-Official/Uninstall-Spotify) recommended)
+- Reinstall Spotify ([Full uninstall Spotify](https://github.com/amd64fox/Uninstall-Spotify) recommended)
 
 <h1>FAQ</h1>
 

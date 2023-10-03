@@ -1,12 +1,12 @@
   <p align="center">
-  <a href="https://github.com/SpotX-Official/SpotX/releases"><img src="https://raw.githubusercontent.com/amd64fox/SpotX/main/.github/Pic/logo.png" />
+  <a href="https://github.com/SpotX-Official/SpotX/releases"><img src="https://spotx-official.github.io/images/logos/logo.png" />
 </p>
 
 <p align="center">        
-      <a href="https://t.me/spotify_windows_mod"><img src="https://raw.githubusercontent.com/amd64fox/SpotX/main/.github/Pic/Shields/SpotX_Channel.svg"></a>
-      <a href="https://t.me/SpotxCommunity"><img src="https://raw.githubusercontent.com/amd64fox/SpotX/main/.github/Pic/Shields/SpotX_Community.svg"></a>
-      <a href="https://github.com/jetfir3/SpotX-Bash"><img src="https://raw.githubusercontent.com/amd64fox/SpotX/main/.github/Pic/Shields/SpotX_for_Mac&Linux.svg"></a>
-      <a href="https://telegra.ph/SpotX-FAQ-09-19"><img src="https://raw.githubusercontent.com/amd64fox/SpotX/main/.github/Pic/Shields/faq.svg"></a>
+      <a href="https://t.me/spotify_windows_mod"><img src="https://spotx-official.github.io/images/shields/SpotX_Channel.svg"></a>
+      <a href="https://t.me/SpotxCommunity"><img src="https://spotx-official.github.io/images/shields/SpotX_Community.svg"></a>
+      <a href="https://github.com/SpotX-Official/SpotX-Bash"><img src="https://spotx-official.github.io/images/shields/SpotX_for_Mac&Linux.svg"></a>
+      <a href="https://telegra.ph/SpotX-FAQ-09-19"><img src="https://spotx-official.github.io/images/shields/faq.svg"></a>
       </p>
 
    <h2> <div align="center"><b> Modified Spotify Client for Windows </b></div> </h2>
@@ -78,18 +78,18 @@ or
 </details>
  
 <details>
-<summary><small>Automatic full installation</small></summary><p>
+<summary><small>Full installation</small></summary><p>
   
-  <h4>Automatic installation without confirmation, what does it do?</h4> 
+  <h4>Full installation without confirmation, what does it do?</h4> 
   
   - New theme activated (new right and left sidebar, some cover change)
   - Hiding podcasts/episodes/audiobooks from the homepage
   - Activated [static theme](https://github.com/SpotX-Official/SpotX/discussions/50#discussioncomment-4096066) <kbd>spotify</kbd> for lyrics
   - Hiding [ad-like sections](https://github.com/SpotX-Official/SpotX/discussions/50#discussioncomment-4478943)
   - All [experimental features](https://github.com/SpotX-Official/SpotX/discussions/50) included
-  - Automatic removal of Spotify MS if it was found 
-  - Automatic installation of the recommended version of Spotify (if another client has already been found, it will be installed over) 
-  - Automatic blocking of Spotify updates
+  - Removal of Spotify MS if it was found 
+  - Installation of the recommended version of Spotify (if another client has already been found, it will be installed over) 
+  - Blocking of Spotify updates
   - After the installation is completed, the client will autorun.
   
 <h4> </h4>

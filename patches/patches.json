@@ -299,7 +299,26 @@
                     "fr": "1.2.20",
                     "to": ""
                 }
+            },
+            "NewAdsNpvNewVideoTakeoverSlot": {
+                "name": "enableNewAdsNpvNewVideoTakeoverSlot",
+                "description": "Enable new modal slot to position redesigned new ads NPV VideoTakeover above all areas except RightSidebar and NPB",
+                "native_description": "Enable new modal slot to position redesigned new ads NPV VideoTakeover above all areas except RightSidebar and NPB",
+                "version": {
+                    "fr": "1.2.22",
+                    "to": ""
+                }
+            },
+            "FraudLoadSignals": {
+                "name": "enableFraudLoadSignals",
+                "description": "Enable user fraud signals emitted on page load",
+                "native_description": "Enable user fraud signals emitted on page load",
+                "version": {
+                    "fr": "1.2.22",
+                    "to": ""
+                }
             }
+
         },
         "EnableExp": {
             "EnhanceLikedSongs": {
@@ -527,15 +546,6 @@
                     "to": ""
                 }
             },
-            "RootGridAnimations": {
-                "name": "enableRootGridAnimations",
-                "description": "Enable the slide-in/out transition on the sidebars in the RootGrid",
-                "native_description": "Enable the slide-in/out transition on the sidebars in the RootGrid",
-                "version": {
-                    "fr": "1.2.17",
-                    "to": "1.2.17"
-                }
-            },
             "YLXEnhancements": {
                 "name": "enableYLXEnhancements",
                 "description": "Enable Your Library X Enhancements",
@@ -581,33 +591,6 @@
                     "to": ""
                 }
             },
-            "VideoPip": {
-                "name": "enableVideoPip",
-                "description": "Enables picture-in-picture in video podcasts",
-                "native_description": "Enables desktop picture-in-picture surface using betamax SDK.",
-                "version": {
-                    "fr": "1.2.10",
-                    "to": ""
-                }
-            },
-            "MyLittleMermaidEasterEgg": {
-                "name": "enableMyLittleMermaidEasterEgg",
-                "description": "Enable My Little Mermaid playlist easter egg",
-                "native_description": "Enable My Little Mermaid playlist easter egg",
-                "version": {
-                    "fr": "1.2.12",
-                    "to": "1.2.13"
-                }
-            },
-            "MyLittleMermaidEasterEggVideo": {
-                "name": "enableMyLittleMermaidEasterEggVideo",
-                "description": "Enable My Little Mermaid playlist easter egg video background",
-                "native_description": "Enable My Little Mermaid playlist easter egg video background",
-                "version": {
-                    "fr": "1.2.12",
-                    "to": "1.2.13"
-                }
-            },
             "AlbumCoverArtModal": {
                 "name": "enableAlbumCoverArtModal",
                 "description": "Enable the cover art modal on the Album page",
@@ -626,30 +609,12 @@
                     "to": ""
                 }
             },
-            "LiveEventsListView": {
-                "name": "enableLiveEventsListView",
-                "description": "Enable list view for Live Events feed",
-                "native_description": "Enable list view for Live Events feed",
-                "version": {
-                    "fr": "1.2.14",
-                    "to": "1.2.18"
-                }
-            },
             "ConcertsTicketPrice": {
                 "name": "enableConcertsTicketPrice",
                 "description": "Display ticket price on Event page",
                 "native_description": "Display ticket price on Event page",
                 "version": {
                     "fr": "1.2.15",
-                    "to": ""
-                }
-            },
-            "ShareEvent": {
-                "name": "enableShareEvent",
-                "description": "Display share icon for sharing an event",
-                "native_description": "Display share icon for sharing an event",
-                "version": {
-                    "fr": "1.2.17",
                     "to": ""
                 }
             },

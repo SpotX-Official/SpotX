@@ -192,7 +192,7 @@
         "replace": "\"Место проведения\""
     },
     "48": {
-        "match": "\"Multiple locationse\"",
+        "match": "\"Multiple locations\"",
         "replace": "\"Несколько местоположений\""
     }
 }

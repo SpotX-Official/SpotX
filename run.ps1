@@ -45,7 +45,7 @@ param
     [Parameter(HelpMessage = 'Do not hide the icon of collaborations in playlists.')]
     [switch]$hide_col_icon_off,
     
-    [Parameter(HelpMessage = 'disable new right sidebar.')]
+    [Parameter(HelpMessage = 'Disable new right sidebar.')]
     [switch]$rightsidebar_off,
 
     [Parameter(HelpMessage = 'Do not enable enhance playlist.')]
@@ -54,16 +54,16 @@ param
     [Parameter(HelpMessage = 'Do not enable enhance liked songs.')]
     [switch]$enhance_like_off,
 
-    [Parameter(HelpMessage = 'Disable smart shuffle in playlists.')]
-    [switch]$smartShuffle_off,
+    [Parameter(HelpMessage = 'Enable smart shuffle in playlists.')]
+    [switch]$smartShuffle,
 
-    [Parameter(HelpMessage = 'enable funny progress bar.')]
+    [Parameter(HelpMessage = 'Enable funny progress bar.')]
     [switch]$funnyprogressBar,
 
     [Parameter(HelpMessage = 'New theme activated (new right and left sidebar, some cover change)')]
     [switch]$new_theme,
 
-    [Parameter(HelpMessage = 'enable right sidebar coloring to match cover color)')]
+    [Parameter(HelpMessage = 'Enable right sidebar coloring to match cover color)')]
     [switch]$rightsidebarcolor,
     
     [Parameter(HelpMessage = 'Returns old lyrics')]
@@ -1014,8 +1014,12 @@ function Helper($paramname) {
 
             if ($enhance_like_off) { $remEnable.remove('EnhanceLikedSongs') }
             if ($enhance_playlist_off) { $remEnable.remove('EnhancePlaylist') }
-            # if ($smartShuffle_off) { $remEnable.remove('SmartShuffle') }
-            $remEnable.remove('SmartShuffle')
+            
+            if (!($smartShuffle)) { 
+                $smartShuffle = $webjson.others.EnableExp.SmartShuffle
+                $webjson.others.DisableExp | Add-Member -MemberType NoteProperty -Name "SmartShuffle" -Value $smartShuffle
+            }
+
             $remEnable.remove('RecentlyPlayedShortcut')
             $remEnable.remove('EncoreCards')
             if (!($funnyprogressBar)) { $remEnable.remove('HeBringsNpb') }

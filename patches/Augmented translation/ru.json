@@ -104,94 +104,90 @@
         "replace": "\"Скорость {0}×\""
     },
     "26": {
-        "match": "(\"Filter options\"",
-        "replace": "\"Параметры фильтрации\""
-    },
-    "27": {
         "match": "\"Artist\"",
         "replace": "\"Исполнитель\""
     },
-    "28": {
+    "27": {
         "match": "\"... of ...\"",
         "replace": "\"{0} из {1}\""
     },
-    "29": {
+    "28": {
         "match": "\"Не удалось изменить\"",
         "replace": "\"Не удалось обновить\""
     },
-    "30": {
+    "29": {
         "match": "Dynamic normalizer - Actively adjust the volume by leveling out the difference between quiet and loud parts of the audio",
         "replace": "Динамический нормализатор - активно регулирует громкость, выравнивая разницу между тихими и громкими частями аудио"
     },
-    "31": {
+    "30": {
         "match": "\"Load more\"",
         "replace": "\"Загрузить еще\""
     },
-    "32": {
+    "31": {
         "match": "\"Sign up free\"",
         "replace": "\"Бесплатная регистрация\""
     },
-    "33": {
+    "32": {
         "match": "\"Build .0. is available\"",
         "replace": "\"Сборка {0} доступна\""
     },
-    "34": {
+    "33": {
         "match": "\"Downloading build .0....\"",
         "replace": "\"Загрузка сборки {0}...\""
     },
-    "35": {
+    "34": {
         "match": "\"Build .0. is ready to install\"",
         "replace": "\"Сборка {0} готова к установке\""
     },
-    "36": {
+    "35": {
         "match": "\"Remove\"",
         "replace": "\"Удалить\""
     },
-    "37": {
+    "36": {
         "match": "\"Feature Spotlight\"",
         "replace": "\"Особенности\""
     },
-    "38": {
+    "37": {
         "match": "\"Switch To Video\"",
         "replace": "\"Переключиться на видео\""
     },
-    "39": {
+    "38": {
         "match": "\"Switch To Audio\"",
         "replace": "\"Переключиться на аудио\""
     },
-    "40": {
+    "39": {
         "match": "\"Do not translate\"",
         "replace": "\"Не переводить\""
     },
-    "41": {
+    "40": {
         "match": "\"Translating to .0.\"",
         "replace": "\"Перевожу на {0}\""
     },
-    "42": {
+    "41": {
         "match": "\"Translation to .0. not available\"",
         "replace": "\"Перевод на {0} недоступен\""
     },
-    "43": {
+    "42": {
         "match": "\"Translate lyrics\"",
         "replace": "\"Перевести текст песни\""
     },
-    "44": {
+    "43": {
         "match": "\"Spotify MiniPlayer\"",
         "replace": "\"мини-плеер Spotify\""
     },
-    "45": {
+    "44": {
         "match": "\"Videos\"",
         "replace": "\"Видео\""
     },
-    "46": {
+    "45": {
         "match": "\"Date\"",
         "replace": "\"Дата\""
     },
-    "47": {
+    "46": {
         "match": "\"Venue\"",
         "replace": "\"Место проведения\""
     },
-    "48": {
+    "47": {
         "match": "\"Multiple locations\"",
         "replace": "\"Несколько местоположений\""
     }

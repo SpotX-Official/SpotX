@@ -54,8 +54,8 @@ param
     [Parameter(HelpMessage = 'Do not enable enhance liked songs.')]
     [switch]$enhance_like_off,
 
-    [Parameter(HelpMessage = 'Enable smart shuffle in playlists.')]
-    [switch]$smartShuffle,
+    [Parameter(HelpMessage = 'Enable enhance playlist & liked songs.')]
+    [switch]$EnhanceSongs,
 
     [Parameter(HelpMessage = 'Enable funny progress bar.')]
     [switch]$funnyprogressBar,
@@ -339,7 +339,7 @@ if (!($version -and $version -match $match_v)) {
     }
     else {  
         # Recommended version for Win 10-12
-        $onlineFull = "1.2.22.982.g794acc0a-900" 
+        $onlineFull = "1.2.23.1114.g74573b48-770" 
     }
 }
 else {
@@ -1015,12 +1015,12 @@ function Helper($paramname) {
             if ($enhance_like_off) { $remEnable.remove('EnhanceLikedSongs') }
             if ($enhance_playlist_off) { $remEnable.remove('EnhancePlaylist') }
             
-            if (!($smartShuffle)) { 
+            if ($EnhanceSongs) { 
                 $smartShuffle = $webjson.others.EnableExp.SmartShuffle
                 $webjson.others.DisableExp | Add-Member -MemberType NoteProperty -Name "SmartShuffle" -Value $smartShuffle
             }
 
-            $remEnable.remove('RecentlyPlayedShortcut')
+            $remEnable.remove('QueueOnRightPanel')
             $remEnable.remove('EncoreCards')
             if (!($funnyprogressBar)) { $remEnable.remove('HeBringsNpb') }
             # Old theme
@@ -1424,10 +1424,9 @@ If ($test_spa) {
         extract -counts 'one' -method 'zip' -name 'xpui.js' -helper 'OffadsonFullscreen'
     }
 
-    # Forced disable some exp
+    # Forced exp
     extract -counts 'one' -method 'zip' -name 'xpui.js' -helper 'ForcedExp' -add $webjson.others.byspotx.add
     
-    # Experimental Feature
     extract -counts 'one' -method 'zip' -name 'xpui.js' -helper 'VariousofXpui-js' 
 
     # Turn off podcasts

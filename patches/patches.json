@@ -3,7 +3,7 @@
         "bilboard": {
             "version": {
                 "fr": "1.1.70",
-                "to": ""
+                "to": "1.2.20"
             },
             "match": ".(\\?\\[.{1,6}[a-zA-Z].leaderboard,)",
             "replace": "false$1"

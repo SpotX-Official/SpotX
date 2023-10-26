@@ -1156,13 +1156,6 @@ function Helper($paramname) {
             $contents = "podcast_ad_block"
             $json = $webjson.others
         }
-        "BannerHome" { 
-            # Remove banner on home page
-            $name = "patches.json.others."
-            $n = "home-hpto.js"
-            $contents = "BannerHome"
-            $json = $webjson.others
-        }
         "BlockUpdate" { 
             # Block Spotify client updates
             $name = "patches.json.others."
@@ -1443,14 +1436,10 @@ If ($test_spa) {
         extract -counts 'one' -method 'zip' -name $js -helper 'OffAdSections'
     }
 
-    # Remove banner on home page
-    extract -counts 'one' -method 'zip' -name 'home-hpto.js' -helper 'BannerHome'
-
     # Hide Collaborators icon
     if (!($hide_col_icon_off) -and !($exp_spotify)) {
         extract -counts 'one' -method 'zip' -name 'xpui-routes-playlist.js' -helper 'Collaborators'
     }
-
 
     # Static color for lyrics
     if ($lyrics_stat) {

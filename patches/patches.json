@@ -239,6 +239,15 @@
                     "to": ""
                 }
             },
+            "Dsa3": {
+                "name": "enableDSASetting",
+                "description": "Enable DSA (Digital Service Act) features for desktop and web",
+                "native_description": "Enable DSA (Digital Service Act) features for desktop and web",
+                "version": {
+                    "fr": "1.2.20",
+                    "to": ""
+                }
+            },
             "NewAdsNpv": {
                 "name": "enableNewAdsNpv",
                 "description": "Enable showing new ads NPV",
@@ -275,15 +284,6 @@
                     "to": ""
                 }
             },
-            "DSASetting": {
-                "name": "enableDSASetting",
-                "description": "Enable DSA (Digital Service Act) features for desktop and web",
-                "native_description": "Enable DSA (Digital Service Act) features for desktop and web",
-                "version": {
-                    "fr": "1.2.20",
-                    "to": ""
-                }
-            },
             "NewAdsNpvNewVideoTakeoverSlot": {
                 "name": "enableNewAdsNpvNewVideoTakeoverSlot",
                 "description": "Enable new modal slot to position redesigned new ads NPV VideoTakeover above all areas except RightSidebar and NPB",
@@ -301,8 +301,16 @@
                     "fr": "1.2.22",
                     "to": ""
                 }
+            },
+            "GabitoAdEvent": {
+                "name": "enableGabitoAdEvent",
+                "description": "Use Gabito AdEvent instead of Gabo AdEvent",
+                "native_description": "Use Gabito AdEvent instead of Gabo AdEvent",
+                "version": {
+                    "fr": "1.1.93",
+                    "to": ""
+                }
             }
-
         },
         "EnableExp": {
             "EnhanceLikedSongs": {
@@ -589,7 +597,7 @@
                 "description": "Enable Smart Shuffle in playlists",
                 "native_description": "Enable Smart Shuffle",
                 "version": {
-                    "fr": "1.2.15",
+                    "fr": "1.2.22",
                     "to": ""
                 }
             },
@@ -747,23 +755,34 @@
                 }
             }
         },
-        "block_update": {
-            "version": {
-                "fr": "1.1.58",
-                "to": ""
+        "binary": {
+            "block_update": {
+                "version": {
+                    "fr": "1.1.58",
+                    "to": ""
+                },
+                "add": "(?<=desktop-update\/.)7(\/update)",
+                "match": "(?<=desktop-update\/.)2(\/update)",
+                "replace": "7/update"
             },
-            "add": "(?<=desktop-update\/.)7(\/update)",
-            "match": "(?<=desktop-update\/.)2(\/update)",
-            "replace": "7/update"
-        },
-        "podcast_ad_block": {
-            "version": {
-                "fr": "1.1.68",
-                "to": ""
+            "podcast_ad_block": {
+                "version": {
+                    "fr": "1.1.68",
+                    "to": ""
+                },
+                "add": "slott(?=.{3,8}override_url)",
+                "match": "slots(?=.{3,8}override_url)",
+                "replace": "slott"
             },
-            "add": "slott(?=.{3,8}override_url)",
-            "match": "slots(?=.{3,8}override_url)",
-            "replace": "slott"
+            "block_gabo": {
+                "version": {
+                    "fr": "1.1.68",
+                    "to": ""
+                },
+                "add": "dodo(?=.receiver-service)",
+                "match": "gabo(?=.receiver-service)",
+                "replace": "dodo"
+            }
         },
         "podcastsoff": {
             "version": {
@@ -1079,8 +1098,14 @@
                 "fr": "1.1.70",
                 "to": ""
             },
-            "match": "(?:prototype\\.)?bindClient(?:=function)?\\(\\w+\\)\\{",
-            "replace": "${0}return;"
+            "match": [
+                "(?:prototype\\.)?bindClient(?:=function)?\\(\\w+\\)\\{",
+                "@\\w+\/gabo[^\"]+"
+            ],
+            "replace": [
+                "${0}return;",
+                ""
+            ]
         },
         "removertl-cssmin": {
             "version": {
@@ -1228,7 +1253,7 @@
             },
             "match": "(this\\._product_state(?:|_service)=(.))",
             "replace": "$1,$2.putOverridesValues({0})",
-            "add": "ads:'0',catalogue:'premium',product:'premium',type:'premium',name:'Spotify'",
+            "add": "ads:'0',catalogue:'premium',product:'premium',type:'premium',name:'Spotify','unrestricted':'1'",
             "add2": "'storage-size-config':'{0},90,500,3'"
         },
         "podcast_page_banner": {
@@ -1247,6 +1272,22 @@
             "match": "(isPremium:).(.{20,40}?isHptoHidden:).",
             "replace": "$1true$2true"
         },
+        "sentry": {
+            "version": {
+                "fr": "1.1.70",
+                "to": ""
+            },
+            "match": "https[0-9a-zA-Z/:@\\d\\.]{0,55}sentry\\.io\/\\d+",
+            "replace": ""
+        },
+        "disablelog": {
+            "version": {
+                "fr": "1.1.70",
+                "to": ""
+            },
+            "match": "sp://logging/v3/\\w+",
+            "replace": ""
+        },
         "hidemerchsidebar": {
             "version": {
                 "fr": "1.2.0",
@@ -1262,14 +1303,6 @@
             },
             "match": "(\\[(.)\\.go\\.en,)(.+?\\])",
             "replace": "$1$2.go.ru]"
-        },
-        "disablelog": {
-            "version": {
-                "fr": "1.1.70",
-                "to": ""
-            },
-            "match": "sp://logging/v3/\\w+",
-            "replace": ""
         },
         "goofyhistory": {
             "version": {

@@ -681,6 +681,15 @@
                     "fr": "1.2.21",
                     "to": ""
                 }
+            },
+            "Plus": {
+                "name": "enableAlignedCuration",
+                "description": "it`s killing the heart icon, you`re able to save and choose the destination for any song, playlist, or podcast",
+                "native_description": "Enable Aligned Curation",
+                "version": {
+                    "fr": "1.2.21",
+                    "to": ""
+                }
             }
         },
         "CustomExp": {

@@ -59,6 +59,9 @@ param
     [Parameter(HelpMessage = 'Enable enhance playlist & liked songs.')]
     [switch]$EnhanceSongs,
 
+    [Parameter(HelpMessage = 'it`s killing the heart icon, you`re able to save and choose the destination for any song, playlist, or podcast')]
+    [switch]$Plus,
+
     [Parameter(HelpMessage = 'Enable funny progress bar.')]
     [switch]$funnyprogressBar,
 
@@ -1064,6 +1067,10 @@ function Helper($paramname) {
                     Move-Json -n "EnhanceLikedSongs", "EnhancePlaylist"-t $Enable -f $Disable
                 }
              
+            }
+
+            if (!($Plus)) {
+                Move-Json -n 'Plus' -t $Enable -f $Disable
             }
 
             Remove-Json -j $Enable -p "EncoreCards", "QueueOnRightPanel"

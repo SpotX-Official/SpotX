@@ -344,7 +344,7 @@ if (!($version -and $version -match $match_v)) {
     }
     else {  
         # Recommended version for Win 10-12
-        $onlineFull = "1.2.23.1125.g920a7ada-925" 
+        $onlineFull = "1.2.24.756.g7a7fc7f0-1487" 
     }
 }
 else {
@@ -1087,7 +1087,7 @@ function Helper($paramname) {
             }
             # New theme
             else {
-                if ($rightsidebar_off) { 
+                if ($rightsidebar_off -and [version]$offline -lt [version]"1.2.24.756") { 
                     Move-Json -n 'RightSidebar' -t $Enable -from $Disable
                 }
                 else {

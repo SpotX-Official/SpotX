@@ -409,7 +409,7 @@
                 "native_description": "Enable the view on the right sidebar",
                 "version": {
                     "fr": "1.1.98",
-                    "to": ""
+                    "to": "1.2.23"
                 }
             },
             "AddPlaylistToPlaylist": {
@@ -553,7 +553,7 @@
                 "native_description": "Enable line height 1.5 on the <body />",
                 "version": {
                     "fr": "1.2.18",
-                    "to": ""
+                    "to": "1.2.23"
                 }
             },
             "ConcertsInterested": {

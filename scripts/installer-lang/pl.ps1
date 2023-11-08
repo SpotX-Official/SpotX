@@ -22,7 +22,7 @@
     OldV3           = "Czy chcesz ją pobrać? [Y/N]"
     AutoUpd         = "Automatyczna aktualizacja do zalecanej wersji"
     DelOrOver       = "Chcesz odinstalować aktualną wersję {0}, czy pobrać nową? Y [Odinstaluj] / N [Pobierz Nową]"
-    DelOld          = "Odinstalowywanie nieaktualnej Spotify..."
+    DelOld          = "Odinstalowywanie nieaktualnej wersji Spotify..."
     NewV            = "Wykryto niewspieraną wersję Spotify"
     NewV2           = "Twoja wersja {0} nie została jeszcze przetestowana, obecna stabilna jest wersja {1} "
     NewV3           = "Czy chcesz kontynuować z wersją {0} (możliwe błędy)? [Y/N]"

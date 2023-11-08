@@ -690,6 +690,15 @@
                     "fr": "1.2.21",
                     "to": ""
                 }
+            },
+            "ViewMode": {
+                "name": "enableViewMode",
+                "description": "Added compact mode to playlist",
+                "native_description": "Enable list / compact mode in entity pages",
+                "version": {
+                    "fr": "1.2.24",
+                    "to": ""
+                }
             }
         },
         "CustomExp": {

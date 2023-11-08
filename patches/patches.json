@@ -705,7 +705,7 @@
                 "description": "Show top tracks and top artists on profile page",
                 "native_description": "Show top tracks and top artists on profile page",
                 "version": {
-                    "fr": "1.1.96",
+                    "fr": "1.2.22",
                     "to": ""
                 }
             }

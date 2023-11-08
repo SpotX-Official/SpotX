@@ -33,7 +33,7 @@
     PodcatsOff      = "Wyłączanie Podcastów"
     PodcastsOn      = "Włączanie Podcastów"
     PodcatsSelect   = "Czy chcesz ukryć podcasty, epizody i audiobooki ze strony główniej? [Y/N]"
-    DowngradeNote   = "Zalecane jest zablokowanie aktualizacji, ponieważ korzystasz z zalecanej wersji Spotify"
+    DowngradeNote   = "Zalecane jest zablokowanie, ponieważ nastąpiło obniżenie wartości dla Spotify"
     UpdBlock        = "Aktualizacje Spotify zablokowane"
     UpdUnblock      = "Aktualizacje Spotify nie są zablokowane"
     UpdSelect       = "Czy chcesz zablokować aktualizacje dla Spotify? [Y/N]"

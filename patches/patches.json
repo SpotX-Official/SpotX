@@ -83,7 +83,7 @@
                 "to": ""
             },
             "match": "(configuration:(.).getRemoteConfiguration.+?;)",
-            "replace": "$1const EnableExp=[],DisableExp=[],CustomExp=[],allExperiments=[EnableExp,DisableExp,CustomExp];allExperiments.forEach((expArray)=>{const values=$2.getRemoteConfiguration()?.values;if(values){expArray.forEach((exp)=>{if(expArray===EnableExp||expArray===DisableExp){values.set(exp,expArray===EnableExp);}else if(expArray===CustomExp){values.set(exp.name,exp.value);}});window.RemoteExp=values}});"
+            "replace": "$1const EnableExp=[],DisableExp=[],CustomExp=[],allExperiments=[EnableExp,DisableExp,CustomExp];allExperiments.forEach((expArray)=>{const values=$2.getRemoteConfiguration()?.values;if(values){expArray.forEach((exp)=>{if(expArray===EnableExp||expArray===DisableExp){values.set(exp,expArray===EnableExp);}else if(expArray===CustomExp){values.set(exp.name,exp.value);}});(window.Spotx??={}).RemoteExp=values}});"
         },
         "DisableExp": {
             "InAppMessaging": {
@@ -1282,6 +1282,28 @@
             "replace": "$1,$2.putOverridesValues({0})",
             "add": "ads:'0',catalogue:'premium',product:'premium',type:'premium',name:'Spotify','unrestricted':'1'",
             "add2": "'storage-size-config':'{0},90,500,3'"
+        },
+        "dev-tools": {
+            "version": {
+                "fr": "1.1.98",
+                "to": ""
+            },
+            "match": [
+                "(onSelected:).(=>{..\"app.enable.developer.mode.,)..}",
+                "(.)\\){(this._cosmos=.,this._product_state)",
+                "(..\\(.\\))(\\?(..createElement|\\(.{1,7}jsxs\\))\\(.{1,3},{filterMatchQuery:.{2,15}\\(\"settings.employee\"\\))",
+                "(\"desktop.settings.language-override\".+?)(\\w\\.\\w*\\(..,null\\),|\\w\\.jsx\\)\\(..,\\{}\\),\\(\\d,)",
+                "(\"Debug Window\")(.*?\"Locales\")",
+                "desktop.settings.language-override"
+            ],
+            "replace": [
+                "$1(check)$2check);localStorage.setItem('dev-tools',check);Spotx.ProductState.putOverridesValues({pairs:{'com.spotify.madprops.use.ucs.product.state':check?'1':'0','employee':check?'1':'0'}});setTimeout(()=>{window.sendCosmosRequest({ request:JSON.stringify({method:'POST',uri:'sp://desktop/v1/restart'})})},500);}",
+                "$1){window.Spotx={ProductState:$1};if(localStorage.getItem('dev-tools')==='true'){$1.putOverridesValues({pairs:{'com.spotify.madprops.use.ucs.product.state':'1','employee': '1'}})};$2",
+                "true$2",
+                "$1",
+                "$1",
+                ""
+            ]
         },
         "podcast_page_banner": {
             "version": {

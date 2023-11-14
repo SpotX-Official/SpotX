@@ -5,6 +5,10 @@ param
     [Alias("v")]
     [string]$version,
 
+    [Parameter(HelpMessage = "Developer mode activation.")]
+    [Alias("dev")]
+    [switch]$devtools,
+
     [Parameter(HelpMessage = 'Hiding podcasts/episodes/audiobooks from homepage.')]
     [switch]$podcasts_off,
 
@@ -1221,6 +1225,8 @@ function Helper($paramname) {
         "VariousofXpui-js" { 
 
             $VarJs = $webjson.VariousJs
+
+            if (!($devtools)) {Remove-Json -j $VarJs -p "dev-tools"}
 
             if ($urlform_goofy -and $idbox_goofy) {
                 $webjson.VariousJs.goofyhistory.replace = "`$1 const urlForm=" + '"' + $urlform_goofy + '"' + ";const idBox=" + '"' + $idbox_goofy + '"' + $webjson.VariousJs.goofyhistory.replace

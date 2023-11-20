@@ -310,6 +310,42 @@
                     "fr": "1.1.93",
                     "to": ""
                 }
+            },
+            "YourListeningUpsell": {
+                "name": "enableYourListeningUpsell",
+                "description": "Enable Your Listening Upsell Banner for free & unauth users",
+                "native_description": "Enable Your Listening Upsell Banner for free & unauth users",
+                "version": {
+                    "fr": "1.2.25",
+                    "to": ""
+                }
+            },
+            "podcast-ads": {
+                "name": "podcastads-ads_npb",
+                "description": "Enable the podcast ads Now Playing Bar experience, including features like the podcast ad Now Playing Bar hat",
+                "native_description": "Enable the podcast ads Now Playing Bar experience, including features like the podcast ad Now Playing Bar hat",
+                "version": {
+                    "fr": "1.1.70",
+                    "to": ""
+                }
+            },
+            "podcast-episode": {
+                "name": "podcastaudioplus-episode_entity",
+                "description": "Enable the Sponsored By section on the Episode Page with Call to Action cards",
+                "native_description": "Enable the Sponsored By section on the Episode Page with Call to Action cards",
+                "version": {
+                    "fr": "1.1.70",
+                    "to": ""
+                }
+            },
+            "podcast-show_page": {
+                "name": "podcastaudioplus-episode_entity",
+                "description": "Enable show sponsors section on the Show Page",
+                "native_description": "Enable show sponsors section on the Show Page",
+                "version": {
+                    "fr": "1.1.70",
+                    "to": ""
+                }
             }
         },
         "EnableExp": {
@@ -1305,14 +1341,6 @@
                 ""
             ]
         },
-        "podcast_page_banner": {
-            "version": {
-                "fr": "1.1.70",
-                "to": ""
-            },
-            "match": "http[^\"'`]*?(?:podcast-ap4p|sponsoredplaylist)\/",
-            "replace": ""
-        },
         "banner_home": {
             "version": {
                 "fr": "1.1.70",
@@ -1364,7 +1392,7 @@
         "similarplaylist": {
             "version": {
                 "fr": "1.1.85",
-                "to": ""
+                "to": "1.2.25"
             },
             "match": ",(.\\.isOwnedBySelf&&)((\\(.{0,11}\\)|..createElement)\\(.{1,3}Fragment,.+?{(uri:.|).+?contextmenu.create-similar-playlist\"\\)}\\),)",
             "replace": ",$2$1"

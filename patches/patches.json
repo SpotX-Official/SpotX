@@ -339,7 +339,7 @@
                 }
             },
             "podcast-show_page": {
-                "name": "podcastaudioplus-episode_entity",
+                "name": "podcastaudioplus-show_page",
                 "description": "Enable show sponsors section on the Show Page",
                 "native_description": "Enable show sponsors section on the Show Page",
                 "version": {

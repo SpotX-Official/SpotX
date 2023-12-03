@@ -1353,9 +1353,9 @@
                 "to": ""
             },
             "match": [
-                "(onSelected:).{3,14}({..\"app.enable.developer.mode.,).\\)}",
+                "(onSelected:).{3,14}({..\"app.enable.developer.mode.,).\\)(,.\\(!0\\))?}",
                 "(.)\\){((.{5,20}?|)this._cosmos=.,this._product_state)",
-                "(..\\(.\\))(\\?(..createElement|\\(.{1,7}jsxs\\))\\(.{1,3},{filterMatchQuery:.{2,15}\\(\"settings.employee\"\\))",
+                "(..\\(.\\)|.)(\\?(..createElement|\\(.{1,7}jsxs\\))\\(.{1,3},{filterMatchQuery:.{2,15}\\(\"settings.employee\"\\))",
                 "(\"desktop.settings.language-override\".+?)(\\w\\.\\w*\\(..,null\\),|\\w\\.jsx\\)\\(..,\\{}\\),\\(\\d,)",
                 "(\"Debug Window\")(.*?\"Locales\")",
                 "desktop.settings.language-override"

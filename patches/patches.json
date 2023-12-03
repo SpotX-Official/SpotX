@@ -308,7 +308,7 @@
                 "native_description": "Use Gabito AdEvent instead of Gabo AdEvent",
                 "version": {
                     "fr": "1.1.93",
-                    "to": ""
+                    "to": "1.2.25"
                 }
             },
             "YourListeningUpsell": {
@@ -346,6 +346,15 @@
                     "fr": "1.1.70",
                     "to": ""
                 }
+            },
+            "betamaxAutoSeekToAdPosition": {
+                "name": "AutoSeekToAdPosition",
+                "description": "If true, the player will seek to the ad position when an stop position is registered. Usefull for debugging ads.",
+                "native_description": "If true, the player will seek to the ad position when an stop position is registered. Usefull for debugging ads.",
+                "version": {
+                    "fr": "1.2.26",
+                    "to": ""
+                }
             }
         },
         "EnableExp": {
@@ -355,7 +364,7 @@
                 "native_description": "Enable Enhance Liked Songs UI and functionality",
                 "version": {
                     "fr": "1.1.86",
-                    "to": ""
+                    "to": "1.2.25"
                 }
             },
             "EnhancePlaylist": {
@@ -364,7 +373,7 @@
                 "native_description": "Enable Enhance Playlist UI and functionality for end-users",
                 "version": {
                     "fr": "1.1.84",
-                    "to": ""
+                    "to": "1.2.25"
                 }
             },
             "IgnoreInRecommendations": {
@@ -391,7 +400,7 @@
                 "native_description": "Use carousels on Home",
                 "version": {
                     "fr": "1.1.93",
-                    "to": ""
+                    "to": "1.2.25"
                 }
             },
             "AttackOnTitanEaster": {
@@ -508,7 +517,7 @@
                 "native_description": "Show credits in the right sidebar",
                 "version": {
                     "fr": "1.2.7",
-                    "to": ""
+                    "to": "1.2.25"
                 }
             },
             "WhatsNewFeed": {
@@ -696,7 +705,7 @@
                 "description": "Enable Queue on the right panel",
                 "native_description": "Enable About Podcast section in  NPV",
                 "version": {
-                    "fr": "1.2.21",
+                    "fr": "1.2.26",
                     "to": ""
                 }
             },
@@ -706,7 +715,7 @@
                 "native_description": "Show Recently Played shortcut in home view. Also increase max number of shortcuts to 8",
                 "version": {
                     "fr": "1.2.21",
-                    "to": ""
+                    "to": "1.2.25"
                 }
             },
             "EncoreCards": {
@@ -714,7 +723,7 @@
                 "description": "Enables all cards throughout app to be Encore Cards",
                 "native_description": "Enables all cards throughout app to be Encore Cards",
                 "version": {
-                    "fr": "1.2.21",
+                    "fr": "1.2.26",
                     "to": ""
                 }
             },
@@ -742,6 +751,25 @@
                 "native_description": "Show top tracks and top artists on profile page",
                 "version": {
                     "fr": "1.2.22",
+                    "to": ""
+                }
+            },
+            "EightShortcuts": {
+                "name": "enableEightShortcuts",
+                "description": "Increase max number of shortcuts on home to 8",
+                "native_description": "Increase max number of shortcuts on home to 8",
+                "version": {
+                    "fr": "1.2.26",
+                    "to": ""
+                }
+            }
+            ,
+            "NPVCredits": {
+                "name": "enableNPVCredits",
+                "description": "Show credits in the right sidebar",
+                "native_description": "Show credits in the right sidebar",
+                "version": {
+                    "fr": "1.2.26",
                     "to": ""
                 }
             }
@@ -860,16 +888,16 @@
                 "fr": "1.1.93",
                 "to": ""
             },
-            "match": "(\\!Array.isArray\\(.\\)\\|\\|.===..length\\)return null;)",
-            "replace": "$1 for (let i=0; i<(e.children?e.children.length:e.length); i++) {const key=(e.children?.[i]||e[i])?.key; if(!key||key.match(/(episode|show)/)||(e.title||t)?.match(/podcasts/i)) return null;};"
+            "match": "(\\!?Array.isArray\\(.\\)[\\|&]{2}.===(.).length\\)return null;)",
+            "replace": "$1 if (!Array.isArray($2)) { $2 = e; } for (let q=0; q<($2.children?$2.children.length:$2.length); q++) {const key=($2.children?.[q]||$2[q])?.key; if(!key||key.match(/(episode|show)/)||($2.title)?.match(/podcasts/i)) return null;};"
         },
         "adsectionsoff": {
             "version": {
                 "fr": "1.1.93",
                 "to": ""
             },
-            "match": "(\"Carousel\".+?{seeAllUri:(.),index.+?(UBIWrapper|id:.}\\)|\\.spec);)",
-            "replace": "$1 if ($2.match(/(0JQ5DAnM3wGh0gz1MXnu3B|0JQ5DAnM3wGh0gz1MXnu3D|0JQ5IMCbQBLupUQrQFeCzx|0JQ5IMCbQBLqTJyy28YCa9|0JQ5IMCbQBLlC31GvtaB6w|0JQ5DAob0KOew1FBAMSmBz|0JQ5DAnM3wGh0gz1MXnu4w|0JQ5DAnM3wGh0gz1MXnu3C|0JQ5DAnM3wGh0gz1MXnu3n|0JQ5DAnM3wGh0gz1MXnu3s|0JQ5DAnM3wGh0gz1MXnu3M|0JQ5DAob0JCuWaGLU6ntFT|0JQ5DAnM3wGh0gz1MXnucG|0JQ5DAnM3wGh0gz1MXnu3E|0JQ5DAnM3wGh0gz1MXnu4h|0JQ5DAnM3wGh0gz1MXnu7R|0JQ5DAnM3wGh0gz1MXnu3w|0JQ5DAuChZYPe9iDhh2mJz)/)) {return null};"
+            "match": "((\"Carousel\".+?|onClickCarouselControls:.,spec:.[\\{\\}\\(\\)]{3,8})seeAllUri:(.),index.+?(UBIWrapper|id:.}\\)|\\.spec);)",
+            "replace": "$1 if ($3 && $3.match && $3.match(/(0JQ5DAnM3wGh0gz1MXnu3B|0JQ5DAnM3wGh0gz1MXnu3D|0JQ5IMCbQBLupUQrQFeCzx|0JQ5IMCbQBLqTJyy28YCa9|0JQ5IMCbQBLlC31GvtaB6w|0JQ5DAob0KOew1FBAMSmBz|0JQ5DAnM3wGh0gz1MXnu4w|0JQ5DAnM3wGh0gz1MXnu3C|0JQ5DAnM3wGh0gz1MXnu3s|0JQ5DAnM3wGh0gz1MXnu3M|0JQ5DAob0JCuWaGLU6ntFT|0JQ5DAnM3wGh0gz1MXnucG|0JQ5DAnM3wGh0gz1MXnu3E|0JQ5DAnM3wGh0gz1MXnu4h|0JQ5DAnM3wGh0gz1MXnu7R|0JQ5DAnM3wGh0gz1MXnu3w|0JQ5DAuChZYPe9iDhh2mJz|0JQ5DAnM3wGh0gz1MXnu3x|0JQ5DAob0JCuWaGLU6ntFY|0JQ5DAnM3wGh0gz1MXnu3u|0JQ5DAnM3wGh0gz1MXnu3q|0JQ5DAob0Jr9ClCbkV4pZD|0JQ5DAob0LaV9FOMJ9utY5)/)) {return null};"
         },
         "themelyrics": {
             "theme": {

@@ -348,7 +348,7 @@ if (!($version -and $version -match $match_v)) {
     }
     else {  
         # Recommended version for Win 10-12
-        $onlineFull = "1.2.25.1011.g0348b2ea-701"
+        $onlineFull = "1.2.26.1180.g6af55bfb-74"
     }
 }
 else {
@@ -1062,7 +1062,8 @@ function Helper($paramname) {
             if ($enhance_like_off) { Remove-Json -j $Enable -p'EnhanceLikedSongs' }
             if ($enhance_playlist_off) { Remove-Json -j $Enable -p 'EnhancePlaylist' }
             
-            if ($EnhanceSongs) { 
+
+            if ($EnhanceSongs -and [version]$offline -le [version]'1.2.25.1011') { 
                 Move-Json -n 'SmartShuffle' -t $Enable -f $Disable 
             }
             else { 
@@ -1076,8 +1077,6 @@ function Helper($paramname) {
             if (!($Plus)) {
                 Move-Json -n 'Plus' -t $Enable -f $Disable
             }
-
-            Remove-Json -j $Enable -p "EncoreCards", "QueueOnRightPanel"
 
             if (!($funnyprogressBar)) { Remove-Json -j $Enable -p "HeBringsNpb" }
 

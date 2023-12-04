@@ -889,7 +889,7 @@
                 "to": ""
             },
             "match": "(\\!?Array.isArray\\(.\\)[\\|&]{2}.===(.).length\\)return null;)",
-            "replace": "$1 if (!Array.isArray($2)) { $2 = e; } for (let q=0; q<($2.children?$2.children.length:$2.length); q++) {const key=($2.children?.[q]||$2[q])?.key; if(!key||key.match(/(episode|show)/)||($2.title)?.match(/podcasts/i)) return null;};"
+            "replace": "$1 if (!Array.isArray($2)) { $2 = e; } for (let q=0; q<($2.children?$2.children.length:$2.length); q++) {const key=($2.children?.[q]||$2[q])?.key; if (!key) {continue;} if(!key||key.match(/(episode|show)/)||($2.title)?.match(/podcasts/i)) return null;};"
         },
         "adsectionsoff": {
             "version": {

@@ -1,11 +1,11 @@
 {
     "lang": {
-        "version": "1.2.22",
+        "version": "1.2.26",
         "language": "Russian"
     },
     "1": {
-        "match": "\"To Enhance this playlist, you.ll need to go online.\"",
-        "replace": "\"Чтобы улучшить этот плейлист, вам нужно подключиться к интернету.\""
+        "match": "\"Show Chrome toolbar\"",
+        "replace": "\"Показать панель инструментов Chrome\""
     },
     "2": {
         "match": "\"Confirm your age\"",
@@ -64,12 +64,12 @@
         "replace": "\"Переключить рукоять светового меча. Текущий {0}.\""
     },
     "16": {
-        "match": "\"Song not available\"",
-        "replace": "\"Песня недоступна\""
+        "match": "\"Doors at .0.\"",
+        "replace": "\"Вход в {0}\""
     },
     "17": {
-        "match": "\"The song you.re trying to listen to is not available in HiFi at this time.\"",
-        "replace": "\"Песня, которую вы пытаетесь прослушать, в настоящее время недоступна в HiFi.\""
+        "match": "\"Show at .0.\"",
+        "replace": "\"Показ в {0}\""
     },
     "18": {
         "match": "\"Your Location\"",
@@ -148,12 +148,12 @@
         "replace": "\"Особенности\""
     },
     "37": {
-        "match": "\"Switch To Video\"",
-        "replace": "\"Переключиться на видео\""
+        "match": "\"prev-related-video\"",
+        "replace": "\"предыдущее связанное видео\""
     },
     "38": {
-        "match": "\"Switch To Audio\"",
-        "replace": "\"Переключиться на аудио\""
+        "match": "\"next-related-video\"",
+        "replace": "\"следующее связанное видео\""
     },
     "39": {
         "match": "\"Do not translate\"",
@@ -176,19 +176,11 @@
         "replace": "\"мини-плеер Spotify\""
     },
     "44": {
-        "match": "\"Videos\"",
-        "replace": "\"Видео\""
-    },
-    "45": {
         "match": "\"Date\"",
         "replace": "\"Дата\""
     },
-    "46": {
+    "45": {
         "match": "\"Venue\"",
         "replace": "\"Место проведения\""
-    },
-    "47": {
-        "match": "\"Multiple locations\"",
-        "replace": "\"Несколько местоположений\""
     }
 }

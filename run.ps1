@@ -854,7 +854,7 @@ if (!($block_update_on) -and !($block_update_off)) {
     }
     while ($ch -notmatch '^y$|^n$')
 }
-if ($ch -eq 'y') { $block_update = $true }
+if ($ch -eq 'y') { $not_block_update = $false }
 
 if (!($new_theme) -and [version]$offline -ge [version]"1.2.14.1141") {
     Write-Warning "This version does not support the old theme, use version 1.2.13.661 or below"
@@ -862,6 +862,7 @@ if (!($new_theme) -and [version]$offline -ge [version]"1.2.14.1141") {
 }
 
 if ($ch -eq 'n') {
+    $not_block_update = $true
     $ErrorActionPreference = 'SilentlyContinue'
     if ((Test-Path -LiteralPath $exe_bak) -and $offline -eq $offline_bak) {
         Remove-Item $spotifyExecutable -Recurse -Force
@@ -1207,7 +1208,7 @@ function Helper($paramname) {
 
             $binary = $webjson.others.binary
 
-            if ($block_update) { Remove-Json -j $binary -p 'BlockUpdate' }
+            if ($not_block_update) { Remove-Json -j $binary -p 'block_update' }
 
             $name = "patches.json.others.binary."
             $n = "Spotify.exe"

@@ -35,7 +35,7 @@
         "connectold": {
             "version": {
                 "fr": "1.1.70",
-                "to": "1.1.97"
+                "to": "1.1.92"
             },
             "match": [
                 " connect-device-list-item--disabled",
@@ -47,14 +47,6 @@
                 "spotify-connect",
                 "$1false"
             ]
-        },
-        "connectnew": {
-            "version": {
-                "fr": "1.1.91",
-                "to": ""
-            },
-            "match": "return (..isDisabled)(\\?(..createElement|\\(.{1,10}\\))\\(..,)",
-            "replace": "return false$2"
         },
         "downloadquality": {
             "version": {

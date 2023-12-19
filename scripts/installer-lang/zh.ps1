@@ -1,7 +1,7 @@
 [PSCustomObject]@{
     Welcome         = "
 ╔════════════════════════════════╗
-║ 欢迎使用 SpotX 的 Windows 版本  ║
+║ 欢迎使用 SpotX 的 Windows 版本 ║
 ╚════════════════════════════════╝"
     Incorrect       = "糟糕，不正确的参数,"
     Incorrect2      = "请重新输入 "

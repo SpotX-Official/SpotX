@@ -117,7 +117,7 @@ function Format-LanguageCode {
     
     
     $supportLanguages = @(
-        'en', 'ru', 'it', 'tr', 'ka', 'pl', 'es', 'fr', 'hi', 'pt', 'id', 'vi', 'ro', 'de', 'hu', 'zh', 'zh-TW', 'ko', 'ua', 'fa', 'sr', 'lv', 'bn', 'el', 'fi', 'ja', 'fil', 'sv'
+        'en', 'ru', 'it', 'tr', 'ka', 'pl', 'es', 'fr', 'hi', 'pt', 'id', 'vi', 'ro', 'de', 'hu', 'zh', 'zh-TW', 'ko', 'ua', 'fa', 'sr', 'lv', 'bn', 'el', 'fi', 'ja', 'fil', 'sv', 'sk'
     )
     
     
@@ -234,6 +234,10 @@ function Format-LanguageCode {
         }
         '^sv' {
             $returnCode = 'sv'
+            break
+        }        
+        '^sk' {
+            $returnCode = 'sk'
             break
         }
         Default {
@@ -1226,7 +1230,7 @@ function Helper($paramname) {
 
             $VarJs = $webjson.VariousJs
 
-            if (!($devtools)) {Remove-Json -j $VarJs -p "dev-tools"}
+            if (!($devtools)) { Remove-Json -j $VarJs -p "dev-tools" }
 
             if ($urlform_goofy -and $idbox_goofy) {
                 $webjson.VariousJs.goofyhistory.replace = "`$1 const urlForm=" + '"' + $urlform_goofy + '"' + ";const idBox=" + '"' + $idbox_goofy + '"' + $webjson.VariousJs.goofyhistory.replace

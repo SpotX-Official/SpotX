@@ -9,7 +9,7 @@
     Download2       = "将在五秒后重试"
     Download3       = "再次出错"
     Download4       = "请检查您的网络设置后再次尝试安装"
-    Download5       = "正在下载 Spotify"
+    Download5       = "下载 Spotify"
     Download6       = "Curl 错误"
     StopScript      = "脚本已停止"
     MsSpoti         = "检测到 Spotify 为微软商店版本，此脚本不支持该版本"

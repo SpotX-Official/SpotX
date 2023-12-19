@@ -1,8 +1,8 @@
 [PSCustomObject]@{
     Welcome         = "
-    ╔══════════════════════════════╗
-    ║ Welcome to SpotX for Windows ║
-    ╚══════════════════════════════╝"
+╔══════════════════════════════╗
+║ Welcome to SpotX for Windows ║
+╚══════════════════════════════╝"
     Incorrect       = "Ups, nesprávna hodnota,"
     Incorrect2      = "zadaj znova cez "
     Download        = "Chyba pri sťahovaní"

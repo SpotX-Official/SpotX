@@ -545,7 +545,7 @@
                 "native_description": "Enable New Entity Headers",
                 "version": {
                     "fr": "1.2.15",
-                    "to": ""
+                    "to": "1.2.27"
                 }
             },
             "ReadAlongTranscripts": {
@@ -680,7 +680,7 @@
                 "native_description": "Display save button always in whats new feed",
                 "version": {
                     "fr": "1.2.20",
-                    "to": ""
+                    "to": "1.2.27"
                 }
             },
             "NpvAboutPodcast": {
@@ -754,17 +754,44 @@
                     "fr": "1.2.26",
                     "to": ""
                 }
-            }
-            ,
+            },
             "NPVCredits": {
                 "name": "enableNPVCredits",
                 "description": "Show credits in the right sidebar",
                 "native_description": "Show credits in the right sidebar",
                 "version": {
                     "fr": "1.2.26",
+                    "to": "1.2.26"
+                }
+            },
+            "NPVCredits2": {
+                "name": "enableNPVCreditsWithLinkability",
+                "description": "Show credits in the right sidebar",
+                "native_description": "Show credits in the right sidebar",
+                "version": {
+                    "fr": "1.2.27",
+                    "to": ""
+                }
+            },
+            "BanArtistAction": {
+                "name": "enableBanArtistAction",
+                "description": "Enable context menu action to ban/unban artists",
+                "native_description": "Enable context menu action to ban/unban artists",
+                "version": {
+                    "fr": "1.2.27",
+                    "to": ""
+                }
+            },
+            "GlobalNavBar": {
+                "name": "enableGlobalNavBar",
+                "description": "Show global nav bar with home button, search input and user avatar",
+                "native_description": "Show global nav bar with home button, search input and user avatar",
+                "version": {
+                    "fr": "1.2.27",
                     "to": ""
                 }
             }
+
         },
         "CustomExp": {
             "SocialConnectOnDesktop": {

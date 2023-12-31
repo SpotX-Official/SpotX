@@ -263,7 +263,7 @@ $spotifyDirectory = Join-Path $env:APPDATA 'Spotify'
 $spotifyDirectory2 = Join-Path $env:LOCALAPPDATA 'Spotify'
 $spotifyExecutable = Join-Path $spotifyDirectory 'Spotify.exe'
 $exe_bak = Join-Path $spotifyDirectory 'Spotify.bak'
-$spotifyUninstall = Join-Path $env:TEMP 'SpotifyUninstall.exe'
+$spotifyUninstall = Join-Path ([System.IO.Path]::GetTempPath()) 'SpotifyUninstall.exe'
 $start_menu = Join-Path $env:APPDATA 'Microsoft\Windows\Start Menu\Programs\Spotify.lnk'
 
 $upgrade_client = $false
@@ -581,7 +581,7 @@ if (Test-Path -Path $hostsFilePath) {
 }
 
 # Unique directory name based on time
-Push-Location -LiteralPath $env:TEMP
+Push-Location -LiteralPath ([System.IO.Path]::GetTempPath())
 New-Item -Type Directory -Name "SpotX_Temp-$(Get-Date -UFormat '%Y-%m-%d_%H-%M-%S')" | Convert-Path | Set-Location
 
 if ($premium) {

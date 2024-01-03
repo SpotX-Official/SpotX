@@ -1119,6 +1119,14 @@
                     "hover": "#a97aff",
                     "background": "#121212",
                     "maxmatch": "#00656a"
+                },
+                "lavender": {
+                    "pasttext": "#B8A2EA",
+                    "current": "#8462DD",
+                    "next": "#575757",
+                    "hover": "#F2F2F2",
+                    "background": "#121212",
+                    "maxmatch": "#C2C2C2"
                 }
             }
         },

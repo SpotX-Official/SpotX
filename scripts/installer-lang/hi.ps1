@@ -45,7 +45,7 @@
     ModSpoti        = "स्पॉटिफाई पैचिंग..."
     Error           = "गडबड"
     FileLocBroken   = "स्पॉटिफाई  फ़ाइलों का स्थान टूटा हुआ है, क्लाइंट की स्थापना रद्द करें और स्क्रिप्ट को फिर से चलाएँ"
-    Spicetify       = "Spicetify detected, it must be installed after SpotX, open recommended actions in FAQ ? [Y/N]"
+    Spicetify       = "स्पाइसेटिफाई का पता चला, इसे स्पॉटएक्स के बाद इंस्टॉल किया जाना चाहिए, एफएक्यू में अनुशंसित क्रियाएं खोलें? [Y/N]"
     NoRestore       = "स्पॉटएक्स पहले ही स्थापित किया जा चुका है, xpui.bak नहीं मिला। `nकृपया स्पॉटिफाई क्लाइंट को अनइंस्टॉल करें और Install.bat को फिर से चलाएं"
     InstallComplete = "इंस्टालेशन पूर्ण"
     HostInfo        = "hosts फ़ाइल में अवांछित URL मिले"

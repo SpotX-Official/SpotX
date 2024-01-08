@@ -293,6 +293,7 @@ function CallLang($clg) {
     
     try {
         $response = (iwr -Uri $urlLang -UseBasicParsing).Content
+        if ($mirror) { $response = [System.Text.Encoding]::UTF8.GetString($response) }
         Invoke-Expression $response
     }
     catch {

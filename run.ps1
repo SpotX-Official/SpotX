@@ -5,6 +5,10 @@ param
     [Alias("v")]
     [string]$version,
 
+    [Parameter(HelpMessage = "Use github.io mirror instead of raw.githubusercontent.")]
+    [Alias("m")]
+    [switch]$mirror,
+
     [Parameter(HelpMessage = "Developer mode activation.")]
     [Alias("dev")]
     [switch]$devtools,
@@ -280,13 +284,16 @@ if ($psv -ge 7) {
 
 function CallLang($clg) {
 
-    $urlLang = "https://spotx-official.github.io/SpotX/scripts/installer-lang/$clg.ps1"
+    if ($mirror) {
+        $urlLang = "https://spotx-official.github.io/SpotX/scripts/installer-lang/$clg.ps1"
+    }
+    else { $urlLang = "https://raw.githubusercontent.com/SpotX-Official/SpotX/main/scripts/installer-lang/$clg.ps1" }
+    
     $ProgressPreference = 'SilentlyContinue'
     
     try {
         $response = (iwr -Uri $urlLang -UseBasicParsing).Content
-        $scriptContent = [System.Text.Encoding]::UTF8.GetString($response)
-        Invoke-Expression $scriptContent
+        Invoke-Expression $response
     }
     catch {
         Write-Host "Error loading $clg language"
@@ -304,7 +311,12 @@ $lang = CallLang -clg $langCode
 # Set variable 'ru'.
 if ($langCode -eq 'ru') { 
     $ru = $true
-    $urlru = "https://spotx-official.github.io/SpotX/patches/Augmented%20translation/ru.json"
+
+    if ($mirror) {
+        $urlru = "https://spotx-official.github.io/SpotX/patches/Augmented%20translation/ru.json"
+    }
+    else { $urlru = "https://raw.githubusercontent.com/SpotX-Official/SpotX/main/patches/Augmented%20translation/ru.json" }
+
     $webjsonru = (Invoke-WebRequest -useb -Uri $urlru).Content | ConvertFrom-Json
 }
 
@@ -876,7 +888,13 @@ if ($ch -eq 'n') {
 
 $ch = $null
 
-$url = "https://spotx-official.github.io/SpotX/patches/patches.json"
+
+if ($mirror) {
+
+    $url = "https://spotx-official.github.io/SpotX/patches/patches.json"
+}
+else { $url = "https://raw.githubusercontent.com/SpotX-Official/SpotX/main/patches/patches.json" }
+
 $retries = 0
 
 while ($retries -lt 3) {

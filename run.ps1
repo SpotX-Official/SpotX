@@ -51,6 +51,9 @@ param
     
     [Parameter(HelpMessage = 'Experimental features operated by Spotify.')]
     [switch]$exp_spotify,
+
+    [Parameter(HelpMessage = 'Enable top search bar.')]
+    [switch]$topsearchbar,
     
     [Parameter(HelpMessage = 'Do not hide the icon of collaborations in playlists.')]
     [switch]$hide_col_icon_off,
@@ -65,10 +68,10 @@ param
     [switch]$enhance_like_off,
 
     [Parameter(HelpMessage = 'Enable enhance playlist & liked songs.')]
-    [switch]$EnhanceSongs,
+    [switch]$enhanceSongs,
 
     [Parameter(HelpMessage = 'it`s killing the heart icon, you`re able to save and choose the destination for any song, playlist, or podcast')]
-    [switch]$Plus,
+    [switch]$plus,
 
     [Parameter(HelpMessage = 'Enable funny progress bar.')]
     [switch]$funnyprogressBar,
@@ -103,7 +106,7 @@ param
     
     [Parameter(HelpMessage = 'Select the desired language to use for installation. Default is the detected system language.')]
     [Alias('l')]
-    [string]$Language
+    [string]$language
 )
 
 # Ignore errors from `Stop-Process`
@@ -1087,7 +1090,7 @@ function Helper($paramname) {
             if ($enhance_playlist_off) { Remove-Json -j $Enable -p 'EnhancePlaylist' }
             
 
-            if ($EnhanceSongs -and [version]$offline -le [version]'1.2.25.1011') { 
+            if ($enhanceSongs -and [version]$offline -le [version]'1.2.25.1011') { 
                 Move-Json -n 'SmartShuffle' -t $Enable -f $Disable 
             }
             else { 
@@ -1098,11 +1101,11 @@ function Helper($paramname) {
              
             }
 
-            if (!($Plus)) {
-                Move-Json -n 'Plus' -t $Enable -f $Disable
-            }
+            if (!($plus)) { Move-Json -n 'Plus' -t $Enable -f $Disable }
 
-            if (!($funnyprogressBar)) { Remove-Json -j $Enable -p "HeBringsNpb" }
+            if (!($topsearchbar)){ Move-Json -n 'GlobalNavBar' -t $Enable -f $Disable }
+
+            if (!($funnyprogressbar)) { Move-Json -n 'HeBringsNpb' -t $Enable -f $Disable }
 
             # Old theme
             if (!($new_theme) -and [version]$offline -le [version]"1.2.13.661") {

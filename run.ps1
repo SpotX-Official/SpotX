@@ -1136,7 +1136,7 @@ function Helper($paramname) {
                     },
                     @{
                         Object           = $webjson.others.EnableExp.psobject.properties
-                        PropertiesToKeep = @('CarouselsOnHome')
+                        PropertiesToKeep = @('CarouselsOnHome', 'BrowseViaPathfinder')
                     }
                 )
 

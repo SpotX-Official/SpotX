@@ -790,6 +790,15 @@
                     "fr": "1.2.27",
                     "to": ""
                 }
+            },
+            "BrowseViaPathfinder": {
+                "name": "enableBrowseViaPathfinder",
+                "description": "Fixes a bug on the genres page",
+                "native_description": "Fetch Browse data from Pathfinder",
+                "version": {
+                    "fr": "1.1.70",
+                    "to": "1.2.24"
+                }
             }
 
         },

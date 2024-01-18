@@ -877,7 +877,7 @@
         "binary": {
             "block_update": {
                 "version": {
-                    "fr": "1.1.58",
+                    "fr": "1.1.59",
                     "to": ""
                 },
                 "add": "(?<=desktop-update\/.)7(\/update)",
@@ -886,16 +886,16 @@
             },
             "podcast_ad_block": {
                 "version": {
-                    "fr": "1.1.68",
+                    "fr": "1.1.59",
                     "to": ""
                 },
-                "add": "slott(?=.{3,8}override_url)",
-                "match": "slots(?=.{3,8}override_url)",
-                "replace": "slott"
+                "add": "podcass(?=-(?:pre|mid|post)roll)",
+                "match": "podcast(?=-(?:pre|mid|post)roll)",
+                "replace": "podcass"
             },
             "block_gabo": {
                 "version": {
-                    "fr": "1.1.68",
+                    "fr": "1.1.59",
                     "to": ""
                 },
                 "add": "dodo(?=.receiver-service)",

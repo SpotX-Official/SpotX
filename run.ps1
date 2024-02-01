@@ -368,7 +368,7 @@ if (!($version -and $version -match $match_v)) {
     }
     else {  
         # Recommended version for Win 10-12
-        $onlineFull = "1.2.29.605.g66a43ceb-1227"
+        $onlineFull = "1.2.30.1135.g02fef27a-399"
     }
 }
 else {
@@ -1103,7 +1103,10 @@ function Helper($paramname) {
 
             if (!($plus)) { Move-Json -n 'Plus' -t $Enable -f $Disable }
 
-            if (!($topsearchbar)){ Move-Json -n 'GlobalNavBar' -t $Enable -f $Disable }
+            if (!($topsearchbar)){ 
+                Move-Json -n "GlobalNavBar" -t $Enable -f $Disable 
+                $Custom.GlobalNavBar.value = "control"
+            }
 
             if (!($funnyprogressbar)) { Move-Json -n 'HeBringsNpb' -t $Enable -f $Disable }
 

@@ -50,8 +50,16 @@
         },
         "downloadquality": {
             "version": {
-                "fr": "1.1.70",
+                "fr": "1.2.30",
                 "to": ""
+            },
+            "match": "(return[^;]*?)(null[^;]*?desktop\\.settings\\.downloadQuality\\.title)",
+            "replace": "return true ? $2"
+        },
+        "downloadqualityold": {
+            "version": {
+                "fr": "1.1.70",
+                "to": "1.2.29"
             },
             "match": "(\\(.,..jsxs\\)\\(.{1,3}|(.\\(\\).|..)createElement\\(.{1,4}),{(filterMatchQuery|filter:.,title|(variant:\"viola\",semanticColor:\"textSubdued\"|..:\"span\",variant:.{3,6}mesto,color:.{3,6}),htmlFor:\"desktop.settings.downloadQuality.+?).{1,6}get\\(\"desktop.settings.downloadQuality.title.+?(children:.{1,2}\\(.,.\\).+?,|\\(.,.\\){3,4},|,.\\)}},.\\(.,.\\)\\),)",
             "replace": ""
@@ -343,6 +351,15 @@
                 "name": "AutoSeekToAdPosition",
                 "description": "If true, the player will seek to the ad position when an stop position is registered. Usefull for debugging ads.",
                 "native_description": "If true, the player will seek to the ad position when an stop position is registered. Usefull for debugging ads.",
+                "version": {
+                    "fr": "1.2.26",
+                    "to": ""
+                }
+            },
+            "PodcastSponsoredContent": {
+                "name": "enablePodcastSponsoredContent",
+                "description": "Enable sponsored content information for podcasts",
+                "native_description": "Enable sponsored content information for podcasts",
                 "version": {
                     "fr": "1.2.26",
                     "to": ""
@@ -788,7 +805,7 @@
                 "native_description": "Show global nav bar with home button, search input and user avatar",
                 "version": {
                     "fr": "1.2.27",
-                    "to": ""
+                    "to": "1.2.29"
                 }
             },
             "BrowseViaPathfinder": {
@@ -798,6 +815,24 @@
                 "version": {
                     "fr": "1.1.70",
                     "to": "1.2.24"
+                }
+            },
+            "NotificationCenter": {
+                "name": "Enables notification center for desktop & web",
+                "description": "Enables notification center for desktop & web",
+                "native_description": "",
+                "version": {
+                    "fr": "1.2.30",
+                    "to": ""
+                }
+            },
+            "DevicePickerSidePanel": {
+                "name": "enableDevicePickerSidePanel",
+                "description": "Enables Device Picker as a side panel",
+                "native_description": "",
+                "version": {
+                    "fr": "1.2.30",
+                    "to": ""
                 }
             }
 
@@ -870,6 +905,16 @@
                 "value": "canonical-top-position",
                 "version": {
                     "fr": "1.2.18",
+                    "to": ""
+                }
+            },
+            "GlobalNavBar": {
+                "name": "enableGlobalNavBar",
+                "description": "Show global nav bar with home button, search input and user avatar",
+                "native_description": "Show global nav bar with home button, search input and user avatar",
+                "value": "home-next-to-search",
+                "version": {
+                    "fr": "1.2.30",
                     "to": ""
                 }
             }

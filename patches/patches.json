@@ -818,9 +818,9 @@
                 }
             },
             "NotificationCenter": {
-                "name": "Enables notification center for desktop & web",
+                "name": "enableNotificationCenter",
                 "description": "Enables notification center for desktop & web",
-                "native_description": "",
+                "native_description": "Enables notification center for desktop & web",
                 "version": {
                     "fr": "1.2.30",
                     "to": ""

@@ -1,11 +1,11 @@
 {
     "lang": {
-        "version": "1.2.26",
+        "version": "1.2.30",
         "language": "Russian"
     },
     "1": {
-        "match": "\"Show Chrome toolbar\"",
-        "replace": "\"Показать панель инструментов Chrome\""
+        "match": "\"Allow to play this artist\"",
+        "replace": "\"Разрешить воспроизведение этого исполнителя\""
     },
     "2": {
         "match": "\"Confirm your age\"",
@@ -182,5 +182,49 @@
     "45": {
         "match": "\"Venue\"",
         "replace": "\"Место проведения\""
+    },
+    "46": {
+        "match": "\"Liked Songs Filter Tags\"",
+        "replace": "\"Фильтр тегов для любимых треков\""
+    },
+    "47": {
+        "match": "\"Notifications\"",
+        "replace": "\"Уведомления\""
+    },
+    "48": {
+        "match": "\"You're now sharing control of .host..s Jam\"",
+        "replace": "\"Теперь вы делитесь управлением джема с %host%\""
+    },
+    "49": {
+        "match": "\"You can play specific tracks, add to the Queue, and reorder songs while in the Jam.\"",
+        "replace": "\"Вы можете воспроизводить конкретные треки, добавлять их в очередь и изменять порядок треков во время прослушивания джема.\""
+    },
+    "50": {
+        "match": "\"Bring back to main window\"",
+        "replace": "\"Вернуться к основному окну\""
+    },
+    "51": {
+        "match": "\"You have no notifications\"",
+        "replace": "\"У вас нет уведомлений\""
+    },
+    "52": {
+        "match": "\"Related videos\"",
+        "replace": "\"Похожие видео\""
+    },
+    "53": {
+        "match": "\"Remove .displayName. from this Jam\"",
+        "replace": "\"Убрать %displayName% из этого джема\""
+    },
+    "54": {
+        "match": "\"Song\"",
+        "replace": "\"Трек\""
+    },
+    "55": {
+        "match": "\"Episode\"",
+        "replace": "\"Эпизод\""
+    },
+    "56": {
+        "match": "\"Chapter\"",
+        "replace": "\"Глава\""
     }
 }

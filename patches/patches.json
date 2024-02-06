@@ -712,10 +712,10 @@
             "QueueOnRightPanel": {
                 "name": "enableQueueOnRightPanel",
                 "description": "Enable Queue on the right panel",
-                "native_description": "Enable About Podcast section in  NPV",
+                "native_description": "Enable Queue on the right panel",
                 "version": {
                     "fr": "1.2.26",
-                    "to": ""
+                    "to": "1.2.29"
                 }
             },
             "RecentlyPlayedShortcut": {

@@ -368,7 +368,7 @@ if (!($version -and $version -match $match_v)) {
     }
     else {  
         # Recommended version for Win 10-12
-        $onlineFull = "1.2.30.1135.g02fef27a-399"
+        $onlineFull = "1.2.31.1205.g4d59ad7c-1561"
     }
 }
 else {
@@ -1100,6 +1100,7 @@ function Helper($paramname) {
                 }
              
             }
+            if ([version]$offline -eq [version]'1.2.30.1135') {  Move-Json -n 'QueueOnRightPanel' -t $Enable -f $Disable }
 
             if (!($plus)) { Move-Json -n 'Plus' -t $Enable -f $Disable }
 

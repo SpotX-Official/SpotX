@@ -364,6 +364,24 @@
                     "fr": "1.2.26",
                     "to": ""
                 }
+            },
+            "HomeAds": {
+                "name": "enableHomeAds",
+                "description": "Enable Fist Impression Takeover ads on Home Page",
+                "native_description": "Enable Fist Impression Takeover ads on Home Page",
+                "version": {
+                    "fr": "1.2.31",
+                    "to": ""
+                }
+            },
+            "LearningHomeCard": {
+                "name": "enableLearningHomeCard",
+                "description": "Enable Learning Home Card",
+                "native_description": "Enable Learning Home Card",
+                "version": {
+                    "fr": "1.2.31",
+                    "to": ""
+                }
             }
         },
         "EnableExp": {
@@ -679,7 +697,7 @@
                 "native_description": "he brings you playback progress",
                 "version": {
                     "fr": "1.2.14",
-                    "to": ""
+                    "to": "1.2.26"
                 }
             },
             "AlbumPrerelease": {
@@ -715,7 +733,7 @@
                 "native_description": "Enable Queue on the right panel",
                 "version": {
                     "fr": "1.2.26",
-                    "to": "1.2.29"
+                    "to": ""
                 }
             },
             "RecentlyPlayedShortcut": {
@@ -829,9 +847,27 @@
             "DevicePickerSidePanel": {
                 "name": "enableDevicePickerSidePanel",
                 "description": "Enables Device Picker as a side panel",
-                "native_description": "",
+                "native_description": "Enables Device Picker as a side panel",
                 "version": {
                     "fr": "1.2.30",
+                    "to": ""
+                }
+            },
+            "Otfn": {
+                "name": "enableOtfn",
+                "description": "Enable On-The-Fly-Normalization",
+                "native_description": "Enable On-The-Fly-Normalization",
+                "version": {
+                    "fr": "1.2.31",
+                    "to": ""
+                }
+            },
+            "FullscreenMode": {
+                "name": "enableFullscreenMode",
+                "description": "Enable fullscreen mode",
+                "native_description": "Enable fullscreen mode",
+                "version": {
+                    "fr": "1.2.31",
                     "to": ""
                 }
             }
@@ -915,6 +951,16 @@
                 "value": "home-next-to-search",
                 "version": {
                     "fr": "1.2.30",
+                    "to": ""
+                }
+            },
+            "VideosPremiumUpsell": {
+                "name": "musicVideosPremiumUpsell",
+                "description": "Testing Premium upsell for Free users on music videos",
+                "native_description": "Testing Premium upsell for Free users on music videos",
+                "value": "CONTROL",
+                "version": {
+                    "fr": "1.2.31",
                     "to": ""
                 }
             }

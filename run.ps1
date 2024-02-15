@@ -124,7 +124,7 @@ function Format-LanguageCode {
     
     
     $supportLanguages = @(
-        'en', 'ru', 'it', 'tr', 'ka', 'pl', 'es', 'fr', 'hi', 'pt', 'id', 'vi', 'ro', 'de', 'hu', 'zh', 'zh-TW', 'ko', 'ua', 'fa', 'sr', 'lv', 'bn', 'el', 'fi', 'ja', 'fil', 'sv', 'sk'
+        'en', 'ru', 'it', 'tr', 'ka', 'pl', 'es', 'fr', 'hi', 'pt', 'id', 'vi', 'ro', 'de', 'hu', 'zh', 'zh-TW', 'ko', 'ua', 'fa', 'sr', 'lv', 'bn', 'el', 'fi', 'ja', 'fil', 'sv', 'sk', 'ta'
     )
     
     
@@ -245,6 +245,10 @@ function Format-LanguageCode {
         }        
         '^sk' {
             $returnCode = 'sk'
+            break
+        }
+        '^ta' {
+            $returnCode = 'ta'
             break
         }
         Default {

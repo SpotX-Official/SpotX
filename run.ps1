@@ -1104,11 +1104,11 @@ function Helper($paramname) {
                 }
              
             }
-            if ([version]$offline -eq [version]'1.2.30.1135') {  Move-Json -n 'QueueOnRightPanel' -t $Enable -f $Disable }
+            if ([version]$offline -eq [version]'1.2.30.1135') { Move-Json -n 'QueueOnRightPanel' -t $Enable -f $Disable }
 
             if (!($plus)) { Move-Json -n 'Plus' -t $Enable -f $Disable }
 
-            if (!($topsearchbar)){ 
+            if (!($topsearchbar)) { 
                 Move-Json -n "GlobalNavBar" -t $Enable -f $Disable 
                 $Custom.GlobalNavBar.value = "control"
             }
@@ -1568,7 +1568,9 @@ If ($test_spa) {
         # Hide submenu item "download"
         $css += $webjson.others.submenudownload.add
         # Hide very high quality streaming
-        $css += $webjson.others.veryhighstream.add
+        if ([version]$offline -le [version]"1.2.29.605") {
+            $css += $webjson.others.veryhighstream.add
+        }
     }
     # Full screen lyrics
     if ($lyrics_stat -and [version]$offline -ge [version]"1.2.3.1107") {

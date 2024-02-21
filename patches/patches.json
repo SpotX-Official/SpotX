@@ -1442,14 +1442,14 @@
                 "fr": "1.1.74",
                 "to": ""
             },
-            "add": " .BKsbV2Xl786X9a09XROH{display:none}"
+            "add": " .BKsbV2Xl786X9a09XROH {display:none}"
         },
         "submenudownload": {
             "version": {
                 "fr": "1.1.74",
                 "to": ""
             },
-            "add": " button.wC9sIed7pfp47wZbmU6m.pzkhLqffqF_4hucrVVQA{display:none}"
+            "add": " .pzkhLqffqF_4hucrVVQA, .egE6UQjF_UUoCzvMxREj {display:none}"
         },
         "veryhighstream": {
             "add": " #desktop\\.settings\\.streamingQuality>option:nth-child(5) {display:none}"

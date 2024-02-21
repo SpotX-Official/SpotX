@@ -1,6 +1,6 @@
 {
     "lang": {
-        "version": "1.2.30",
+        "version": "1.2.31",
         "language": "Russian"
     },
     "1": {
@@ -120,110 +120,114 @@
         "replace": "Динамический нормализатор - активно регулирует громкость, выравнивая разницу между тихими и громкими частями аудио"
     },
     "30": {
+        "match": "Dynamic loudness control for podcasts - Actively maintain optimal podcast volume level for a clear and balanced sound experience",
+        "replace": "Динамическое управление громкостью для подкастов - активное поддержание оптимального уровня громкости подкаста для четкого и сбалансированного звукового восприятия"
+    },
+    "31": {
         "match": "\"Load more\"",
         "replace": "\"Загрузить еще\""
     },
-    "31": {
+    "32": {
         "match": "\"Sign up free\"",
         "replace": "\"Бесплатная регистрация\""
     },
-    "32": {
+    "33": {
         "match": "\"Build .0. is available\"",
         "replace": "\"Сборка {0} доступна\""
     },
-    "33": {
+    "34": {
         "match": "\"Downloading build .0....\"",
         "replace": "\"Загрузка сборки {0}...\""
     },
-    "34": {
+    "35": {
         "match": "\"Build .0. is ready to install\"",
         "replace": "\"Сборка {0} готова к установке\""
     },
-    "35": {
+    "36": {
         "match": "\"Remove\"",
         "replace": "\"Удалить\""
     },
-    "36": {
+    "37": {
         "match": "\"Feature Spotlight\"",
         "replace": "\"Особенности\""
     },
-    "37": {
+    "38": {
         "match": "\"prev-related-video\"",
         "replace": "\"предыдущее связанное видео\""
     },
-    "38": {
+    "39": {
         "match": "\"next-related-video\"",
         "replace": "\"следующее связанное видео\""
     },
-    "39": {
+    "40": {
         "match": "\"Do not translate\"",
         "replace": "\"Не переводить\""
     },
-    "40": {
+    "41": {
         "match": "\"Translating to .0.\"",
         "replace": "\"Перевожу на {0}\""
     },
-    "41": {
+    "42": {
         "match": "\"Translation to .0. not available\"",
         "replace": "\"Перевод на {0} недоступен\""
     },
-    "42": {
+    "43": {
         "match": "\"Translate lyrics\"",
         "replace": "\"Перевести текст песни\""
     },
-    "43": {
+    "44": {
         "match": "\"Spotify MiniPlayer\"",
         "replace": "\"мини-плеер Spotify\""
     },
-    "44": {
+    "45": {
         "match": "\"Date\"",
         "replace": "\"Дата\""
     },
-    "45": {
+    "46": {
         "match": "\"Venue\"",
         "replace": "\"Место проведения\""
     },
-    "46": {
+    "47": {
         "match": "\"Liked Songs Filter Tags\"",
         "replace": "\"Фильтр тегов для любимых треков\""
     },
-    "47": {
+    "48": {
         "match": "\"Notifications\"",
         "replace": "\"Уведомления\""
     },
-    "48": {
-        "match": "\"You're now sharing control of .host..s Jam\"",
+    "49": {
+        "match": "\"You\u0027re now sharing control of .host..s Jam\"",
         "replace": "\"Теперь вы делитесь управлением джема с %host%\""
     },
-    "49": {
+    "50": {
         "match": "\"You can play specific tracks, add to the Queue, and reorder songs while in the Jam.\"",
         "replace": "\"Вы можете воспроизводить конкретные треки, добавлять их в очередь и изменять порядок треков во время прослушивания джема.\""
     },
-    "50": {
+    "51": {
         "match": "\"Bring back to main window\"",
         "replace": "\"Вернуться к основному окну\""
     },
-    "51": {
+    "52": {
         "match": "\"You have no notifications\"",
         "replace": "\"У вас нет уведомлений\""
     },
-    "52": {
+    "53": {
         "match": "\"Related videos\"",
         "replace": "\"Похожие видео\""
     },
-    "53": {
+    "54": {
         "match": "\"Remove .displayName. from this Jam\"",
         "replace": "\"Убрать %displayName% из этого джема\""
     },
-    "54": {
+    "55": {
         "match": "\"Song\"",
         "replace": "\"Трек\""
     },
-    "55": {
+    "56": {
         "match": "\"Episode\"",
         "replace": "\"Эпизод\""
     },
-    "56": {
+    "57": {
         "match": "\"Chapter\"",
         "replace": "\"Глава\""
     }

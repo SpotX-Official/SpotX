@@ -196,7 +196,7 @@
         "replace": "\"Уведомления\""
     },
     "49": {
-        "match": "\"You\u0027re now sharing control of .host..s Jam\"",
+        "match": "\"You.re now sharing control of .host..s Jam\"",
         "replace": "\"Теперь вы делитесь управлением джема с %host%\""
     },
     "50": {

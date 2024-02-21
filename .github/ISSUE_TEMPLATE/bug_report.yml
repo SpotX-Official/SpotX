@@ -5,7 +5,7 @@ body:
 - type: checkboxes
   attributes:
       label: 🧐 Have you read the FAQ and viewed similar issues?
-      description: Please read the <a href="https://telegra.ph/SpotX-FAQ-09-19">FAQ</a>. Also check the open and closed <a href="https://github.com/SpotX-Official/SpotX/issues">issue</a> because your issue may have already been fixed.
+      description: <strong>❗️❗️ Important:</strong> Please review the <a href="https://telegra.ph/SpotX-FAQ-09-19">FAQ</a> and check both open and closed <a href="https://github.com/SpotX-Official/SpotX/issues">issue</a>, as your concern may have already been addressed. However, please be aware that if it's discovered that requested actions weren't completed, the issue may be closed without explanation.
       options:
         - label: I have read the FAQ
           required: true
@@ -20,7 +20,7 @@ body:
   id: lang_spoti
   attributes:
     label: Сountry of your account
-    description: You can view your country on your account page, in paragraph <a href="https://www.spotify.com/account/">Country or region</a>.
+    description: You can view your country on your account page, in paragraph <a href="https://www.spotify.com/account/profile/">Country or region</a>.
     placeholder: "e.g. Ukraine"
   validations:
     required: true 
@@ -46,8 +46,8 @@ body:
     label: Do you have Spicetify installed?
     description: <a href="https://spicetify.app/">Spicetify</a> is a command line tool to customize Spotify client.
     options:
-      - "Yes"
       - "No"
+      - "Yes"
   validations:
     required: true
 - type: markdown
@@ -57,12 +57,12 @@ body:
   attributes:
     label: ℹ Computer information
     description: |
-      - Spotify: e.g. <kbd>1.1.90.859.gf1bb1e36</kbd>
+      - Spotify: e.g. <kbd>1.1.90.859.gf1bb1e36</kbd> (Avoid labeling version as "latest" due to regional update variations in Spotify)
         - In the open Spotify client in the upper left corner, click <kbd>•••</kbd> → <kbd>Help</kbd> → <kbd>About Spotify</kbd>
       - Windows: e.g. <kbd>Windows 11 21H2 22000.527</kbd> 
         - Press <kbd>Win</kbd> + <kbd>Pause/Break</kbd> to open the page to copy from.
       - PowerShell: e.g. <kbd>5.1.19041.1200</kbd>
-        - In the Windows PowerShell console, type the following command <kbd>Get-Host | Select-Object Version</kbd>
+        - Press <kbd>Win</kbd> + <kbd>R</kbd> then type "powershell," and press <kbd>Enter</kbd>, type the following command <kbd>Get-Host | Select-Object Version</kbd>
     placeholder: |
         - Spotify: 
         - Windows: 

@@ -310,23 +310,10 @@ function CallLang($clg) {
     }
 }
 
-
 # Set language code for script.
 $langCode = Format-LanguageCode -LanguageCode $Language
 
 $lang = CallLang -clg $langCode
-
-# Set variable 'ru'.
-if ($langCode -eq 'ru') { 
-    $ru = $true
-
-    if ($mirror) {
-        $urlru = "https://spotx-official.github.io/SpotX/patches/Augmented%20translation/ru.json"
-    }
-    else { $urlru = "https://raw.githubusercontent.com/SpotX-Official/SpotX/main/patches/Augmented%20translation/ru.json" }
-
-    $webjsonru = (Invoke-WebRequest -useb -Uri $urlru).Content | ConvertFrom-Json
-}
 
 Write-Host ($lang).Welcome
 Write-Host
@@ -372,7 +359,7 @@ if (!($version -and $version -match $match_v)) {
     }
     else {  
         # Recommended version for Win 10-12
-        $onlineFull = "1.2.31.1205.g4d59ad7c-1561"
+        $onlineFull = "1.2.32.997.g4c6498b6-2894"
     }
 }
 else {
@@ -835,6 +822,19 @@ if ($no_shortcut) {
 }
 
 $ch = $null
+
+
+# updated Russian translation
+if ($langCode -eq 'ru' -and [version]$offline -ge [version]"1.1.92.644") { 
+    $ru = $true
+
+    if ($mirror) {
+        $urlru = "https://spotx-official.github.io/SpotX/patches/Augmented%20translation/ru.json"
+    }
+    else { $urlru = "https://raw.githubusercontent.com/SpotX-Official/SpotX/main/patches/Augmented%20translation/ru.json" }
+
+    $webjsonru = (Invoke-WebRequest -useb -Uri $urlru).Content | ConvertFrom-Json
+}
 
 if ($podcasts_off) { 
     Write-Host ($lang).PodcatsOff`n 

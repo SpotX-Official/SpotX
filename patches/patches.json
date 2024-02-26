@@ -382,6 +382,42 @@
                     "fr": "1.2.31",
                     "to": ""
                 }
+            },
+            "BillboardEsperantoMigration": {
+                "name": "enableBillboardEsperantoMigration",
+                "description": "Enable esperanto migration for Billboard Ad Format",
+                "native_description": "Enable esperanto migration for Billboard Ad Format",
+                "version": {
+                    "fr": "1.2.32",
+                    "to": ""
+                }
+            },
+            "LeaderboardEsperantoMigration": {
+                "name": "enableEsperantoMigrationLeaderboard",
+                "description": "Enable esperanto Migration for Leaderboard Ad Format",
+                "native_description": "Enable esperanto Migration for Leaderboard Ad Format",
+                "version": {
+                    "fr": "1.2.32",
+                    "to": ""
+                }
+            },
+            "SponsoredPlaylistEsperantoMigration": {
+                "name": "enableSponsoredPlaylistEsperantoMigration",
+                "description": "Enable esperanto Migration for Sponsored Playlist Ad Formats",
+                "native_description": "Enable esperanto Migration for Sponsored Playlist Ad Formats",
+                "version": {
+                    "fr": "1.2.32",
+                    "to": ""
+                }
+            },
+            "PipImpressionLogging": {
+                "name": "enablePipImpressionLogging",
+                "description": "Enables impression logging for PiP",
+                "native_description": "Enables impression logging for PiP",
+                "version": {
+                    "fr": "1.2.32",
+                    "to": ""
+                }
             }
         },
         "EnableExp": {
@@ -870,6 +906,51 @@
                     "fr": "1.2.31",
                     "to": ""
                 }
+            },
+            "GPCSignal": {
+                "name": "enableGPCSignal",
+                "description": "Enables sending of the GPC signal to the backend",
+                "native_description": "Enables sending of the GPC signal to the backend",
+                "version": {
+                    "fr": "1.2.32",
+                    "to": ""
+                }
+            },
+            "NewConnectBar": {
+                "name": "enableNewConnectBar",
+                "description": "New Connect Bar without arrow and clickable elements",
+                "native_description": "New Connect Bar without arrow and clickable elements",
+                "version": {
+                    "fr": "1.2.14",
+                    "to": ""
+                }
+            },
+            "ResizableTracklistColumns": {
+                "name": "enableResizableTracklistColumns",
+                "description": "Enable resizable tracklist columns",
+                "native_description": "Enable resizable tracklist columns",
+                "version": {
+                    "fr": "1.2.28",
+                    "to": ""
+                }
+            },
+            "QueueOnRightPanelAnimations": {
+                "name": "enableQueueOnRightPanelAnimations",
+                "description": "Enable animations for Queue on the right panel",
+                "native_description": "Enable animations for Queue on the right panel",
+                "version": {
+                    "fr": "1.2.32",
+                    "to": ""
+                }
+            },
+            "LikedSongsFilterTags": {
+                "name": "enableLikedSongsFilterTags",
+                "description": "Show filter tags on the Liked Songs entity view",
+                "native_description": "Show filter tags on the Liked Songs entity view",
+                "version": {
+                    "fr": "1.2.32",
+                    "to": ""
+                }
             }
 
         },
@@ -934,13 +1015,23 @@
                     "to": ""
                 }
             },
+            "InternalTrackSearch": {
+                "name": "enableInternalTrackSearch",
+                "description": "Enable internal track search on desktop UI",
+                "native_description": "Enable internal track search on desktop UI",
+                "value": "VARIANT",
+                "version": {
+                    "fr": "1.2.19",
+                    "to": ""
+                }
+            },
             "TrackRecommender": {
                 "name": "enableTrackInternalLinkRecommender",
                 "description": "Enable internal link recommender component for track entity pages",
                 "native_description": "Enable internal link recommender component for track entity pages",
                 "value": "canonical-top-position",
                 "version": {
-                    "fr": "1.2.18",
+                    "fr": "1.2.19",
                     "to": ""
                 }
             },
@@ -1533,8 +1624,8 @@
                 "fr": "1.1.92",
                 "to": ""
             },
-            "match": "(\\[(.)\\.go\\.en,)(.+?\\])",
-            "replace": "$1$2.go.ru]"
+            "match": "\\[(.\\...\\.)en,.\\...\\.a(.+?\\])",
+            "replace": "[$1en,$1ru]"
         },
         "goofyhistory": {
             "version": {

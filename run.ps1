@@ -1115,6 +1115,17 @@ function Helper($paramname) {
 
             if (!($funnyprogressbar)) { Move-Json -n 'HeBringsNpb' -t $Enable -f $Disable }
 
+            # disable homesub if the patch for disabling podcasts on the home page is applied
+            $homesub = "HomeSubfeeds"
+
+            if ($podcasts_off) { 
+                Move-Json -n $homesub -t $Enable -f $Disable 
+            }
+
+            else { 
+                Remove-Json -j $Enable -p $homesub
+            }
+
             # Old theme
             if (!($new_theme) -and [version]$offline -le [version]"1.2.13.661") {
 

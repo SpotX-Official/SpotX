@@ -733,7 +733,7 @@
                 "native_description": "he brings you playback progress",
                 "version": {
                     "fr": "1.2.14",
-                    "to": "1.2.26"
+                    "to": ""
                 }
             },
             "AlbumPrerelease": {
@@ -951,8 +951,43 @@
                     "fr": "1.2.32",
                     "to": ""
                 }
+            },
+            "MiniPlayer": {
+                "name": "enablePiPMiniPlayer",
+                "description": "Enable the PiP Mini Player",
+                "native_description": "Enable the PiP Mini Player",
+                "version": {
+                    "fr": "1.2.32",
+                    "to": ""
+                }
+            },
+            "MiniPlayerVideo": {
+                "name": "enablePiPMiniPlayerVideo",
+                "description": "Enable playback of video inside the PiP Mini Player",
+                "native_description": "Enable playback of video inside the PiP Mini Player",
+                "version": {
+                    "fr": "1.2.32",
+                    "to": ""
+                }
+            },
+            "PremiumUserForMiniPlayer": {
+                "name": "enablePremiumUserForMiniPlayer",
+                "description": "Enables premium user flag for mini player",
+                "native_description": "Enables premium user flag for mini player",
+                "version": {
+                    "fr": "1.2.32",
+                    "to": ""
+                }
+            },
+            "HomeSubfeeds": {
+                "name": "enableHomeSubfeeds",
+                "description": "Enable Subfeed filter chips on home",
+                "native_description": "Enable Subfeed filter chips on home",
+                "version": {
+                    "fr": "1.2.23",
+                    "to": ""
+                }
             }
-
         },
         "CustomExp": {
             "SocialConnectOnDesktop": {

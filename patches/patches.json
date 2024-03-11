@@ -1089,6 +1089,16 @@
                     "fr": "1.2.31",
                     "to": ""
                 }
+            },
+            "CanvasNpv": {
+                "name": "enableCanvasNpv",
+                "description": "Enables short, looping visuals on tracks",
+                "native_description": "Enables short, looping visuals on tracks",
+                "value": "canvas-play-loop",
+                "version": {
+                    "fr": "1.2.33",
+                    "to": ""
+                }
             }
         },
         "binary": {
@@ -1659,7 +1669,7 @@
                 "fr": "1.1.92",
                 "to": ""
             },
-            "match": "\\[(.\\...\\.)en,.\\...\\.a(.+?\\])",
+            "match": "\\[(.\\..{1,2}\\.)en,.\\..{1,2}\\.a(.+?\\])",
             "replace": "[$1en,$1ru]"
         },
         "goofyhistory": {

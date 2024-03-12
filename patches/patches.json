@@ -1617,19 +1617,13 @@
             },
             "match": [
                 "(onSelected:).{3,14}({..\"app.enable.developer.mode.,).\\)(,.\\(!0\\))?}",
-                "(.)\\){((.{5,20}?|)this._cosmos=.,this._product_state)",
-                "(..\\(.\\)|.)(\\?(..createElement|\\(.{1,7}jsxs\\))\\(.{1,3},{filterMatchQuery:.{2,15}\\(\"settings.employee\"\\))",
-                "(\"desktop.settings.language-override\".+?)(\\w\\.\\w*\\(..,null\\),|\\w\\.jsx\\)\\(..,\\{}\\),\\(\\d,)",
-                "(\"Debug Window\")(.*?\"Locales\")",
-                "desktop.settings.language-override"
+                "{(.{5,20}?|)(this\\._product_state(?:|_service)=(.))",
+                "(..\\(.\\)|.)(\\?(..createElement|\\(.{1,7}jsxs\\))\\(.{1,3},{filterMatchQuery:.{2,15}\\(\"settings.employee\"\\))"
             ],
             "replace": [
-                "$1(check)=>$2check);localStorage.setItem('dev-tools',check);Spotx.ProductState.putOverridesValues({pairs:{'com.spotify.madprops.use.ucs.product.state':check?'1':'0','employee':check?'1':'0'}});setTimeout(()=>{window.sendCosmosRequest({ request:JSON.stringify({method:'POST',uri:'sp://desktop/v1/restart'})})},500);}",
-                "$1){window.Spotx={ProductState:$1};if(localStorage.getItem('dev-tools')==='true'){$1.putOverridesValues({pairs:{'com.spotify.madprops.use.ucs.product.state':'1','employee': '1'}})};$2",
-                "true$2",
-                "$1",
-                "$1",
-                ""
+                "$1(check)=>$2check);localStorage.setItem('dev-tools',check);Spotx.ProductState.putOverridesValues({pairs:{'com.spotify.madprops.use.ucs.product.state':check?'1':'0','employee':check?'1':'0'}});setTimeout(()=>{window.sendCosmosRequest({ request:JSON.stringify({method:'POST',uri:'sp://desktop/v1/restart'})})},700);}",
+                "{window.Spotx={ProductState:$3};if(localStorage.getItem('dev-tools')==='true'){$3.putOverridesValues({pairs:{'com.spotify.madprops.use.ucs.product.state':'1','employee':'1'}})};$1$2",
+                "true$2"
             ]
         },
         "banner_home": {

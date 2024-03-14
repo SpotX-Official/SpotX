@@ -1613,8 +1613,8 @@ If ($test_spa) {
     if ($podcast_off -or $adsections_off) {
 
         $url = switch ($mirror) {
-            $true { " https://spotx-official.github.io/SpotX/js-helper/sectionBlock.js" }
-            default { "https://raw.githubusercontent.com/SpotX-Official/SpotX/js-helper/main/sectionBlock.js" }
+            $true { "https://spotx-official.github.io/SpotX/js-helper/sectionBlock.js" }
+            default { "https://raw.githubusercontent.com/SpotX-Official/SpotX/main/js-helper/sectionBlock.js" }
         }
         $section = Get -Url $url
         

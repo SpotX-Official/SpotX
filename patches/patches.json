@@ -421,6 +421,24 @@
             }
         },
         "EnableExp": {
+            "HomeViaGraphQLV2": {
+                "name": "enableHomeViaGraphQLV2",
+                "description": "Enable fetching Home via GraphQL",
+                "native_description": "Enable fetching Home via GraphQL",
+                "version": {
+                    "fr": "1.1.86",
+                    "to": "1.1.92"
+                }
+            },
+            "BrowseViaPathfinder": {
+                "name": "enableBrowseViaPathfinder",
+                "description": "Fixes a bug on the genres page",
+                "native_description": "Fetch Browse data from Pathfinder",
+                "version": {
+                    "fr": "1.1.88",
+                    "to": "1.2.24"
+                }
+            },
             "EnhanceLikedSongs": {
                 "name": "enableEnhanceLikedSongs",
                 "description": "Enable Enhance Liked Songs UI and functionality",
@@ -862,15 +880,6 @@
                     "to": "1.2.29"
                 }
             },
-            "BrowseViaPathfinder": {
-                "name": "enableBrowseViaPathfinder",
-                "description": "Fixes a bug on the genres page",
-                "native_description": "Fetch Browse data from Pathfinder",
-                "version": {
-                    "fr": "1.1.70",
-                    "to": "1.2.24"
-                }
-            },
             "NotificationCenter": {
                 "name": "enableNotificationCenter",
                 "description": "Enables notification center for desktop & web",
@@ -1129,30 +1138,6 @@
                 "match": "gabo(?=.receiver-service)",
                 "replace": "dodo"
             }
-        },
-        "podcastsoff": {
-            "version": {
-                "fr": "1.1.70",
-                "to": "1.1.92"
-            },
-            "match": "withQueryParameters\\(.\\){return this.queryParameters=.,this}",
-            "replace": "withQueryParameters(e){return this.queryParameters=(e.types?{...e, types: e.types.split(\",\").filter(_ => ![\"episode\",\"show\"].includes(_)).join(\",\")}:e),this}"
-        },
-        "podcastsoff2": {
-            "version": {
-                "fr": "1.1.93",
-                "to": ""
-            },
-            "match": "(\\!?Array.isArray\\(.\\)[\\|&]{2}.===(.).length\\)return null;)",
-            "replace": "$1 let as=$2;if(!Array.isArray(as)){as=e;}for(let q=0;q<(as.children?as.children.length:as.length);q++){const key=(as.children?.[q]||as[q])?.key;if(!key||as[q].props?.value===\"search-history\"){continue;}if(key.match(/(episode|show)/)||(as.title)?.match(/podcasts/i)){return null;}}"
-        },
-        "adsectionsoff": {
-            "version": {
-                "fr": "1.1.93",
-                "to": ""
-            },
-            "match": "((\"Carousel\".+?|onClickCarouselControls:.,spec:.[\\{\\}\\(\\)]{3,8})seeAllUri:(.),index.+?(UBIWrapper|id:.}\\)|\\.spec);)",
-            "replace": "$1 if ($3 && $3.match && $3.match(/(0JQ5DAnM3wGh0gz1MXnu3B|0JQ5DAnM3wGh0gz1MXnu3D|0JQ5IMCbQBLupUQrQFeCzx|0JQ5IMCbQBLqTJyy28YCa9|0JQ5IMCbQBLlC31GvtaB6w|0JQ5DAob0KOew1FBAMSmBz|0JQ5DAnM3wGh0gz1MXnu4w|0JQ5DAnM3wGh0gz1MXnu3C|0JQ5DAnM3wGh0gz1MXnu3s|0JQ5DAnM3wGh0gz1MXnu3M|0JQ5DAob0JCuWaGLU6ntFT|0JQ5DAnM3wGh0gz1MXnucG|0JQ5DAnM3wGh0gz1MXnu3E|0JQ5DAnM3wGh0gz1MXnu4h|0JQ5DAnM3wGh0gz1MXnu7R|0JQ5DAnM3wGh0gz1MXnu3w|0JQ5DAuChZYPe9iDhh2mJz|0JQ5DAnM3wGh0gz1MXnu3x|0JQ5DAob0JCuWaGLU6ntFY|0JQ5DAnM3wGh0gz1MXnu3u|0JQ5DAnM3wGh0gz1MXnu3q|0JQ5DAob0Jr9ClCbkV4pZD|0JQ5DAob0LaV9FOMJ9utY5)/)) {return null};"
         },
         "themelyrics": {
             "theme": {
@@ -1625,6 +1610,14 @@
                 "{window.Spotx={ProductState:$3};if(localStorage.getItem('dev-tools')==='true'){$3.putOverridesValues({pairs:{'com.spotify.madprops.use.ucs.product.state':'1','employee':'1'}})};$1$2",
                 "true$2"
             ]
+        },
+        "block_section": {
+            "version": {
+                "fr": "1.1.86",
+                "to": ""
+            },
+            "match": "(case 6:|const .=await .\\(.,.\\);)((return .\\.abrupt\\(\"|return[ \"],?)(null!=n&&|return\",)?(.)(\\);case 9|\\??.errors\\?Promise.reject.+?errors\\):.))",
+            "replace": "$1sectionBlock($5,\"{0}\");$2"
         },
         "banner_home": {
             "version": {

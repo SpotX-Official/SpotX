@@ -1,5 +1,5 @@
 function sectionBlock(e, type) {
-    
+
     const body = e?.data?.home;
     const sections = body?.sectionContainer?.sections?.items;
 
@@ -9,12 +9,14 @@ function sectionBlock(e, type) {
             { id: '0JQ5IMCbQBLupUQrQFeCzx', name: 'Best of the Year' },
             { id: '0JQ5DAnM3wGh0gz1MXnu3C', name: 'Best of Artists / Tracks' },
             { id: '0JQ5DAnM3wGh0gz1MXnu4w', name: 'Best of songwriters' },
+            { id: '0JQ5IMCbQBLhSb02SGYpDM', name: 'Biggest Indie Playlists' },
             { id: '0JQ5DAnM3wGh0gz1MXnu5g', name: 'Charts' },
             { id: '0JQ5DAob0KOew1FBAMSmBz', name: 'Featured Charts' },
             { id: '0JQ5DAob0JCuWaGLU6ntFY', name: 'Focus' },
             { id: '0JQ5DAnM3wGh0gz1MXnu3s', name: 'Fresh new music' },
             { id: '0JQ5DAob0LaV9FOMJ9utY5', name: 'Gaming music' },
             { id: '0JQ5DAnM3wGh0gz1MXnu3q', name: 'Happy' },
+            { id: '0JQ5IMCbQBLiqrNCH9VvmA', name: 'ICE PHONK' },
             { id: '0JQ5DAnM3wGh0gz1MXnucG', name: 'Mood' },
             { id: '0JQ5DAob0JCuWaGLU6ntFT', name: 'Mood' },
             { id: '0JQ5DAob0Jr9ClCbkV4pZD', name: 'Music to game to' },
@@ -23,7 +25,7 @@ function sectionBlock(e, type) {
             { id: '0JQ5DAnM3wGh0gz1MXnu4h', name: 'Popular radio' },
             { id: '0JQ5DAnM3wGh0gz1MXnu3u', name: 'Sad' },
             { id: '0JQ5DAnM3wGh0gz1MXnu3w', name: 'Throwback' },
-            { id: '0JQ5DAuChZYPe9iDhh2mJz', name: 'Throwback Thursday' },
+            { id: '0JQ5DAuChZYPe9iDhh2mJz', name: 'Throwback Thursday / Spotify Playlists' },
             { id: '0JQ5DAnM3wGh0gz1MXnu3M', name: 'Today`s biggest hits' },
             { id: '0JQ5DAnM3wGh0gz1MXnu3E', name: 'Trending now' },
             { id: '0JQ5DAnM3wGh0gz1MXnu3x', name: 'Workout' },

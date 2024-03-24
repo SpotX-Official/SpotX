@@ -1007,7 +1007,7 @@
                 }
             },
             "RightSidebarCollapsible": {
-                "name": "enableSidebarAnimations",
+                "name": "enableRightSidebarCollapsible",
                 "description": "Enable the right sidebar to collapse into the right margin",
                 "native_description": "Enable the right sidebar to collapse into the right margin",
                 "version": {

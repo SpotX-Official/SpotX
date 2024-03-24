@@ -188,20 +188,20 @@
         "replace": "\"Место проведения\""
     },
     "47": {
-        "match": "\"Liked Songs Filter Tags\"",
-        "replace": "\"Фильтр тегов для любимых треков\""
+        "match": "\"Unpin upcoming audiobook\"",
+        "replace": "\"Открепить предстоящую аудиокнигу\""
     },
     "48": {
         "match": "\"Notifications\"",
         "replace": "\"Уведомления\""
     },
     "49": {
-        "match": "\"You.re now sharing control of .host..s Jam\"",
-        "replace": "\"Теперь вы делитесь управлением джема с %host%\""
+        "match": "\"Pin upcoming audiobook\"",
+        "replace": "\"Закрепить предстоящую аудиокнигу\""
     },
     "50": {
-        "match": "\"You can play specific tracks, add to the Queue, and reorder songs while in the Jam.\"",
-        "replace": "\"Вы можете воспроизводить конкретные треки, добавлять их в очередь и изменять порядок треков во время прослушивания джема.\""
+        "match": "\"When this audiobook is released we.ll add it to Your Library.\"",
+        "replace": "\"Когда эта аудиокнига выйдет, мы добавим её в вашу библиотеку.\""
     },
     "51": {
         "match": "\"Bring back to main window\"",
@@ -216,8 +216,8 @@
         "replace": "\"Похожие видео\""
     },
     "54": {
-        "match": "\"Remove .displayName. from this Jam\"",
-        "replace": "\"Убрать %displayName% из этого джема\""
+        "match": "\"Upcoming audiobook\"",
+        "replace": "\"Предстоящая аудиокнига\""
     },
     "55": {
         "match": "\"Song\"",

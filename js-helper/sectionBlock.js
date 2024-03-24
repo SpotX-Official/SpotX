@@ -11,6 +11,7 @@ function sectionBlock(e, type) {
             { id: '0JQ5DAnM3wGh0gz1MXnu4w', name: 'Best of songwriters' },
             { id: '0JQ5IMCbQBLhSb02SGYpDM', name: 'Biggest Indie Playlists' },
             { id: '0JQ5DAnM3wGh0gz1MXnu5g', name: 'Charts' },
+            { id: '0JQ5DAnM3wGh0gz1MXnu3p', name: 'Dinner' },
             { id: '0JQ5DAob0KOew1FBAMSmBz', name: 'Featured Charts' },
             { id: '0JQ5DAob0JCuWaGLU6ntFY', name: 'Focus' },
             { id: '0JQ5DAnM3wGh0gz1MXnu3s', name: 'Fresh new music' },

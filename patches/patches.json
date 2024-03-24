@@ -418,6 +418,15 @@
                     "fr": "1.2.32",
                     "to": ""
                 }
+            },
+            "SwitchingBetweenHomeAdsAndHpto": {
+                "name": "allowSwitchingBetweenHomeAdsAndHpto",
+                "description": "Allow switching between the new Home Ads format and legacy HPTO format (as opposed to only showing the legacy HPTO format)",
+                "native_description": "Allow switching between the new Home Ads format and legacy HPTO format (as opposed to only showing the legacy HPTO format)",
+                "version": {
+                    "fr": "1.2.34",
+                    "to": ""
+                }
             }
         },
         "EnableExp": {
@@ -661,7 +670,7 @@
                 "native_description": "Enable the slide-in/out transition on the right sidebar",
                 "version": {
                     "fr": "1.2.8",
-                    "to": ""
+                    "to": "1.2.33"
                 }
             },
             "YLXEnhancements": {
@@ -805,7 +814,7 @@
                 "native_description": "Enables all cards throughout app to be Encore Cards",
                 "version": {
                     "fr": "1.2.26",
-                    "to": ""
+                    "to": "1.2.33"
                 }
             },
             "Plus": {
@@ -916,15 +925,6 @@
                     "to": ""
                 }
             },
-            "GPCSignal": {
-                "name": "enableGPCSignal",
-                "description": "Enables sending of the GPC signal to the backend",
-                "native_description": "Enables sending of the GPC signal to the backend",
-                "version": {
-                    "fr": "1.2.32",
-                    "to": ""
-                }
-            },
             "NewConnectBar": {
                 "name": "enableNewConnectBar",
                 "description": "New Connect Bar without arrow and clickable elements",
@@ -994,6 +994,24 @@
                 "native_description": "Enable Subfeed filter chips on home",
                 "version": {
                     "fr": "1.2.23",
+                    "to": ""
+                }
+            },
+            "SidebarAnimations": {
+                "name": "enableSidebarAnimations",
+                "description": "Enable animations on the left and right on the sidebars and makes the right sidebar collapsible",
+                "native_description": "Enable animations on the left and right on the sidebars and makes the right sidebar collapsible",
+                "version": {
+                    "fr": "1.2.34",
+                    "to": ""
+                }
+            },
+            "RightSidebarCollapsible": {
+                "name": "enableSidebarAnimations",
+                "description": "Enable the right sidebar to collapse into the right margin",
+                "native_description": "Enable the right sidebar to collapse into the right margin",
+                "version": {
+                    "fr": "1.2.34",
                     "to": ""
                 }
             }
@@ -1076,7 +1094,7 @@
                 "value": "canonical-top-position",
                 "version": {
                     "fr": "1.2.19",
-                    "to": ""
+                    "to": "1.2.33"
                 }
             },
             "GlobalNavBar": {

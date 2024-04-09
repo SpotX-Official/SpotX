@@ -1191,6 +1191,14 @@
                     "background": "#121212",
                     "maxmatch": "#969696"
                 },
+                "spotify#2": {
+                    "pasttext": "#9b9b9b",
+                    "current": "#1ed760",
+                    "next": "#666666",
+                    "hover": "#f2f2f2",
+                    "background": "#242424",
+                    "maxmatch": "#C2C2C2"
+                },
                 "blue": {
                     "pasttext": "#575757",
                     "current": "#00DFEA",

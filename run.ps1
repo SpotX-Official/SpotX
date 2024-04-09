@@ -362,7 +362,7 @@ if (!($version -and $version -match $match_v)) {
     }
     else {  
         # Recommended version for Win 10-12
-        $onlineFull = "1.2.34.783.g923721d9-5822"
+        $onlineFull = "1.2.35.663.gb699649e-6892"
     }
 }
 else {
@@ -1270,11 +1270,39 @@ function Helper($paramname) {
             $contents = "collaboration"
             $json = $webjson.others
         }
+        "Dev" { 
+
+            $name = "patches.json.others."
+            $n = "xpui-routes-desktop-settings.js"
+            $contents = "dev-tools"
+            $json = $webjson.others
+
+        }        
         "VariousofXpui-js" { 
 
             $VarJs = $webjson.VariousJs
 
             if (!($devtools)) { Remove-Json -j $VarJs -p "dev-tools" }
+
+            else {
+                if ([version]$offline -ge [version]"1.2.35.663") {
+
+                    # Create a copy of 'dev-tools'
+                    $newDevTools = $webjson.VariousJs.'dev-tools'.PSObject.Copy()
+                    
+                    # Delete the first item and change the version
+                    $newDevTools.match = $newDevTools.match[0], $newDevTools.match[2]
+                    $newDevTools.replace = $newDevTools.replace[0], $newDevTools.replace[2]
+                    $newDevTools.version.fr = '1.2.35'
+                    
+                    # Assign a copy of 'devtools' to the 'devtools' property in $web json.others
+                    $webjson.others | Add-Member -Name 'dev-tools' -Value $newDevTools -MemberType NoteProperty
+					
+                    # leave only first item in $web json.Various Js.'devtools' match & replace
+                    $webjson.VariousJs.'dev-tools'.match = $webjson.VariousJs.'dev-tools'.match[1]
+                    $webjson.VariousJs.'dev-tools'.replace = $webjson.VariousJs.'dev-tools'.replace[1] 
+                }
+            }
 
             if ($urlform_goofy -and $idbox_goofy) {
                 $webjson.VariousJs.goofyhistory.replace = "`$1 const urlForm=" + '"' + $urlform_goofy + '"' + ";const idBox=" + '"' + $idbox_goofy + '"' + $webjson.VariousJs.goofyhistory.replace
@@ -1630,6 +1658,9 @@ If ($test_spa) {
 
     extract -counts 'one' -method 'zip' -name 'xpui.js' -helper 'VariousofXpui-js' 
 
+    if ($devtools -and [version]$offline -ge [version]"1.2.35.663") {
+        extract -counts 'one' -method 'zip' -name 'xpui-routes-desktop-settings.js' -helper 'Dev' 
+    }
 
     # Hide Collaborators icon
     if (!($hide_col_icon_off) -and !($exp_spotify)) {
@@ -1670,6 +1701,10 @@ If ($test_spa) {
 
     # xpui.css
     if (!($premium)) {
+        # Hide download block
+        if ([version]$offline -ge [version]"1.2.30.1135") {
+            $css += $webjson.others.downloadquality.add
+        }
         # Hide download icon on different pages
         $css += $webjson.others.downloadicon.add
         # Hide submenu item "download"

@@ -1130,14 +1130,14 @@
                 "match": "(?<=desktop-update\/.)2(\/update)",
                 "replace": "7/update"
             },
-            "podcast_ad_block": {
+            "block_slots": {
                 "version": {
                     "fr": "1.1.59",
                     "to": ""
                 },
-                "add": "podcass(?=-(?:pre|mid|post)roll)",
-                "match": "podcast(?=-(?:pre|mid|post)roll)",
-                "replace": "podcass"
+                "add": "slot}(?=.{3,8}override_url)",
+                "match": "slots(?=.{3,8}override_url)",
+                "replace": "slot}"
             },
             "block_gabo": {
                 "version": {

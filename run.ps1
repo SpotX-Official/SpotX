@@ -1787,7 +1787,7 @@ $ANSI = [Text.Encoding]::GetEncoding(1251)
 $old = [IO.File]::ReadAllText($spotifyExecutable, $ANSI)
 
 $rexex1 = $old -notmatch $webjson.others.binary.block_update.add
-$rexex2 = $old -notmatch $webjson.others.binary.podcast_ad_block.add
+$rexex2 = $old -notmatch $webjson.others.binary.block_slots.add
 $rexex3 = $old -notmatch $webjson.others.binary.block_gabo.add
 
 if ($rexex1 -and $rexex2 -and $rexex3) {

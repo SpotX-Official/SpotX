@@ -419,6 +419,15 @@
                     "fr": "1.2.34",
                     "to": ""
                 }
+            },
+            "enableLyricsUpsell": {
+                "name": "LyricsUpsell",
+                "description": "Enable Lyrics Upsell",
+                "native_description": "Enable Lyrics Upsell",
+                "version": {
+                    "fr": "1.2.36",
+                    "to": ""
+                }
             }
         },
         "EnableExp": {
@@ -923,7 +932,7 @@
                 "native_description": "New Connect Bar without arrow and clickable elements",
                 "version": {
                     "fr": "1.2.14",
-                    "to": ""
+                    "to": "1.2.35"
                 }
             },
             "ResizableTracklistColumns": {
@@ -1432,7 +1441,7 @@
             },
             "match": [
                 "(:hover{color:var)\\(--lyrics-color-active\\)",
-                "(kGR_hu4tdj9PnUlSPaRL{color:var)\\(--lyrics-color-inactive\\)"
+                "((?:kGR_hu4tdj9PnUlSPaRL|LomBcMvfM8AEmZGquAdj){color:var)\\(--lyrics-color-inactive\\)"
             ],
             "replace": [
                 "$1(--lyrics-color-hover)!important",
@@ -1581,7 +1590,7 @@
                 "fr": "1.2.30",
                 "to": ""
             },
-            "add": " .weV_qxFz4gF5sPotO10y:has([for=\"desktop.settings.downloadQuality\"]) {display: none}"
+            "add": " .weV_qxFz4gF5sPotO10y, .BMtRRwqaJD_95vJFMFD0:has([for=\"desktop.settings.downloadQuality\"]) {display: none}"
         },
         "downloadicon": {
             "version": {

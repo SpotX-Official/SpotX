@@ -420,8 +420,8 @@
                     "to": ""
                 }
             },
-            "enableLyricsUpsell": {
-                "name": "LyricsUpsell",
+            "LyricsUpsell": {
+                "name": "enableLyricsUpsell",
                 "description": "Enable Lyrics Upsell",
                 "native_description": "Enable Lyrics Upsell",
                 "version": {
@@ -958,7 +958,7 @@
                 "description": "Show filter tags on the Liked Songs entity view",
                 "native_description": "Show filter tags on the Liked Songs entity view",
                 "version": {
-                    "fr": "1.2.32",
+                    "fr": "1.2.29",
                     "to": ""
                 }
             },
@@ -1720,6 +1720,14 @@
             },
             "match": "min:320,max:420",
             "replace": "min:250,max:400"
+        },
+        "filtertags_locale_fix": {
+            "version": {
+                "fr": "1.2.29",
+                "to": ""
+            },
+            "match": "(getTracksFilterTags.+?(.)=this._builder.build\\(\\)),",
+            "replace": "$1;$2.locale = 'en';const "
         }
     }
 }

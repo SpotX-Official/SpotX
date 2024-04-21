@@ -1,6 +1,6 @@
 {
     "lang": {
-        "version": "1.2.31",
+        "version": "1.2.36",
         "language": "Russian"
     },
     "1": {
@@ -188,46 +188,34 @@
         "replace": "\"Место проведения\""
     },
     "47": {
-        "match": "\"Unpin upcoming audiobook\"",
-        "replace": "\"Открепить предстоящую аудиокнигу\""
+        "match": "\"View credits\"",
+        "replace": "\"Показать сведения\""
     },
     "48": {
         "match": "\"Notifications\"",
         "replace": "\"Уведомления\""
     },
     "49": {
-        "match": "\"Pin upcoming audiobook\"",
-        "replace": "\"Закрепить предстоящую аудиокнигу\""
-    },
-    "50": {
-        "match": "\"When this audiobook is released we.ll add it to Your Library.\"",
-        "replace": "\"Когда эта аудиокнига выйдет, мы добавим её в вашу библиотеку.\""
-    },
-    "51": {
         "match": "\"Bring back to main window\"",
         "replace": "\"Вернуться к основному окну\""
     },
-    "52": {
+    "50": {
         "match": "\"You have no notifications\"",
         "replace": "\"У вас нет уведомлений\""
     },
-    "53": {
+    "51": {
         "match": "\"Related videos\"",
         "replace": "\"Похожие видео\""
     },
-    "54": {
-        "match": "\"Upcoming audiobook\"",
-        "replace": "\"Предстоящая аудиокнига\""
-    },
-    "55": {
+    "52": {
         "match": "\"Song\"",
         "replace": "\"Трек\""
     },
-    "56": {
+    "53": {
         "match": "\"Episode\"",
         "replace": "\"Эпизод\""
     },
-    "57": {
+    "54": {
         "match": "\"Chapter\"",
         "replace": "\"Глава\""
     }

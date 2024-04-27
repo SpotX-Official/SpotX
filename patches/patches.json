@@ -1590,7 +1590,7 @@
                 "fr": "1.2.30",
                 "to": ""
             },
-            "add": " .weV_qxFz4gF5sPotO10y, .BMtRRwqaJD_95vJFMFD0:has([for=\"desktop.settings.downloadQuality\"]) {display: none}"
+            "add": " :is(.weV_qxFz4gF5sPotO10y, .BMtRRwqaJD_95vJFMFD0):has([for=\"desktop.settings.downloadQuality\"]) {display: none}"
         },
         "downloadicon": {
             "version": {

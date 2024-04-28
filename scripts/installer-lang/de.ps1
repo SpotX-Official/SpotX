@@ -36,7 +36,7 @@
     DowngradeNote   = "Es wird empfohlen, Updates zu blockieren, da Spotify herabgestuft wurde"
     UpdBlock        = "Spotify-Updates blockiert"
     UpdUnblock      = "Spotify-Updates sind nicht blockiert"
-    UpdSelect       = "Möchten sie Spotify-Updates blockieren? [Y/N]"
+    UpdSelect       = "Möchten Sie Spotify-Updates blockieren? [Y/N]"
     CacheOn         = "Automatische Cache-Bereinigung ist aktiviert ({0})"
     CacheOff        = "Automatische Cache-Bereinigung ist deaktiviert"
     CacheSelect     = "Möchten Sie die automatische Cache-Bereinigung aktivieren? [Y/N]"

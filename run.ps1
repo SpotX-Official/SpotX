@@ -592,20 +592,24 @@ $hostsFilePath = Join-Path $Env:windir 'System32\Drivers\Etc\hosts'
 $hostsBackupFilePath = Join-Path $Env:windir 'System32\Drivers\Etc\hosts.bak'
 
 if (Test-Path -Path $hostsFilePath) {
-    $hosts = Get-Content -Path $hostsFilePath
 
-    if ($hosts -match '^[^\#|].+scdn.+|^[^\#|].+spotify.+') {
+    $hosts = [System.IO.File]::ReadAllLines($hostsFilePath)
+    $regex = "^(?!#|\|)((?:.*?(?:download|upgrade)\.scdn\.co|.*?spotify).*)"
+
+    if ($hosts -match $regex) {
+
         Write-Host ($lang).HostInfo
         Write-Host ($lang).HostBak
 
         Copy-Item -Path $hostsFilePath -Destination $hostsBackupFilePath -ErrorAction SilentlyContinue
 
         if ($?) {
+
             Write-Host ($lang).HostDel
+
             try {
-                $hosts = $hosts -replace '^[^\#|].+scdn.+|^[^\#|].+spotify.+', ''
-                $hosts = $hosts | Where-Object { $_.trim() -ne "" }
-                Set-Content -Path $hostsFilePath -Value $hosts -Force
+                $hosts = $hosts | Where-Object { $_ -notmatch $regex }
+                [System.IO.File]::WriteAllLines($hostsFilePath, $hosts)
             }
             catch {
                 Write-Host ($lang).HostError -ForegroundColor Red

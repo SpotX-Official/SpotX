@@ -598,8 +598,8 @@ if (Test-Path -Path $hostsFilePath) {
 
     if ($hosts -match $regex) {
 
-        Write-Host ($lang).HostInfo
-        Write-Host ($lang).HostBak
+        Write-Host ($lang).HostInfo`n
+        Write-Host ($lang).HostBak`n
 
         Copy-Item -Path $hostsFilePath -Destination $hostsBackupFilePath -ErrorAction SilentlyContinue
 
@@ -612,9 +612,9 @@ if (Test-Path -Path $hostsFilePath) {
                 [System.IO.File]::WriteAllLines($hostsFilePath, $hosts)
             }
             catch {
-                Write-Host ($lang).HostError -ForegroundColor Red
+                Write-Host ($lang).HostError`n -ForegroundColor Red
                 $copyError = $Error[0]
-                Write-Host "Error: $($copyError.Exception.Message)" -ForegroundColor Red
+                Write-Host "Error: $($copyError.Exception.Message)`n" -ForegroundColor Red
             }
         }
         else {

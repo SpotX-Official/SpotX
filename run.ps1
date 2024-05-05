@@ -553,7 +553,38 @@ function DesktopFolder {
     return $desktop_folder
 }
 
-taskkill /f /im Spotify.exe /t > $null 2>&1
+function Kill-Spotify {
+    param (
+        [int]$maxAttempts = 5
+    )
+
+    for ($attempt = 1; $attempt -le $maxAttempts; $attempt++) {
+        $allProcesses = Get-Process -ErrorAction SilentlyContinue
+
+        $spotifyProcesses = $allProcesses | Where-Object { $_.ProcessName -like "*spotify*" }
+
+        if ($spotifyProcesses) {
+            foreach ($process in $spotifyProcesses) {
+                try {
+                    Stop-Process -Id $process.Id -Force
+                }
+                catch {
+                    # Ignore NoSuchProcess exception
+                }
+            }
+            Start-Sleep -Seconds 1
+        }
+        else {
+            break
+        }
+    }
+
+    if ($attempt -gt $maxAttempts) {
+        Write-Host "The maximum number of attempts to terminate a process has been reached."
+    }
+}
+
+Kill-Spotify
 
 # Remove Spotify Windows Store If Any
 if ($win10 -or $win11 -or $win8_1 -or $win8 -or $win12) {
@@ -822,7 +853,7 @@ if (-not $spotifyInstalled -or $upgrade_client) {
     
     # Delete old version files of Spotify before installing, leave only profile files
     $ErrorActionPreference = 'SilentlyContinue'
-    taskkill /f /im Spotify.exe /t > $null 2>&1
+    Kill-Spotify
     Start-Sleep -Milliseconds 600
     $null = Unlock-Folder 
     Start-Sleep -Milliseconds 200
@@ -839,8 +870,7 @@ if (-not $spotifyInstalled -or $upgrade_client) {
     Start-Process -FilePath explorer.exe -ArgumentList $PWD\SpotifySetup.exe
     while (-not (get-process | Where-Object { $_.ProcessName -eq 'SpotifySetup' })) {}
     wait-process -name SpotifySetup
-    taskkill /f /im Spotify.exe /t > $null 2>&1
-
+    Kill-Spotify
 
     # Upgrade check version Spotify offline
     $offline = (Get-Item $spotifyExecutable).VersionInfo.FileVersion

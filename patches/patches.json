@@ -1658,7 +1658,7 @@
             },
             "match": [
                 "(onSelected:).{3,14}({..\"app.enable.developer.mode.,).\\)(,.\\(!0\\))?}",
-                "{(.{5,20}?|)(this\\.(?:productStateApi|_product_state)(?:|_service)=(.))(?=}|,this.productStateApi|,this._events|,.\\?\\.putOverridesValues)",
+                "{(.{5,20}?|)(this\\.(?:productStateApi|_product_state)(?:|_service)=(.))(?=}|,this\\.productStateApi|,this\\._events|,.\\?\\.putOverridesValues)",
                 "(..\\(.\\)|.)(\\?(..createElement|\\(.{1,7}jsxs\\))\\(.{1,3},{filterMatchQuery:.{2,15}\\(\"settings.employee\"\\))"
             ],
             "replace": [

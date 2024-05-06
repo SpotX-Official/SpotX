@@ -1033,6 +1033,15 @@
                     "fr": "1.2.34",
                     "to": ""
                 }
+            },
+            "Spotlight": {
+                "name": "enableSpotlight",
+                "description": "adds a new section to the main page 'More like on...'",
+                "native_description": "Enables the Spotlight component on home",
+                "version": {
+                    "fr": "1.2.37",
+                    "to": ""
+                }
             }
         },
         "CustomExp": {

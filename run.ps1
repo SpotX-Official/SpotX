@@ -87,7 +87,10 @@ param
     
     [Parameter(HelpMessage = 'Returns old lyrics')]
     [switch]$old_lyrics,
-    
+
+    [Parameter(HelpMessage = 'Disable native lyrics')]
+    [switch]$lyrics_block,
+
     [Parameter(HelpMessage = 'Do not create desktop shortcut.')]
     [switch]$no_shortcut,
 
@@ -1319,6 +1322,9 @@ function Helper($paramname) {
         "VariousofXpui-js" { 
 
             $VarJs = $webjson.VariousJs
+
+            if (!($lyrics_block)) { Remove-Json -j $VarJs -p "lyrics-block" }
+
 
             if (!($devtools)) { Remove-Json -j $VarJs -p "dev-tools" }
 

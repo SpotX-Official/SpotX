@@ -1755,6 +1755,14 @@
             },
             "match": "(getTracksFilterTags.+?(.)=this._builder.build\\(\\)),",
             "replace": "$1;$2.locale = 'en';const "
+        },
+        "lyrics-block": {
+            "version": {
+                "fr": "1.1.70",
+                "to": ""
+            },
+            "match": "(?:\\(?await )?.\\.build.{20,60}encodeURIComponent.{20,140}\"\\/track\\/{trackId}.+?send\\(\\)(?:\\)\\.body)?",
+            "replace": "{}"
         }
     }
 }

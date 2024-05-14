@@ -919,11 +919,11 @@
             },
             "DevicePickerSidePanel": {
                 "name": "enableDevicePickerSidePanel",
-                "description": "Enables Device Picker as a side panel",
+                "description": "Enables Device Picker as a side panel (temporarily disabled until 1.2.36 because it was broken in version 1.2.37)",
                 "native_description": "Enables Device Picker as a side panel",
                 "version": {
                     "fr": "1.2.30",
-                    "to": ""
+                    "to": "1.2.36"
                 }
             },
             "Otfn": {

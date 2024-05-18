@@ -1663,7 +1663,7 @@
         "dev-tools": {
             "version": {
                 "fr": "1.1.98",
-                "to": ""
+                "to": "1.2.37"
             },
             "match": [
                 "(onSelected:).{3,14}({..\"app.enable.developer.mode.,).\\)(,.\\(!0\\))?}",
@@ -1751,7 +1751,7 @@
         "filtertags_locale_fix": {
             "version": {
                 "fr": "1.2.29",
-                "to": ""
+                "to": "1.2.37"
             },
             "match": "(getTracksFilterTags.+?(.)=this._builder.build\\(\\)),",
             "replace": "$1;$2.locale = 'en';const "

@@ -1159,6 +1159,10 @@ function Helper($paramname) {
             if ($enhance_playlist_off) { Remove-Json -j $Enable -p 'EnhancePlaylist' }
             
 
+            if ([version]$offline -eq [version]'1.2.37.701' -or [version]$offline -eq [version]'1.2.38.720' ) { 
+                Move-Json -n 'DevicePickerSidePanel' -t $Enable -f $Disable
+            }
+
             if ($enhanceSongs -and [version]$offline -le [version]'1.2.25.1011') { 
                 Move-Json -n 'SmartShuffle' -t $Enable -f $Disable 
             }

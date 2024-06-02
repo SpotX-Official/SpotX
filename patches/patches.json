@@ -1042,6 +1042,42 @@
                     "fr": "1.2.37",
                     "to": ""
                 }
+            },
+            "SharingButtonOnMiniPlayer": {
+                "name": "enableSharingButtonOnMiniPlayer",
+                "description": "Enables sharing button on MiniPlayer (this also moves the (+) icon close to the title)",
+                "native_description": "Enables sharing button on MiniPlayer (this also moves the (+) icon close to the title)",
+                "version": {
+                    "fr": "1.2.39",
+                    "to": ""
+                }
+            },
+            "PrereleaseRadar": {
+                "name": "enablePrereleaseRadar",
+                "description": "Show a curated list of upcoming albums to a user",
+                "native_description": "Show a curated list of upcoming albums to a user",
+                "version": {
+                    "fr": "1.2.39",
+                    "to": ""
+                }
+            },
+            "PremiumOnlyModal": {
+                "name": "disablePremiumOnlyModal",
+                "description": "Disable the Premium Only Modal",
+                "native_description": "Disable the Premium Only Modal",
+                "version": {
+                    "fr": "1.2.39",
+                    "to": ""
+                }
+            },
+            "CenteredLayout": {
+                "name": "enableCenteredLayout",
+                "description": "Enable centered in 'what's new'",
+                "native_description": "Enable centered layout",
+                "version": {
+                    "fr": "1.2.39",
+                    "to": ""
+                }
             }
         },
         "CustomExp": {
@@ -1152,6 +1188,16 @@
                 "value": "canvas-play-loop",
                 "version": {
                     "fr": "1.2.33",
+                    "to": ""
+                }
+            },
+            "shareButtonPositioning": {
+                "name": "shareButtonPositioning",
+                "description": "Share button positioning in NPV",
+                "native_description": "Share button positioning in NPV",
+                "value": "NPV_ALWAYS_VISIBLE",
+                "version": {
+                    "fr": "1.2.39",
                     "to": ""
                 }
             }

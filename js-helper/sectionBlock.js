@@ -20,6 +20,7 @@ function sectionBlock(e, type) {
             { id: '0JQ5IMCbQBLiqrNCH9VvmA', name: 'ICE PHONK' },
             { id: '0JQ5DAnM3wGh0gz1MXnucG', name: 'Mood' },
             { id: '0JQ5DAob0JCuWaGLU6ntFT', name: 'Mood' },
+            { id: '0JQ5IMCbQBLicmNERjnGn5', name: 'Most Listened 2023' },
             { id: '0JQ5DAob0Jr9ClCbkV4pZD', name: 'Music to game to' },
             { id: '0JQ5DAnM3wGh0gz1MXnu3B', name: 'Popular Albums / Artists' },
             { id: '0JQ5DAnM3wGh0gz1MXnu3D', name: 'Popular new releases' },

@@ -1078,6 +1078,15 @@
                     "fr": "1.2.39",
                     "to": ""
                 }
+            },
+            "AlignedCurationSavedIn": {
+                "name": "enableAlignedCurationSavedIn",
+                "description": "Enables the Saved In section in Aligned Curation",
+                "native_description": "Enables the Saved In section in Aligned Curation",
+                "version": {
+                    "fr": "1.2.40",
+                    "to": ""
+                }
             }
         },
         "CustomExp": {
@@ -1701,7 +1710,7 @@
                 "fr": "1.1.93",
                 "to": ""
             },
-            "match": "(this\\.(?:productStateApi|_product_state)(?:|_service)=(.))(?=}|,this\\.productStateApi|,this\\._events)",
+            "match": "(this\\.(?:productStateApi|_product_state)(?:|_service)=(.))(?=}|(?:,this\\.cache=.)?,this\\.productStateApi|,this\\._events)",
             "replace": "$1,$2?.putOverridesValues?.({0})",
             "add": "ads:'0',catalogue:'premium',product:'premium',type:'premium',name:'Spotify','unrestricted':'1'",
             "add2": "'storage-size-config':'{0},90,500,3'"

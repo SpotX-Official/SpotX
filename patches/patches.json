@@ -446,6 +446,24 @@
                     "fr": "1.2.37",
                     "to": ""
                 }
+            },
+            "EnhanceLikedSongs": {
+                "name": "enableEnhanceLikedSongs",
+                "description": "disabled on the server side",
+                "native_description": "Enable Enhance Liked Songs UI and functionality",
+                "version": {
+                    "fr": "1.1.86",
+                    "to": "1.2.25"
+                }
+            },
+            "EnhancePlaylist": {
+                "name": "enableEnhancePlaylistProd",
+                "description": "disabled on the server side",
+                "native_description": "Enable Enhance Playlist UI and functionality for end-users",
+                "version": {
+                    "fr": "1.1.84",
+                    "to": "1.2.25"
+                }
             }
         },
         "EnableExp": {
@@ -465,24 +483,6 @@
                 "version": {
                     "fr": "1.1.88",
                     "to": "1.2.24"
-                }
-            },
-            "EnhanceLikedSongs": {
-                "name": "enableEnhanceLikedSongs",
-                "description": "Enable Enhance Liked Songs UI and functionality",
-                "native_description": "Enable Enhance Liked Songs UI and functionality",
-                "version": {
-                    "fr": "1.1.86",
-                    "to": "1.2.25"
-                }
-            },
-            "EnhancePlaylist": {
-                "name": "enableEnhancePlaylistProd",
-                "description": "Enable Enhance Playlist UI and functionality for end-users",
-                "native_description": "Enable Enhance Playlist UI and functionality for end-users",
-                "version": {
-                    "fr": "1.1.84",
-                    "to": "1.2.25"
                 }
             },
             "IgnoreInRecommendations": {
@@ -1806,10 +1806,10 @@
         "filtertags_locale_fix": {
             "version": {
                 "fr": "1.2.29",
-                "to": "1.2.37"
+                "to": ""
             },
-            "match": "(getTracksFilterTags.+?(.)=this._builder.build\\(\\)),",
-            "replace": "$1;$2.locale = 'en';const "
+            "match": "(withPath\\(\"\/liked-songs\"\\))",
+            "replace": "$1.withLocale(\"en\")"
         },
         "lyrics-block": {
             "version": {

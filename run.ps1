@@ -360,7 +360,7 @@ if (!($version -and $version -match $match_v)) {
     }
     else {  
         # Recommended version for Win 10-12
-        $onlineFull = "1.2.40.599.g606b7f29-1500"
+        $onlineFull = "1.2.41.434.g39a25e2c-2490"
     }
 }
 else {
@@ -1149,6 +1149,8 @@ function Helper($paramname) {
             if ([version]$offline -eq [version]'1.2.37.701' -or [version]$offline -eq [version]'1.2.38.720' ) { 
                 Move-Json -n 'DevicePickerSidePanel' -t $Enable -f $Disable
             }
+
+            if ([version]$offline -ge [version]'1.2.41.434' -and $lyrics_block) { Move-Json -n 'Lyrics' -t $Enable -f $Disable } 
 
             if ([version]$offline -eq [version]'1.2.30.1135') { Move-Json -n 'QueueOnRightPanel' -t $Enable -f $Disable }
 

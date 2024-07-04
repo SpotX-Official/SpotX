@@ -372,7 +372,7 @@
                 "native_description": "Enable Learning Home Card",
                 "version": {
                     "fr": "1.2.31",
-                    "to": ""
+                    "to": "1.2.40"
                 }
             },
             "BillboardEsperantoMigration": {
@@ -1022,7 +1022,7 @@
                 "native_description": "Enable animations on the left and right on the sidebars and makes the right sidebar collapsible",
                 "version": {
                     "fr": "1.2.34",
-                    "to": ""
+                    "to": "1.2.37"
                 }
             },
             "RightSidebarCollapsible": {
@@ -1031,7 +1031,7 @@
                 "native_description": "Enable the right sidebar to collapse into the right margin",
                 "version": {
                     "fr": "1.2.34",
-                    "to": ""
+                    "to": "1.2.37"
                 }
             },
             "Spotlight": {
@@ -1085,6 +1085,15 @@
                 "native_description": "Enables the Saved In section in Aligned Curation",
                 "version": {
                     "fr": "1.2.40",
+                    "to": ""
+                }
+            },
+            "Lyrics": {
+                "name": "enableLyrics",
+                "description": "Feature flag that controls the availability of the lyrics feature",
+                "native_description": "Feature flag that controls the availability of the lyrics feature",
+                "version": {
+                    "fr": "1.2.41",
                     "to": ""
                 }
             }

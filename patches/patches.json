@@ -1801,8 +1801,8 @@
                 "fr": "1.1.85",
                 "to": "1.2.24"
             },
-            "match": ",(.\\.isOwnedBySelf&&)((\\(.{0,11}\\)|..createElement)\\(.{1,3}Fragment,.+?{(uri:.|).+?contextmenu.create-similar-playlist\"\\)}\\),)",
-            "replace": ",$2$1"
+            "match": "(Fragment,(?:null,|{children:\\[))(?:(?!\\1).)*?contextmenu\\.create-similar-playlist\"\\)}\\),",
+            "replace": "$1"
         },
         "sidebar_fix": {
             "version": {

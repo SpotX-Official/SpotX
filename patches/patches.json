@@ -1801,7 +1801,7 @@
                 "fr": "1.1.85",
                 "to": "1.2.24"
             },
-            "match": "(Fragment,(?:null,|{children:\\[))(?:(?!\\1).)*?contextmenu\\.create-similar-playlist\"\\)}\\),",
+            "match": "(Fragment,(?:null,|{children:\\[))(?:[^}]{1,100}?)contextmenu\\.create-similar-playlist\"\\)}\\),",
             "replace": "$1"
         },
         "sidebar_fix": {

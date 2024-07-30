@@ -102,7 +102,7 @@
                 "native_description": "Enable pick and shuffle",
                 "version": {
                     "fr": "1.1.85",
-                    "to": ""
+                    "to": "1.2.42"
                 }
             },
             "MusicLeavebehinds": {
@@ -463,6 +463,15 @@
                 "version": {
                     "fr": "1.1.84",
                     "to": "1.2.25"
+                }
+            },
+            "enableSurveyAds": {
+                "name": "enableEnhancePlaylistProd",
+                "description": "Enable Spotify Brand Lift (SBL) Surveys in the NPV",
+                "native_description": "Enable Spotify Brand Lift (SBL) Surveys in the NPV",
+                "version": {
+                    "fr": "1.2.43",
+                    "to": ""
                 }
             }
         },
@@ -896,6 +905,24 @@
                 "native_description": "Enable context menu action to ban/unban artists",
                 "version": {
                     "fr": "1.2.27",
+                    "to": "1.2.42"
+                }
+            },
+            "ArtistBans": {
+                "name": "enableArtistBans",
+                "description": "Enable context menu action to ban/unban artists",
+                "native_description": "Enable context menu action to ban/unban artists",
+                "version": {
+                    "fr": "1.2.43",
+                    "to": ""
+                }
+            },
+            "LyricsFullAvailabilityCheck": {
+                "name": "enableLyricsFullAvailabilityCheck",
+                "description": "Enable full availability check before showing the mic button for lyrics",
+                "native_description": "Enable full availability check before showing the mic button for lyrics",
+                "version": {
+                    "fr": "1.2.43",
                     "to": ""
                 }
             },
@@ -1556,11 +1583,9 @@
                 "to": ""
             },
             "match": [
-                "(?:prototype\\.)?bindClient(?:=function)?\\(\\w+\\)\\{",
                 "@\\w+\/gabo[^\"]+"
             ],
             "replace": [
-                "${0}return;",
                 ""
             ]
         },

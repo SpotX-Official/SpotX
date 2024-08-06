@@ -465,8 +465,8 @@
                     "to": "1.2.25"
                 }
             },
-            "enableSurveyAds": {
-                "name": "enableEnhancePlaylistProd",
+            "SurveyAds": {
+                "name": "enableSurveyAds",
                 "description": "Enable Spotify Brand Lift (SBL) Surveys in the NPV",
                 "native_description": "Enable Spotify Brand Lift (SBL) Surveys in the NPV",
                 "version": {

@@ -1845,6 +1845,14 @@
             "match": "(withPath\\(\"\/liked-songs\"\\))",
             "replace": "$1.withLocale(\"en\")"
         },
+        "lyrics-on": {
+            "version": {
+                "fr": "1.1.70",
+                "to": "1.2.35"
+            },
+            "match": "((?:\\(?await )?.\\.build.{20,60}encodeURIComponent.{20,140}\"\/track\/{trackId}.+?)(.send)",
+            "replace": "$1.withHeaders([{key:'spotify-app-version',value:'1.2.43'}])$2"
+        },
         "lyrics-block": {
             "version": {
                 "fr": "1.1.70",

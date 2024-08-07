@@ -1308,6 +1308,9 @@ function Helper($paramname) {
 
             if (!($lyrics_block)) { Remove-Json -j $VarJs -p "lyrics-block" }
 
+            else { 
+                Remove-Json -j $VarJs -p "lyrics-on"
+            }
 
             if (!($devtools)) { Remove-Json -j $VarJs -p "dev-tools" }
 

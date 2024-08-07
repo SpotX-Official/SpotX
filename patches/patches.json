@@ -1786,8 +1786,8 @@
                 "fr": "1.1.70",
                 "to": ""
             },
-            "match": "(864e5<)30",
-            "replace": "$10"
+            "match": "(864e5)<30",
+            "replace": "$1<0"
         },
         "disablelog": {
             "version": {

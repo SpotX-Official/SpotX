@@ -1786,8 +1786,8 @@
                 "fr": "1.1.70",
                 "to": ""
             },
-            "match": "https[0-9a-zA-Z/:@\\d\\.]{0,55}sentry\\.io\/\\d+",
-            "replace": ""
+            "match": "(864e5<)30",
+            "replace": "$10"
         },
         "disablelog": {
             "version": {

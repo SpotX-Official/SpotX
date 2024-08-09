@@ -1,6 +1,6 @@
 {
     "lang": {
-        "version": "1.2.36",
+        "version": "1.2.43",
         "language": "Russian"
     },
     "1": {
@@ -124,12 +124,12 @@
         "replace": "Динамическое управление громкостью для подкастов - активное поддержание оптимального уровня громкости подкаста для четкого и сбалансированного звукового восприятия"
     },
     "31": {
-        "match": "\"Load more\"",
-        "replace": "\"Загрузить еще\""
+        "match": "\"The song you're trying to listen to is not available in HiFi at this time.\"",
+        "replace": "\"Песня, которую вы пытаетесь прослушать, в данный момент недоступна в HiFi.\""
     },
     "32": {
-        "match": "\"Sign up free\"",
-        "replace": "\"Бесплатная регистрация\""
+        "match": "\"Song not available\"",
+        "replace": "\"Песня недоступна\""
     },
     "33": {
         "match": "\"Build .0. is available\"",
@@ -188,8 +188,8 @@
         "replace": "\"Место проведения\""
     },
     "47": {
-        "match": "\"View credits\"",
-        "replace": "\"Показать сведения\""
+        "match": "\"Upcoming Release\"",
+        "replace": "\"Предстоящий релиз\""
     },
     "48": {
         "match": "\"Notifications\"",
@@ -204,8 +204,8 @@
         "replace": "\"У вас нет уведомлений\""
     },
     "51": {
-        "match": "\"Related videos\"",
-        "replace": "\"Похожие видео\""
+        "match": "\"Chapter\"",
+        "replace": "\"Глава\""
     },
     "52": {
         "match": "\"Song\"",
@@ -216,7 +216,11 @@
         "replace": "\"Эпизод\""
     },
     "54": {
-        "match": "\"Chapter\"",
-        "replace": "\"Глава\""
+        "match": "\"Pre-saved\"",
+        "replace": "\"Предварительно сохранено\""
+    },
+    "55": {
+        "match": "\"Pre-save\"",
+        "replace": "\"Предварительное сохранение\""
     }
 }

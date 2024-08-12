@@ -1160,8 +1160,8 @@
                     "to": ""
                 }
             },
-            "enableHomeCarousels": {
-                "name": "HomeCarousels",
+            "HomeCarousels": {
+                "name": "enableHomeCarousels",
                 "description": "Enable carousels on home",
                 "native_description": "Enable carousels on home",
                 "version": {

@@ -473,6 +473,33 @@
                     "fr": "1.2.43",
                     "to": ""
                 }
+            },
+            "EFlag": {
+                "name": "enableEFlag",
+                "description": "Enables the Employee Flag to send to Sentry",
+                "native_description": "Enables the Employee Flag to send to Sentry",
+                "version": {
+                    "fr": "1.2.44",
+                    "to": ""
+                }
+            },
+            "HomeImpressions": {
+                "name": "enableHomeImpressions",
+                "description": "Enable impressions on home for impression economy (some impressions will still be logged with this disabled)",
+                "native_description": "Enable impressions on home for impression economy (some impressions will still be logged with this disabled)",
+                "version": {
+                    "fr": "1.2.44",
+                    "to": ""
+                }
+            },
+            "SearchImpressions": {
+                "name": "enableSearchImpressions",
+                "description": "Enable impressions on search for impression economy",
+                "native_description": "Enable impressions on search for impression economy",
+                "version": {
+                    "fr": "1.2.44",
+                    "to": ""
+                }
             }
         },
         "EnableExp": {
@@ -1076,7 +1103,7 @@
                 "native_description": "Enables sharing button on MiniPlayer (this also moves the (+) icon close to the title)",
                 "version": {
                     "fr": "1.2.39",
-                    "to": ""
+                    "to": "1.2.43"
                 }
             },
             "PrereleaseRadar": {
@@ -1121,6 +1148,24 @@
                 "native_description": "Feature flag that controls the availability of the lyrics feature",
                 "version": {
                     "fr": "1.2.41",
+                    "to": ""
+                }
+            },
+            "SeekWithArrowKeys": {
+                "name": "enableSeekWithArrowKeys",
+                "description": "Enable seeking 5s backward/forward with left/right arrow keys",
+                "native_description": "Enable seeking 5s backward/forward with left/right arrow keys",
+                "version": {
+                    "fr": "1.2.44",
+                    "to": ""
+                }
+            },
+            "enableHomeCarousels": {
+                "name": "HomeCarousels",
+                "description": "Enable carousels on home",
+                "native_description": "Enable carousels on home",
+                "version": {
+                    "fr": "1.2.44",
                     "to": ""
                 }
             }

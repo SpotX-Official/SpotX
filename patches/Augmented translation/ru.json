@@ -1,11 +1,11 @@
 {
     "lang": {
-        "version": "1.2.43",
+        "version": "1.2.44",
         "language": "Russian"
     },
     "1": {
-        "match": "\"Allow to play this artist\"",
-        "replace": "\"Разрешить воспроизведение этого исполнителя\""
+        "match": "\"The Stage Experience\"",
+        "replace": "\"Сценический опыт\""
     },
     "2": {
         "match": "\"Confirm your age\"",
@@ -124,12 +124,12 @@
         "replace": "Динамическое управление громкостью для подкастов - активное поддержание оптимального уровня громкости подкаста для четкого и сбалансированного звукового восприятия"
     },
     "31": {
-        "match": "\"The song you're trying to listen to is not available in HiFi at this time.\"",
-        "replace": "\"Песня, которую вы пытаетесь прослушать, в данный момент недоступна в HiFi.\""
+        "match": "Prerelease Radar",
+        "replace": "Пререлизный радар"
     },
     "32": {
-        "match": "\"Song not available\"",
-        "replace": "\"Песня недоступна\""
+        "match": "\"Your destination for upcoming albums curated for you.\"",
+        "replace": "\"Место назначения для предстоящих альбомов, подобранных специально для вас.\""
     },
     "33": {
         "match": "\"Build .0. is available\"",
@@ -188,8 +188,8 @@
         "replace": "\"Место проведения\""
     },
     "47": {
-        "match": "\"Upcoming Release\"",
-        "replace": "\"Предстоящий релиз\""
+        "match": "\"We couldn't find the venue\"",
+        "replace": "\"Мы не смогли найти место проведения\""
     },
     "48": {
         "match": "\"Notifications\"",
@@ -216,11 +216,27 @@
         "replace": "\"Эпизод\""
     },
     "54": {
-        "match": "\"Pre-saved\"",
-        "replace": "\"Предварительно сохранено\""
+        "match": "\"The venue you requested couldn.t be found, please try again.\"",
+        "replace": "\"Запрошенное вами место проведения не найдено, попробуйте снова.\""
     },
     "55": {
-        "match": "\"Pre-save\"",
-        "replace": "\"Предварительное сохранение\""
+        "match": "\"There was an error fetching the venue.\"",
+        "replace": "\"Произошла ошибка при получении места проведения.\""
+    },
+    "56": {
+        "match": "\"Concerts\"",
+        "replace": "\"Концерты\""
+    },
+    "57": {
+        "match": "\"all times are local to the venue\"",
+        "replace": "\"все время указано по месту проведения\""
+    },
+    "58": {
+        "match": "\"Presale access\"",
+        "replace": "\"Предварительный доступ\""
+    },
+    "59": {
+        "match": "\"We.ve ran out of codes. Visit our ticketing partner for more information\"",
+        "replace": "\"У нас закончились коды. Посетите нашего партнера по продаже билетов для получения дополнительной информации\""
     }
 }

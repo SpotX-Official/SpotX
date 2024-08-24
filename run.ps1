@@ -67,6 +67,9 @@ param
     [Parameter(HelpMessage = 'it`s killing the heart icon, you`re able to save and choose the destination for any song, playlist, or podcast')]
     [switch]$plus,
 
+    [Parameter(HelpMessage = 'Enabled the big cards for home page')]
+    [switch]$canvasHome,
+
     [Parameter(HelpMessage = 'Enable funny progress bar.')]
     [switch]$funnyprogressBar,
 
@@ -360,7 +363,7 @@ if (!($version -and $version -match $match_v)) {
     }
     else {  
         # Recommended version for Win 10-12
-        $onlineFull = "1.2.44.405.g81fd6352-5851"
+        $onlineFull = "1.2.45.451.gac8a666f-7100"
     }
 }
 else {
@@ -1157,11 +1160,15 @@ function Helper($paramname) {
             if (!($plus)) { Move-Json -n "Plus", "AlignedCurationSavedIn" -t $Enable -f $Disable }
 
             if (!($topsearchbar)) { 
-                Move-Json -n "GlobalNavBar" -t $Enable -f $Disable 
+                Move-Json -n "GlobalNavBar", "RecentSearchesDropdown" -t $Enable -f $Disable 
                 $Custom.GlobalNavBar.value = "control"
             }
 
             if (!($funnyprogressbar)) { Move-Json -n 'HeBringsNpb' -t $Enable -f $Disable }
+
+            if (!($canvasHome)) { Move-Json -n "canvasHome", "canvasHomeAudioPreviews" -t $Enable -f $Disable }
+
+            
 
             # disable subfeed filter chips on home
             if ($homesub_off) { 
@@ -1309,7 +1316,7 @@ function Helper($paramname) {
             if (!($lyrics_block)) { Remove-Json -j $VarJs -p "lyrics-block" }
 
             else { 
-                Remove-Json -j $VarJs -p "lyrics-on"
+                Remove-Json -j $VarJs -p "lyrics-old-on"
             }
 
             if (!($devtools)) { Remove-Json -j $VarJs -p "dev-tools" }

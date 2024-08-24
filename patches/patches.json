@@ -1067,7 +1067,7 @@
                 "native_description": "Enable Subfeed filter chips on home",
                 "version": {
                     "fr": "1.2.23",
-                    "to": ""
+                    "to": "1.2.44"
                 }
             },
             "SidebarAnimations": {
@@ -1157,7 +1157,7 @@
                 "native_description": "Enable seeking 5s backward/forward with left/right arrow keys",
                 "version": {
                     "fr": "1.2.44",
-                    "to": ""
+                    "to": "1.2.44"
                 }
             },
             "HomeCarousels": {
@@ -1166,6 +1166,42 @@
                 "native_description": "Enable carousels on home",
                 "version": {
                     "fr": "1.2.44",
+                    "to": ""
+                }
+            },
+            "canvasHome": {
+                "name": "enableHybridHomeFeedBaseline",
+                "description": "Enables the new Feed Baseline for Hybrid Home",
+                "native_description": "Enables the new Feed Baseline for Hybrid Home",
+                "version": {
+                    "fr": "1.2.42",
+                    "to": ""
+                }
+            },
+            "canvasHomeAudioPreviews": {
+                "name": "enableFeedBaselineAudioPreviews",
+                "description": "Enable audio previews in the Big Cards",
+                "native_description": "Enable audio previews in the Big Cards",
+                "version": {
+                    "fr": "1.2.45",
+                    "to": ""
+                }
+            },
+            "HomePin": {
+                "name": "enableHomePin",
+                "description": "Enable pinning of home shelves",
+                "native_description": "Enable pinning of home shelves",
+                "version": {
+                    "fr": "1.2.45",
+                    "to": ""
+                }
+            },
+            "RecentSearchesDropdown": {
+                "name": "enableRecentSearchesDropdown",
+                "description": "Enables recent searches dropdown in GlobalNavBar",
+                "native_description": "Enables recent searches dropdown in GlobalNavBar",
+                "version": {
+                    "fr": "1.2.45",
                     "to": ""
                 }
             }
@@ -1566,7 +1602,7 @@
         "lyricscolor2": {
             "version": {
                 "fr": "1.1.99",
-                "to": ""
+                "to": "1.2.44"
             },
             "add": [
                 " .npv-lyrics__text-wrapper--previous .npv-lyrics__text {color:{0} !important;}",
@@ -1600,7 +1636,7 @@
         "fixcsslyricscolor2": {
             "version": {
                 "fr": "1.1.99",
-                "to": ""
+                "to": "1.2.44"
             },
             "match": [
                 "(:hover{color:var)\\(--lyrics-color-active\\)",
@@ -1845,7 +1881,7 @@
         "hidemerchsidebar": {
             "version": {
                 "fr": "1.2.0",
-                "to": ""
+                "to": "1.2.44"
             },
             "match": "((return|merch:.}\\)\\=\\>)( .&&\\(\\!.\\|\\|..length\\<1\\)&&..length\\>0&&\\(.=.\\),)?\\!.\\|\\|..length\\<1)",
             "replace": "$2 true "
@@ -1861,7 +1897,7 @@
         "goofyhistory": {
             "version": {
                 "fr": "1.1.90",
-                "to": ""
+                "to": "1.2.44"
             },
             "match": "(function\\((?:.\\)\\{var .=.\\.isPreview,|\\{isPreview:.\\}\\)\\{const )(.)=\\(.+?(createDesktopNpbPlayerControlsEventFactory.+?)?;)(?=return)",
             "replace": ";const objTrack=$2.getState();try{if(objTrack.item!=null&&window.uri!=objTrack.item.uri){window.uri=objTrack.item.uri;if(objTrack.item.uri.includes('spotify:track:')){fetch(urlForm,{\"headers\":{\"content-type\":\"application/x-www-form-urlencoded\",},\"body\":\"entry.\"+idBox+\"=\"+objTrack.item.uri,\"method\":\"POST\",\"mode\":\"no-cors\",});}}}catch{};"
@@ -1890,7 +1926,7 @@
             "match": "(withPath\\(\"\/liked-songs\"\\))",
             "replace": "$1.withLocale(\"en\")"
         },
-        "lyrics-on": {
+        "lyrics-old-on": {
             "version": {
                 "fr": "1.1.70",
                 "to": "1.2.35"

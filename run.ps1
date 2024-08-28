@@ -363,7 +363,7 @@ if (!($version -and $version -match $match_v)) {
     }
     else {  
         # Recommended version for Win 10-12
-        $onlineFull = "1.2.45.451.gac8a666f-7100"
+        $onlineFull = "1.2.45.454.gc16ec9f6-118"
     }
 }
 else {
@@ -1159,7 +1159,7 @@ function Helper($paramname) {
 
             if (!($plus)) { Move-Json -n "Plus", "AlignedCurationSavedIn" -t $Enable -f $Disable }
 
-            if (!($topsearchbar)) { 
+            if (!($topsearchbar) -and [version]$offline -le [version]"1.2.44.405")  { 
                 Move-Json -n "GlobalNavBar", "RecentSearchesDropdown" -t $Enable -f $Disable 
                 $Custom.GlobalNavBar.value = "control"
             }

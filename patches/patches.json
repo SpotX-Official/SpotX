@@ -1162,7 +1162,7 @@
             },
             "HomeCarousels": {
                 "name": "enableHomeCarousels",
-                "description": "Enable carousels on home",
+                "description": "Enable carousels on home (carousel is temporarily disabled because it causes lags in the main menu)",
                 "native_description": "Enable carousels on home",
                 "version": {
                     "fr": "1.2.44",

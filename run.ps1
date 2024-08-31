@@ -1149,6 +1149,9 @@ function Helper($paramname) {
             $Disable = $webjson.others.DisableExp
             $Custom = $webjson.others.CustomExp
 
+            # carousel is temporarily disabled because it causes lags in the main menu
+            Move-Json -n 'HomeCarousels' -t $Enable -f $Disable
+
             if ([version]$offline -eq [version]'1.2.37.701' -or [version]$offline -eq [version]'1.2.38.720' ) { 
                 Move-Json -n 'DevicePickerSidePanel' -t $Enable -f $Disable
             }
@@ -1159,7 +1162,7 @@ function Helper($paramname) {
 
             if (!($plus)) { Move-Json -n "Plus", "AlignedCurationSavedIn" -t $Enable -f $Disable }
 
-            if (!($topsearchbar) -and [version]$offline -le [version]"1.2.44.405")  { 
+            if (!($topsearchbar) -and [version]$offline -le [version]"1.2.44.405") { 
                 Move-Json -n "GlobalNavBar", "RecentSearchesDropdown" -t $Enable -f $Disable 
                 $Custom.GlobalNavBar.value = "control"
             }
@@ -1752,7 +1755,7 @@ If ($test_spa) {
         }
     }
     # Full screen lyrics
-    if ($lyrics_stat -and [version]$offline -ge [version]"1.2.3.1107") {
+    if ($lyrics_stat -and [version]$offline -ge [version]"1.2.3.1107" -and [version]$offline -le [version]"1.2.44.405") {
         $css += $webjson.others.lyricscolor2.add[3]
     }
     if ($null -ne $css ) { extract -counts 'one' -method 'zip' -name 'xpui.css' -add $css }

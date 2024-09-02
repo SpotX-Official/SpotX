@@ -1941,6 +1941,14 @@
             },
             "match": "(?:\\(?await )?.\\.build.{20,60}encodeURIComponent.{20,140}\"\\/track\\/{trackId}.+?send\\(\\)(?:\\)\\.body)?",
             "replace": "{}"
+        },
+        "fixTitlebarHeight": {
+            "version": {
+                "fr": "1.2.45",
+                "to": ""
+            },
+            "match": "(\"update_titlebar\",height:).",
+            "replace": "$140"
         }
     }
 }

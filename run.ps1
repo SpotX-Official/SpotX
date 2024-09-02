@@ -1162,7 +1162,7 @@ function Helper($paramname) {
 
             if (!($plus)) { Move-Json -n "Plus", "AlignedCurationSavedIn" -t $Enable -f $Disable }
 
-            if (!($topsearchbar) -and [version]$offline -le [version]"1.2.44.405") { 
+            if (!($topsearchbar)) { 
                 Move-Json -n "GlobalNavBar", "RecentSearchesDropdown" -t $Enable -f $Disable 
                 $Custom.GlobalNavBar.value = "control"
             }
@@ -1315,6 +1315,11 @@ function Helper($paramname) {
         "VariousofXpui-js" { 
 
             $VarJs = $webjson.VariousJs
+
+
+            if ($topsearchbar) { 
+                Remove-Json -j $VarJs -p "fixTitlebarHeight"
+            }
 
             if (!($lyrics_block)) { Remove-Json -j $VarJs -p "lyrics-block" }
 

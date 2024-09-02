@@ -292,18 +292,24 @@ if ($psv -ge 7) {
 # add Tls12
 [Net.ServicePointManager]::SecurityProtocol = 3072
 
+function Get-Link {
+    param (
+        [Alias("e")]
+        [string]$endlink
+    )
+
+    switch ($mirror) {
+        $true { return "https://spotx-official.github.io/SpotX" + $endlink }
+        default { return "https://raw.githubusercontent.com/SpotX-Official/SpotX/main" + $endlink }
+    }
+}
 
 function CallLang($clg) {
 
-    $urlLang = switch ($mirror) {
-        $true { "https://spotx-official.github.io/SpotX/scripts/installer-lang/$clg.ps1" }
-        default { "https://raw.githubusercontent.com/SpotX-Official/SpotX/main/scripts/installer-lang/$clg.ps1" }
-    }
-    
     $ProgressPreference = 'SilentlyContinue'
     
     try {
-        $response = (iwr -Uri $urlLang -UseBasicParsing).Content
+        $response = (iwr -Uri (Get-Link -e "/scripts/installer-lang/$clg.ps1") -UseBasicParsing).Content
         if ($mirror) { $response = [System.Text.Encoding]::UTF8.GetString($response) }
         Invoke-Expression $response
     }
@@ -892,12 +898,7 @@ $ch = $null
 # updated Russian translation
 if ($langCode -eq 'ru' -and [version]$offline -ge [version]"1.1.92.644") { 
     
-    $urlru = switch ($mirror) {
-        $true { "https://spotx-official.github.io/SpotX/patches/Augmented%20translation/ru.json" }
-        default { "https://raw.githubusercontent.com/SpotX-Official/SpotX/main/patches/Augmented%20translation/ru.json" }
-    }
-
-    $webjsonru = Get -Url $urlru
+    $webjsonru = Get -Url (Get-Link -e "/patches/Augmented%20translation/ru.json")
 
     if ($webjsonru -ne $null) {
 
@@ -965,13 +966,7 @@ if ($ch -eq 'n') {
 
 $ch = $null
 
-
-$url = switch ($mirror) {
-    $true { "https://spotx-official.github.io/SpotX/patches/patches.json" }
-    default { "https://raw.githubusercontent.com/SpotX-Official/SpotX/main/patches/patches.json" }
-}
-
-$webjson = Get -Url $url -RetrySeconds 5
+$webjson = Get -Url (Get-Link -e "/patches/patches.json") -RetrySeconds 5
         
 if ($webjson -eq $null) { 
     Write-Host
@@ -1350,7 +1345,7 @@ function Helper($paramname) {
             }
 
             if ($urlform_goofy -and $idbox_goofy) {
-                $webjson.VariousJs.goofyhistory.replace = "`$1 const urlForm=" + '"' + $urlform_goofy + '"' + ";const idBox=" + '"' + $idbox_goofy + '"' + $webjson.VariousJs.goofyhistory.replace
+                $webjson.VariousJs.goofyhistory.replace = $webjson.VariousJs.goofyhistory.replace -f "`"$urlform_goofy`"", "`"$idbox_goofy`""
             }
             else { Remove-Json -j $VarJs -p "goofyhistory" }
             
@@ -1680,16 +1675,11 @@ If ($test_spa) {
 
     # Forced exp
     extract -counts 'one' -method 'zip' -name 'xpui.js' -helper 'ForcedExp' -add $webjson.others.byspotx.add
-    
 
     # Hiding Ad-like sections or turn off podcasts from the homepage
     if ($podcast_off -or $adsections_off) {
 
-        $url = switch ($mirror) {
-            $true { "https://spotx-official.github.io/SpotX/js-helper/sectionBlock.js" }
-            default { "https://raw.githubusercontent.com/SpotX-Official/SpotX/main/js-helper/sectionBlock.js" }
-        }
-        $section = Get -Url $url
+        $section = Get -Url (Get-Link -e "/js-helper/sectionBlock.js")
         
         if ($section -ne $null) {
 
@@ -1699,7 +1689,17 @@ If ($test_spa) {
             $podcast_off, $adsections_off = $false
         }
     }
+	
+    # goofy History
+    if ($urlform_goofy -and $idbox_goofy) {
 
+        $goofy = Get -Url (Get-Link -e "/js-helper/goofyHistory.js")
+        
+        if ($goofy -ne $null) {
+
+            injection -p $xpui_spa_patch -f "spotx-helper" -n "goofyHistory.js" -c $goofy
+        }
+    }
 
     extract -counts 'one' -method 'zip' -name 'xpui.js' -helper 'VariousofXpui-js' 
 

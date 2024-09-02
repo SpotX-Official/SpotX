@@ -1,6 +1,6 @@
 const unique = new Set();
 
-function Gofy_history(e, urlForm, idBox) {
+function goofyHistory(e, urlForm, idBox) {
 
     const uri = e?.item?.uri;
 

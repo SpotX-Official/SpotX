@@ -1948,7 +1948,7 @@
                 "to": ""
             },
             "match": "(\"update_titlebar\",height:).",
-            "replace": "$140"
+            "replace": "$1'40'"
         }
     }
 }

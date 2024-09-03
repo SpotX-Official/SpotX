@@ -1,5 +1,18 @@
 function sectionBlock(e, type) {
 
+
+// block subfeeds
+    if (type === "podcast" || type === "all") {
+        const style = document.createElement("style");
+        style.innerHTML = `
+            .cj6vRk3nFAi80HSVqX91, 
+            .zbU90jX5VWUhVlpUda7B {
+                display: none !important;
+            }
+        `;
+        document.body.appendChild(style);
+    }
+
     const body = e?.data?.home;
     const sections = body?.sectionContainer?.sections?.items;
 

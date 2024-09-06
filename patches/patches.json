@@ -680,7 +680,7 @@
                 "native_description": "Enable Whats new feed in the main view",
                 "version": {
                     "fr": "1.2.17",
-                    "to": ""
+                    "to": "1.2.45"
                 }
             },
             "RightSidebarArtistEnhanced": {
@@ -905,7 +905,7 @@
                 "native_description": "Increase max number of shortcuts on home to 8",
                 "version": {
                     "fr": "1.2.26",
-                    "to": ""
+                    "to": "1.2.45"
                 }
             },
             "NPVCredits": {
@@ -973,11 +973,11 @@
             },
             "DevicePickerSidePanel": {
                 "name": "enableDevicePickerSidePanel",
-                "description": "Enables Device Picker as a side panel (temporarily disabled until 1.2.36 because it was broken in version 1.2.37)",
+                "description": "Enables Device Picker as a side panel",
                 "native_description": "Enables Device Picker as a side panel",
                 "version": {
                     "fr": "1.2.30",
-                    "to": ""
+                    "to": "1.2.45"
                 }
             },
             "Otfn": {
@@ -1112,7 +1112,7 @@
                 "native_description": "Show a curated list of upcoming albums to a user",
                 "version": {
                     "fr": "1.2.39",
-                    "to": ""
+                    "to": "1.2.45"
                 }
             },
             "PremiumOnlyModal": {
@@ -1294,7 +1294,7 @@
                 "value": "home-next-to-search",
                 "version": {
                     "fr": "1.2.30",
-                    "to": ""
+                    "to": "1.2.45"
                 }
             },
             "VideosPremiumUpsell": {
@@ -1851,7 +1851,7 @@
                 "fr": "1.1.86",
                 "to": ""
             },
-            "match": "(case 6:|const .=await .\\(.,.\\);)((return .\\.abrupt\\(\"|return[ \"],?)(null!=n&&|return\",)?(.)(\\);case 9|\\??.errors\\?Promise.reject.+?errors\\):.))",
+            "match": "(case 6:|const .=await .\\([^\\)]*\\);)((return .\\.abrupt\\(\"|return[ \"],?)(null!=n&&|return\",)?(.)(\\);case 9|\\??.errors\\?Promise.reject.+?errors\\):.))",
             "replace": "$1sectionBlock($5,\"{0}\");$2"
         },
         "banner_home": {
@@ -1945,7 +1945,7 @@
         "fixTitlebarHeight": {
             "version": {
                 "fr": "1.2.45",
-                "to": ""
+                "to": "1.2.45"
             },
             "match": "(\"update_titlebar\",height:).",
             "replace": "$1'40'"

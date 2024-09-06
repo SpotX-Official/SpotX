@@ -369,7 +369,7 @@ if (!($version -and $version -match $match_v)) {
     }
     else {  
         # Recommended version for Win 10-12
-        $onlineFull = "1.2.45.454.gc16ec9f6-118"
+        $onlineFull = "1.2.46.462.gf57913e0-290"
     }
 }
 else {
@@ -1149,6 +1149,7 @@ function Helper($paramname) {
  
             if ($podcasts_off) { Move-Json -n 'HomePin' -t $Enable -f $Disable }
 
+            # disabled broken panel from 1.2.37 to 1.2.38
             if ([version]$offline -eq [version]'1.2.37.701' -or [version]$offline -eq [version]'1.2.38.720' ) { 
                 Move-Json -n 'DevicePickerSidePanel' -t $Enable -f $Disable
             }
@@ -1159,8 +1160,8 @@ function Helper($paramname) {
 
             if (!($plus)) { Move-Json -n "Plus", "AlignedCurationSavedIn" -t $Enable -f $Disable }
 
-            if (!($topsearchbar)) { 
-                Move-Json -n "GlobalNavBar", "RecentSearchesDropdown" -t $Enable -f $Disable 
+            if (!$topsearchbar -or [version]$offline -ge [version]"1.2.46.462") {
+                Move-Json -n "GlobalNavBar" -t $Enable -f $Disable 
                 $Custom.GlobalNavBar.value = "control"
             }
 
@@ -1314,7 +1315,7 @@ function Helper($paramname) {
             $VarJs = $webjson.VariousJs
 
 
-            if ($topsearchbar) { 
+            if ($topsearchbar -or ([version]$offline -ne [version]"1.2.45.451" -and [version]$offline -ne [version]"1.2.45.454")) { 
                 Remove-Json -j $VarJs -p "fixTitlebarHeight"
             }
 

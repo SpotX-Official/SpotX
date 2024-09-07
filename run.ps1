@@ -1147,7 +1147,7 @@ function Helper($paramname) {
             # carousel is temporarily disabled because it causes lags in the main menu
             Move-Json -n 'HomeCarousels' -t $Enable -f $Disable
  
-            if ($podcasts_off) { Move-Json -n 'HomePin' -t $Enable -f $Disable }
+            if ($podcast_off) { Move-Json -n 'HomePin' -t $Enable -f $Disable }
 
             # disabled broken panel from 1.2.37 to 1.2.38
             if ([version]$offline -eq [version]'1.2.37.701' -or [version]$offline -eq [version]'1.2.38.720' ) { 

@@ -1939,7 +1939,7 @@
                 "fr": "1.1.70",
                 "to": ""
             },
-            "match": "(?:\\(?await )?.\\.build.{20,60}encodeURIComponent.{20,140}\"\\/track\\/{trackId}.+?send\\(\\)(?:\\)\\.body)?",
+            "match": "(?:\\(?await )?.\\.build.{20,60}encodeURIComponent.{20,180}\"\\/track\\/{trackId}.+?send\\(\\)(?:\\)\\.body)?",
             "replace": "{}"
         },
         "fixTitlebarHeight": {

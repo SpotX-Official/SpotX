@@ -1,0 +1,95 @@
+@import url('colors.css');
+/* mini lyrics */
+.I2WIloMMjsBeMaIS8H3v,
+.McI3hD7aCfpq015LJa6X {
+    --lyrics-color-active: var(--current) !important;
+    --lyrics-color-inactive: var(--next) !important;
+    --lyrics-color-passed: var(--past) !important;
+    --lyrics-color-background: var(--background) !important;
+}
+
+/* musixmatch */
+p.encore-text.encore-text-body-small,
+p.Type__TypeElement-sc-goli3j-0.ieTwfQ,
+p.Type__TypeElement-goli3j-0 {
+    color: var(--musixmatch) !important;
+}
+
+/* full cinema lyrics */
+.FUYNhisXTCmbzt9IDxnT,
+.tr8V5eHsUaIkOYVw7eSG,
+.hW9km7ku6_iggdWDR_Lg {
+    --lyrics-color-active: var(--current) !important;
+    --lyrics-color-inactive: var(--next) !important;
+    --lyrics-color-passed: var(--past) !important;
+    --lyrics-color-background: var(--background) !important;
+}
+
+/* fix previous lyrics for old versions */
+.H2J92dVdr0ykdOX5azL1 {
+    color: var(--past) !important;
+    opacity: 1 !important;
+}
+
+/* hover */
+.vapgYYF2HMEeLJuOWGq5:hover,
+._LKG3z7SnerR0eigPCoK:hover,
+.NHVfxGs2HwmI_fly2JC4:hover {
+    color: var(--hover) !important;
+}
+
+/* lyrics unsynced */
+.HxblHEsl2WX2yhubfVIc,
+.SruqsAzX8rUtY2isUZDF,
+.AEfhRyqGa3vzQrgfdwWE.Re403AJffPPuZmX7LRJj,
+.NHVfxGs2HwmI_fly2JC4.E64X_eoy6xsJmDdKKHja {
+    color: var(--next) !important;
+}
+
+/* lyrics description */
+.iq4cgi0YEKr6DGaTtzUj,
+.KDhLFoEqoClhH12bsfrS {
+    color: var(--musixmatch) !important;
+}
+
+/* lyrics not available message */
+.C3pBU1DsOUJJOAv89ZFT,
+.T67LFP0PElpfkkLuegQt,
+.e7eFLioNSG5PAi1qVFT4 {
+    color: var(--past) !important;
+}
+
+/* full screen lyrics */
+.npv-lyrics__text-wrapper--previous .npv-lyrics__text {
+    color: var(--past) !important;
+}
+
+.npv-lyrics__text-wrapper--current .npv-lyrics__text {
+    color: var(--current) !important;
+}
+
+.npv-lyrics__text-wrapper--next .npv-lyrics__text {
+    color: var(--next) !important;
+}
+
+.npv-background-color {
+    background: var(--background) !important;
+}
+
+.npv-main-container {
+    background: transparent !important;
+}
+
+.npv-lyrics__gradient-background {
+    background: -webkit-gradient(linear, left top, left bottom, from(rgba(18, 18, 18, 0)), color-stop(30%, rgba(18, 18, 18, 0.6)), color-stop(60%, var(--background))) !important;
+    background: -webkit-linear-gradient(top, rgba(18, 18, 18, 0) 0%, rgba(18, 18, 18, 0.6) 30%, var(--background) 60%) !important;
+    background: linear-gradient(to bottom, rgba(18, 18, 18, 0) 0%, rgba(18, 18, 18, 0.6) 30%, var(--background) 60%) !important;
+}
+
+/* read along podcasts  */
+._nDkCIVgkWayq3tqiIuW,
+.B_wut2Bw4HwLr3w8rNfM {
+    --transcript-color-background: var(--background) !important;
+    --transcript-color-text: var(--next) !important;
+    --transcript-color-highlightText: var(--current) !important;
+}

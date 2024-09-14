@@ -90,7 +90,7 @@ param
 
     [Parameter(HelpMessage = 'Static color for lyrics.')]
     [ArgumentCompleter({ param($cmd, $param, $wordToComplete)
-            [array] $validValues = @('default', 'red', 'orange', 'yellow', 'spotify', 'blue', 'purple', 'strawberry', 'pumpkin', 'sandbar', 'radium', 'oceano', 'royal', 'github', 'discord', 'drot', 'forest', 'fresh', 'zing', 'pinkle', 'krux', 'blueberry', 'postlight', 'relish', 'turquoise')
+            [array] $validValues = @('blue', 'blueberry', 'discord', 'drot', 'default', 'forest', 'fresh', 'github', 'lavender', 'orange', 'postlight', 'pumpkin', 'purple', 'radium', 'relish', 'red', 'sandbar', 'spotify', 'spotify#2', 'strawberry', 'turquoise', 'yellow', 'zing', 'pinkle', 'krux', 'royal', 'oceano')
             $validValues -like "*$wordToComplete*"
         })]
     [string]$lyrics_stat,
@@ -122,40 +122,48 @@ function Format-LanguageCode {
         [string]$LanguageCode
     )
     
-    
     $supportLanguages = @(
-        'en', 'ru', 'it', 'tr', 'ka', 'pl', 'es', 'fr', 'hi', 'pt', 'id', 'vi', 'ro', 'de', 'hu', 'zh', 'zh-TW', 'ko', 'ua', 'fa', 'sr', 'lv', 'bn', 'el', 'fi', 'ja', 'fil', 'sv', 'sk', 'ta', 'cs'
+        'bn', 'cs', 'de', 'el', 'en', 'es', 'fa', 'fi', 'fil', 'fr', 'hi', 'hu', 
+        'id', 'it', 'ja', 'ka', 'ko', 'lv', 'pl', 'pt', 'ro', 'ru', 'sk', 'sr', 
+        'sv', 'ta', 'tr', 'ua', 'vi', 'zh', 'zh-TW'
     )
-    
     
     # Trim the language code down to two letter code.
     switch -Regex ($LanguageCode) {
+        '^bn' {
+            $returnCode = 'bn'
+            break
+        }
+        '^cs' {
+            $returnCode = 'cs'
+            break
+        }
+        '^de' {
+            $returnCode = 'de'
+            break
+        }
+        '^el' {
+            $returnCode = 'el'
+            break
+        }
         '^en' {
             $returnCode = 'en'
             break
         }
-        '^(ru|py)' {
-            $returnCode = 'ru'
-            break
-        }
-        '^it' {
-            $returnCode = 'it'
-            break
-        }
-        '^tr' {
-            $returnCode = 'tr'
-            break
-        }
-        '^ka' {
-            $returnCode = 'ka'
-            break
-        }
-        '^pl' {
-            $returnCode = 'pl'
-            break
-        }
         '^es' {
             $returnCode = 'es'
+            break
+        }
+        '^fa' {
+            $returnCode = 'fa'
+            break
+        }
+        '^fi$' {
+            $returnCode = 'fi'
+            break
+        }
+        '^fil' {
+            $returnCode = 'fil'
             break
         }
         '^fr' {
@@ -166,28 +174,76 @@ function Format-LanguageCode {
             $returnCode = 'hi'
             break
         }
-        '^pt' {
-            $returnCode = 'pt'
+        '^hu' {
+            $returnCode = 'hu'
             break
         }
         '^id' {
             $returnCode = 'id'
             break
         }
-        '^vi' {
-            $returnCode = 'vi'
+        '^it' {
+            $returnCode = 'it'
+            break
+        }
+        '^ja' {
+            $returnCode = 'ja'
+            break
+        }
+        '^ka' {
+            $returnCode = 'ka'
+            break
+        }
+        '^ko' {
+            $returnCode = 'ko'
+            break
+        }
+        '^lv' {
+            $returnCode = 'lv'
+            break
+        }
+        '^pl' {
+            $returnCode = 'pl'
+            break
+        }
+        '^pt' {
+            $returnCode = 'pt'
             break
         }
         '^ro' {
             $returnCode = 'ro'
             break
         }
-        '^de' {
-            $returnCode = 'de'
+        '^(ru|py)' {
+            $returnCode = 'ru'
             break
         }
-        '^hu' {
-            $returnCode = 'hu'
+        '^sk' {
+            $returnCode = 'sk'
+            break
+        }
+        '^sr' {
+            $returnCode = 'sr'
+            break
+        }
+        '^sv' {
+            $returnCode = 'sv'
+            break
+        }
+        '^ta' {
+            $returnCode = 'ta'
+            break
+        }
+        '^tr' {
+            $returnCode = 'tr'
+            break
+        }
+        '^ua' {
+            $returnCode = 'ua'
+            break
+        }
+        '^vi' {
+            $returnCode = 'vi'
             break
         }
         '^(zh|zh-CN)$' {
@@ -196,63 +252,6 @@ function Format-LanguageCode {
         }
         '^zh-TW' {
             $returnCode = 'zh-TW'
-            break
-        }
-        '^ko' {
-            $returnCode = 'ko'
-            break
-        }
-        '^ua' {
-            $returnCode = 'ua'
-            break
-        }
-        '^fa' {
-            $returnCode = 'fa'
-            break
-        }
-        '^sr' {
-            $returnCode = 'sr'
-            break
-        }
-        '^lv' {
-            $returnCode = 'lv'
-            break
-        }
-        '^bn' {
-            $returnCode = 'bn'
-            break
-        }
-        '^el' {
-            $returnCode = 'el'
-            break
-        }
-        '^fi$' {
-            $returnCode = 'fi'
-            break
-        }
-        '^ja' {
-            $returnCode = 'ja'
-            break
-        
-        }
-        '^fil' {
-            $returnCode = 'fil'
-            break
-        }
-        '^sv' {
-            $returnCode = 'sv'
-            break
-        }        
-        '^sk' {
-            $returnCode = 'sk'
-            break
-        }
-        '^ta' {
-            $returnCode = 'ta'
-            break
-        }
-        '^cs' {
-            $returnCode = 'cs'
             break
         }
         Default {

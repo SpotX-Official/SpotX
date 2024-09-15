@@ -10,10 +10,26 @@
     --lyrics-color-background: var(--background) !important;
 }
 
-/* musixmatch */
-.LomBcMvfM8AEmZGquAdj,
-.W_EplVEAbZrZURqfLiQC,
-.kGR_hu4tdj9PnUlSPaRL {
+/* lyrics description */
+.ebHsEf.I4K12o0qDoITOLr2AEs0,
+.ebHsEf.OYiGFGZJDIZ4FF4ZTDK2,
+.jKdLzW.LvLs_UgYs7ps5KdoCr0h,
+.bWzOVV._T5UDP2tItG9WGdwO5Yi,
+.hzUuLPdH48AzgQun5NYQ [data-encore-id="type"],
+.hzUuLPdH48AzgQun5NYQ [data-encore-id="text"],
+body .LomBcMvfM8AEmZGquAdj,
+body .W_EplVEAbZrZURqfLiQC,
+body .kGR_hu4tdj9PnUlSPaRL,
+.GML6YUVCeJvRhGznLnqm,
+body .iq4cgi0YEKr6DGaTtzUj,
+body .KDhLFoEqoClhH12bsfrS {
+    color: var(--musixmatch) !important;
+}
+
+/* lyrics not available message */
+.C3pBU1DsOUJJOAv89ZFT,
+.T67LFP0PElpfkkLuegQt,
+.e7eFLioNSG5PAi1qVFT4 {
     color: var(--musixmatch) !important;
 }
 
@@ -52,18 +68,6 @@
     color: var(--next) !important;
 }
 
-/* lyrics description */
-.iq4cgi0YEKr6DGaTtzUj,
-.KDhLFoEqoClhH12bsfrS {
-    color: var(--musixmatch) !important;
-}
-
-/* lyrics not available message */
-.C3pBU1DsOUJJOAv89ZFT,
-.T67LFP0PElpfkkLuegQt,
-.e7eFLioNSG5PAi1qVFT4 {
-    color: var(--musixmatch) !important;
-}
 
 /* full screen lyrics */
 .npv-lyrics__text-wrapper--previous .npv-lyrics__text {
@@ -75,6 +79,15 @@
 }
 
 .npv-lyrics__text-wrapper--next .npv-lyrics__text {
+    color: var(--next) !important;
+}
+
+.npv-lyrics__text.npv-lyrics__text--credits,
+.npv-lyrics__text--unsynced-warning {
+    color: var(--musixmatch) !important;
+}
+
+.npv-lyrics__text--unsynced {
     color: var(--next) !important;
 }
 

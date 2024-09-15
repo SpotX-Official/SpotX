@@ -1110,9 +1110,12 @@ function Helper($paramname) {
 
             if (!($plus)) { Move-Json -n "Plus", "AlignedCurationSavedIn" -t $Enable -f $Disable }
 
-            if (!$topsearchbar -or [version]$offline -ge [version]"1.2.46.462") {
+            if (!$topsearchbar) {
                 Move-Json -n "GlobalNavBar" -t $Enable -f $Disable 
                 $Custom.GlobalNavBar.value = "control"
+                if ([version]$offline -le [version]"1.2.45.454") {
+                    Move-Json -n "RecentSearchesDropdown" -t $Enable -f $Disable 
+                }
             }
 
             if (!($funnyprogressbar)) { Move-Json -n 'HeBringsNpb' -t $Enable -f $Disable }

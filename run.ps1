@@ -477,7 +477,7 @@ function downloadSp() {
     
     try { 
         if ($curl_check) {
-            $stcode = curl.exe -Is -w "%{http_code} \n" -o /dev/null $web_Url --retry 2 --ssl-no-revoke
+            $stcode = curl.exe -Is -w "%{http_code} \n" -o /dev/null -k $web_Url --retry 2 --ssl-no-revoke
             if ($stcode.trim() -ne "200") {
                 Write-Host "Curl error code: $stcode"; throw
             }
@@ -486,7 +486,7 @@ function downloadSp() {
         }
         if (!($curl_check ) -and $null -ne (Get-Module -Name BitsTransfer -ListAvailable)) {
             $ProgressPreference = 'Continue'
-            Start-BitsTransfer -Source  $web_Url -Destination $local_Url  -DisplayName ($lang).Download5 -Description "$online "
+            Start-BitsTransfer -Source  -k $web_Url -Destination $local_Url  -DisplayName ($lang).Download5 -Description "$online "
             return
         }
         if (!($curl_check ) -and $null -eq (Get-Module -Name BitsTransfer -ListAvailable)) {
@@ -505,11 +505,11 @@ function downloadSp() {
         try { 
 
             if ($curl_check) {
-                $stcode = curl.exe -Is -w "%{http_code} \n" -o /dev/null $web_Url --retry 2 --ssl-no-revoke
+                $stcode = curl.exe -Is -w "%{http_code} \n" -o /dev/null -k $web_Url --retry 2 --ssl-no-revoke
                 if ($stcode.trim() -ne "200") {
                     Write-Host "Curl error code: $stcode"; throw
                 }
-                curl.exe -q $web_Url -o $local_Url --progress-bar --retry 3 --ssl-no-revoke
+                curl.exe -q -k $web_Url -o $local_Url --progress-bar --retry 3 --ssl-no-revoke
                 return
             }
             if (!($curl_check ) -and $null -ne (Get-Module -Name BitsTransfer -ListAvailable) -and !($curl_check )) {

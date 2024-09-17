@@ -388,30 +388,41 @@ $online = ($onlineFull -split ".g")[0]
 
 function Get {
     param (
+        [Parameter(Mandatory = $true)]
         [string]$Url,
         [int]$MaxRetries = 3,
-        [int]$RetrySeconds = 3
+        [int]$RetrySeconds = 3,
+        [string]$OutputPath
     )
 
-    $retries = 0
+    $params = @{
+        Uri        = $Url
+        TimeoutSec = 15
+    }
 
-    while ($retries -lt $MaxRetries) {
+    if ($OutputPath) {
+        $params['OutFile'] = $OutputPath
+    }
+
+    for ($i = 0; $i -lt $MaxRetries; $i++) {
         try {
-            return Invoke-RestMethod -Uri $Url
+            $response = Invoke-RestMethod @params
+            return $response
         }
         catch {
-            Write-Warning "Request failed: $_"
-            $retries++
-            Start-Sleep -Seconds $RetrySeconds
+            Write-Warning "Attempt $($i+1) of $MaxRetries failed: $_"
+            if ($i -lt $MaxRetries - 1) {
+                Start-Sleep -Seconds $RetrySeconds
+            }
         }
     }
+
     Write-Host
     Write-Host "ERROR: " -ForegroundColor Red -NoNewline; Write-Host "Failed to retrieve data from $Url" -ForegroundColor White
-    Write-Host 
-
+    Write-Host
     return $null
-
 }
+
 
 function incorrectValue {
 
@@ -1806,6 +1817,12 @@ if ($rexex1 -and $rexex2 -and $rexex3) {
 
 # Binary patch
 extract -counts 'exe' -helper 'Binary'
+
+# fix login for old versions
+if ([version]$offline -ge [version]"1.1.87.612" -and [version]$offline -le [version]"1.2.5.1006") {
+    $login_spa = Join-Path (Join-Path $env:APPDATA 'Spotify\Apps') 'login.spa'
+    Get -Url (Get-Link -e "/res/login.spa") -OutputPath $login_spa
+}
 
 # Start Spotify
 if ($start_spoti) { Start-Process -WorkingDirectory $spotifyDirectory -FilePath $spotifyExecutable }

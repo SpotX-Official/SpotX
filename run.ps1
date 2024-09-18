@@ -45,6 +45,9 @@ param
     
     [Parameter(HelpMessage = 'Installation without ad blocking for premium accounts.')]
     [switch]$premium,
+
+    [Parameter(HelpMessage = 'Disable Spotify autostart on Windows boot.')]
+    [switch]$DisableStartup,
     
     [Parameter(HelpMessage = 'Automatic launch of Spotify after installation is complete.')]
     [switch]$start_spoti,
@@ -1822,6 +1825,15 @@ extract -counts 'exe' -helper 'Binary'
 if ([version]$offline -ge [version]"1.1.87.612" -and [version]$offline -le [version]"1.2.5.1006") {
     $login_spa = Join-Path (Join-Path $env:APPDATA 'Spotify\Apps') 'login.spa'
     Get -Url (Get-Link -e "/res/login.spa") -OutputPath $login_spa
+}
+
+if ($DisableStartup) {
+    $keyPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run"
+    $keyName = "Spotify"
+
+    if (Get-ItemProperty -Path $keyPath -Name $keyName -ErrorAction SilentlyContinue) {
+        Remove-ItemProperty -Path $keyPath -Name $keyName -Force
+    } 
 }
 
 # Start Spotify

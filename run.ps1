@@ -1827,13 +1827,36 @@ if ([version]$offline -ge [version]"1.1.87.612" -and [version]$offline -le [vers
     Get -Url (Get-Link -e "/res/login.spa") -OutputPath $login_spa
 }
 
+# Disable Startup client
 if ($DisableStartup) {
+    $prefsPath = "$env:APPDATA\Spotify\prefs"
     $keyPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run"
     $keyName = "Spotify"
 
+    # delete key in registry
     if (Get-ItemProperty -Path $keyPath -Name $keyName -ErrorAction SilentlyContinue) {
         Remove-ItemProperty -Path $keyPath -Name $keyName -Force
     } 
+
+    # create new prefs
+    if (-not (Test-Path $prefsPath)) {
+        $content = @"
+app.autostart-configured=true
+app.autostart-mode="off"
+"@
+        [System.IO.File]::WriteAllLines($prefsPath, $content, [System.Text.UTF8Encoding]::new($false))
+    }
+    
+    # update prefs
+    else {
+        $content = [System.IO.File]::ReadAllText($prefsPath)
+        if (-not $content.EndsWith("`n")) {
+            $content += "`n"
+        }
+        $content += 'app.autostart-mode="off"'
+        [System.IO.File]::WriteAllText($prefsPath, $content, [System.Text.UTF8Encoding]::new($false))
+    }
+
 }
 
 # Start Spotify

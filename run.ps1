@@ -371,7 +371,7 @@ if (!($version -and $version -match $match_v)) {
     }
     else {  
         # Recommended version for Win 10-12
-        $onlineFull = "1.2.46.462.gf57913e0-290"
+        $onlineFull = "1.2.47.364.gf06e5cee-667"
     }
 }
 else {
@@ -766,10 +766,9 @@ if ($spotifyInstalled) {
             $country = [System.Globalization.RegionInfo]::CurrentRegion.EnglishName
 
             $txt = [IO.File]::ReadAllText($spotifyExecutable)
-            $regex = "(\d+)\.(\d+)\.(\d+)\.(\d+)(\.g[0-9a-f]{8})"
-            $v = $txt | Select-String $regex -AllMatches
-            $ver = $v.Matches.Value[0]
-            if ($ver.Count -gt 1) { $ver = $ver[0] }
+            $regex = "(?<![\w\-])(\d+)\.(\d+)\.(\d+)\.(\d+)(\.g[0-9a-f]{8})(?![\w\-])"
+            $matches = [regex]::Matches($txt, $regex)
+            $ver = $matches[0].Value
 
             $Parameters = @{
                 Uri    = 'https://docs.google.com/forms/d/e/1FAIpQLSegGsAgilgQ8Y36uw-N7zFF6Lh40cXNfyl1ecHPpZcpD8kdHg/formResponse'

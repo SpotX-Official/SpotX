@@ -1274,7 +1274,7 @@
                 "value": "VARIANT",
                 "version": {
                     "fr": "1.2.19",
-                    "to": ""
+                    "to": "1.2.47"
                 }
             },
             "TrackRecommender": {

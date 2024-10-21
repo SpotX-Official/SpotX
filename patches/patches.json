@@ -1204,6 +1204,15 @@
                     "fr": "1.2.45",
                     "to": ""
                 }
+            },
+            "LazyHomeShelvesDWP": {
+                "name": "enableLazyHomeShelvesDWP",
+                "description": "Enable lazy-loading of offscreen shelves on Home",
+                "native_description": "Enable lazy-loading of offscreen shelves on Home",
+                "version": {
+                    "fr": "1.2.49",
+                    "to": ""
+                }
             }
         },
         "CustomExp": {

@@ -93,7 +93,7 @@
                 "native_description": "Enable showing content information messages for episodes",
                 "version": {
                     "fr": "1.1.78",
-                    "to": ""
+                    "to": "1.2.50"
                 }
             },
             "PickShuffle": {
@@ -165,7 +165,7 @@
                 "native_description": "Enable esperanto Migration for Ad Formats",
                 "version": {
                     "fr": "1.2.6",
-                    "to": ""
+                    "to": "1.2.50"
                 }
             },
             "RightSidebarMerchFallback": {
@@ -183,7 +183,7 @@
                 "native_description": "Enable Report action for audiobooks",
                 "version": {
                     "fr": "1.1.97",
-                    "to": ""
+                    "to": "1.2.50"
                 }
             },
             "ReportPodcastShows": {
@@ -210,7 +210,7 @@
                 "native_description": "Enable Report action for audiobook chapters",
                 "version": {
                     "fr": "1.2.12",
-                    "to": ""
+                    "to": "1.2.50"
                 }
             },
             "Dsa": {
@@ -246,7 +246,7 @@
                 "native_description": "Enable showing new ads NPV",
                 "version": {
                     "fr": "1.2.18",
-                    "to": ""
+                    "to": "1.2.50"
                 }
             },
             "NewAdsNpvVideoTakeover": {
@@ -255,7 +255,7 @@
                 "native_description": "Enable redesigned VideoTakeover for new ads NPV",
                 "version": {
                     "fr": "1.2.18",
-                    "to": ""
+                    "to": "1.2.50"
                 }
             },
             "NewAdsNpvColorExtraction": {
@@ -264,7 +264,7 @@
                 "native_description": "Enable CTA card color extraction for new ads NPV",
                 "version": {
                     "fr": "1.2.18",
-                    "to": ""
+                    "to": "1.2.50"
                 }
             },
             "AudiobookAdExclusivity": {
@@ -282,7 +282,7 @@
                 "native_description": "Enable new modal slot to position redesigned new ads NPV VideoTakeover above all areas except RightSidebar and NPB",
                 "version": {
                     "fr": "1.2.22",
-                    "to": ""
+                    "to": "1.2.50"
                 }
             },
             "FraudLoadSignals": {
@@ -318,7 +318,7 @@
                 "native_description": "Enable the podcast ads Now Playing Bar experience, including features like the podcast ad Now Playing Bar hat",
                 "version": {
                     "fr": "1.1.70",
-                    "to": ""
+                    "to": "1.2.50"
                 }
             },
             "podcast-episode": {
@@ -327,7 +327,7 @@
                 "native_description": "Enable the Sponsored By section on the Episode Page with Call to Action cards",
                 "version": {
                     "fr": "1.1.70",
-                    "to": ""
+                    "to": "1.2.50"
                 }
             },
             "podcast-show_page": {
@@ -336,7 +336,7 @@
                 "native_description": "Enable show sponsors section on the Show Page",
                 "version": {
                     "fr": "1.1.70",
-                    "to": ""
+                    "to": "1.2.50"
                 }
             },
             "betamaxAutoSeekToAdPosition": {
@@ -354,7 +354,7 @@
                 "native_description": "Enable sponsored content information for podcasts",
                 "version": {
                     "fr": "1.2.26",
-                    "to": ""
+                    "to": "1.2.50"
                 }
             },
             "HomeAds": {
@@ -399,7 +399,7 @@
                 "native_description": "Enable esperanto Migration for Sponsored Playlist Ad Formats",
                 "version": {
                     "fr": "1.2.32",
-                    "to": ""
+                    "to": "1.2.50"
                 }
             },
             "PipImpressionLogging": {
@@ -435,7 +435,7 @@
                 "native_description": "Enables impression logging for the Artist About section in NPV",
                 "version": {
                     "fr": "1.2.37",
-                    "to": ""
+                    "to": "1.2.50"
                 }
             },
             "SpotlightImpressionLogging": {
@@ -444,7 +444,7 @@
                 "native_description": "Enables impression logging for Spotlight",
                 "version": {
                     "fr": "1.2.37",
-                    "to": ""
+                    "to": "1.2.50"
                 }
             },
             "EnhanceLikedSongs": {
@@ -500,6 +500,15 @@
                     "fr": "1.2.44",
                     "to": ""
                 }
+            },
+            "StageDesktopDebug": {
+                "name": "enableTheStageDesktopDebug",
+                "description": "Enable debug messages for The Stage",
+                "native_description": "Enable debug messages for The Stage",
+                "version": {
+                    "fr": "1.2.50",
+                    "to": ""
+                }
             }
         },
         "EnableExp": {
@@ -527,7 +536,7 @@
                 "native_description": "Enable Ignore In Recommendations for desktop and web",
                 "version": {
                     "fr": "1.1.87",
-                    "to": ""
+                    "to": "1.2.50"
                 }
             },
             "Equalizer": {
@@ -554,7 +563,7 @@
                 "native_description": "Enable Attack on Titan Easter egg turning progress bar red when playing official soundtrack",
                 "version": {
                     "fr": "1.2.6",
-                    "to": ""
+                    "to": "1.2.50"
                 }
             },
             "AlbumReleaseAnniversaries": {
@@ -653,7 +662,7 @@
                 "native_description": "Enable a setting to control if followers and following lists are shown on profile",
                 "version": {
                     "fr": "1.2.1",
-                    "to": ""
+                    "to": "1.2.50"
                 }
             },
             "RightSidebarCredits": {
@@ -689,7 +698,7 @@
                 "native_description": "Enable Artist about V2 section in NPV",
                 "version": {
                     "fr": "1.2.16",
-                    "to": ""
+                    "to": "1.2.50"
                 }
             },
             "NewEntityHeaders": {
@@ -734,7 +743,7 @@
                 "native_description": "Enable Your Library X Enhancements",
                 "version": {
                     "fr": "1.2.18",
-                    "to": ""
+                    "to": "1.2.50"
                 }
             },
             "SmallerLineHeight": {
@@ -779,7 +788,7 @@
                 "native_description": "Enable the cover art modal on the Album page",
                 "version": {
                     "fr": "1.2.13",
-                    "to": ""
+                    "to": "1.2.50"
                 }
             },
             "SmartShuffle": {
@@ -815,7 +824,7 @@
                 "native_description": "he brings you playback progress",
                 "version": {
                     "fr": "1.2.14",
-                    "to": ""
+                    "to": "1.2.50"
                 }
             },
             "AlbumPrerelease": {
@@ -824,7 +833,7 @@
                 "native_description": "Enable album prerelease pages",
                 "version": {
                     "fr": "1.2.18",
-                    "to": ""
+                    "to": "1.2.50"
                 }
             },
             "ButtonAlwaysVisible": {
@@ -878,6 +887,15 @@
                 "native_description": "Enable Aligned Curation",
                 "version": {
                     "fr": "1.2.21",
+                    "to": "1.2.50"
+                }
+            },
+            "AlignedCurationSavedIn": {
+                "name": "enableAlignedCurationSavedIn",
+                "description": "Enables the Saved In section in Aligned Curation",
+                "native_description": "Enables the Saved In section in Aligned Curation",
+                "version": {
+                    "fr": "1.2.40",
                     "to": ""
                 }
             },
@@ -923,7 +941,7 @@
                 "native_description": "Show credits in the right sidebar",
                 "version": {
                     "fr": "1.2.27",
-                    "to": ""
+                    "to": "1.2.50"
                 }
             },
             "BanArtistAction": {
@@ -941,7 +959,7 @@
                 "native_description": "Enable context menu action to ban/unban artists",
                 "version": {
                     "fr": "1.2.43",
-                    "to": ""
+                    "to": "1.2.50"
                 }
             },
             "LyricsFullAvailabilityCheck": {
@@ -1022,7 +1040,7 @@
                 "native_description": "Enable animations for Queue on the right panel",
                 "version": {
                     "fr": "1.2.32",
-                    "to": ""
+                    "to": "1.2.50"
                 }
             },
             "LikedSongsFilterTags": {
@@ -1130,16 +1148,7 @@
                 "native_description": "Enable centered layout",
                 "version": {
                     "fr": "1.2.39",
-                    "to": ""
-                }
-            },
-            "AlignedCurationSavedIn": {
-                "name": "enableAlignedCurationSavedIn",
-                "description": "Enables the Saved In section in Aligned Curation",
-                "native_description": "Enables the Saved In section in Aligned Curation",
-                "version": {
-                    "fr": "1.2.40",
-                    "to": ""
+                    "to": "1.2.50"
                 }
             },
             "Lyrics": {
@@ -1223,7 +1232,7 @@
                 "value": "ENABLED",
                 "version": {
                     "fr": "1.2.21",
-                    "to": ""
+                    "to": "1.2.50"
                 }
             },
             "SocialConnectOnDesktopWebPlayer": {
@@ -1233,7 +1242,7 @@
                 "value": "ENABLED",
                 "version": {
                     "fr": "1.2.21",
-                    "to": ""
+                    "to": "1.2.50"
                 }
             },
             "MandalorianEaster": {
@@ -1333,7 +1342,7 @@
                 "value": "NPV_ALWAYS_VISIBLE",
                 "version": {
                     "fr": "1.2.39",
-                    "to": ""
+                    "to": "1.2.50"
                 }
             }
         },

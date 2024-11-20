@@ -371,7 +371,7 @@ if (!($version -and $version -match $match_v)) {
     }
     else {  
         # Recommended version for Win 10-12 
-        $onlineFull = "1.2.50.335.g5e2860a8-546" 
+        $onlineFull = "1.2.51.345.gcc39d911-63" 
     }
 }
 else {
@@ -1121,7 +1121,11 @@ function Helper($paramname) {
 
             if ([version]$offline -eq [version]'1.2.30.1135') { Move-Json -n 'QueueOnRightPanel' -t $Enable -f $Disable }
 
-            if (!($plus)) { Move-Json -n "Plus", "AlignedCurationSavedIn" -t $Enable -f $Disable }
+            if ([version]$offline -le [version]'1.2.50.335') {
+
+                if (!($plus)) { Move-Json -n "Plus", "AlignedCurationSavedIn" -t $Enable -f $Disable }
+            
+            }
 
             if (!$topsearchbar) {
                 Move-Json -n "GlobalNavBar" -t $Enable -f $Disable 
@@ -1130,8 +1134,11 @@ function Helper($paramname) {
                     Move-Json -n "RecentSearchesDropdown" -t $Enable -f $Disable 
                 }
             }
+            if ([version]$offline -le [version]'1.2.50.335') {
 
-            if (!($funnyprogressbar)) { Move-Json -n 'HeBringsNpb' -t $Enable -f $Disable }
+                if (!($funnyprogressbar)) { Move-Json -n 'HeBringsNpb' -t $Enable -f $Disable }
+            
+            }
 
             if (!($canvasHome)) { Move-Json -n "canvasHome", "canvasHomeAudioPreviews" -t $Enable -f $Disable }
 

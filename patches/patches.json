@@ -506,7 +506,7 @@
                 "description": "Enable debug messages for The Stage",
                 "native_description": "Enable debug messages for The Stage",
                 "version": {
-                    "fr": "1.2.50",
+                    "fr": "1.2.51",
                     "to": ""
                 }
             }

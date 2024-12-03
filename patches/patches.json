@@ -509,6 +509,24 @@
                     "fr": "1.2.51",
                     "to": ""
                 }
+            },
+            "NewAdsNpvCanvasAds": {
+                "name": "enableNewAdsNpvCanvasAds",
+                "description": "Enable Canvas ads for new ads NPV",
+                "native_description": "Enable Canvas ads for new ads NPV",
+                "version": {
+                    "fr": "1.2.28",
+                    "to": "1.2.51"
+                }
+            },
+            "CanvasAds": {
+                "name": "enableCanvasAds",
+                "description": "Enable Canvas for ads",
+                "native_description": "Enable Canvas for ads",
+                "version": {
+                    "fr": "1.2.52",
+                    "to": ""
+                }
             }
         },
         "EnableExp": {
@@ -1221,6 +1239,33 @@
                 "version": {
                     "fr": "1.2.49",
                     "to": ""
+                }
+            },
+            "NearbyJams": {
+                "name": "enableNearbyJams",
+                "description": "Enable the support for Nearby Jams feature in the Device Picker",
+                "native_description": "Enable the support for Nearby Jams feature in the Device Picker",
+                "version": {
+                    "fr": "1.2.52",
+                    "to": ""
+                }
+            },
+            "TrackBans": {
+                "name": "enableContextualTrackBans",
+                "description": "Enable ability to ban/hide tracks from eligible contexts",
+                "native_description": "Enable ability to ban/hide tracks from eligible contexts",
+                "version": {
+                    "fr": "1.2.52",
+                    "to": ""
+                }
+            },
+            "ArtistLikedSongs": {
+                "name": "enableArtistLikedSongs",
+                "description": "Enable Liked Songs section on Artist page",
+                "native_description": "Enable Liked Songs section on Artist page",
+                "version": {
+                    "fr": "1.1.79",
+                    "to": "1.2.17"
                 }
             }
         },

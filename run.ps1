@@ -497,7 +497,7 @@ function downloadSp() {
     }
     else { $arch = $archType["x64"] }
 
-    $web_Url = "https://download.scdn.co/$arch/client/win32-x86/spotify_installer-$onlineFull.exe"
+    $web_Url = "https://download.scdn.co/upgrade/client/$arch/spotify_installer-$onlineFull.exe"
     $local_Url = "$PWD\SpotifySetup.exe" 
     $web_name_file = "SpotifySetup.exe"
 

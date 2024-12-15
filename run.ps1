@@ -482,7 +482,22 @@ function downloadSp() {
 
     Import-Module BitsTransfer
         
-    $web_Url = "https://download.scdn.co/upgrade/client/win32-x86/spotify_installer-$onlineFull.exe"
+    $min_x86 = [Version]"1.2.52"
+
+    $archType = @{
+        "x86" = "win32-x86"
+        "x64" = "win32-x86_64"
+    }
+
+    $versionParts = $onlineFull -split '\.'
+    $short = [Version]"$($versionParts[0]).$($versionParts[1]).$($versionParts[2])"
+
+    if ($short -le $min_x86) {
+        $arch = $archType["x86"]
+    }
+    else { $arch = $archType["x64"] }
+
+    $web_Url = "https://download.scdn.co/$arch/client/win32-x86/spotify_installer-$onlineFull.exe"
     $local_Url = "$PWD\SpotifySetup.exe" 
     $web_name_file = "SpotifySetup.exe"
 

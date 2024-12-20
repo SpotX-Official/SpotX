@@ -228,7 +228,7 @@
                 "native_description": "Enable showing DSA (Digital Services Act) context menu and modal for ads",
                 "version": {
                     "fr": "1.2.20",
-                    "to": ""
+                    "to": "1.2.52"
                 }
             },
             "Dsa3": {
@@ -381,7 +381,7 @@
                 "native_description": "Enable esperanto migration for Billboard Ad Format",
                 "version": {
                     "fr": "1.2.32",
-                    "to": ""
+                    "to": "1.2.52"
                 }
             },
             "LeaderboardEsperantoMigration": {
@@ -525,6 +525,33 @@
                 "native_description": "Enable Canvas for ads",
                 "version": {
                     "fr": "1.2.52",
+                    "to": ""
+                }
+            },
+            "ConnectedStateObserver": {
+                "name": "enableConnectedStateObserver",
+                "description": "Enable observer that logs errors related to connected state and ad info",
+                "native_description": "Enable observer that logs errors related to connected state and ad info",
+                "version": {
+                    "fr": "1.2.53",
+                    "to": ""
+                }
+            },
+            "VideoAdOptimizedColorExtraction": {
+                "name": "enableVideoAdOptimizedColorExtraction",
+                "description": "Enables enhanced companion card color extraction waterfall for video stream ads",
+                "native_description": "Enables enhanced companion card color extraction waterfall for video stream ads",
+                "version": {
+                    "fr": "1.2.53",
+                    "to": ""
+                }
+            },
+            "fixColorLyricsBug": {
+                "name": "enableDynamicColors",
+                "description": "if disabled then it fixes the bug with dynamic colors in lyrics",
+                "native_description": "Enable dynamic colors for the app",
+                "version": {
+                    "fr": "1.2.47",
                     "to": ""
                 }
             }
@@ -1229,7 +1256,7 @@
                 "native_description": "Enables recent searches dropdown in GlobalNavBar",
                 "version": {
                     "fr": "1.2.45",
-                    "to": ""
+                    "to": "1.2.52"
                 }
             },
             "LazyHomeShelvesDWP": {
@@ -1266,6 +1293,42 @@
                 "version": {
                     "fr": "1.1.79",
                     "to": "1.2.17"
+                }
+            },
+            "ConcertsNotInterested": {
+                "name": "enableConcertsNotInterested",
+                "description": "Enable user to set not interested on concerts",
+                "native_description": "Enable user to set not interested on concerts",
+                "version": {
+                    "fr": "1.2.53",
+                    "to": ""
+                }
+            },
+            "GlobalCreateButton": {
+                "name": "enableGlobalCreateButton",
+                "description": "Enable plus button for creating different types of playlists from global nav bar",
+                "native_description": "Enable plus button for creating different types of playlists from global nav bar",
+                "version": {
+                    "fr": "1.2.53",
+                    "to": ""
+                }
+            },
+            "ZoomSettingsUIDesktop": {
+                "name": "enableZoomSettingsUIDesktop",
+                "description": "Enable zoom settings from the settings page on Desktop",
+                "native_description": "Enable zoom settings from the settings page on Desktop",
+                "version": {
+                    "fr": "1.2.53",
+                    "to": ""
+                }
+            },
+            "PeekNpv": {
+                "name": "enablePeekNpv",
+                "description": "Collapse right sidebar",
+                "native_description": "Enable the Peek NPV feature",
+                "version": {
+                    "fr": "1.2.53",
+                    "to": ""
                 }
             }
         },

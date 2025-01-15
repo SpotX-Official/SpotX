@@ -19,10 +19,10 @@ jobs:
 
         # Get a link to the x86 installer for the first version
         $firstVersion = $resp.PSObject.Properties.Name | Select-Object -First 1
-        $x86InstallerUrl = $resp.$firstVersion.links.win.x86
+        $x64InstallerUrl = $resp.$firstVersion.links.win.x64
 
         # Regex to find the desired part of the link
-        $regex = [regex]::Match($x86InstallerUrl, "spotify_installer-(.+?)\.exe")
+        $regex = [regex]::Match($x64InstallerUrl, "spotify_installer-(.+?)\.exe")
         $version = $regex.Groups[1].Value
         
         # Incoming parameters

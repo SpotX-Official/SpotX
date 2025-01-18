@@ -1821,9 +1821,10 @@ $old = [IO.File]::ReadAllText($spotifyExecutable, $ANSI)
 
 $rexex1 = $old -notmatch $webjson.others.binary.block_update.add
 $rexex2 = $old -notmatch $webjson.others.binary.block_slots.add
-$rexex3 = $old -notmatch $webjson.others.binary.block_gabo.add
+$rexex3 = $old -notmatch $webjson.others.binary.block_slots_2.add
+$rexex4 = $old -notmatch $webjson.others.binary.block_gabo.add
 
-if ($rexex1 -and $rexex2 -and $rexex3) {
+if ($rexex1 -and $rexex2 -and $rexex3 -and $rexex4) {
 
     if (Test-Path -LiteralPath $exe_bak) { 
         Remove-Item $exe_bak -Recurse -Force

@@ -1473,6 +1473,15 @@
                 "match": "slots(?=.{3,8}override_url)",
                 "replace": "slot}"
             },
+            "block_slots_2": {
+                "version": {
+                    "fr": "1.2.55",
+                    "to": ""
+                },
+                "add": "slot}(?=.{25,35}state)",
+                "match": "slots(?=.{25,35}state)",
+                "replace": "slot}"
+            },
             "block_gabo": {
                 "version": {
                     "fr": "1.1.59",
@@ -2005,6 +2014,30 @@
             },
             "match": "(\"update_titlebar\",height:).",
             "replace": "$1'40'"
+        },
+        "mock": {
+            "version": {
+                "fr": "1.2.55",
+                "to": ""
+            },
+            "match": "\/(?:leavebehinds\/mock|leavebehinds|mock)\/",
+            "replace": "/localhost/"
+        },
+        "upgradeButton": {
+            "version": {
+                "fr": "1.2.55",
+                "to": ""
+            },
+            "match": "\"\\(min-width: 1024px\\)\"",
+            "replace": "\"(min-width: 9999990px)\""
+        },
+        "upgradeMenu": {
+            "version": {
+                "fr": "1.2.55",
+                "to": ""
+            },
+            "match": "=>\\{((?:(?!=>\\{).)*?(?=\"loggedin_upgrade_menu))",
+            "replace": "=>\\{ return null; $1"
         }
     }
 }

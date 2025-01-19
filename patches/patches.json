@@ -537,12 +537,30 @@
                     "to": ""
                 }
             },
-            "VideoAdOptimizedColorExtraction": {
-                "name": "enableVideoAdOptimizedColorExtraction",
-                "description": "Enables enhanced companion card color extraction waterfall for video stream ads",
-                "native_description": "Enables enhanced companion card color extraction waterfall for video stream ads",
+            "EsperantoAdStateReportManager": {
+                "name": "enableEsperantoAdStateReportManager",
+                "description": "Enables esperanto migration of the adStateReportManager",
+                "native_description": "Enables esperanto migration of the adStateReportManager",
                 "version": {
-                    "fr": "1.2.53",
+                    "fr": "1.2.55",
+                    "to": ""
+                }
+            },
+            "EventsInYourLibrary": {
+                "name": "enableEventsInYourLibrary",
+                "description": "Enable event chips and event items in your library",
+                "native_description": "Enable event chips and event items in your library",
+                "version": {
+                    "fr": "1.2.55",
+                    "to": ""
+                }
+            },
+            "LeavebehindsMockData": {
+                "name": "enableLeavebehindsMockData",
+                "description": "Use the mock2 endpoint to fetch Leavebehinds from AP4P",
+                "native_description": "Use the mock2 endpoint to fetch Leavebehinds from AP4P",
+                "version": {
+                    "fr": "1.2.30",
                     "to": ""
                 }
             },
@@ -1259,15 +1277,6 @@
                     "to": "1.2.52"
                 }
             },
-            "LazyHomeShelvesDWP": {
-                "name": "enableLazyHomeShelvesDWP",
-                "description": "Enable lazy-loading of offscreen shelves on Home",
-                "native_description": "Enable lazy-loading of offscreen shelves on Home",
-                "version": {
-                    "fr": "1.2.49",
-                    "to": ""
-                }
-            },
             "NearbyJams": {
                 "name": "enableNearbyJams",
                 "description": "Enable the support for Nearby Jams feature in the Device Picker",
@@ -1319,6 +1328,15 @@
                 "native_description": "Enable zoom settings from the settings page on Desktop",
                 "version": {
                     "fr": "1.2.53",
+                    "to": ""
+                }
+            },
+            "AmbientModeForMiniplayer": {
+                "name": "enableAmbientModeForMiniplayer",
+                "description": "Enable Ambient Mode for Miniplayer",
+                "native_description": "Enable Ambient Mode for Miniplayer",
+                "version": {
+                    "fr": "1.2.55",
                     "to": ""
                 }
             },

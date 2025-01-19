@@ -1819,12 +1819,13 @@ If (!(Test-Path $start_menu)) {
 $ANSI = [Text.Encoding]::GetEncoding(1251)
 $old = [IO.File]::ReadAllText($spotifyExecutable, $ANSI)
 
-$rexex1 = $old -notmatch $webjson.others.binary.block_update.add
-$rexex2 = $old -notmatch $webjson.others.binary.block_slots.add
-$rexex3 = $old -notmatch $webjson.others.binary.block_slots_2.add
-$rexex4 = $old -notmatch $webjson.others.binary.block_gabo.add
+$regex1 = $old -notmatch $webjson.others.binary.block_update.add
+$regex2 = $old -notmatch $webjson.others.binary.block_slots.add
+$regex3 = $old -notmatch $webjson.others.binary.block_slots_2.add
+$regex4 = $old -notmatch $webjson.others.binary.block_slots_3.add
+$regex5 = $old -notmatch $webjson.others.binary.block_gabo.add
 
-if ($rexex1 -and $rexex2 -and $rexex3 -and $rexex4) {
+if ($regex1 -and $regex2 -and $regex3 -and $regex4 -and $regex5) {
 
     if (Test-Path -LiteralPath $exe_bak) { 
         Remove-Item $exe_bak -Recurse -Force

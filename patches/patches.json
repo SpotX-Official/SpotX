@@ -1500,6 +1500,15 @@
                 "match": "slots(?=.{25,35}state)",
                 "replace": "slot}"
             },
+            "block_slots_3": {
+                "version": {
+                    "fr": "1.2.55",
+                    "to": ""
+                },
+                "add": "}(?=payload=)",
+                "match": "\\?(?=payload=)",
+                "replace": "}"
+            },
             "block_gabo": {
                 "version": {
                     "fr": "1.1.59",

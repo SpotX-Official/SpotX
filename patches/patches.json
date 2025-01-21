@@ -1876,7 +1876,7 @@
         },
         "block_subfeeds": {
             "version": {
-                "fr": "1.2.30",
+                "fr": "1.2.36",
                 "to": ""
             },
             "add": " .LVMjmN2CaPruPAo62RAY { display: none !important }"

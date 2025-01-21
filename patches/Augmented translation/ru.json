@@ -1,11 +1,11 @@
 {
     "lang": {
-        "version": "1.2.44",
+        "version": "1.2.55",
         "language": "Russian"
     },
     "1": {
-        "match": "\"The Stage Experience\"",
-        "replace": "\"Сценический опыт\""
+        "match": "\"Spacious\"",
+        "replace": "\"Просторный\""
     },
     "2": {
         "match": "\"Confirm your age\"",
@@ -124,12 +124,12 @@
         "replace": "Динамическое управление громкостью для подкастов - активное поддержание оптимального уровня громкости подкаста для четкого и сбалансированного звукового восприятия"
     },
     "31": {
-        "match": "Prerelease Radar",
-        "replace": "Пререлизный радар"
+        "match": "\"All genres\"",
+        "replace": "\"Все жанры\""
     },
     "32": {
-        "match": "\"Your destination for upcoming albums curated for you.\"",
-        "replace": "\"Место назначения для предстоящих альбомов, подобранных специально для вас.\""
+        "match": "\"Clear\"",
+        "replace": "\"Очистить\""
     },
     "33": {
         "match": "\"Build .0. is available\"",
@@ -152,12 +152,12 @@
         "replace": "\"Особенности\""
     },
     "38": {
-        "match": "\"prev-related-video\"",
-        "replace": "\"предыдущее связанное видео\""
+        "match": "\"Done\"",
+        "replace": "\"Готово\""
     },
     "39": {
-        "match": "\"next-related-video\"",
-        "replace": "\"следующее связанное видео\""
+        "match": "\"Expand playing view\"",
+        "replace": "\"Развернуть\""
     },
     "40": {
         "match": "\"Do not translate\"",
@@ -180,8 +180,8 @@
         "replace": "\"мини-плеер Spotify\""
     },
     "45": {
-        "match": "\"Date\"",
-        "replace": "\"Дата\""
+        "match": "\"Show artwork\"",
+        "replace": "\"Показать обложку\""
     },
     "46": {
         "match": "\"Venue\"",
@@ -232,11 +232,39 @@
         "replace": "\"все время указано по месту проведения\""
     },
     "58": {
-        "match": "\"Presale access\"",
-        "replace": "\"Предварительный доступ\""
+        "match": "\"Show artist image\"",
+        "replace": "\"Показать фото артиста\""
     },
     "59": {
-        "match": "\"We.ve ran out of codes. Visit our ticketing partner for more information\"",
-        "replace": "\"У нас закончились коды. Посетите нашего партнера по продаже билетов для получения дополнительной информации\""
+        "match": "\"Exit full screen\"",
+        "replace": "\"Выйти из полноэкранного режима\""
+    },
+    "60": {
+        "match": "\"Enter Full screen\"",
+        "replace": "\"Развернуть на весь экран\""
+    },
+    "61": {
+        "match": "\"Spotify Spotlight Presale\"",
+        "replace": "\"Предпродажа Spotify Spotlight\""
+    },
+    "62": {
+        "match": "\"Get access\"",
+        "replace": "\"Получить доступ\""
+    },
+    "63": {
+        "match": "\"Continue playing\"",
+        "replace": "\"Продолжить воспроизведение\""
+    },
+    "64": {
+        "match": "\"Fans First\"",
+        "replace": "\"Для фанатов\""
+    },
+    "65": {
+        "match": "\"Offer ends in .0.:.1.:.2.\"",
+        "replace": "\"До конца предложения: {0}:{1}:{2}\""
+    },
+    "66": {
+        "match": "\"Minimize playing view\"",
+        "replace": "\"Свернуть\""
     }
 }

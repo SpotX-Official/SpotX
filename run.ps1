@@ -362,7 +362,7 @@ if ($version) {
 
 $old_os = $win7 -or $win8 -or $win8_1
 
-# Recommended version for Win 7-8.1 
+# latest tested version for Win 7-8.1 
 $last_win7_full = "1.2.5.1006.g22820f93-1078"
 
 if (!($version -and $version -match $match_v)) {
@@ -370,8 +370,8 @@ if (!($version -and $version -match $match_v)) {
         $onlineFull = $last_win7_full
     }
     else {  
-        # Recommended version for Win 10-12 
-        $onlineFull = "1.2.53.440.g7b2f582a-58" 
+        # latest tested version for Win 10-12 
+        $onlineFull = "1.2.55.235.g5eaa0904-463" 
     }
 }
 else {
@@ -791,6 +791,7 @@ if ($spotifyInstalled) {
         catch {
             Write-Host 'Unable to submit new version of Spotify' 
             Write-Host "error description: "$Error[0]
+            Write-Host
         }
 
         if ($confirm_spoti_recomended_over -or $confirm_spoti_recomended_uninstall) {
@@ -1271,6 +1272,8 @@ function Helper($paramname) {
 
             if ($not_block_update) { Remove-Json -j $binary -p 'block_update' }
 
+            if ($premium) { Remove-Json -j $binary -p 'block_slots_2', 'block_slots_3' }
+
             $name = "patches.json.others.binary."
             $n = "Spotify.exe"
             $contents = $webjson.others.binary.psobject.properties.name
@@ -1295,6 +1298,7 @@ function Helper($paramname) {
 
             $VarJs = $webjson.VariousJs
 
+            if ($premium) { Remove-Json -j $VarJs -p 'mock', 'upgradeButton', 'upgradeMenu' }
 
             if ($topsearchbar -or ([version]$offline -ne [version]"1.2.45.451" -and [version]$offline -ne [version]"1.2.45.454")) { 
                 Remove-Json -j $VarJs -p "fixTitlebarHeight"
@@ -1755,6 +1759,11 @@ If ($test_spa) {
             $css += $webjson.others.veryhighstream.add
         }
     }
+    # block subfeeds
+    if ($type -eq "all" -or $type -eq "podcast") {
+        $css += $webjson.others.block_subfeeds.add
+    }
+
 
     if ($null -ne $css ) { extract -counts 'one' -method 'zip' -name 'xpui.css' -add $css }
     

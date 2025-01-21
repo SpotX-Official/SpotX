@@ -1874,6 +1874,13 @@
                 ""
             ]
         },
+        "block_subfeeds": {
+            "version": {
+                "fr": "1.2.30",
+                "to": ""
+            },
+            "add": " .LVMjmN2CaPruPAo62RAY { display: none !important }"
+        },
         "downloadquality": {
             "version": {
                 "fr": "1.2.30",

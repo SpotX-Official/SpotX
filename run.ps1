@@ -1367,6 +1367,7 @@ function Helper($paramname) {
                     { -not $podcast_off -and $adsections_off } { "section" }
                 }
                 $webjson.VariousJs.block_section.replace = $webjson.VariousJs.block_section.replace -f $type
+                $global:type = $type
             }
             else {
                 Remove-Json -j $VarJs -p 'block_section'
@@ -1760,10 +1761,9 @@ If ($test_spa) {
         }
     }
     # block subfeeds
-    if ($type -eq "all" -or $type -eq "podcast") {
+    if ($global:type -eq "all" -or $global:type -eq "podcast") {
         $css += $webjson.others.block_subfeeds.add
     }
-
 
     if ($null -ne $css ) { extract -counts 'one' -method 'zip' -name 'xpui.css' -add $css }
     

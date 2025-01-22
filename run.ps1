@@ -1070,9 +1070,9 @@ function Helper($paramname) {
             $n = "xpui.css"
             $json = $webjson.others
         }
-        "RemovertlCssmin" { 
-            # Remove RTL and minification of all *.css
-            $contents = "removertl-cssmin"
+        "Cssmin" { 
+            # Minification of all *.css
+            $contents = "cssmin"
             $json = $webjson.others
         }
         "DisableSentry" { 
@@ -1403,7 +1403,7 @@ function Helper($paramname) {
                         $paramdata = $paramdata -replace $json.$PSItem.match[$numbers], $json.$PSItem.replace[$numbers] 
                     }
                     else { 
-                        $notlog = "MinJs", "MinJson", "Removertl", "RemovertlCssmin"
+                        $notlog = "MinJs", "MinJson", "Cssmin"
                         if ($paramname -notin $notlog) {
     
                             Write-Host $novariable -ForegroundColor red -NoNewline 
@@ -1772,7 +1772,7 @@ If ($test_spa) {
     extract -counts 'one' -method 'zip' -name 'xpui.css' -helper "FixCss"
 
     # Remove RTL and minification of all *.css
-    extract -counts 'more' -name '*.css' -helper 'RemovertlCssmin'
+    extract -counts 'more' -name '*.css' -helper 'Cssmin'
     
     # licenses.html minification
 

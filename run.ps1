@@ -1116,6 +1116,9 @@ function Helper($paramname) {
             # carousel is temporarily disabled because it causes lags in the main menu
             Move-Json -n 'HomeCarousels' -t $Enable -f $Disable
 
+            # temporarily disable collapsing right sidebar
+            Move-Json -n 'PeekNpv' -t $Enable -f $Disable
+
             # ability to toggle the visibility of the playlist column is temporarily disabled because it does not save its state
             Move-Json -n 'TogglePlaylistColumns' -t $Enable -f $Disable
  

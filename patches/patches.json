@@ -2,7 +2,7 @@
     "free": {
         "fullscreen": {
             "version": {
-                "fr": "1.1.58",
+                "fr": "1.1.59",
                 "to": "1.1.92"
             },
             "match": "(return|.=.=>)\"free\"===(.+?)(return|.=.=>)\"premium\"===",
@@ -10,7 +10,7 @@
         },
         "audioads": {
             "version": {
-                "fr": "1.1.58",
+                "fr": "1.1.59",
                 "to": "1.1.92"
             },
             "match": "(case .:|async enable\\(.\\){)(this.enabled=.+?\\(.{1,3},\"audio\"\\),|return this.enabled=...+?\\(.{1,3},\"audio\"\\))((;case 4:)?this.subscription=this.audioApi).+?this.onAdMessage\\)",
@@ -18,7 +18,7 @@
         },
         "emptyblock": {
             "version": {
-                "fr": "1.1.58",
+                "fr": "1.1.59",
                 "to": ""
             },
             "match": "adsEnabled:!0",
@@ -26,7 +26,7 @@
         },
         "playlistsponsor": {
             "version": {
-                "fr": "1.1.58",
+                "fr": "1.1.59",
                 "to": ""
             },
             "match": "allSponsorships",
@@ -60,7 +60,7 @@
     "others": {
         "discriptions": {
             "version": {
-                "fr": "1.1.70",
+                "fr": "1.1.59",
                 "to": ""
             },
             "match": "((..createElement|children:\\(.{1,7}\\))\\(.{1,7},{source:).{1,7}get\\(\"about.copyright\",.\\),paragraphClassName:.}\\)",
@@ -71,11 +71,11 @@
         },
         "ForcedExp": {
             "version": {
-                "fr": "1.1.79",
+                "fr": "1.1.67",
                 "to": ""
             },
-            "match": "(configuration:(.).getRemoteConfiguration.+?;)",
-            "replace": "$1const EnableExp=[],DisableExp=[],CustomExp=[],allExperiments=[EnableExp,DisableExp,CustomExp];allExperiments.forEach((expArray)=>{const values=$2.getRemoteConfiguration()?.values;if(values){expArray.forEach((exp)=>{if(expArray===EnableExp||expArray===DisableExp){values.set(exp,expArray===EnableExp);}else if(expArray===CustomExp){values.set(exp.name,exp.value);}});(window.Spotx??={}).RemoteExp=values}});"
+            "match": "((?:{configuration|{resolver|instance):(.).(?:getRemoteConfig|getUrlDispenserServiceClient).+?;)",
+            "replace": "$1const experiments={enable:[],disable:[],custom:[]},setExpValue=(v,e,val)=>v&&(v.set?v.set(e,val):v[e]&&(v[e].value=val)),config=e.getRemoteConfigResolver?.()||e.getRemoteConfiguration?.();config&&((values=>{for(const type in experiments)experiments[type].forEach(exp=>setExpValue(values,type==='custom'?exp.name:exp,type==='enable'));(window.Spotx??={}).RemoteExp=values})(config.values||config.activeProperties));"
         },
         "DisableExp": {
             "InAppMessaging": {
@@ -83,7 +83,7 @@
                 "description": "Disable pop-up window for premium account purchase",
                 "native_description": "Enables quicksilver in-app messaging modal",
                 "version": {
-                    "fr": "1.1.70",
+                    "fr": "1.1.59",
                     "to": ""
                 }
             },
@@ -317,7 +317,7 @@
                 "description": "Enable the podcast ads Now Playing Bar experience, including features like the podcast ad Now Playing Bar hat",
                 "native_description": "Enable the podcast ads Now Playing Bar experience, including features like the podcast ad Now Playing Bar hat",
                 "version": {
-                    "fr": "1.1.70",
+                    "fr": "1.1.67",
                     "to": "1.2.50"
                 }
             },
@@ -326,7 +326,7 @@
                 "description": "Enable the Sponsored By section on the Episode Page with Call to Action cards",
                 "native_description": "Enable the Sponsored By section on the Episode Page with Call to Action cards",
                 "version": {
-                    "fr": "1.1.70",
+                    "fr": "1.1.67",
                     "to": "1.2.50"
                 }
             },
@@ -335,7 +335,7 @@
                 "description": "Enable show sponsors section on the Show Page",
                 "native_description": "Enable show sponsors section on the Show Page",
                 "version": {
-                    "fr": "1.1.70",
+                    "fr": "1.1.77",
                     "to": "1.2.50"
                 }
             },
@@ -643,7 +643,7 @@
                 "description": "Show 'Made For You' entry point in the left sidebar",
                 "native_description": "Show 'Made For You' entry point in the left sidebar",
                 "version": {
-                    "fr": "1.1.70",
+                    "fr": "1.1.67",
                     "to": "1.1.95"
                 }
             },
@@ -1300,7 +1300,7 @@
                 "description": "Enable Liked Songs section on Artist page",
                 "native_description": "Enable Liked Songs section on Artist page",
                 "version": {
-                    "fr": "1.1.79",
+                    "fr": "1.1.67",
                     "to": "1.2.17"
                 }
             },

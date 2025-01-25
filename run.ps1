@@ -1249,9 +1249,9 @@ function Helper($paramname) {
             else { $disableTextVariable = "['" + ($disableNames -join "','") + "']" }
 
             $replacements = @(
-                @("EnableExp=[]", "EnableExp=$enableTextVariable"),
-                @("DisableExp=[]", "DisableExp=$disableTextVariable"),
-                @("CustomExp=[]", "CustomExp=$customTextVariable")
+                @("enable:[]", "enable:$enableTextVariable"),
+                @("disable:[]", "disable:$disableTextVariable"),
+                @("custom:[]", "custom:$customTextVariable")
             )
 
             foreach ($replacement in $replacements) {

@@ -75,7 +75,7 @@
                 "to": ""
             },
             "match": "((?:{configuration|{resolver|instance):(.).(?:getRemoteConfig|getUrlDispenserServiceClient).+?;)",
-            "replace": "$1const experiments={enable:[],disable:[],custom:[]},setExpValue=(v,e,val)=>v&&(v.set?v.set(e,val):v[e]&&(v[e].value=val)),config=$2.getRemoteConfigResolver?.()||$2.getRemoteConfiguration?.();config&&((values=>{for(const type in experiments)experiments[type].forEach(exp=>setExpValue(values,type==='custom'?exp.name:exp,type==='enable'));(window.Spotx??={}).RemoteExp=values})(config.values||config.activeProperties));"
+            "replace": "$1const experiments={enable:[],disable:[],custom:[]},setExpValue=(v,e,val)=>v&&(v.set?v.set(e,val):v[e]&&(v[e].value=val)),config=$2.getRemoteConfigResolver?.()||$2.getRemoteConfiguration?.();config&&((values=>{for(const type in experiments)experiments[type].forEach(exp=>setExpValue(values,type==='custom'?exp.name:exp,type==='custom'?exp.value:type==='enable'));(window.Spotx??={}).RemoteExp=values})(config.values||config.activeProperties));"
         },
         "DisableExp": {
             "InAppMessaging": {
@@ -570,7 +570,7 @@
                 "native_description": "Enable dynamic colors for the app",
                 "version": {
                     "fr": "1.2.47",
-                    "to": "1.2.57"
+                    "to": "1.2.56"
                 }
             },
             "EmbeddedNpvAds": {

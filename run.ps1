@@ -371,7 +371,7 @@ if (!($version -and $version -match $match_v)) {
     }
     else {  
         # latest tested version for Win 10-12 
-        $onlineFull = "1.2.56.502.ga68d2d4f-1913" 
+        $onlineFull = "1.2.57.463.g4f748c64-3096" 
     }
 }
 else {
@@ -1076,9 +1076,9 @@ function Helper($paramname) {
             $json = $webjson.others
         }
         "DisableSentry" { 
-            # Disable Sentry (vendor~xpui.js)
+
             $name = "patches.json.others."
-            $n = "vendor~xpui.js"
+            $n = $fileName
             $contents = "disablesentry"
             $json = $webjson.others
         }
@@ -1742,8 +1742,14 @@ If ($test_spa) {
     # Add discriptions (xpui-desktop-modals.js)
     extract -counts 'one' -method 'zip' -name 'xpui-desktop-modals.js' -helper 'Discriptions'
 
-    # Disable Sentry (vendor~xpui.js)
-    extract -counts 'one' -method 'zip' -name 'vendor~xpui.js' -helper 'DisableSentry'
+    # Disable Sentry 
+    if ( [version]$offline -le [version]"1.2.56.502" ) {  
+        $fileName = 'vendor~xpui.js'
+
+    }
+    else { $fileName = 'xpui.js' }
+
+    extract -counts 'one' -method 'zip' -name $fileName -helper 'DisableSentry'
 
     # Minification of all *.js
     extract -counts 'more' -name '*.js' -helper 'MinJs'

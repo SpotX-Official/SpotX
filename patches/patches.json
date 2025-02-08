@@ -570,6 +570,24 @@
                 "native_description": "Enable dynamic colors for the app",
                 "version": {
                     "fr": "1.2.47",
+                    "to": "1.2.57"
+                }
+            },
+            "EmbeddedNpvAds": {
+                "name": "enableEmbeddedNpvAds",
+                "description": "Enable embedded display ads on NPV",
+                "native_description": "Enable embedded display ads on NPV",
+                "version": {
+                    "fr": "1.2.57",
+                    "to": ""
+                }
+            },
+            "EnhancedAdsClientDeconfliction": {
+                "name": "enableEnhancedAdsClientDeconfliction",
+                "description": "Enable refactored version of ads orchestrator middleware",
+                "native_description": "Enable refactored version of ads orchestrator middleware",
+                "version": {
+                    "fr": "1.2.57",
                     "to": ""
                 }
             }
@@ -1319,7 +1337,7 @@
                 "native_description": "Enable plus button for creating different types of playlists from global nav bar",
                 "version": {
                     "fr": "1.2.53",
-                    "to": ""
+                    "to": "1.2.56"
                 }
             },
             "ZoomSettingsUIDesktop": {
@@ -1346,6 +1364,15 @@
                 "native_description": "Enable the Peek NPV feature",
                 "version": {
                     "fr": "1.2.53",
+                    "to": ""
+                }
+            },
+            "AlignedPanelHeaders": {
+                "name": "enableAlignedPanelHeaders",
+                "description": "Enable aligned panel headers",
+                "native_description": "Enable aligned panel headers",
+                "version": {
+                    "fr": "1.2.57",
                     "to": ""
                 }
             }
@@ -1469,6 +1496,16 @@
                 "version": {
                     "fr": "1.2.39",
                     "to": "1.2.50"
+                }
+            },
+            "CreateButton": {
+                "name": "enableCreateButton",
+                "description": "Enable create button either in the global navbar or in YLX",
+                "native_description": "Enable create button either in the global navbar or in YLX",
+                "value": "NPV_ALWAYS_VISIBLE",
+                "version": {
+                    "fr": "1.2.57",
+                    "to": ""
                 }
             }
         },

@@ -1502,7 +1502,7 @@
                 "name": "enableCreateButton",
                 "description": "Enable create button either in the global navbar or in YLX",
                 "native_description": "Enable create button either in the global navbar or in YLX",
-                "value": "NPV_ALWAYS_VISIBLE",
+                "value": "your_library",
                 "version": {
                     "fr": "1.2.57",
                     "to": ""

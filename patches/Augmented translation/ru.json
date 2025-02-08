@@ -1,11 +1,11 @@
 {
     "lang": {
-        "version": "1.2.55",
+        "version": "1.2.57",
         "language": "Russian"
     },
     "1": {
-        "match": "\"Spacious\"",
-        "replace": "\"Просторный\""
+        "match": "\"Authors\"",
+        "replace": "\"Авторы\""
     },
     "2": {
         "match": "\"Confirm your age\"",
@@ -156,8 +156,8 @@
         "replace": "\"Готово\""
     },
     "39": {
-        "match": "\"Expand playing view\"",
-        "replace": "\"Развернуть\""
+        "match": "\"Not supported for this device.\"",
+        "replace": "\"Не поддерживается на этом устройстве.\""
     },
     "40": {
         "match": "\"Do not translate\"",
@@ -180,8 +180,8 @@
         "replace": "\"мини-плеер Spotify\""
     },
     "45": {
-        "match": "\"Show artwork\"",
-        "replace": "\"Показать обложку\""
+        "match": "\"Couldn.t find that author\"",
+        "replace": "\"Не удалось найти этого автора\""
     },
     "46": {
         "match": "\"Venue\"",
@@ -232,16 +232,16 @@
         "replace": "\"все время указано по месту проведения\""
     },
     "58": {
-        "match": "\"Show artist image\"",
-        "replace": "\"Показать фото артиста\""
+        "match": "\"Author\"",
+        "replace": "\"Автор\""
     },
     "59": {
-        "match": "\"Exit full screen\"",
-        "replace": "\"Выйти из полноэкранного режима\""
+        "match": "\"About\"",
+        "replace": "\"Сведения\""
     },
     "60": {
-        "match": "\"Enter Full screen\"",
-        "replace": "\"Развернуть на весь экран\""
+        "match": "\"Create a playlist, folder, or Jam\"",
+        "replace": "\"Создать плейлист, папку или Джем\""
     },
     "61": {
         "match": "\"Spotify Spotlight Presale\"",
@@ -263,8 +263,92 @@
         "match": "\"Offer ends in .0.:.1.:.2.\"",
         "replace": "\"До конца предложения: {0}:{1}:{2}\""
     },
-    "66": {
-        "match": "\"Minimize playing view\"",
-        "replace": "\"Свернуть\""
+    "67": {
+        "match": "\"Create\"",
+        "replace": "\"Создать\""
+    },
+    "68": {
+        "match": "\"Copy link to author\"",
+        "replace": "\"Скопировать ссылку автора\""
+    },
+    "69": {
+        "match": "\"Unpin author\"",
+        "replace": "\"Открепить автора\""
+    },
+    "70": {
+        "match": "\"Pin author\"",
+        "replace": "\"Закрепить автора\""
+    },
+    "71": {
+        "match": "\"Build a playlist with songs, or episodes\"",
+        "replace": "\"Создайте плейлист с треками или подкастами\""
+    },
+    "72": {
+        "match": "\"Blend\"",
+        "replace": "\"Синтез\""
+    },
+    "73": {
+        "match": "\"Mix up your tastes with friends\"",
+        "replace": "\"Объедините свои вкусы с друзьями\""
+    },
+    "75": {
+        "match": "\"Folder\"",
+        "replace": "\"Папка\""
+    },
+    "76": {
+        "match": "\"Organize your playlists\"",
+        "replace": "\"Организовать плейлисты\""
+    },
+    "77": {
+        "match": "\"Jam\"",
+        "replace": "\"Джем\""
+    },
+    "78": {
+        "match": "\"Listen live with others\"",
+        "replace": "\"Слушайте вместе, где бы вы ни были\""
+    },
+    "79": {
+        "match": "\"Explore .0.\"",
+        "replace": "\"Исследовать {0}\""
+    },
+    "80": {
+        "match": "\"Sleep timer\"",
+        "replace": "\"Таймер сна\""
+    },
+    "81": {
+        "match": "\"Scroll through previews of tracks from this album\"",
+        "replace": "\"Пролистайте превью треков из этого альбома\""
+    },
+    "82": {
+        "match": "\"Scroll through previews of tracks from this playlist\"",
+        "replace": "\"Пролистайте превью треков из этого плейлиста\""
+    },
+    "83": {
+        "match": "\"Scroll through previews of tracks from this artist\"",
+        "replace": "\"Пролистайте превью треков из этого артиста\""
+    },
+    "84": {
+        "match": "\"Scroll through previews of episodes from this podcast\"",
+        "replace": "\"Пролистайте превью эпизодов из этого подкаста\""
+    },
+    "85": {
+        "match": "\"End of episode\"",
+        "replace": "\"Эпизод окончен\""
+    },
+    "86": {
+        "match": "\"End of track\"",
+        "replace": "\"Трек окончен\""
+    },
+    "87": {
+        "match": "\"Turn off timer\"",
+        "replace": "\"Выключить таймер\""
+    },
+    "88": {
+        "match": "\"OK, your sleep timer is set.\"",
+        "replace": "\"Хорошо, таймер сна установлен\""
+    },
+    "89": {
+        "match": "\"Search in Authors\"",
+        "replace": "\"Искать в Авторах\""
     }
 }

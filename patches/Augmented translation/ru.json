@@ -293,7 +293,7 @@
     },
     "75": {
         "match": "\"Folder\"",
-        "replace": "\"Папка\""
+        "replace": "\"Папку\""
     },
     "76": {
         "match": "\"Organize your playlists\"",
@@ -333,11 +333,11 @@
     },
     "85": {
         "match": "\"End of episode\"",
-        "replace": "\"Эпизод окончен\""
+        "replace": "\"Когда закончится эпизод\""
     },
     "86": {
         "match": "\"End of track\"",
-        "replace": "\"Трек окончен\""
+        "replace": "\"Когда закончится трек\""
     },
     "87": {
         "match": "\"Turn off timer\"",

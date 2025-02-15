@@ -1113,8 +1113,8 @@ function Helper($paramname) {
             $Disable = $webjson.others.DisableExp
             $Custom = $webjson.others.CustomExp
 
-            # carousel is temporarily disabled because it causes lags in the main menu
-            Move-Json -n 'HomeCarousels' -t $Enable -f $Disable
+            # causes lags in the main menu 1.2.44-1.2.56
+            if ([version]$offline -le [version]'1.2.56.502') { Move-Json -n 'HomeCarousels' -t $Enable -f $Disable }
 
             # temporarily disable collapsing right sidebar
             Move-Json -n 'PeekNpv' -t $Enable -f $Disable

@@ -977,7 +977,7 @@
                 "native_description": "Enables the Saved In section in Aligned Curation",
                 "version": {
                     "fr": "1.2.40",
-                    "to": ""
+                    "to": "1.2.47"
                 }
             },
             "ViewMode": {
@@ -1346,7 +1346,7 @@
                 "native_description": "Enable zoom settings from the settings page on Desktop",
                 "version": {
                     "fr": "1.2.53",
-                    "to": ""
+                    "to": "1.2.57"
                 }
             },
             "AmbientModeForMiniplayer": {
@@ -1373,6 +1373,42 @@
                 "native_description": "Enable aligned panel headers",
                 "version": {
                     "fr": "1.2.57",
+                    "to": ""
+                }
+            },
+            "UserCommentsForEpisodes": {
+                "name": "enableUserCommentsForEpisodes",
+                "description": "Enable user comments for podcast episodes",
+                "native_description": "Enable user comments for podcast episodes",
+                "version": {
+                    "fr": "1.2.56",
+                    "to": ""
+                }
+            },
+            "AdsPrioritizeCanvas": {
+                "name": "embeddedAdsPrioritizeCanvas",
+                "description": "When enabled, tracks eligible for canvas will not be eligible for embedded ads",
+                "native_description": "When enabled, tracks eligible for canvas will not be eligible for embedded ads",
+                "version": {
+                    "fr": "1.2.58",
+                    "to": ""
+                }
+            },
+            "NewOverlayScrollbars": {
+                "name": "enableNewOverlayScrollbars",
+                "description": "Enable new overlay scrollbars",
+                "native_description": "Enable new overlay scrollbars",
+                "version": {
+                    "fr": "1.2.58",
+                    "to": ""
+                }
+            },
+            "FullscreenLibrary": {
+                "name": "enableFullscreenLibrary",
+                "description": "Enable fullscreen library",
+                "native_description": "Enable fullscreen library",
+                "version": {
+                    "fr": "1.2.58",
                     "to": ""
                 }
             }
@@ -1505,6 +1541,26 @@
                 "value": "your_library",
                 "version": {
                     "fr": "1.2.57",
+                    "to": ""
+                }
+            },
+            "AdsDismissInterval": {
+                "name": "embeddedAdsDismissInterval",
+                "description": "How long to wait (in seconds) before autodismissing embedded ad",
+                "native_description": "How long to wait (in seconds) before autodismissing embedded ad",
+                "value": "0",
+                "version": {
+                    "fr": "1.2.58",
+                    "to": ""
+                }
+            },
+            "AdsViewsTimeInterval": {
+                "name": "embeddedAdsViewsTimeInterval",
+                "description": "How long to wait (in seconds) between each successful render of embedded ad",
+                "native_description": "How long to wait (in seconds) between each successful render of embedded ad",
+                "value": "99999",
+                "version": {
+                    "fr": "1.2.58",
                     "to": ""
                 }
             }

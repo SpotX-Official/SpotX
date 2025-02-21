@@ -292,7 +292,7 @@ if ($psv -ge 7) {
 }
 
 # add Tls12
-[Net.ServicePointManager]::SecurityProtocol = 3072
+[Net.ServicePointManager]::SecurityProtocol = [Net.ServicePointManager]::SecurityProtocol -bor [Net.SecurityProtocolType]::Tls12;
 
 function Get-Link {
     param (
@@ -371,7 +371,7 @@ if (!($version -and $version -match $match_v)) {
     }
     else {  
         # latest tested version for Win 10-12 
-        $onlineFull = "1.2.57.463.g4f748c64-3096" 
+        $onlineFull = "1.2.58.492.g5e7cd836-228" 
     }
 }
 else {

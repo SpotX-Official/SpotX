@@ -26,7 +26,7 @@ jobs:
         $version = $regex.Groups[1].Value
         
         # Incoming parameters
-        $parametrs = '-new_theme -v $version -dev -funnyprogressBar -homesub_off -sp-over -cache_limit 1000 -block_update_on -lyrics_stat spotify -urlform_goofy "https://docs.google.com/forms/formResponse" -idbox_goofy "9999999" -podcasts_off -adsections_off'
+        $parametrs = '-new_theme -v $version -sp-over -cache_limit 1000 -block_update_on -lyrics_stat spotify -urlform_goofy "https://docs.google.com/forms/formResponse" -idbox_goofy "9999999" -podcasts_off -adsections_off -lyrics_block'
         
         # Run Spotx
         iex "& { $(iwr -useb 'https://raw.githubusercontent.com/SpotX-Official/spotx-official.github.io/main/run.ps1') } $parametrs" 

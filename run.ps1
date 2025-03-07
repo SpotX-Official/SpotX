@@ -58,6 +58,9 @@ param
     [Parameter(HelpMessage = 'Enable top search bar.')]
     [switch]$topsearchbar,
 
+    [Parameter(HelpMessage = 'Enable new fullscreen mode (Experimental)')]
+    [switch]$newFullscreenMode,
+
     [Parameter(HelpMessage = 'disable subfeed filter chips on home.')]
     [switch]$homesub_off,
     
@@ -1116,6 +1119,9 @@ function Helper($paramname) {
             # causes lags in the main menu 1.2.44-1.2.56
             if ([version]$offline -le [version]'1.2.56.502') { Move-Json -n 'HomeCarousels' -t $Enable -f $Disable }
 
+            # disable new scrollbar
+            Move-Json -n 'NewOverlayScrollbars' -t $Enable -f $Disable
+
             # temporarily disable collapsing right sidebar
             Move-Json -n 'PeekNpv' -t $Enable -f $Disable
 
@@ -1154,8 +1160,8 @@ function Helper($paramname) {
 
             if (!($canvasHome)) { Move-Json -n "canvasHome", "canvasHomeAudioPreviews" -t $Enable -f $Disable }
 
+            if (!$newFullscreenMode) { Move-Json -n "ImprovedCinemaMode", "ImprovedCinemaModeCanvas" -t $Enable -f $Disable }
             
-
             # disable subfeed filter chips on home
             if ($homesub_off) { 
                 Move-Json -n "HomeSubfeeds" -t $Enable -f $Disable 
@@ -1773,6 +1779,8 @@ If ($test_spa) {
     if ($global:type -eq "all" -or $global:type -eq "podcast") {
         $css += $webjson.others.block_subfeeds.add
     }
+    # scrollbar indent fixes
+    $css += $webjson.others.'fix-scrollbar'.add
 
     if ($null -ne $css ) { extract -counts 'one' -method 'zip' -name 'xpui.css' -add $css }
     

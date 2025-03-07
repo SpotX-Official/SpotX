@@ -1411,6 +1411,24 @@
                     "fr": "1.2.58",
                     "to": ""
                 }
+            },
+            "ImprovedCinemaMode": {
+                "name": "enableImprovedCinemaMode",
+                "description": "Enable improved cinema mode",
+                "native_description": "Enable improved cinema mode",
+                "version": {
+                    "fr": "1.2.50",
+                    "to": ""
+                }
+            },
+            "ImprovedCinemaModeCanvas": {
+                "name": "enableImprovedCinemaModeCanvas",
+                "description": "Enable canvas support inside improved cinema mode",
+                "native_description": "Enable canvas support inside improved cinema mode",
+                "version": {
+                    "fr": "1.2.56",
+                    "to": ""
+                }
             }
         },
         "CustomExp": {
@@ -1973,6 +1991,13 @@
                 "to": "1.2.29"
             },
             "add": " #desktop\\.settings\\.streamingQuality>option:nth-child(5) {display:none}"
+        },
+        "fix-scrollbar": {
+            "version": {
+                "fr": "1.1.59",
+                "to": ""
+            },
+            "add": " .main-view-container__scroll-node > .os-scrollbar-vertical {top:0px !important}"
         },
         "fix-old-theme": {
             "version": {

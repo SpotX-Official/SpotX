@@ -590,6 +590,24 @@
                     "fr": "1.2.57",
                     "to": ""
                 }
+            },
+            "AdCountUi": {
+                "name": "enableAdCountUi",
+                "description": "Enable ad count feedback in NPV",
+                "native_description": "Enable ad count feedback in NPV",
+                "version": {
+                    "fr": "1.2.59",
+                    "to": ""
+                }
+            },
+            "ChecklistBasedOnboarding": {
+                "name": "enableChecklistBasedOnboarding",
+                "description": "Enable checklist-based onboarding",
+                "native_description": "Enable checklist-based onboarding",
+                "version": {
+                    "fr": "1.2.59",
+                    "to": ""
+                }
             }
         },
         "EnableExp": {
@@ -1562,23 +1580,23 @@
                     "to": ""
                 }
             },
-            "AdsDismissInterval": {
-                "name": "embeddedAdsDismissInterval",
+            "AdsDismissTimeInterval": {
+                "name": "embeddedAdsDismissTimeInterval",
                 "description": "How long to wait (in seconds) before autodismissing embedded ad",
                 "native_description": "How long to wait (in seconds) before autodismissing embedded ad",
                 "value": "0",
                 "version": {
-                    "fr": "1.2.58",
+                    "fr": "1.2.59",
                     "to": ""
                 }
             },
-            "AdsViewsTimeInterval": {
-                "name": "embeddedAdsViewsTimeInterval",
+            "AdsRefreshTimeInterval": {
+                "name": "embeddedAdsRefreshTimeInterval",
                 "description": "How long to wait (in seconds) between each successful render of embedded ad",
                 "native_description": "How long to wait (in seconds) between each successful render of embedded ad",
                 "value": "99999",
                 "version": {
-                    "fr": "1.2.58",
+                    "fr": "1.2.59",
                     "to": ""
                 }
             }

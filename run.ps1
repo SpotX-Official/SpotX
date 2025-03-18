@@ -129,13 +129,17 @@ function Format-LanguageCode {
     )
     
     $supportLanguages = @(
-        'bn', 'cs', 'de', 'el', 'en', 'es', 'fa', 'fi', 'fil', 'fr', 'hi', 'hu', 
+        'be', 'bn', 'cs', 'de', 'el', 'en', 'es', 'fa', 'fi', 'fil', 'fr', 'hi', 'hu', 
         'id', 'it', 'ja', 'ka', 'ko', 'lv', 'pl', 'pt', 'ro', 'ru', 'sk', 'sr', 
         'sv', 'ta', 'tr', 'ua', 'vi', 'zh', 'zh-TW'
     )
     
     # Trim the language code down to two letter code.
     switch -Regex ($LanguageCode) {
+        '^be' {
+            $returnCode = 'be'
+            break
+        }
         '^bn' {
             $returnCode = 'bn'
             break

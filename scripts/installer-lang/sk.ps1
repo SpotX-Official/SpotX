@@ -40,7 +40,6 @@
     Error           = "Chyba"
     FileLocBroken   = "Umiestnenie Spotify súborov je chybné, odinštaluj Spotify klient a spusti skript znova"
     Spicetify       = "Spicetify nájdené, musí byť inštalované po SpotX, otvoriť odporúčané akcie vo FAQ ? [Y/N]"
-    ExpSpotify      = "Experimentálne funkcie sú prevádzkované Spotify"
     NoRestore       = "SpotX už bol nainštalovaný, xpui.bak sa nenašlo. `nProsím odinštaluj Spotify klient a spusti Install.bat znova"
     InstallComplete = "Inštalácia dokončená"
     HostInfo        = "Nechcené URLs nájdené v súbore hosts"

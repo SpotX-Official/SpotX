@@ -599,15 +599,6 @@
                     "fr": "1.2.59",
                     "to": ""
                 }
-            },
-            "ChecklistBasedOnboarding": {
-                "name": "enableChecklistBasedOnboarding",
-                "description": "Enable checklist-based onboarding",
-                "native_description": "Enable checklist-based onboarding",
-                "version": {
-                    "fr": "1.2.59",
-                    "to": ""
-                }
             }
         },
         "EnableExp": {
@@ -1447,6 +1438,15 @@
                     "fr": "1.2.56",
                     "to": ""
                 }
+            },
+            "YlxReverseSorting": {
+                "name": "enableYlxReverseSorting",
+                "description": "Enable reverse sort direction in Your Library",
+                "native_description": "Enable reverse sort direction in Your Library",
+                "version": {
+                    "fr": "1.2.60",
+                    "to": ""
+                }
             }
         },
         "CustomExp": {
@@ -1597,6 +1597,26 @@
                 "value": "99999",
                 "version": {
                     "fr": "1.2.59",
+                    "to": ""
+                }
+            },
+            "DesktopOnboardingChecklist": {
+                "name": "enableDesktopOnboardingChecklist",
+                "description": "Enable checklist-based onboarding",
+                "native_description": "Enable checklist-based onboarding",
+                "value": "control",
+                "version": {
+                    "fr": "1.2.60",
+                    "to": ""
+                }
+            },
+            "SpotifyOnboardingChecklist": {
+                "name": "enableSpotifyOnboardingChecklist",
+                "description": "Enable checklist-based onboarding",
+                "native_description": "Enable checklist-based onboarding",
+                "value": "control",
+                "version": {
+                    "fr": "1.2.60",
                     "to": ""
                 }
             }

@@ -23,7 +23,7 @@
     DelOrOver       = "Rimuovere la versione attuale {0} o sovrascriverla? Y [Rimuovi] / N [Sovrascrivi]"
     DelOld          = "Disinstallando vecchia versione di Spotify..."
     NewV            = "Trovata versione di Spotify non supportata"
-    NewV2           = "La tua versione {0} di Spotify non è stata testata. La versione stabile di Spotify è {1}"
+    NewV2           = "La tua versione {0} di Spotify non è stata testata. La versione stabile per SpotX è {1}"
     NewV3           = "Continuare con {0} (possibili errori) ? [Y/N]"
     Recom           = "Installare l'ultima versione {0} ? [Y/N]"
     DelNew          = "Disinstallando una versione non testata di Spotify..."

@@ -1,354 +1,438 @@
 {
     "lang": {
-        "version": "1.2.57",
+        "version": "1.2.60",
         "language": "Russian"
     },
     "1": {
-        "match": "\"Authors\"",
-        "replace": "\"Авторы\""
-    },
-    "2": {
         "match": "\"Confirm your age\"",
         "replace": "\"Подтвердите свой возраст\""
     },
-    "3": {
+    "2": {
         "match": "\"%price%/month after. Terms and conditions apply. One month free not available for users who have already tried Premium.\"",
         "replace": "\"%price%/месяц спустя. Принять условия. Один месяц бесплатно, недоступно для пользователей, которые уже попробовали Premium.\""
     },
-    "4": {
-        "match": "\"Enjoy ad-free music listening, offline listening, and more. Cancel anytime.\"",
-        "replace": "\"Наслаждайтесь прослушиванием музыки без рекламы, прослушиванием в офлайн режиме и многим другим. Отменить можно в любое время.\""
-    },
-    "5": {
+    "3": {
         "match": "\"Offline storage location\"",
         "replace": "\"Хранилище скачанных треков\""
     },
-    "6": {
+    "4": {
         "match": "\"Click to start listening\"",
         "replace": "\"Нажмите, чтобы начать прослушивание\""
     },
-    "7": {
+    "5": {
         "match": "\"Change speed\"",
         "replace": "\"Изменение скорости\""
     },
-    "8": {
+    "6": {
         "match": "\"You need to be at least 19 years old to listen to explicit content marked with\"",
         "replace": "\"Вам должно быть не менее 19 лет, чтобы слушать непристойный контент, помеченный значком\""
     },
-    "9": {
+    "7": {
         "match": "\"Add to another playlist\"",
         "replace": "\"Добавить в другой плейлист\""
     },
-    "10": {
+    "8": {
         "match": "\"Add to this playlist\"",
         "replace": "\"Добавить в этот плейлист\""
     },
-    "11": {
+    "9": {
         "match": "\"Couldn.t connect to Spotify.\"",
         "replace": "\"Не удалось подключиться к Spotify.\""
     },
-    "12": {
+    "10": {
         "match": "\"No connection\"",
         "replace": "\"Нет соединения\""
     },
-    "13": {
+    "11": {
         "match": "\"Reconnecting...\"",
         "replace": "\"Повторное подключение...\""
     },
-    "14": {
+    "12": {
         "match": "\"Character counter\"",
         "replace": "\"Счетчик символов\""
     },
-    "15": {
+    "13": {
         "match": "\"Toggle lightsaber hilt. Current is [{]0[}].\"",
         "replace": "\"Переключить рукоять светового меча. Текущий {0}.\""
     },
-    "16": {
+    "14": {
         "match": "\"Doors at .0.\"",
         "replace": "\"Вход в {0}\""
     },
-    "17": {
+    "15": {
         "match": "\"Show at .0.\"",
         "replace": "\"Показ в {0}\""
     },
-    "18": {
+    "16": {
         "match": "\"Your Location\"",
         "replace": "\"Ваше местоположение\""
     },
-    "19": {
+    "17": {
         "match": "\"Override certain user attributes to test regionalized content programming. The overrides are only active in this app.\"",
         "replace": "\"Переопределите определенные атрибуты пользователя, чтобы протестировать региональное программирование контента. Переопределения активны только в этом приложении.\""
     },
-    "20": {
+    "18": {
         "match": " was released this week!",
         "replace": " был выпущен на этой неделе!"
     },
-    "21": {
+    "19": {
         "match": "(\"one\": \"...name...) was released %years% year ago this week!\"",
         "replace": "$1 был выпущен %years% год назад на этой неделе!\""
     },
-    "22": {
+    "20": {
         "match": "(\"few\": \"...name...) was released %years% years ago this week!\"",
         "replace": "$1 был выпущен %years% года назад на этой неделе!\""
     },
-    "23": {
+    "21": {
         "match": "(\"many\": \"...name...) was released %years% years ago this week!\"",
         "replace": "$1 был выпущен %years% лет назад на этой неделе!\""
     },
-    "24": {
+    "22": {
         "match": "(\"other\": \"...name...) was released %years% years ago this week!\"",
         "replace": "$1 был выпущен %years% года назад на этой неделе!\""
     },
-    "25": {
+    "23": {
         "match": "\"Speed [{]0[}]×\"",
         "replace": "\"Скорость {0}×\""
     },
-    "26": {
+    "24": {
         "match": "\"Artist\"",
         "replace": "\"Исполнитель\""
     },
-    "27": {
+    "25": {
         "match": "\"... of ...\"",
         "replace": "\"{0} из {1}\""
     },
-    "28": {
+    "26": {
         "match": "\"Не удалось изменить\"",
         "replace": "\"Не удалось обновить\""
     },
-    "29": {
+    "27": {
         "match": "Dynamic normalizer - Actively adjust the volume by leveling out the difference between quiet and loud parts of the audio",
         "replace": "Динамический нормализатор - активно регулирует громкость, выравнивая разницу между тихими и громкими частями аудио"
     },
-    "30": {
+    "28": {
         "match": "Dynamic loudness control for podcasts - Actively maintain optimal podcast volume level for a clear and balanced sound experience",
         "replace": "Динамическое управление громкостью для подкастов - активное поддержание оптимального уровня громкости подкаста для четкого и сбалансированного звукового восприятия"
     },
-    "31": {
+    "29": {
         "match": "\"All genres\"",
         "replace": "\"Все жанры\""
     },
-    "32": {
+    "30": {
         "match": "\"Clear\"",
         "replace": "\"Очистить\""
     },
-    "33": {
+    "31": {
         "match": "\"Build .0. is available\"",
         "replace": "\"Сборка {0} доступна\""
     },
-    "34": {
+    "32": {
         "match": "\"Downloading build .0....\"",
         "replace": "\"Загрузка сборки {0}...\""
     },
-    "35": {
+    "33": {
         "match": "\"Build .0. is ready to install\"",
         "replace": "\"Сборка {0} готова к установке\""
     },
-    "36": {
+    "34": {
         "match": "\"Remove\"",
         "replace": "\"Удалить\""
     },
-    "37": {
+    "35": {
         "match": "\"Feature Spotlight\"",
         "replace": "\"Особенности\""
     },
-    "38": {
+    "36": {
         "match": "\"Done\"",
         "replace": "\"Готово\""
     },
-    "39": {
-        "match": "\"Not supported for this device.\"",
-        "replace": "\"Не поддерживается на этом устройстве.\""
-    },
-    "40": {
+    "37": {
         "match": "\"Do not translate\"",
         "replace": "\"Не переводить\""
     },
-    "41": {
+    "38": {
         "match": "\"Translating to .0.\"",
         "replace": "\"Перевожу на {0}\""
     },
-    "42": {
+    "39": {
         "match": "\"Translation to .0. not available\"",
         "replace": "\"Перевод на {0} недоступен\""
     },
-    "43": {
+    "40": {
         "match": "\"Translate lyrics\"",
         "replace": "\"Перевести текст песни\""
     },
-    "44": {
+    "41": {
         "match": "\"Spotify MiniPlayer\"",
         "replace": "\"мини-плеер Spotify\""
     },
-    "45": {
-        "match": "\"Couldn.t find that author\"",
-        "replace": "\"Не удалось найти этого автора\""
-    },
-    "46": {
+    "42": {
         "match": "\"Venue\"",
         "replace": "\"Место проведения\""
     },
-    "47": {
+    "43": {
         "match": "\"We couldn't find the venue\"",
         "replace": "\"Мы не смогли найти место проведения\""
     },
-    "48": {
+    "44": {
         "match": "\"Notifications\"",
         "replace": "\"Уведомления\""
     },
-    "49": {
+    "45": {
         "match": "\"Bring back to main window\"",
         "replace": "\"Вернуться к основному окну\""
     },
-    "50": {
+    "46": {
         "match": "\"You have no notifications\"",
         "replace": "\"У вас нет уведомлений\""
     },
-    "51": {
+    "47": {
         "match": "\"Chapter\"",
         "replace": "\"Глава\""
     },
-    "52": {
+    "48": {
         "match": "\"Song\"",
         "replace": "\"Трек\""
     },
-    "53": {
+    "49": {
         "match": "\"Episode\"",
         "replace": "\"Эпизод\""
     },
-    "54": {
+    "50": {
         "match": "\"The venue you requested couldn.t be found, please try again.\"",
         "replace": "\"Запрошенное вами место проведения не найдено, попробуйте снова.\""
     },
-    "55": {
+    "51": {
         "match": "\"There was an error fetching the venue.\"",
         "replace": "\"Произошла ошибка при получении места проведения.\""
     },
-    "56": {
+    "52": {
         "match": "\"Concerts\"",
         "replace": "\"Концерты\""
     },
-    "57": {
+    "53": {
         "match": "\"all times are local to the venue\"",
         "replace": "\"все время указано по месту проведения\""
     },
-    "58": {
-        "match": "\"Author\"",
-        "replace": "\"Автор\""
-    },
-    "59": {
-        "match": "\"About\"",
-        "replace": "\"Сведения\""
-    },
-    "60": {
-        "match": "\"Create a playlist, folder, or Jam\"",
-        "replace": "\"Создать плейлист, папку или Джем\""
-    },
-    "61": {
+    "54": {
         "match": "\"Spotify Spotlight Presale\"",
         "replace": "\"Предпродажа Spotify Spotlight\""
     },
-    "62": {
+    "55": {
         "match": "\"Get access\"",
         "replace": "\"Получить доступ\""
     },
-    "63": {
+    "56": {
         "match": "\"Continue playing\"",
         "replace": "\"Продолжить воспроизведение\""
     },
-    "64": {
+    "57": {
         "match": "\"Fans First\"",
         "replace": "\"Для фанатов\""
     },
-    "65": {
+    "58": {
         "match": "\"Offer ends in .0.:.1.:.2.\"",
         "replace": "\"До конца предложения: {0}:{1}:{2}\""
     },
-    "67": {
-        "match": "\"Create\"",
-        "replace": "\"Создать\""
-    },
-    "68": {
-        "match": "\"Copy link to author\"",
-        "replace": "\"Скопировать ссылку автора\""
-    },
-    "69": {
-        "match": "\"Unpin author\"",
-        "replace": "\"Открепить автора\""
-    },
-    "70": {
-        "match": "\"Pin author\"",
-        "replace": "\"Закрепить автора\""
-    },
-    "71": {
-        "match": "\"Build a playlist with songs, or episodes\"",
-        "replace": "\"Создайте плейлист с треками или подкастами\""
-    },
-    "72": {
-        "match": "\"Blend\"",
-        "replace": "\"Синтез\""
-    },
-    "73": {
-        "match": "\"Mix up your tastes with friends\"",
-        "replace": "\"Объедините свои вкусы с друзьями\""
-    },
-    "75": {
-        "match": "\"Folder\"",
-        "replace": "\"Папку\""
-    },
-    "76": {
-        "match": "\"Organize your playlists\"",
-        "replace": "\"Организовать плейлисты\""
-    },
-    "77": {
-        "match": "\"Jam\"",
-        "replace": "\"Джем\""
-    },
-    "78": {
-        "match": "\"Listen live with others\"",
-        "replace": "\"Слушайте вместе, где бы вы ни были\""
-    },
-    "79": {
-        "match": "\"Explore .0.\"",
-        "replace": "\"Исследовать {0}\""
-    },
-    "80": {
+    "59": {
         "match": "\"Sleep timer\"",
         "replace": "\"Таймер сна\""
     },
-    "81": {
-        "match": "\"Scroll through previews of tracks from this album\"",
-        "replace": "\"Пролистайте превью треков из этого альбома\""
-    },
-    "82": {
-        "match": "\"Scroll through previews of tracks from this playlist\"",
-        "replace": "\"Пролистайте превью треков из этого плейлиста\""
-    },
-    "83": {
-        "match": "\"Scroll through previews of tracks from this artist\"",
-        "replace": "\"Пролистайте превью треков из этого артиста\""
-    },
-    "84": {
-        "match": "\"Scroll through previews of episodes from this podcast\"",
-        "replace": "\"Пролистайте превью эпизодов из этого подкаста\""
-    },
-    "85": {
+    "60": {
         "match": "\"End of episode\"",
         "replace": "\"Когда закончится эпизод\""
     },
-    "86": {
+    "61": {
         "match": "\"End of track\"",
         "replace": "\"Когда закончится трек\""
     },
-    "87": {
+    "62": {
         "match": "\"Turn off timer\"",
         "replace": "\"Выключить таймер\""
     },
-    "88": {
+    "63": {
         "match": "\"OK, your sleep timer is set.\"",
         "replace": "\"Хорошо, таймер сна установлен\""
     },
-    "89": {
+    "64": {
         "match": "\"Search in Authors\"",
         "replace": "\"Искать в Авторах\""
+    },
+    "65": {
+        "match": "\"A soundtrack for every part of the day.\"",
+        "replace": "\"Саундтрек для любого времени суток.\""
+    },
+    "66": {
+        "match": "\"See your unique playlist\"",
+        "replace": "\"Посмотрите свой уникальный плейлист\""
+    },
+    "67": {
+        "match": "\"You.ll still get:\"",
+        "replace": "\"Вы также получите:\""
+    },
+    "68": {
+        "match": "\"Trending songs in .country. | Spotify\"",
+        "replace": "\"Популярные песни в %country% | Spotify\""
+    },
+    "69": {
+        "match": "\"Featured Charts in .country. | Spotify\"",
+        "replace": "\"Избранные чарты в %country% | Spotify\""
+    },
+    "70": {
+        "match": "\"Popular artists in .country. | Spotify\"",
+        "replace": "\"Популярные исполнители в %country% | Spotify\""
+    },
+    "71": {
+        "match": "\"Popular albums in .country. | Spotify\"",
+        "replace": "\"Популярные альбомы в %country% | Spotify\""
+    },
+    "72": {
+        "match": "\"Discover trending songs in .country. today.\"",
+        "replace": "\"Откройте для себя трендовые песни в %country% сегодня.\""
+    },
+    "73": {
+        "match": "\"Discover Featured Charts in .country. today.\"",
+        "replace": "\"Откройте для себя избранные чарты в %country% сегодня.\""
+    },
+    "74": {
+        "match": "\"Discover the most popular artists in .country. today.\"",
+        "replace": "\"Откройте для себя самых популярных исполнителей в %country% сегодня.\""
+    },
+    "75": {
+        "match": "\"Discover the most popular albums in .country. today.\"",
+        "replace": "\"Откройте для себя самые популярные альбомы в %country% сегодня.\""
+    },
+    "76": {
+        "match": "\"Report Issue\"",
+        "replace": "\"Сообщить о проблеме\""
+    },
+    "77": {
+        "match": "\"Type of issue:\"",
+        "replace": "\"Тип проблемы:\""
+    },
+    "78": {
+        "match": "\"Report\"",
+        "replace": "\"Сообщить\""
+    },
+    "79": {
+        "match": "\"customer service\"",
+        "replace": "\"служба поддержки\""
+    },
+    "80": {
+        "match": "\"here\"",
+        "replace": "\"здесь\""
+    },
+    "81": {
+        "match": "\"You issue has been reported. To get personal support, please contact .support_link.. Log files has copied .open_folder_link..\"",
+        "replace": "\"Ваше сообщение о проблеме отправлено. Для получения персональной поддержки, пожалуйста, свяжитесь с %support_link%. Лог-файлы скопированы в %open_folder_link%.\""
+    },
+    "82": {
+        "match": "\"Close\"",
+        "replace": "\"Закрыть\""
+    },
+    "83": {
+        "match": "\"Ok, we won.t play music from this artist again.\"",
+        "replace": "\"Хорошо, мы больше не будем воспроизводить музыку этого исполнителя\""
+    },
+    "84": {
+        "match": "\".Select Type.\"",
+        "replace": "\"<Выберите тип>\""
+    },
+    "85": {
+        "match": "\"Failed to load page, ..Something went wrong..\"",
+        "replace": "\"Не удалось загрузить страницу,\"Что-то пошло не так\"\""
+    },
+    "86": {
+        "match": "\"Problem playing songs or podcasts\"",
+        "replace": "\"Проблема с воспроизведением песен или подкастов\""
+    },
+    "87": {
+        "match": "\"Black screen\"",
+        "replace": "\"Черный экран\""
+    },
+    "88": {
+        "match": "\"Spotify hangs or crashes\"",
+        "replace": "\"Spotify завис или произошел сбой\""
+    },
+    "89": {
+        "match": "\"Incorrect behaviour\"",
+        "replace": "\"Некорректное поведение\""
+    },
+    "90": {
+        "match": "\"Problem installing or upgrading the Spotify\"",
+        "replace": "\"Проблема с установкой или обновлением Spotify\""
+    },
+    "91": {
+        "match": "\"Problem login to Spotify\"",
+        "replace": "\"Проблема со входом в Spotify\""
+    },
+    "92": {
+        "match": "\"Spotify use to much CPU, RAM or drain battery\"",
+        "replace": "\"Spotify сильно нагружает процессор, оперативную память или разряжает батарею\""
+    },
+    "93": {
+        "match": "\"Some other issue with Spotify\"",
+        "replace": "\"Другая проблема со Spotify\""
+    },
+    "94": {
+        "match": "\"Download the .0. app\"",
+        "replace": "\" Загрузите приложение {0}\""
+    },
+    "95": {
+        "match": "\"Check out what your friends are playing and explore their music vibes.\"",
+        "replace": "\"Посмотрите, что слушают ваши друзья, и исследуйте их музыкальные предпочтения.\""
+    },
+    "96": {
+        "match": "\"Take your music offline with the .0. app\"",
+        "replace": "\"Слушайте свою музыку офлайн с помощью приложения {0}\""
+    },
+    "97": {
+        "match": "\"Download your favorite playlists, albums and episodes to listen anytime, anywhere.\"",
+        "replace": "\"Скачивайте любимые плейлисты, альбомы и эпизоды, чтобы слушать в любое время и в любом месте.\""
+    },
+    "98": {
+        "match": "\"Download the {0} app to start a Jam\"",
+        "replace": "\"Скачайте приложение {0}, чтобы начать Джем\""
+    },
+    "99": {
+        "match": "\"Invite friends to listen and add songs together in real time, from wherever they are.\"",
+        "replace": "\"Приглашайте друзей слушать и добавлять песни вместе в режиме реального времени, где бы они ни находились\""
+    },
+    "100": {
+        "match": "\"Compact list\"",
+        "replace": "\"Компактный список\""
+    },
+    "101": {
+        "match": "\"Compact grid\"",
+        "replace": "\"Компактная сетка\""
+    },
+    "102": {
+        "match": "\"Download Spotify for .device.\"",
+        "replace": "\"Скачать Spotify для %device%\""
+    },
+    "103": {
+        "match": "\"Enjoy high-quality audio, offline playback, and a lively friend feed to stay in tune with your friends' favourites.\"",
+        "replace": "\"Слушайте музыку в высоком качестве, прослушиванием офлайн и ленту обновлений друзей, чтобы следить за их музыкальными предпочтениями.\""
+    },
+    "104": {
+        "match": "\"Download the free app\"",
+        "replace": "\"Скачайте бесплатное приложение\""
+    },
+    "105": {
+        "match": "\"Lyrics preview\"",
+        "replace": "\"Превью текста\""
+    },
+    "106": {
+        "match": "\"Show less\"",
+        "replace": "\"Свернуть\""
+    },
+    "107": {
+        "match": "\"Show more\"",
+        "replace": "\"Развернуть\""
+    },
+    "108": {
+        "match": "\"Hide lyrics\"",
+        "replace": "\"Скрыть текст\""
     }
 }

@@ -1447,6 +1447,15 @@
                     "fr": "1.2.60",
                     "to": ""
                 }
+            },
+            "BackendSearchHistory": {
+                "name": "enableBackendSearchHistory",
+                "description": "Enable backend search history",
+                "native_description": "Enable backend search history",
+                "version": {
+                    "fr": "1.2.60",
+                    "to": ""
+                }
             }
         },
         "CustomExp": {

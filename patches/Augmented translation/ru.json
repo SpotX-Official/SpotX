@@ -341,7 +341,7 @@
     },
     "85": {
         "match": "\"Failed to load page, ..Something went wrong..\"",
-        "replace": "\"Не удалось загрузить страницу,\"Что-то пошло не так\"\""
+        "replace": "\"Не удалось загрузить страницу, что-то пошло не так\""
     },
     "86": {
         "match": "\"Problem playing songs or podcasts\"",

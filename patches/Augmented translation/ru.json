@@ -272,19 +272,19 @@
         "replace": "\"Вы также получите:\""
     },
     "68": {
-        "match": "\"Trending songs in .country. | Spotify\"",
+        "match": "\"Trending songs in .country. . Spotify\"",
         "replace": "\"Популярные песни в %country% | Spotify\""
     },
     "69": {
-        "match": "\"Featured Charts in .country. | Spotify\"",
-        "replace": "\"Избранные чарты в %country% | Spotify\""
+        "match": "\"Featured Charts in .country. . Spotify\"",
+        "replace": "\"Избранные чарты в %country% . Spotify\""
     },
     "70": {
-        "match": "\"Popular artists in .country. | Spotify\"",
+        "match": "\"Popular artists in .country. . Spotify\"",
         "replace": "\"Популярные исполнители в %country% | Spotify\""
     },
     "71": {
-        "match": "\"Popular albums in .country. | Spotify\"",
+        "match": "\"Popular albums in .country. . Spotify\"",
         "replace": "\"Популярные альбомы в %country% | Spotify\""
     },
     "72": {
@@ -392,7 +392,7 @@
         "replace": "\"Скачивайте любимые плейлисты, альбомы и эпизоды, чтобы слушать в любое время и в любом месте.\""
     },
     "98": {
-        "match": "\"Download the {0} app to start a Jam\"",
+        "match": "\"Download the .0. app to start a Jam\"",
         "replace": "\"Скачайте приложение {0}, чтобы начать Джем\""
     },
     "99": {

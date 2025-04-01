@@ -121,17 +121,18 @@ $PSDefaultParameterValues['Stop-Process:ErrorAction'] = [System.Management.Autom
 
 function Show-SpotXRIP {
     $SpotXRipLogo = @"
-
-   ███████╗██████╗  ██████╗ ████████╗██╗  ██╗    ██████╗ ██╗██████╗ 
-   ██╔════╝██╔══██╗██╔═══██╗╚══██╔══╝╚██╗██╔╝    ██╔══██╗██║██╔══██╗
-   ███████╗██████╔╝██║   ██║   ██║    ╚███╔╝     ██████╔╝██║██████╔╝
-   ╚════██║██╔═══╝ ██║   ██║   ██║    ██╔██╗     ██╔══██╗██║██╔═══╝ 
-   ███████║██║     ╚██████╔╝   ██║   ██╔╝ ██╗    ██║  ██║██║██║     
-   ╚══════╝╚═╝      ╚═════╝    ╚═╝   ╚═╝  ╚═╝    ╚═╝  ╚═╝╚═╝╚═╝     
+                                                                   
+    _____             _    __   __   _____  _____  _____
+   / ____|           | |   \ \ / /  |  __ \|_   _||  __ \
+   | (___  _ __   ___| |_   \ V /   | |__) | | |  | |__) |
+    \___ \| '_ \ / _ \ __|   > <    |  _  /  | |  |  ___/
+    ____) | |_) | (_) | |_  / . \   | | \ \ _| |_ | |
+   |_____/| .__/ \___/ \__|/_/ \_\  |_|  \_\_____||_|
+          | |                                         
+          |_|                                         
                                                                    
 "@
-    # Convert to UTF8 to ensure proper display
-    $SpotXRipLogo = [System.Text.Encoding]::UTF8.GetString([System.Text.Encoding]::Default.GetBytes($SpotXRipLogo))
+
     Write-Host $SpotXRipLogo -ForegroundColor Red
 
     Write-Host "SpotX is completely broken. The project has officially shut down and is no longer maintained as of today." -ForegroundColor Yellow

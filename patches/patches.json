@@ -543,7 +543,7 @@
                 "native_description": "Enables esperanto migration of the adStateReportManager",
                 "version": {
                     "fr": "1.2.55",
-                    "to": ""
+                    "to": "1.2.60"
                 }
             },
             "EventsInYourLibrary": {
@@ -905,7 +905,7 @@
                 "native_description": "Enable the dynamic normalizer/compressor",
                 "version": {
                     "fr": "1.2.14",
-                    "to": ""
+                    "to": "1.2.60"
                 }
             },
             "HeBringsNpb": {
@@ -1456,6 +1456,24 @@
                     "fr": "1.2.60",
                     "to": ""
                 }
+            },
+            "WatchFeedEntityPages": {
+                "name": "enableWatchFeedEntityPages",
+                "description": "enabled track fragments in playlists, artists, albums",
+                "native_description": "Enable Watch Feed feature on entity pages",
+                "version": {
+                    "fr": "1.2.56",
+                    "to": ""
+                }
+            },
+            "WatchFeed": {
+                "name": "enableWatchFeed",
+                "description": "Enable Watch Feed feature",
+                "native_description": "Enable Watch Feed feature",
+                "version": {
+                    "fr": "1.2.56",
+                    "to": ""
+                }
             }
         },
         "CustomExp": {
@@ -1626,6 +1644,16 @@
                 "value": "control",
                 "version": {
                     "fr": "1.2.60",
+                    "to": ""
+                }
+            },
+            "LyricsVariationsInNPV": {
+                "name": "enableLyricsVariationsInNPV",
+                "description": "Enable Lyrics in NPV and reducing accidental view",
+                "native_description": "Enable Lyrics in NPV and reducing accidental view",
+                "value": "CONTROL",
+                "version": {
+                    "fr": "1.2.61",
                     "to": ""
                 }
             }

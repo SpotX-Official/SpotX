@@ -588,7 +588,7 @@
                 "native_description": "Enable refactored version of ads orchestrator middleware",
                 "version": {
                     "fr": "1.2.57",
-                    "to": ""
+                    "to": "1.2.61"
                 }
             },
             "AdCountUi": {
@@ -597,6 +597,15 @@
                 "native_description": "Enable ad count feedback in NPV",
                 "version": {
                     "fr": "1.2.59",
+                    "to": ""
+                }
+            },
+            "SaxLeaderboardAds": {
+                "name": "enableSaxLeaderboardAds",
+                "description": "Enable SAX Leaderboard Ad Format",
+                "native_description": "Enable SAX Leaderboard Ad Format",
+                "version": {
+                    "fr": "1.2.62",
                     "to": ""
                 }
             }
@@ -950,7 +959,7 @@
                 "native_description": "Enable Queue on the right panel",
                 "version": {
                     "fr": "1.2.26",
-                    "to": ""
+                    "to": "1.2.61"
                 }
             },
             "RecentlyPlayedShortcut": {
@@ -1364,7 +1373,7 @@
                 "native_description": "Enable Ambient Mode for Miniplayer",
                 "version": {
                     "fr": "1.2.55",
-                    "to": ""
+                    "to": "1.2.61"
                 }
             },
             "PeekNpv": {

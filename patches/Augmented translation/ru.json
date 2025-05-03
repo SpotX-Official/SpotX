@@ -380,7 +380,7 @@
         "replace": "\"Файлы журнала скопированы. Нажмите %open_folder_link% для просмотра.\""
     },
     "95": {
-        "match": "\"Failed to load page (..Something went wrong..)\"",
+        "match": "\"Failed to load page ...Something went wrong...\"",
         "replace": "\"Не удалось загрузить страницу, что-то пошло не так\""
     },
     "96": {

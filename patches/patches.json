@@ -129,7 +129,7 @@
                 "native_description": "Enable user fraud signals",
                 "version": {
                     "fr": "1.2.10",
-                    "to": ""
+                    "to": "1.2.62"
                 }
             },
             "UserFraudVerificationRequest": {
@@ -138,7 +138,7 @@
                 "native_description": "Enable the IAV component make api requests",
                 "version": {
                     "fr": "1.2.5",
-                    "to": ""
+                    "to": "1.2.62"
                 }
             },
             "UserFraudVerification": {
@@ -147,7 +147,7 @@
                 "native_description": "Enable user fraud verification",
                 "version": {
                     "fr": "1.2.3",
-                    "to": ""
+                    "to": "1.2.62"
                 }
             },
             "UserFraudCspViolation": {
@@ -156,7 +156,7 @@
                 "native_description": "Enable CSP violation detection",
                 "version": {
                     "fr": "1.2.17",
-                    "to": ""
+                    "to": "1.2.62"
                 }
             },
             "EsperantoMigration": {
@@ -291,7 +291,7 @@
                 "native_description": "Enable user fraud signals emitted on page load",
                 "version": {
                     "fr": "1.2.22",
-                    "to": ""
+                    "to": "1.2.62"
                 }
             },
             "GabitoAdEvent": {
@@ -815,7 +815,7 @@
                 "native_description": "Enable read along transcripts in the NPV",
                 "version": {
                     "fr": "1.2.17",
-                    "to": ""
+                    "to": "1.2.62"
                 }
             },
             "TogglePlaylistColumns": {
@@ -860,7 +860,7 @@
                 "native_description": "Enable Save and Retrieve feature for concerts",
                 "version": {
                     "fr": "1.2.7",
-                    "to": ""
+                    "to": "1.2.62"
                 }
             },
             "ConcertsForThisIsPlaylist": {
@@ -869,13 +869,13 @@
                 "native_description": "Enable Tour Card on This is Playlist",
                 "version": {
                     "fr": "1.2.11",
-                    "to": ""
+                    "to": "1.2.62"
                 }
             },
             "RemoteDownloads": {
                 "name": "enableRemoteDownloads",
                 "description": "Enable remote download support through the offline2 system",
-                "native_description": "Enable Tour Card on This is Playlist",
+                "native_description": "Enable remote download support through the offline2 system",
                 "version": {
                     "fr": "1.2.8",
                     "to": ""
@@ -905,7 +905,7 @@
                 "native_description": "Display ticket price on Event page",
                 "version": {
                     "fr": "1.2.15",
-                    "to": ""
+                    "to": "1.2.62"
                 }
             },
             "DynamicNormalizer": {
@@ -1211,7 +1211,7 @@
                 "native_description": "Enables the Spotlight component on home",
                 "version": {
                     "fr": "1.2.37",
-                    "to": ""
+                    "to": "1.2.62"
                 }
             },
             "SharingButtonOnMiniPlayer": {
@@ -1274,7 +1274,7 @@
                 "native_description": "Enable carousels on home",
                 "version": {
                     "fr": "1.2.44",
-                    "to": ""
+                    "to": "1.2.62"
                 }
             },
             "canvasHome": {
@@ -1283,7 +1283,7 @@
                 "native_description": "Enables the new Feed Baseline for Hybrid Home",
                 "version": {
                     "fr": "1.2.42",
-                    "to": ""
+                    "to": "1.2.62"
                 }
             },
             "canvasHomeAudioPreviews": {
@@ -1391,7 +1391,7 @@
                 "native_description": "Enable aligned panel headers",
                 "version": {
                     "fr": "1.2.57",
-                    "to": ""
+                    "to": "1.2.62"
                 }
             },
             "UserCommentsForEpisodes": {
@@ -1436,7 +1436,7 @@
                 "native_description": "Enable improved cinema mode",
                 "version": {
                     "fr": "1.2.50",
-                    "to": ""
+                    "to": "1.2.62"
                 }
             },
             "ImprovedCinemaModeCanvas": {
@@ -1593,7 +1593,7 @@
                 "value": "canvas-play-loop",
                 "version": {
                     "fr": "1.2.33",
-                    "to": ""
+                    "to": "1.2.62"
                 }
             },
             "shareButtonPositioning": {

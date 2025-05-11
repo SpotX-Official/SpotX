@@ -13,13 +13,16 @@ param
     [Alias("dev")]
     [switch]$devtools,
 
-    [Parameter(HelpMessage = 'Hiding podcasts/episodes/audiobooks from homepage.')]
+    [Parameter(HelpMessage = 'Disable podcasts/episodes/audiobooks from homepage.')]
     [switch]$podcasts_off,
 
-    [Parameter(HelpMessage = 'Hiding Ad-like sections from the homepage')]
+    [Parameter(HelpMessage = 'Disable Ad-like sections from homepage')]
     [switch]$adsections_off,
+
+    [Parameter(HelpMessage = 'Disable canvas from homepage')]
+    [switch]$canvashome_off,
     
-    [Parameter(HelpMessage = 'Do not hiding podcasts/episodes/audiobooks from homepage.')]
+    [Parameter(HelpMessage = 'Do not disable podcasts/episodes/audiobooks from homepage.')]
     [switch]$podcasts_on,
     
     [Parameter(HelpMessage = 'Block Spotify automatic updates.')]
@@ -72,9 +75,6 @@ param
 
     [Parameter(HelpMessage = 'it`s killing the heart icon, you`re able to save and choose the destination for any song, playlist, or podcast')]
     [switch]$plus,
-
-    [Parameter(HelpMessage = 'Enabled the big cards for home page')]
-    [switch]$canvasHome,
 
     [Parameter(HelpMessage = 'Enable funny progress bar.')]
     [switch]$funnyprogressBar,
@@ -1168,8 +1168,6 @@ function Helper($paramname) {
 
             if ([version]$offline -le [version]'1.2.62.580') {
 
-                if (!($canvasHome)) { Move-Json -n "canvasHome", "canvasHomeAudioPreviews" -t $Enable -f $Disable }
-
                 if (!$newFullscreenMode) { Move-Json -n "ImprovedCinemaMode", "ImprovedCinemaModeCanvas" -t $Enable -f $Disable }
             
             }
@@ -1380,14 +1378,31 @@ function Helper($paramname) {
             else { Remove-Json -j $VarJs -p 'product_state' }
 
             
-            if ($podcast_off -or $adsections_off) {
-                $type = switch ($true) {
-                    { $podcast_off -and $adsections_off } { "all" }
-                    { $podcast_off -and -not $adsections_off } { "podcast" }
-                    { -not $podcast_off -and $adsections_off } { "section" }
+            $type = $null
+
+            if ($podcast_off -or $adsections_off -or $canvashome_off) {
+    
+                $active_elements = @()
+                if ($podcast_off) { $active_elements += "podcast" }
+                if ($adsections_off) { $active_elements += "section" }
+                if ($canvashome_off) { $active_elements += "canvas" }
+
+                switch ($active_elements.Count) {
+                    3 {
+                        $type = "all"
+                    }
+                    2 {
+                        $type = '[' + (($active_elements | ForEach-Object { "`"$_`"" }) -join ", ") + ']'
+                        $webjson.VariousJs.block_section.replace = $webjson.VariousJs.block_section.replace -replace '\"', ''
+                    }
+                    1 {
+                        $type = $active_elements[0]
+                    }
                 }
+
                 $webjson.VariousJs.block_section.replace = $webjson.VariousJs.block_section.replace -f $type
                 $global:type = $type
+                
             }
             else {
                 Remove-Json -j $VarJs -p 'block_section'
@@ -1787,7 +1802,7 @@ If ($test_spa) {
         }
     }
     # block subfeeds
-    if ($global:type -eq "all" -or $global:type -eq "podcast") {
+    if ($global:type -match "all" -or $global:type -match "podcast") {
         $css += $webjson.others.block_subfeeds.add
     }
     # scrollbar indent fixes

@@ -4,7 +4,6 @@ function sectionBlock(e, type) {
     const sections = body?.sectionContainer?.sections?.items;
 
     function removeSections() {
-
         const sectionsData = [
             { id: '0JQ5IMCbQBLupUQrQFeCzx', name: 'Best of the Year' },
             { id: '0JQ5DAnM3wGh0gz1MXnu3C', name: 'Best of Artists / Tracks' },
@@ -34,7 +33,7 @@ function sectionBlock(e, type) {
             { id: '0JQ5IMCbQBLqTJyy28YCa9', name: '?' },
             { id: '0JQ5IMCbQBLlC31GvtaB6w', name: '?' },
             { id: '0JQ5DAnM3wGh0gz1MXnu7R', name: '?' }
-        ]
+        ];
         const sectionIdsRegex = new RegExp(sectionsData.map(section => section.id).join('|'));
 
         for (let i = sections.length - 1; i >= 0; i--) {
@@ -64,13 +63,34 @@ function sectionBlock(e, type) {
         }
     }
 
-    if (body?.greeting && sections) {
-        if (type === "section" || type === "all") {
-            removeSections();
-        }
+    function removeCanvasSections() {
+        if (Array.isArray(sections)) {
+            for (let i = sections.length - 1; i >= 0; i--) {
 
-        if (type === "podcast" || type === "all") {
-            removePodcasts();
+                const sectionDataTypename = sections[i]?.data?.__typename;
+
+                if (sectionDataTypename === 'HomeFeedBaselineSectionData') {
+                    sections.splice(i, 1);
+                }
+            }
+        }
+    }
+
+    if (body?.greeting && sections) {
+        const actions = {
+            section: removeSections,
+            podcast: removePodcasts,
+            canvas: removeCanvasSections,
+            all: () => {
+                removeSections();
+                removePodcasts();
+                removeCanvasSections();
+            }
+        };
+        if (Array.isArray(type)) {
+            type.forEach(t => actions[t]?.());
+        } else {
+            actions[type]?.();
         }
     }
 }

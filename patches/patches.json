@@ -2090,6 +2090,14 @@
             },
             "match": "((LKgm9fCDTO7wqig_5U1q|eFQFeXVbY8rrcTagg0oH){--left-sidebar-item-height.+?margin-top)(:\\d+px)",
             "replace": "$1:0px"
+        },
+        "searchFixes": {
+            "version": {
+                "fr": "1.2.28",
+                "to": "1.2.57"
+            },
+            "match": "(typeName\\])",
+            "replace": "$1 || []"
         }
     },
     "VariousJs": {

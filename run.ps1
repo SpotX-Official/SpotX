@@ -1385,7 +1385,8 @@ function Helper($paramname) {
 
             
             $type = $null
-
+            $global:type = $null
+            
             if ($podcast_off -or $adsections_off -or $canvashome_off) {
     
                 $active_elements = @()

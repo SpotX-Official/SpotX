@@ -309,7 +309,7 @@
                 "native_description": "Enable Your Listening Upsell Banner for free & unauth users",
                 "version": {
                     "fr": "1.2.25",
-                    "to": ""
+                    "to": "1.2.63"
                 }
             },
             "podcast-ads": {
@@ -471,7 +471,7 @@
                 "native_description": "Enable Spotify Brand Lift (SBL) Surveys in the NPV",
                 "version": {
                     "fr": "1.2.43",
-                    "to": ""
+                    "to": "1.2.63"
                 }
             },
             "EFlag": {
@@ -489,7 +489,7 @@
                 "native_description": "Enable impressions on home for impression economy (some impressions will still be logged with this disabled)",
                 "version": {
                     "fr": "1.2.44",
-                    "to": ""
+                    "to": "1.2.63"
                 }
             },
             "SearchImpressions": {
@@ -498,7 +498,7 @@
                 "native_description": "Enable impressions on search for impression economy",
                 "version": {
                     "fr": "1.2.44",
-                    "to": ""
+                    "to": "1.2.63"
                 }
             },
             "StageDesktopDebug": {
@@ -606,6 +606,15 @@
                 "native_description": "Enable SAX Leaderboard Ad Format",
                 "version": {
                     "fr": "1.2.62",
+                    "to": ""
+                }
+            },
+            "EmbeddedAdVisibilityLogging": {
+                "name": "enableEmbeddedAdVisibilityLogging",
+                "description": "When enabled, enhanced visibility logs will be sent for embedded ads",
+                "native_description": "EWhen enabled, enhanced visibility logs will be sent for embedded ads",
+                "version": {
+                    "fr": "1.2.63",
                     "to": ""
                 }
             }
@@ -1633,16 +1642,6 @@
                 "value": "99999",
                 "version": {
                     "fr": "1.2.59",
-                    "to": ""
-                }
-            },
-            "DesktopOnboardingChecklist": {
-                "name": "enableDesktopOnboardingChecklist",
-                "description": "Enable checklist-based onboarding",
-                "native_description": "Enable checklist-based onboarding",
-                "value": "control",
-                "version": {
-                    "fr": "1.2.60",
                     "to": ""
                 }
             },

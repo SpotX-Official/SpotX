@@ -617,6 +617,15 @@
                     "fr": "1.2.63",
                     "to": ""
                 }
+            },
+            "Hpto": {
+                "name": "enableHpto",
+                "description": "Enable Hpto announcements on Home",
+                "native_description": "Enable Hpto announcements on Home",
+                "version": {
+                    "fr": "1.2.65",
+                    "to": ""
+                }
             }
         },
         "EnableExp": {
@@ -1492,6 +1501,24 @@
                     "fr": "1.2.56",
                     "to": ""
                 }
+            },
+            "LyricsScrollToCurrentLineButton": {
+                "name": "enableLyricsScrollToCurrentLineButton",
+                "description": "Enable scroll to current line button in lyrics",
+                "native_description": "Enable scroll to current line button in lyrics",
+                "version": {
+                    "fr": "1.2.65",
+                    "to": ""
+                }
+            },
+            "PiPMiniPlayerSettings": {
+                "name": "enablePiPMiniPlayerSettings",
+                "description": "Enable PiP settings",
+                "native_description": "Enable PiP settings",
+                "version": {
+                    "fr": "1.2.65",
+                    "to": ""
+                }
             }
         },
         "CustomExp": {
@@ -1662,6 +1689,16 @@
                 "value": "CONTROL",
                 "version": {
                     "fr": "1.2.61",
+                    "to": ""
+                }
+            },
+            "SkipNextTooltip": {
+                "name": "enableSkipNextTooltip",
+                "description": "Enable tooltip that shows a preview of the next item in queue",
+                "native_description": "Enable tooltip that shows a preview of the next item in queue",
+                "value": "expanded",
+                "version": {
+                    "fr": "1.2.65",
                     "to": ""
                 }
             }

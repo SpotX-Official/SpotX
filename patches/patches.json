@@ -626,6 +626,24 @@
                     "fr": "1.2.65",
                     "to": ""
                 }
+            },
+            "SponsoredPlaylistV2": {
+                "name": "enableSponsoredPlaylistV2",
+                "description": "Enables the new suite of interfaces for Sponsored Playlists V2",
+                "native_description": "Enables the new suite of interfaces for Sponsored Playlists V2",
+                "version": {
+                    "fr": "1.2.66",
+                    "to": ""
+                }
+            },
+            "SponsoredPlaylistV2ScrollCard": {
+                "name": "enableSponsoredPlaylistV2ScrollCard",
+                "description": "Enables the music NPV scroll card rendering during a sponsored playlist playback",
+                "native_description": "Enables the music NPV scroll card rendering during a sponsored playlist playback",
+                "version": {
+                    "fr": "1.2.66",
+                    "to": ""
+                }
             }
         },
         "EnableExp": {
@@ -743,7 +761,7 @@
                 "native_description": "Show lyrics in the right sidebar",
                 "version": {
                     "fr": "1.2.0",
-                    "to": ""
+                    "to": "1.2.61"
                 }
             },
             "RightSidebarColors": {
@@ -1519,6 +1537,15 @@
                     "fr": "1.2.65",
                     "to": ""
                 }
+            },
+            "SearchSuggestions": {
+                "name": "enableSearchSuggestions",
+                "description": "Enables the search suggestions dropdown",
+                "native_description": "Enables the search suggestions dropdown",
+                "version": {
+                    "fr": "1.2.66",
+                    "to": ""
+                }
             }
         },
         "CustomExp": {
@@ -1686,9 +1713,9 @@
                 "name": "enableLyricsVariationsInNPV",
                 "description": "Enable Lyrics in NPV and reducing accidental view",
                 "native_description": "Enable Lyrics in NPV and reducing accidental view",
-                "value": "CONTROL",
+                "value": "REDUCED_VISIBILITY",
                 "version": {
-                    "fr": "1.2.61",
+                    "fr": "1.2.66",
                     "to": ""
                 }
             },

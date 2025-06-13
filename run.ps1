@@ -378,7 +378,7 @@ if (!($version -and $version -match $match_v)) {
     }
     else {  
         # latest tested version for Win 10-12 
-        $onlineFull = "1.2.65.255.g85e641b4-609"
+        $onlineFull = "1.2.66.444.gf7d4ad52-343"
     }
 }
 else {
@@ -1197,7 +1197,11 @@ function Helper($paramname) {
                 }
                 else {
                     if (!($rightsidebarcolor)) { Remove-Json -j $Enable -p 'RightSidebarColors' }
-                    if ($old_lyrics) { Remove-Json -j $Enable -p 'RightSidebarLyrics' } 
+                    
+                    if ($old_lyrics) { 
+                        Remove-Json -j $Enable -p 'RightSidebarLyrics' 
+                        $Custom.GlobalNavBar.value = "CONTROL"
+                    } 
                 }
             }
             if (!$premium) { Remove-Json -j $Enable -p 'RemoteDownloads' }
@@ -1923,7 +1927,7 @@ if ($test_spa) {
     extract -counts 'one' -method 'zip' -name 'xpui.js' -helper 'ForcedExp' -add $webjson.others.byspotx.add
 
     # Hiding Ad-like sections or turn off podcasts from the homepage
-    if ($podcast_off -or $adsections_off) {
+    if ($podcast_off -or $adsections_off -or $canvashome_off) {
 
         $section = Get -Url (Get-Link -e "/js-helper/sectionBlock.js")
         

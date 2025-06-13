@@ -10,7 +10,7 @@
     --lyrics-color-background: var(--background) !important;
 }
 
-.Ai_McRq9wJEYK21w8nX_.gpDSOimnzH4zTJmE7UR5.I2WIloMMjsBeMaIS8H3v.Rp8WpXLxe4HlMlQ79OLY {
+[data-testid="lyrics-npv-section"]:not(._OhUGn8Plh3mRw4awIM5):not(.Sb2rC16jDkGc9eweOU8g) {
     background-color: #1f1f1f !important;
 }
 

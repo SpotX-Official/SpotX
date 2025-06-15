@@ -1130,6 +1130,9 @@ function Helper($paramname) {
             # causes lags in the main menu 1.2.44-1.2.56
             if ([version]$offline -le [version]'1.2.56.502') { Move-Json -n 'HomeCarousels' -t $Enable -f $Disable }
 
+            # disable search suggestions
+            Move-Json -n 'SearchSuggestions' -t $Enable -f $Disable
+
             # disable new scrollbar
             Move-Json -n 'NewOverlayScrollbars' -t $Enable -f $Disable
 

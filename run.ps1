@@ -378,7 +378,7 @@ if (!($version -and $version -match $match_v)) {
     }
     else {  
         # latest tested version for Win 10-12 
-        $onlineFull = "1.2.66.445.ge795b717-376"
+        $onlineFull = "1.2.66.447.g4e37e896-540"
     }
 }
 else {
@@ -1203,7 +1203,7 @@ function Helper($paramname) {
                     
                     if ($old_lyrics) { 
                         Remove-Json -j $Enable -p 'RightSidebarLyrics' 
-                        $Custom.GlobalNavBar.value = "CONTROL"
+                        $Custom.LyricsVariationsInNPV.value = "CONTROL"
                     } 
                 }
             }

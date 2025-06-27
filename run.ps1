@@ -378,7 +378,7 @@ if (!($version -and $version -match $match_v)) {
     }
     else {  
         # latest tested version for Win 10-12 
-        $onlineFull = "1.2.66.447.g4e37e896-540"
+        $onlineFull = "1.2.67.553.gf85dc202-149"
     }
 }
 else {
@@ -1141,9 +1141,6 @@ function Helper($paramname) {
 
             # notifications are temporarily disabled
             Move-Json -n 'NotificationCenter' -t $Enable -f $Disable
-
-            # ability to toggle the visibility of the playlist column is temporarily disabled because it does not save its state
-            Move-Json -n 'TogglePlaylistColumns' -t $Enable -f $Disable
  
             if ($podcast_off) { Move-Json -n 'HomePin' -t $Enable -f $Disable }
 

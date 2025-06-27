@@ -2195,7 +2195,7 @@
                 "fr": "1.1.86",
                 "to": ""
             },
-            "match": "(case 6:|const .=await .\\([^\\)]*\\);)((return .\\.abrupt\\(\"|return[ \"],?)(null!=n&&|return\",)?(.)(\\);case 9|\\??.errors\\?Promise.reject.+?errors\\):.))",
+            "match": "(case 6:|const .=await .\\([^\\)]*\\);)((return .\\.abrupt\\(\"|return[ \"],?)(null!=n&&|return\",)?(.)(\\);case 9|\\??.errors\\?.*?Promise.reject.+?errors\\)+:.))",
             "replace": "$1sectionBlock($5,\"{0}\");$2"
         },
         "banner_home": {

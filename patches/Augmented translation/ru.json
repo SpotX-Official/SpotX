@@ -312,11 +312,11 @@
         "replace": "\"Все места проведения\""
     },
     "78": {
-        "match": "\"\".name.\" was released .years. year ago this week!\"",
+        "match": "\".\".name..\" was released .years. year ago this week!\"",
         "replace": "\"На этой неделе исполнился %years% год с момента выхода \"%name%\"!\""
     },
     "79": {
-        "match": "\"\".name.\" was released .years. years ago this week!\"",
+        "match": "\".\".name..\" was released .years. years ago this week!\"",
         "replace": "\"На этой неделе исполнилось %years% лет с момента выхода \"%name%\"!\""
     },
     "80": {

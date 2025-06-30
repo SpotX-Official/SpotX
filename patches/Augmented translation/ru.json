@@ -316,46 +316,51 @@
         "replace": "\"На этой неделе исполнился %years% год с момента выхода \\\"%name%\\\"!\""
     },
     "79": {
-        "match": "\".\".name..\" was released .years. years ago this week!\"",
-        "replace": "\"На этой неделе исполнилось %years% лет с момента выхода \\\"%name%\\\"!\""
+        "match": "((?:few|other)..)\".\".name..\" was released .years. years ago this week!\"",
+        "replace": "$1\"На этой неделе исполнилось %years% года с момента выхода \\\"%name%\\\"!\""
     },
+    
     "80": {
+        "match": "(many..)\".\".name..\" was released .years. years ago this week!\"",
+        "replace": "$1\"На этой неделе исполнилось %years% лет с момента выхода \\\"%name%\\\"!\""
+    },
+    "81": {
         "match": "\"Events at venues we think you.ll like\"",
         "replace": "\"События в местах, которые, как мы полагаем, вам придутся по вкусу\""
     },
-    "81": {
+    "82": {
         "match": "\".Select Type. \"",
         "replace": "\"<Выберите тип>\""
     },
-    "82": {
+    "83": {
         "match": "\"Use arrow keys to navigate the search suggestions\"",
         "replace": "\"Используйте клавиши со стрелками для навигации по поисковым предложениям\""
     },
-    "83": {
+    "84": {
         "match": "\"Up\"",
         "replace": "\"Вверх\""
     },
-    "84": {
+    "85": {
         "match": "\"Down\"",
         "replace": "\"Вниз\""
     },
-    "85": {
+    "86": {
         "match": "\"Navigate\"",
         "replace": "\"Навигация\""
     },
-    "86": {
+    "87": {
         "match": "\"Search\"",
         "replace": "\"Поиск\""
     },
-    "87": {
+    "88": {
         "match": "\"Connect\"",
         "replace": "\"Подключить устройство\""
     },
-    "88": {
+    "89": {
         "match": "\"Verify your age\"",
         "replace": "\"Подтвердите свой возраст\""
     },
-    "89": {
+    "90": {
         "match": "\"Синхронизация\"",
         "replace": "\"Синхронизировать\""
     }

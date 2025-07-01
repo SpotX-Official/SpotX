@@ -319,7 +319,6 @@
         "match": "((?:few|other)..)\".\".name..\" was released .years. years ago this week!\"",
         "replace": "$1\"На этой неделе исполнилось %years% года с момента выхода \\\"%name%\\\"!\""
     },
-    
     "80": {
         "match": "(many..)\".\".name..\" was released .years. years ago this week!\"",
         "replace": "$1\"На этой неделе исполнилось %years% лет с момента выхода \\\"%name%\\\"!\""

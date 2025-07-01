@@ -378,7 +378,7 @@ if (!($version -and $version -match $match_v)) {
     }
     else {  
         # latest tested version for Win 10-12 
-        $onlineFull = "1.2.67.556.g7023c791-183"
+        $onlineFull = "1.2.67.557.g2d9c92d2-185"
     }
 }
 else {
@@ -1911,7 +1911,7 @@ if ($test_spa) {
         $mode = [IO.Compression.ZipArchiveMode]::Update
         $zip_xpui = New-Object IO.Compression.ZipArchive($stream, $mode)
 
-    ($zip_xpui.Entries | Where-Object { $_.FullName -match "i18n" -and $_.FullName -inotmatch "(ru|en.json|longest)" }) | foreach { $_.Delete() }
+        ($zip_xpui.Entries | Where-Object { $_.FullName -match "i18n" -and $_.FullName -inotmatch "(ru|en.json|longest)" }) | foreach { $_.Delete() }
 
         $zip_xpui.Dispose()
         $stream.Close()

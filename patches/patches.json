@@ -2042,7 +2042,7 @@
                 "to": ""
             },
             "match": [
-                "<li><a href=\"#6eef7\">zlib<\/a><\/li>\n(.|\n)*<\/p><!-- END CONTAINER DEPS LICENSES -->(<\/div>)",
+                "<li><a href=\"#[A-Za-z0-9]{5}\">zlib<\/a><\/li>\n(.|\n)*<\/p><!-- END CONTAINER DEPS LICENSES -->(<\/div>)",
                 "\t",
                 "  ",
                 "(?m)(^\\s*\r?\n)",

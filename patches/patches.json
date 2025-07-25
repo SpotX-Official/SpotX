@@ -1546,6 +1546,33 @@
                     "fr": "1.2.67",
                     "to": ""
                 }
+            },
+            "SleepTimer": {
+                "name": "enableSleepTimer",
+                "description": "Enable Sleep timer",
+                "native_description": "Enable Sleep timer",
+                "version": {
+                    "fr": "1.2.69",
+                    "to": ""
+                }
+            },
+            "TracklistColumnsSorting": {
+                "name": "enableTracklistColumnsSorting",
+                "description": "Enable column reordering functionality in tracklists",
+                "native_description": "Enable column reordering functionality in tracklists",
+                "version": {
+                    "fr": "1.2.69",
+                    "to": ""
+                }
+            },
+            "ContextMenuShortcuts": {
+                "name": "enableContextMenuShortcuts",
+                "description": "Enables inline keyboard shortcuts for common context menu items",
+                "native_description": "Enables inline keyboard shortcuts for common context menu items",
+                "version": {
+                    "fr": "1.2.69",
+                    "to": ""
+                }
             }
         },
         "CustomExp": {
@@ -2130,7 +2157,7 @@
                 "fr": "1.1.74",
                 "to": ""
             },
-            "add": " .pzkhLqffqF_4hucrVVQA, .egE6UQjF_UUoCzvMxREj {display:none}"
+            "add": " .pzkhLqffqF_4hucrVVQA, .egE6UQjF_UUoCzvMxREj, .Y98_oiegQgSpY_o7hoKG {display:none}"
         },
         "veryhighstream": {
             "version": {

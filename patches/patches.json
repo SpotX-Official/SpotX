@@ -2344,6 +2344,14 @@
             },
             "match": "=>\\{((?:(?!=>\\{).)*?(?=\"loggedin_upgrade_menu))",
             "replace": "=>{ return null; $1"
+        },
+        "fix_sleep_timer": {
+            "version": {
+                "fr": "1.2.69",
+                "to": ""
+            },
+            "match": "(Sleep timer\",default:!)1",
+            "replace": "$10"
         }
     }
 }

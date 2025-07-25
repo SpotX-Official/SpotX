@@ -2350,8 +2350,8 @@
                 "fr": "1.2.69",
                 "to": ""
             },
-            "match": "(Sleep timer\",default:!)1",
-            "replace": "$10"
+            "match": "(Sleep timer\",default:)!1",
+            "replace": "$1!0"
         }
     }
 }

@@ -2352,6 +2352,14 @@
             },
             "match": "(Sleep timer\",default:)!1",
             "replace": "$1!0"
+        },
+        "fix_shuffle": {
+            "version": {
+                "fr": "1.2.69",
+                "to": ""
+            },
+            "match": "(Enable Smart Shuffle\",default:)!1",
+            "replace": "$1!0"
         }
     }
 }

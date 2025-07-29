@@ -62,7 +62,7 @@ body:
       PodcatsOff      = "Off Podcasts"
       PodcastsOn      = "On Podcasts"
       PodcatsSelect   = "Hide podcasts, shows, and audiobooks on the homepage ? [Y/N]"
-      DowngradeNote   = "It is recommended to block because Spotify was downgraded"
+      DowngradeNote   = "It is recommended to block because there is already a newer version of Spotify"
       UpdBlock        = "Spotify updates blocked"
       UpdUnblock      = "Spotify updates are not blocked"
       UpdSelect       = "Block Spotify updates ? [Y/N]"

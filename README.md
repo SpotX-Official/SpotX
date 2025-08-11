@@ -22,7 +22,7 @@
 <h1 id="requirements">Requirements</h1>
 
 - **OS:** Windows 7-11
-- **Spotify:** Latest official [versions](https://loadspot.pages.dev)
+- **Spotify:** [1.2.68 and below](https://loadspot.pages.dev)
 - **For Windows Desktop only** (Microsoft Store version is not suitable)
 - **PowerShell:** Version 5 and above recommended
 
@@ -53,13 +53,13 @@ or
 #### Run The following command in PowerShell:
 
 ```ps1
-iex "& { $(iwr -useb 'https://raw.githubusercontent.com/SpotX-Official/spotx-official.github.io/main/run.ps1') } -new_theme"
+iex "& { $(iwr -useb 'https://raw.githubusercontent.com/SpotX-Official/spotx-official.github.io/main/run.ps1') } -new_theme -block_update_on"
 ```
 
 #### mirror
 
 ```ps1
-iex "& { $(iwr -useb 'https://spotx-official.github.io/run.ps1') } -m -new_theme"
+iex "& { $(iwr -useb 'https://spotx-official.github.io/run.ps1') } -m -new_theme -block_update_on"
 ```
 
 </details>
@@ -150,13 +150,13 @@ or
 #### Run The following command in PowerShell:
 
 ```ps1
-iex "& { $(iwr -useb 'https://raw.githubusercontent.com/SpotX-Official/spotx-official.github.io/main/run.ps1') } -premium -new_theme"
+iex "& { $(iwr -useb 'https://raw.githubusercontent.com/SpotX-Official/spotx-official.github.io/main/run.ps1') } -premium -new_theme -block_update_on"
 ```
 
 #### mirror
 
 ```ps1
-iex "& { $(iwr -useb 'https://spotx-official.github.io/run.ps1') } -m -premium -new_theme"
+iex "& { $(iwr -useb 'https://spotx-official.github.io/run.ps1') } -m -premium -new_theme -block_update_on"
 ```
 
 </details>

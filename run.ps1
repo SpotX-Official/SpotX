@@ -794,7 +794,7 @@ if ($spotifyInstalled) {
                     'entry.2067427976' = $online + " < " + $offline
                 }   
             }
-            $null = Invoke-WebRequest -useb @Parameters 
+            # $null = Invoke-WebRequest -useb @Parameters 
         }
         catch {
             Write-Host 'Unable to submit new version of Spotify' 

@@ -1968,7 +1968,7 @@ if ($test_spa) {
     }
     extract -counts 'one' -method 'zip' -name 'xpui.js' -helper 'VariousofXpui-js'
     
-    if ([version]$offline -ge [version]"1.2.28.581" -and [version]$offline -le [version]"1.2.57.463") {
+    if ([version]$offline -ge [version]"1.1.85.884" -and [version]$offline -le [version]"1.2.57.463") {
         
         if ([version]$offline -ge [version]"1.2.45.454") { $typefile = "xpui.js" }
 

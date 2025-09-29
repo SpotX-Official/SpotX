@@ -2183,7 +2183,7 @@
         },
         "searchFixes": {
             "version": {
-                "fr": "1.2.28",
+                "fr": "1.1.85",
                 "to": "1.2.57"
             },
             "match": "(typeName\\])",

@@ -1,6 +1,7 @@
 @import url('colors.css');
 
 /* mini lyrics */
+.Li269NgzkU2gI4KOP9sM,
 .I2WIloMMjsBeMaIS8H3v,
 .McI3hD7aCfpq015LJa6X,
 .gpDSOimnzH4zTJmE7UR5 {
@@ -10,8 +11,16 @@
     --lyrics-color-background: var(--background) !important;
 }
 
-[data-testid="lyrics-npv-section"]:not(._OhUGn8Plh3mRw4awIM5):not(.Sb2rC16jDkGc9eweOU8g) {
-    background-color: #1f1f1f !important;
+/* title unsynced */
+p[class*="e-"][class*="-text"].encore-text-body-small {
+    color: var(--musixmatch) !important;
+    margin-bottom: 8px !important;
+}
+
+/* fixed color of lyrics button */
+[data-testid="lyrics-npv-section"]:not(._OhUGn8Plh3mRw4awIM5):not(.Sb2rC16jDkGc9eweOU8g):not(._YRfjT5prbRuSXcNK9WR):not(.RXRGSIFllAhUYWKYlANd) {
+    background-color:
+        #1f1f1f !important;
 }
 
 /* lyrics description */
@@ -40,7 +49,8 @@ body .KDhLFoEqoClhH12bsfrS {
 /* full cinema lyrics */
 .FUYNhisXTCmbzt9IDxnT,
 .tr8V5eHsUaIkOYVw7eSG,
-.hW9km7ku6_iggdWDR_Lg {
+.hW9km7ku6_iggdWDR_Lg,
+.lofIAg8Ixko3mfBrbfej {
     --lyrics-color-active: var(--current) !important;
     --lyrics-color-inactive: var(--next) !important;
     --lyrics-color-passed: var(--past) !important;
@@ -58,7 +68,8 @@ body .KDhLFoEqoClhH12bsfrS {
 .vapgYYF2HMEeLJuOWGq5:hover,
 ._LKG3z7SnerR0eigPCoK:hover,
 .NHVfxGs2HwmI_fly2JC4:hover,
-.gaHIufRWhoWbiT8S6zuM:hover {
+.gaHIufRWhoWbiT8S6zuM:hover,
+.FQYXZaa0aDIrse54YlYO:hover {
     color: var(--hover) !important;
     /* remove underline */
     text-decoration: none !important;
@@ -67,13 +78,13 @@ body .KDhLFoEqoClhH12bsfrS {
 /* lyrics unsynced */
 .HxblHEsl2WX2yhubfVIc,
 .SruqsAzX8rUtY2isUZDF,
+.eTLjCqbDo7QehPEPz86a,
 .AEfhRyqGa3vzQrgfdwWE.Re403AJffPPuZmX7LRJj,
 .NHVfxGs2HwmI_fly2JC4.E64X_eoy6xsJmDdKKHja,
 .gaHIufRWhoWbiT8S6zuM.Qo3OkrSis5IWlP9Tchbr,
 .AEfhRyqGa3vzQrgfdwWE .Re403AJffPPuZmX7LRJj {
     color: var(--next) !important;
 }
-
 
 /* full screen lyrics */
 .npv-lyrics__text-wrapper--previous .npv-lyrics__text {

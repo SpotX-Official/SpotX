@@ -287,8 +287,10 @@ $spotifyDirectory = Join-Path $env:APPDATA 'Spotify'
 $spotifyDirectory2 = Join-Path $env:LOCALAPPDATA 'Spotify'
 $spotifyExecutable = Join-Path $spotifyDirectory 'Spotify.exe'
 $spotifyDll = Join-Path $spotifyDirectory 'Spotify.dll' 
+$chrome_elf = Join-Path $spotifyDirectory 'chrome_elf.dll'
 $exe_bak = Join-Path $spotifyDirectory 'Spotify.bak'
 $dll_bak = Join-Path $spotifyDirectory 'Spotify.dll.bak'
+$chrome_elf_bak = Join-Path $spotifyDirectory 'chrome_elf.dll.bak'
 $spotifyUninstall = Join-Path ([System.IO.Path]::GetTempPath()) 'SpotifyUninstall.exe'
 $start_menu = Join-Path $env:APPDATA 'Microsoft\Windows\Start Menu\Programs\Spotify.lnk'
 
@@ -380,7 +382,7 @@ if (!($version -and $version -match $match_v)) {
     }
     else {  
         # latest tested version for Win 10-12 
-        $onlineFull = "1.2.68.528.g50f97d42-1008"
+        $onlineFull = "1.2.74.471.g95134d25-1118"
     }
 }
 else {
@@ -1726,6 +1728,17 @@ function Reset-Dll-Sign {
         Exit
     }
 
+    $fileBytes = [System.IO.File]::ReadAllBytes($FilePath)
+    $peHeaderOffset = [System.BitConverter]::ToUInt32($fileBytes, 0x3C)
+    $fileHeaderOffset = $peHeaderOffset + 4
+    $archInfo = Get-PEArchitectureOffsets -bytes $fileBytes -fileHeaderOffset $fileHeaderOffset
+    if ($archInfo.Architecture -eq 'ARM64') {
+        Write-Warning ("Your version {0} on ARM architecture is not supported by the patcher. Please use builds 1.2.69 and below." -f $offline)
+        Write-Host ($lang).StopScript
+        Pause
+        Exit
+    }
+
     try {
         Write-Verbose "Reading file..."
         $fileBytes = [System.IO.File]::ReadAllBytes($FilePath)
@@ -1778,6 +1791,23 @@ function Reset-Dll-Sign {
     }
 }
 
+function Get-PEArchitectureOffsets {
+    param(
+        [byte[]]$bytes,
+        [int]$fileHeaderOffset
+    )
+    $machineType = [System.BitConverter]::ToUInt16($bytes, $fileHeaderOffset)
+    $result = @{ Architecture = $null; DataDirectoryOffset = 0 }
+    switch ($machineType) {
+        0x8664 { $result.Architecture = 'x64'; $result.DataDirectoryOffset = 112 }
+        0xAA64 { $result.Architecture = 'ARM64'; $result.DataDirectoryOffset = 112 }
+        0x014c { $result.Architecture = 'x86'; $result.DataDirectoryOffset = 96 }
+        default { $result.Architecture = 'Unknown'; $result.DataDirectoryOffset = $null }
+    }
+    $result.MachineType = $machineType
+    return $result
+}
+
 function Remove-Sign([string]$filePath) {
     try {
         $bytes = [System.IO.File]::ReadAllBytes($filePath)
@@ -1788,18 +1818,12 @@ function Remove-Sign([string]$filePath) {
         }
         $fileHeaderOffset = $peHeaderOffset + 4
         $optionalHeaderOffset = $fileHeaderOffset + 20
-        $machineType = [System.BitConverter]::ToUInt16($bytes, $fileHeaderOffset)
-        $dataDirectoryOffsetWithinOptionalHeader = 0
-        if (($machineType -eq 0x8664) -or ($machineType -eq 0xAA64)) {
-            $dataDirectoryOffsetWithinOptionalHeader = 112
-        }
-        elseif ($machineType -eq 0x014c) {
-            $dataDirectoryOffsetWithinOptionalHeader = 96
-        }
-        else {
-            Write-Warning "Unsupported architecture type ($($machineType.ToString('X'))) in file '$(Split-Path $filePath -Leaf)'."
+        $archInfo = Get-PEArchitectureOffsets -bytes $bytes -fileHeaderOffset $fileHeaderOffset
+        if ($archInfo.DataDirectoryOffset -eq $null) {
+            Write-Warning "Unsupported architecture type ($($archInfo.MachineType.ToString('X'))) in file '$(Split-Path $filePath -Leaf)'."
             return $false
         }
+        $dataDirectoryOffsetWithinOptionalHeader = $archInfo.DataDirectoryOffset
         $securityDirectoryIndex = 4
         $certificateTableEntryOffset = $optionalHeaderOffset + $dataDirectoryOffsetWithinOptionalHeader + ($securityDirectoryIndex * 8)
         if ($certificateTableEntryOffset + 8 -gt $bytes.Length) {
@@ -1835,11 +1859,6 @@ function Remove-Signature-FromFiles([string[]]$fileNames) {
         }
         try {
             Write-Verbose "Processing file: $fileName"
-            if ($fileName -ne "Spotify.dll") {
-                $backupPath = $fullPath + ".bak"
-                Copy-Item -Path $fullPath -Destination $backupPath -Force
-                Write-Verbose "  -> Backup created: $backupPath"
-            }
             if (Remove-Sign -filePath $fullPath) {
                 Write-Verbose "  -> Signature entry successfully zeroed."
             }
@@ -1999,9 +2018,7 @@ if ($test_spa) {
                     return $c
                 } -Verbose:$VerbosePreference
             }
-            else {
-                Write-Warning "v8_context_snapshot file not found"
-            }
+            
         }
     }
     catch {
@@ -2010,6 +2027,12 @@ if ($test_spa) {
     finally {
         if ($null -ne $archive_spa) {
             $archive_spa.Dispose()
+        }
+        if (-not $v8_snapshot -and $null -eq $xpuiJsEntry) {
+            Write-Warning "v8_context_snapshot file not found, cannot create xpui.js"
+            Write-Host ($lang).StopScript
+            Pause
+            Exit
         }
     }
 
@@ -2025,10 +2048,6 @@ if ($test_spa) {
 
 
     if ($offline -ge [version]'1.2.70.404') {
-        Reset-Dll-Sign -FilePath $spotifyDll
-
-        $files = @("Spotify.dll", "Spotify.exe", "chrome_elf.dll")
-        Remove-Signature-FromFiles $files
         
         $spotify_binary_bak = $dll_bak 
         $spotify_binary = $spotifyDll
@@ -2049,6 +2068,31 @@ if ($test_spa) {
                 Remove-Item $spotify_binary -Recurse -Force
                 Rename-Item $spotify_binary_bak $spotify_binary
             }
+            if ($spotify_binary_bak -eq $dll_bak) {
+
+                if (Test-Path -Path $exe_bak) {
+                    Remove-Item $spotifyExecutable -Recurse -Force
+                    Rename-Item $exe_bak $spotifyExecutable
+                }
+                else {
+                    $binary_exe_bak = [System.IO.Path]::GetFileName($exe_bak)
+                    Write-Warning ("Backup copy {0} not found. Please reinstall Spotify and run SpotX again" -f $binary_exe_bak)
+                    Pause
+                    Exit
+                }
+
+                if (Test-Path -Path $chrome_elf_bak) {
+                    Remove-Item $chrome_elf -Recurse -Force
+                    Rename-Item $chrome_elf_bak $chrome_elf
+                }
+                else {
+                    $binary_chrome_elf_bak = [System.IO.Path]::GetFileName($chrome_elf_bak)
+                    Write-Warning ("Backup copy {0} not found. Please reinstall Spotify and run SpotX again" -f $binary_chrome_elf_bak)
+                    Pause
+                    Exit
+                }
+
+            }
         }
         else {
             Write-Host ($lang).NoRestore`n
@@ -2058,7 +2102,13 @@ if ($test_spa) {
 
     }
     $zip.Dispose()
-    Copy-Item $xpui_spa_patch $env:APPDATA\Spotify\Apps\xpui.bak
+    Copy-Item $xpui_spa_patch $bak_spa
+
+    if ($spotify_binary_bak -eq $dll_bak) {
+        Copy-Item $spotifyExecutable $exe_bak
+        Copy-Item $chrome_elf $chrome_elf_bak
+
+    }
 
     # Remove all languages except En and Ru from xpui.spa
     if ($ru) {
@@ -2241,7 +2291,7 @@ If (!(Test-Path $start_menu)) {
 }
 
 $ANSI = [Text.Encoding]::GetEncoding(1251)
-$old = [IO.File]::ReadAllText($spotifyExecutable, $ANSI)
+$old = [IO.File]::ReadAllText($spotify_binary, $ANSI)
 
 $regex1 = $old -notmatch $webjson.others.binary.block_update.add
 $regex2 = $old -notmatch $webjson.others.binary.block_slots.add
@@ -2258,7 +2308,22 @@ if ($regex1 -and $regex2 -and $regex3 -and $regex4 -and $regex5) {
     copy-Item $spotify_binary $spotify_binary_bak
 }
 
-# Binary patch
+if (-not (Test-Path -LiteralPath $spotify_binary_bak)) {
+    $name_binary = [System.IO.Path]::GetFileName($spotify_binary_bak)
+    Write-Warning ("Backup copy {0} not found. Please reinstall Spotify and run SpotX again" -f $name_binary)
+    Pause
+    Exit
+}
+
+# disable signature verification
+if ($spotify_binary_bak -eq $dll_bak) {
+    Reset-Dll-Sign -FilePath $spotifyDll
+
+    $files = @("Spotify.dll", "Spotify.exe", "chrome_elf.dll")
+    Remove-Signature-FromFiles $files
+}
+
+# binary patch
 extract -counts 'exe' -helper 'Binary'
 
 # fix login for old versions

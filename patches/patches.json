@@ -552,7 +552,7 @@
                 "native_description": "Enable event chips and event items in your library",
                 "version": {
                     "fr": "1.2.55",
-                    "to": ""
+                    "to": "1.2.71"
                 }
             },
             "LeavebehindsMockData": {
@@ -642,6 +642,42 @@
                 "native_description": "Enables the music NPV scroll card rendering during a sponsored playlist playback",
                 "version": {
                     "fr": "1.2.66",
+                    "to": ""
+                }
+            },
+            "EmbeddedAdsCarousel": {
+                "name": "enableEmbeddedAdsCarousel",
+                "description": "Enable embedded ads carousel for the NPV",
+                "native_description": "Enable embedded ads carousel for the NPV",
+                "version": {
+                    "fr": "1.2.73",
+                    "to": ""
+                }
+            },
+            "EmbeddedAdsFetchingOverCanvas": {
+                "name": "enableEmbeddedAdsFetchingOverCanvas",
+                "description": "Enable embedded ads fetching when canvas track is playing. Defaults to true since this is currently existing behavior",
+                "native_description": "Enable embedded ads fetching when canvas track is playing. Defaults to true since this is currently existing behavior",
+                "version": {
+                    "fr": "1.2.72",
+                    "to": ""
+                }
+            },
+            "SponsoredPlaylistMockEndpoint": {
+                "name": "enableSponsoredPlaylistMockEndpoint",
+                "description": "Enables the endpoint to fetch mock sponsorships for e2e testing",
+                "native_description": "Enables the endpoint to fetch mock sponsorships for e2e testing",
+                "version": {
+                    "fr": "1.2.74",
+                    "to": ""
+                }
+            },
+            "WatchFeedPreviewReporting": {
+                "name": "enableWatchFeedPreviewReporting",
+                "description": "Enable watch feed preview reporting (requires enableOutroPreviewReporting)",
+                "native_description": "Enable watch feed preview reporting (requires enableOutroPreviewReporting)",
+                "version": {
+                    "fr": "1.2.70",
                     "to": ""
                 }
             }
@@ -1573,6 +1609,69 @@
                     "fr": "1.2.69",
                     "to": ""
                 }
+            },
+            "CommentThreadsReactionsForEpisodes": {
+                "name": "enableCommentThreadsReactionsForEpisodes",
+                "description": "Enable users to react and reply to comments.",
+                "native_description": "Enable users to react and reply to comments.",
+                "version": {
+                    "fr": "1.2.74",
+                    "to": ""
+                }
+            },
+            "ExcludeTrackFromTasteProfile": {
+                "name": "enableExcludeTrackFromTasteProfile",
+                "description": "Enables option to exclude track from taste profile via context menu",
+                "native_description": "Enables option to exclude track from taste profile via context menu",
+                "version": {
+                    "fr": "1.2.73",
+                    "to": ""
+                }
+            },
+            "LauncherAutoStartToggle": {
+                "name": "enableLauncherAutoStartToggle",
+                "description": "Enable launcher auto start toggle",
+                "native_description": "Enable launcher auto start toggle",
+                "version": {
+                    "fr": "1.2.71",
+                    "to": ""
+                }
+            },
+            "ProfileVisibilityControls": {
+                "name": "enableProfileVisibilityControls",
+                "description": "Enable profile visibility controls in the settings & profile page",
+                "native_description": "Enable profile visibility controls in the settings & profile page",
+                "version": {
+                    "fr": "1.2.74",
+                    "to": ""
+                }
+            },
+            "ShuffleSettings": {
+                "name": "enableShuffleSettings",
+                "description": "Enable shuffle settings section in advanced settings",
+                "native_description": "Enable shuffle settings section in advanced settings",
+                "version": {
+                    "fr": "1.2.74",
+                    "to": ""
+                }
+            },
+            "YlxMultiSelect": {
+                "name": "enableYlxMultiSelect",
+                "description": "Enable multi selection in Your Library",
+                "native_description": "Enable multi selection in Your Library",
+                "version": {
+                    "fr": "1.2.72",
+                    "to": ""
+                }
+            },
+            "MoreLikeThisPlaylist": {
+                "name": "enableMoreLikeThisPlaylist",
+                "description": "Enables More Like This playlist for playlists the user cannot edit",
+                "native_description": "Enables More Like This playlist for playlists the user cannot edit",
+                "version": {
+                    "fr": "1.2.32",
+                    "to": ""
+                }
             }
         },
         "CustomExp": {
@@ -1753,6 +1852,36 @@
                 "value": "expanded",
                 "version": {
                     "fr": "1.2.65",
+                    "to": ""
+                }
+            },
+            "OutroPreviewReporting": {
+                "name": "enableOutroPreviewReporting",
+                "description": "Enable outro reporter for audio previews",
+                "native_description": "Enable outro reporter for audio previews",
+                "value": "DISABLED",
+                "version": {
+                    "fr": "1.2.70",
+                    "to": ""
+                }
+            },
+            "LibraryImportSettings": {
+                "name": "enableLibraryImportSettings",
+                "description": "Enable library import on settings page",
+                "native_description": "Enable library import on settings page",
+                "value": "enabled",
+                "version": {
+                    "fr": "1.2.73",
+                    "to": ""
+                }
+            },
+            "SearchResultsAsList": {
+                "name": "enableSearchResultsAsList",
+                "description": "Enables the search results as a list of top results",
+                "native_description": "Enables the search results as a list of top results",
+                "value": "LIST_WITH_TOP_RESULT",
+                "version": {
+                    "fr": "1.2.73",
                     "to": ""
                 }
             }
@@ -2143,14 +2272,14 @@
                 "fr": "1.2.30",
                 "to": ""
             },
-            "add": " :is(.weV_qxFz4gF5sPotO10y, .BMtRRwqaJD_95vJFMFD0):has([for=\"desktop.settings.downloadQuality\"]) {display: none}"
+            "add": " :is(.weV_qxFz4gF5sPotO10y, .BMtRRwqaJD_95vJFMFD0, .eguwzH_QWTBXry7hiNj3):has([for=\"desktop.settings.downloadQuality\"]) {display: none}"
         },
         "downloadicon": {
             "version": {
                 "fr": "1.1.74",
                 "to": ""
             },
-            "add": " .BKsbV2Xl786X9a09XROH {display:none}"
+            "add": " .BKsbV2Xl786X9a09XROH, .GWCBhKJqeZal3n5tCQwl {display:none}"
         },
         "submenudownload": {
             "version": {

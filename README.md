@@ -22,17 +22,17 @@
 <h1 id="requirements">Requirements</h1>
 
 - **OS:** Windows 7-11
-- **Spotify:** [1.2.68 and below](https://loadspot.pages.dev)
-- **For Windows Desktop only** (Microsoft Store version is not suitable)
-- **PowerShell:** Version 5 and above recommended
+- **Spotify:** [Official desktop version](https://loadspot.pages.dev) (Microsoft Store version is not suitable)
+- **PowerShell:** 5.1 and above
 
 <h1 id="features">Features</h1>
 
 - **Blocks all banner, video, and audio ads** in the client
 - **Hiding podcasts, episodes, and audiobooks** from the homepage (optional)
 - **Block Spotify automatic updates** (optional)
-- **More experimental features have been activated** ([see the full list](https://github.com/SpotX-Official/SpotX/discussions/50))
-- **Disabled Sentry's console log/error/warning messages** to Spotify developers, halted user interaction logging, and performed code minification
+- **Some native experimental features have been changed**
+- **Analytics sending has been disabled** 
+- **Advanced installation [parameters](https://github.com/SpotX-Official/SpotX/discussions/60)**
 
 <h1 id="installation--update">Installation / Update</h1>
 <h3>Choose installation type:</h3>
@@ -46,7 +46,7 @@
 
   <h4> </h4>
   
-#### Just download and run [Install.bat](https://raw.githack.com/amd64fox/SpotX/main/Install_New_theme.bat)
+#### Just download and run [Install_New_theme.bat](https://raw.githack.com/amd64fox/SpotX/main/Install_New_theme.bat)
 
 or
 
@@ -76,7 +76,7 @@ iex "& { $(iwr -useb 'https://spotx-official.github.io/SpotX/run.ps1') } -m -new
 
   <h4> </h4>
   
-#### Just download and run [Install.bat](https://raw.githack.com/amd64fox/SpotX/main/Install_Old_theme.bat)
+#### Just download and run [Install_Old_theme.bat](https://raw.githack.com/amd64fox/SpotX/main/Install_Old_theme.bat)
 
 or
 
@@ -184,4 +184,4 @@ or
 
 <h1 id="disclaimer">Disclaimer</h1>
 
- SpotX is a modified version of the official Spotify client, provided as an evaluation version, you use it at your own risk.
+SpotX is a tool that modifies the official Spotify client, provided as an evaluation version — use it at your own risk.

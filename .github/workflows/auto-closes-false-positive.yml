@@ -1,0 +1,125 @@
+name: Auto Close Antivirus False Positive Issues
+
+on:
+  issues:
+    types: [opened, reopened, edited]
+
+jobs:
+  auto-close:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+    
+    steps:
+      - name: Check for AV-related keywords
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const issue = context.payload.issue;
+            const title = issue.title.toLowerCase();
+            const authorAssociation = issue.author_association;
+            
+            if (context.payload.action === 'reopened') {
+              if (authorAssociation === 'OWNER') {
+                console.log('Issue #' + issue.number + ' was reopened by OWNER - will not auto-close');
+                return;
+              }
+            }
+            
+            const keywords = [
+              'av',
+              'virus',
+              'malware',
+              'trojan',
+              'defender',
+              'smartscreen',
+              'antivirus',
+              'anti-virus',
+              'anti virus',
+              'malicious',
+              'agenttesla',
+              'virustotal',
+              'eset',
+              'avast',
+              'avg',
+              'kaspersky',
+              'norton',
+              'mcafee',
+              'bitdefender'
+            ];
+            
+            const containsKeyword = keywords.some(keyword => {
+              const regex = new RegExp('\\b' + keyword + '\\b', 'i');
+              return regex.test(title);
+            });
+            
+            if (containsKeyword) {
+              console.log('Issue #' + issue.number + ' contains AV-related keywords in title');
+              
+              const comment = '# ⚠️ Automatic Closure: Antivirus False Positive\n\n' +
+                '> [!NOTE]\n' +
+                '> This issue has been automatically closed because it appears to be related to an **antivirus false positive detection**.\n\n' +
+                '---\n\n' +
+                '## 🔍 What causes false positives?\n\n' +
+                'Different antiviruses may respond differently to installing **SpotX**, as SpotX uses a system interpreter **PowerShell** to modify an application **Spotify**.\n\n' +
+                'Also, most AV use **heuristic analysis**, which looks for threats based on assumptions or by matching its own set of rules. This imperfect method also leads to a high number of false positives.\n\n' +
+                '---\n\n' +
+                '## ✅ What should you do?\n\n' +
+                '### Step 1: Disable Your Antivirus\n' +
+                '> [!IMPORTANT]\n' +
+                '> Before running the SpotX patcher, **temporarily disable or pause your antivirus protection**.\n\n' +
+                '> [!WARNING]\n' +
+                '> **Signs you need to disable your antivirus:**\n' +
+                '> - The terminal window is forcibly closed\n' +
+                '> - Errors flagging the script as malicious\n' +
+                '> - The bat installation file is deleted\n\n' +
+                '### Step 2: Run the Installation\n' +
+                'Once your antivirus is disabled, proceed with the SpotX installation.\n\n' +
+                '### Step 3: Re-enable Protection\n' +
+                'After the installation is complete, you can turn your antivirus back on. If your AV then marks some files in the Spotify folder, **add them to the exclusion list** of your antivirus.\n\n' +
+                '> [!TIP]\n' +
+                '> We do not provide instructions on how to disable AV protection or add files/folders to exclusions, as there are many different security systems and the process varies for each. The easiest solution if you don\'t know how to do this is to use [Google](https://www.google.com).\n\n' +
+                '---\n\n' +
+                '<div align="center">\n\n' +
+                '**🤖 This issue was automatically closed by a bot.**\n\n' +
+                'If you believe your issue isn\'t related to a false positive, please mention **@&#8203;amd64fox**\n\n' +
+                '</div>';
+
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issue.number,
+                body: comment
+              });
+              
+              const existingLabels = issue.labels.map(label => label.name);
+              if (existingLabels.length > 0) {
+                for (const label of existingLabels) {
+                  await github.rest.issues.removeLabel({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    issue_number: issue.number,
+                    name: label
+                  });
+                }
+              }
+              
+              await github.rest.issues.addLabels({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issue.number,
+                labels: ['❎ false positive']
+              });
+              
+              await github.rest.issues.update({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issue.number,
+                state: 'closed',
+                state_reason: 'not_planned'
+              });
+              
+              console.log('Issue #' + issue.number + ' was automatically closed');
+            } else {
+              console.log('Issue #' + issue.number + ' does not contain AV-related keywords in title');
+            }

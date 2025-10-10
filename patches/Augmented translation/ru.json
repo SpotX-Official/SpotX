@@ -1,6 +1,6 @@
 {
     "lang": {
-        "version": "1.2.67",
+        "version": "1.2.74",
         "language": "Russian"
     },
     "1": {
@@ -188,179 +188,151 @@
         "replace": "\"До конца предложения: {0}:{1}:{2}\""
     },
     "47": {
-        "match": "\"Sleep timer\"",
-        "replace": "\"Таймер сна\""
-    },
-    "48": {
-        "match": "\"End of episode\"",
-        "replace": "\"Когда закончится эпизод\""
-    },
-    "49": {
-        "match": "\"End of track\"",
-        "replace": "\"Когда закончится трек\""
-    },
-    "50": {
-        "match": "\"Turn off timer\"",
-        "replace": "\"Выключить таймер\""
-    },
-    "51": {
-        "match": "\"OK, your sleep timer is set.\"",
-        "replace": "\"Хорошо, таймер сна установлен\""
-    },
-    "52": {
         "match": "\"Search in Authors\"",
         "replace": "\"Искать в Авторах\""
     },
-    "53": {
+    "48": {
         "match": "\"A soundtrack for every part of the day.\"",
         "replace": "\"Саундтрек для любого времени суток.\""
     },
-    "54": {
+    "49": {
         "match": "\"See your unique playlist\"",
         "replace": "\"Посмотрите свой уникальный плейлист\""
     },
-    "55": {
+    "50": {
         "match": "\"You.ll still get:\"",
         "replace": "\"Вы также получите:\""
     },
-    "56": {
+    "51": {
         "match": "\"Trending songs in .country. . Spotify\"",
         "replace": "\"Популярные песни в %country% | Spotify\""
     },
-    "57": {
+    "52": {
         "match": "\"Featured Charts in .country. . Spotify\"",
         "replace": "\"Избранные чарты в %country% . Spotify\""
     },
-    "58": {
+    "53": {
         "match": "\"Popular artists in .country. . Spotify\"",
         "replace": "\"Популярные исполнители в %country% | Spotify\""
     },
-    "59": {
+    "54": {
         "match": "\"Popular albums in .country. . Spotify\"",
         "replace": "\"Популярные альбомы в %country% | Spotify\""
     },
-    "60": {
+    "55": {
         "match": "\"Discover trending songs in .country. today.\"",
         "replace": "\"Откройте для себя трендовые песни в %country% сегодня.\""
     },
-    "61": {
+    "56": {
         "match": "\"Discover Featured Charts in .country. today.\"",
         "replace": "\"Откройте для себя избранные чарты в %country% сегодня.\""
     },
-    "62": {
+    "57": {
         "match": "\"Discover the most popular artists in .country. today.\"",
         "replace": "\"Откройте для себя самых популярных исполнителей в %country% сегодня.\""
     },
-    "63": {
+    "58": {
         "match": "\"Discover the most popular albums in .country. today.\"",
         "replace": "\"Откройте для себя самые популярные альбомы в %country% сегодня.\""
     },
-    "64": {
+    "59": {
         "match": "\"Close\"",
         "replace": "\"Закрыть\""
     },
-    "65": {
+    "60": {
         "match": "\"Ok, we won.t play music from this artist again.\"",
         "replace": "\"Хорошо, мы больше не будем воспроизводить музыку этого исполнителя\""
     },
-    "66": {
+    "61": {
         "match": "\"Compact list\"",
         "replace": "\"Компактный список\""
     },
-    "67": {
+    "62": {
         "match": "\"Compact grid\"",
         "replace": "\"Компактная сетка\""
     },
-    "68": {
+    "63": {
         "match": "\"Lyrics preview\"",
         "replace": "\"Превью текста\""
     },
-    "69": {
+    "64": {
         "match": "\"Show less\"",
         "replace": "\"Свернуть\""
     },
-    "70": {
+    "65": {
         "match": "\"Show more\"",
         "replace": "\"Развернуть\""
     },
-    "71": {
+    "66": {
         "match": "\"Hide lyrics\"",
         "replace": "\"Скрыть текст\""
     },
-    "72": {
-        "match": "\"Sleep timer - .0. left\"",
-        "replace": "\"Таймер сна - осталось {0}\""
-    },
-    "73": {
+    "67": {
         "match": "\"Переключиться на видеорежим\"",
         "replace": "\"К видео\""
     },
-    "74": {
+    "68": {
         "match": "\"Переключиться на аудиорежим\"",
         "replace": "\"К аудио\""
     },
-    "75": {
-        "match": "\"Venues\"",
-        "replace": "\"Места проведения\""
-    },
-    "76": {
-        "match": "\"Your venues\"",
-        "replace": "\"Ваши места проведения\""
-    },
-    "77": {
-        "match": "\"All venues\"",
-        "replace": "\"Все места проведения\""
-    },
-    "78": {
+    "69": {
         "match": "\".\".name..\" was released .years. year ago this week!\"",
         "replace": "\"На этой неделе исполнился %years% год с момента выхода \\\"%name%\\\"!\""
     },
-    "79": {
+    "70": {
         "match": "((?:few|other)..)\".\".name..\" was released .years. years ago this week!\"",
         "replace": "$1\"На этой неделе исполнилось %years% года с момента выхода \\\"%name%\\\"!\""
     },
-    "80": {
+    "71": {
         "match": "(many..)\".\".name..\" was released .years. years ago this week!\"",
         "replace": "$1\"На этой неделе исполнилось %years% лет с момента выхода \\\"%name%\\\"!\""
     },
-    "81": {
-        "match": "\"Events at venues we think you.ll like\"",
-        "replace": "\"События в местах, которые, как мы полагаем, вам придутся по вкусу\""
-    },
-    "82": {
+    "72": {
         "match": "\".Select Type. \"",
         "replace": "\"<Выберите тип>\""
     },
-    "83": {
-        "match": "\"Use arrow keys to navigate the search suggestions\"",
-        "replace": "\"Используйте клавиши со стрелками для навигации по поисковым предложениям\""
-    },
-    "84": {
-        "match": "\"Up\"",
-        "replace": "\"Вверх\""
-    },
-    "85": {
-        "match": "\"Down\"",
-        "replace": "\"Вниз\""
-    },
-    "86": {
-        "match": "\"Navigate\"",
-        "replace": "\"Навигация\""
-    },
-    "87": {
-        "match": "\"Search\"",
-        "replace": "\"Поиск\""
-    },
-    "88": {
+    "73": {
         "match": "\"Connect\"",
         "replace": "\"Подключить устройство\""
     },
-    "89": {
-        "match": "\"Verify your age\"",
-        "replace": "\"Подтвердите свой возраст\""
-    },
-    "90": {
+    "74": {
         "match": "\"Синхронизация\"",
         "replace": "\"Синхронизировать\""
+    },
+    "75": {
+        "match": "\"Browse the live events feed to find more concerts.\"",
+        "replace": "\"Листайте нашу афишу, чтобы найти больше концертов.\""
+    },
+    "76": {
+        "match": "\"No concerts found\"",
+        "replace": "\"Концертов не найдено\""
+    },
+    "77": {
+        "match": "\"Browse the live events feed to find more venues.\"",
+        "replace": "\"Листайте нашу афишу, чтобы найти больше площадок.\""
+    },
+    "78": {
+        "match": "\"No venues found\"",
+        "replace": "\"Площадок не найдено\""
+    },
+    "79": {
+        "match": "\"Concerts in Your Top Genre\"",
+        "replace": "\"Концерты в вашем любимом жанре\""
+    },
+    "80": {
+        "match": "\"Follow your favorite venues to discover and browse events happening near you\"",
+        "replace": "\"Подписывайтесь на любимые площадки, чтобы открывать и просматривать события рядом с вами\""
+    },
+    "81": {
+        "match": "\"Search results\"",
+        "replace": "\"Результаты поиска\""
+    },
+    "82": {
+        "match": "\"BPM\"",
+        "replace": "\"Темп\""
+    },
+    "83": {
+        "match": "\"Folder name is required\"",
+        "replace": "\"Имя папки обязательно\""
     }
 }

@@ -19,8 +19,10 @@ jobs:
             const title = issue.title.toLowerCase();
             const authorAssociation = issue.author_association;
             
-            if (authorAssociation === 'OWNER') {
-              console.log('Issue #' + issue.number + ' action performed by OWNER - will not auto-close');
+            const privilegedRoles = ['OWNER', 'MEMBER', 'COLLABORATOR'];
+            
+            if (privilegedRoles.includes(authorAssociation)) {
+              console.log('Issue #' + issue.number + ' action performed by ' + authorAssociation + ' - will not auto-close');
               return;
             }
             

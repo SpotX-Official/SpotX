@@ -19,11 +19,9 @@ jobs:
             const title = issue.title.toLowerCase();
             const authorAssociation = issue.author_association;
             
-            if (context.payload.action === 'reopened') {
-              if (authorAssociation === 'OWNER') {
-                console.log('Issue #' + issue.number + ' was reopened by OWNER - will not auto-close');
-                return;
-              }
+            if (authorAssociation === 'OWNER') {
+              console.log('Issue #' + issue.number + ' action performed by OWNER - will not auto-close');
+              return;
             }
             
             const keywords = [

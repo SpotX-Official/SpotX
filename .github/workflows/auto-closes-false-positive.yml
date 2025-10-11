@@ -17,12 +17,13 @@ jobs:
           script: |
             const issue = context.payload.issue;
             const title = issue.title.toLowerCase();
-            const authorAssociation = issue.author_association;
+            const actor = context.payload.sender.login;
             
-            const privilegedRoles = ['OWNER', 'MEMBER', 'COLLABORATOR'];
+            // Проверяем, кто выполнил действие (не создателя issue, а того кто сейчас действует)
+            const privilegedUsers = ['amd64fox'];
             
-            if (privilegedRoles.includes(authorAssociation)) {
-              console.log('Issue #' + issue.number + ' action performed by ' + authorAssociation + ' - will not auto-close');
+            if (privilegedUsers.includes(actor)) {
+              console.log('Issue #' + issue.number + ' action performed by @' + actor + ' - will not auto-close');
               return;
             }
             

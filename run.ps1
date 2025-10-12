@@ -1713,13 +1713,21 @@ function Reset-Dll-Sign {
         [string]$FilePath
     )
 
-    $searchPattern = [byte[]](
-        0x30, 0x01, 0x00, 0x00, 0x5B, 0xC3, 0xCC, 0xCC, 0x48, 0x89, 0x5C, 0x24, 0x18, 0x55
-    )
-    $replacePattern = [byte[]](
-        0xB8, 0x01, 0x00, 0x00, 0x00, 0xC3
-    )
-    $bytesToReplaceCount = 6
+    # convert hex string to byte array
+    function ConvertTo-ByteArray {
+        param([string]$HexString)
+        return [byte[]]($HexString -split ' ' | ForEach-Object { [Convert]::ToByte($_, 16) })
+    }
+
+    # byte patterns for x64 arch
+    $searchPattern_x64 = '30 01 00 00 5B C3 CC CC 48 89 5C 24 18 55'
+    $replacePattern_x64 = 'B8 01 00 00 00 C3'
+    $bytesToReplaceCount_x64 = 6
+    
+    # byte patterns for ARM64 arch
+    $searchPattern_ARM64 = 'E0 03 13 AA FD 7B D3 A8 F3 07 41 F8 C0 03 5F D6 61 00 00 D4 00 00 00 00 FD 7B BA A9 F3 53 01 A9'
+    $replacePattern_ARM64 = '20 00 80 52 C0 03 5F D6'
+    $bytesToReplaceCount_ARM64 = 8
 
     if (-not (Test-Path $FilePath -PathType Leaf)) {
         Write-Error "File not found at path: $FilePath"
@@ -1732,11 +1740,18 @@ function Reset-Dll-Sign {
     $peHeaderOffset = [System.BitConverter]::ToUInt32($fileBytes, 0x3C)
     $fileHeaderOffset = $peHeaderOffset + 4
     $archInfo = Get-PEArchitectureOffsets -bytes $fileBytes -fileHeaderOffset $fileHeaderOffset
+    
     if ($archInfo.Architecture -eq 'ARM64') {
-        Write-Warning ("Your version {0} on ARM architecture is not supported by the patcher. Please use builds 1.2.69 and below." -f $offline)
-        Write-Host ($lang).StopScript
-        Pause
-        Exit
+        $searchPattern = ConvertTo-ByteArray $searchPattern_ARM64
+        $replacePattern = ConvertTo-ByteArray $replacePattern_ARM64
+        $bytesToReplaceCount = $bytesToReplaceCount_ARM64
+        Write-Verbose "Using ARM64 byte patterns"
+    }
+    else {
+        $searchPattern = ConvertTo-ByteArray $searchPattern_x64
+        $replacePattern = ConvertTo-ByteArray $replacePattern_x64
+        $bytesToReplaceCount = $bytesToReplaceCount_x64
+        Write-Verbose "Using x86/x64 byte patterns"
     }
 
     try {
@@ -1764,6 +1779,7 @@ function Reset-Dll-Sign {
         
         if ($offset -eq -1) {
             Write-Warning "Required byte sequence not found for the signature reset patch"
+            Write-Warning "Spotify Version: $offline | Architecture: $($archInfo.Architecture)"
             Write-Host ($lang).StopScript
             Pause
             Exit

@@ -776,35 +776,40 @@ if ($spotifyInstalled) {
     
     # Unsupported version Spotify
     if ($testversion) {
+
         # Submit unsupported version of Spotify to google form for further processing
-        try { 
-            
-            # Country check
-            $country = [System.Globalization.RegionInfo]::CurrentRegion.EnglishName
 
-            $txt = [IO.File]::ReadAllText($spotifyExecutable)
-            $regex = "(?<![\w\-])(\d+)\.(\d+)\.(\d+)\.(\d+)(\.g[0-9a-f]{8})(?![\w\-])"
-            $matches = [regex]::Matches($txt, $regex)
-            $ver = $matches[0].Value
+        $binary = if (Test-Path $spotifyDll) {
+            $spotifyDll
+        }
+        else {
+            $spotifyExecutable
+        }
 
-            $Parameters = @{
-                Uri    = 'https://docs.google.com/forms/d/e/1FAIpQLSegGsAgilgQ8Y36uw-N7zFF6Lh40cXNfyl1ecHPpZcpD8kdHg/formResponse'
-                Method = 'POST'
-                Body   = @{
-                    'entry.620327948'  = $ver
-                    'entry.1951747592' = $country
-                    'entry.1402903593' = $win_os
-                    'entry.860691305'  = $psv
-                    'entry.2067427976' = $online + " < " + $offline
-                }   
+        Start-Job -ScriptBlock {
+            param($binary, $win_os, $psv, $online, $offline)
+
+            try { 
+                $country = [System.Globalization.RegionInfo]::CurrentRegion.EnglishName
+                $txt = [IO.File]::ReadAllText($binary)
+                $regex = "(?<![\w\-])(\d+)\.(\d+)\.(\d+)\.(\d+)(\.g[0-9a-f]{8})(?![\w\-])"
+                $matches = [regex]::Matches($txt, $regex)
+                $ver = $matches[0].Value
+                $Parameters = @{
+                    Uri    = 'https://docs.google.com/forms/d/e/1FAIpQLSegGsAgilgQ8Y36uw-N7zFF6Lh40cXNfyl1ecHPpZcpD8kdHg/formResponse'
+                    Method = 'POST'
+                    Body   = @{
+                        'entry.620327948'  = $ver
+                        'entry.1951747592' = $country
+                        'entry.1402903593' = $win_os
+                        'entry.860691305'  = $psv
+                        'entry.2067427976' = $online + " < " + $offline
+                    }   
+                }
+                Invoke-WebRequest @Parameters -UseBasicParsing -ErrorAction SilentlyContinue | Out-Null
             }
-            # $null = Invoke-WebRequest -useb @Parameters 
-        }
-        catch {
-            Write-Host 'Unable to submit new version of Spotify' 
-            Write-Host "error description: "$Error[0]
-            Write-Host
-        }
+            catch { }
+        } -ArgumentList $binary, $win_os, $psv, $online, $offline | Out-Null
 
         if ($confirm_spoti_recomended_over -or $confirm_spoti_recomended_uninstall) {
             Write-Host ($lang).NewV`n

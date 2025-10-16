@@ -1147,7 +1147,7 @@
                 "description": "Enables notification center for desktop & web",
                 "native_description": "Enables notification center for desktop & web",
                 "version": {
-                    "fr": "1.2.30",
+                    "fr": "1.2.75",
                     "to": ""
                 }
             },

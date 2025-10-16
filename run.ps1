@@ -382,7 +382,7 @@ if (!($version -and $version -match $match_v)) {
     }
     else {  
         # latest tested version for Win 10-12 
-        $onlineFull = "1.2.74.477.g3be53afe-1297"
+        $onlineFull = "1.2.75.391.g6c85102e-2109"
     }
 }
 else {
@@ -1147,9 +1147,6 @@ function Helper($paramname) {
 
             # temporarily disable collapsing right sidebar
             Move-Json -n 'PeekNpv' -t $Enable -f $Disable
-
-            # notifications are temporarily disabled
-            Move-Json -n 'NotificationCenter' -t $Enable -f $Disable
  
             if ($podcast_off) { Move-Json -n 'HomePin' -t $Enable -f $Disable }
 

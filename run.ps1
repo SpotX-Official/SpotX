@@ -1397,37 +1397,6 @@ function Helper($paramname) {
             else { Remove-Json -j $VarJs -p 'product_state' }
 
             
-            $type = $null
-            $global:type = $null
-            
-            if ($podcast_off -or $adsections_off -or $canvashome_off) {
-    
-                $active_elements = @()
-                if ($podcast_off) { $active_elements += "podcast" }
-                if ($adsections_off) { $active_elements += "section" }
-                if ($canvashome_off) { $active_elements += "canvas" }
-
-                switch ($active_elements.Count) {
-                    3 {
-                        $type = "all"
-                    }
-                    2 {
-                        $type = '[' + (($active_elements | ForEach-Object { "`"$_`"" }) -join ", ") + ']'
-                        $webjson.VariousJs.block_section.replace = $webjson.VariousJs.block_section.replace -replace '\"', ''
-                    }
-                    1 {
-                        $type = $active_elements[0]
-                    }
-                }
-
-                $webjson.VariousJs.block_section.replace = $webjson.VariousJs.block_section.replace -f $type
-                $global:type = $type
-                
-            }
-            else {
-                Remove-Json -j $VarJs -p 'block_section'
-            }
-
             $name = "patches.json.VariousJs."
             $n = "xpui.js"
             $contents = $webjson.VariousJs.psobject.properties.name
@@ -2023,12 +1992,10 @@ if ($test_spa) {
             if ($v8_snapshot) {
                 $modules = Extract-WebpackModules -InputFile $v8_snapshot
 
-                $firstLine = ($modules -split "`r?`n" | Select-Object -First 1)
-
                 $archive_spa.Dispose()
                 $archive_spa = [System.IO.Compression.ZipFile]::Open($xpui_spa_patch, [System.IO.Compression.ZipArchiveMode]::Update)
 
-                Update-ZipEntry -archive $archive_spa -entryName 'xpui-snapshot.js' -prepend $firstLine -newEntryName 'xpui.js' -Verbose:$VerbosePreference
+                Update-ZipEntry -archive $archive_spa -entryName 'xpui-snapshot.js' -prepend $modules -newEntryName 'xpui.js' -Verbose:$VerbosePreference
             
                 Update-ZipEntry -archive $archive_spa -entryName 'xpui-snapshot.css' -newEntryName 'xpui.css' -Verbose:$VerbosePreference
             
@@ -2160,11 +2127,22 @@ if ($test_spa) {
         
         if ($section -ne $null) {
 
+            $calltype = switch ($true) {
+                ($podcast_off -and $adsections_off -and $canvashome_off) { 'all'; break }
+                ($podcast_off -and $adsections_off) { 'podcast, section'; break }
+                ($podcast_off -and $canvashome_off) { 'podcast, canvas'; break }
+                ($adsections_off -and $canvashome_off) { 'section, canvas'; break }
+                $podcast_off { 'podcast'; break }
+                $adsections_off { 'section'; break }
+                $canvashome_off { 'canvas'; break }
+                default { $null } 
+            }
+
+            $section = $section -replace "sectionBlock\(data, ''\)", "sectionBlock(data, '$calltype')"
+
             injection -p $xpui_spa_patch -f "spotx-helper" -n "sectionBlock.js" -c $section
         }
-        else {
-            $podcast_off, $adsections_off = $false
-        }
+
     }
 	
     # goofy History
@@ -2245,7 +2223,7 @@ if ($test_spa) {
         }
     }
     # block subfeeds
-    if ($global:type -match "all" -or $global:type -match "podcast") {
+    if ($calltype -match "all" -or $calltype -match "podcast") {
         $css += $webjson.others.block_subfeeds.add
     }
     # scrollbar indent fixes

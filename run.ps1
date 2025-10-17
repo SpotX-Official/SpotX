@@ -2125,19 +2125,20 @@ if ($test_spa) {
         if ($section -ne $null) {
 
             $calltype = switch ($true) {
-                ($podcast_off -and $adsections_off -and $canvashome_off) { 'all'; break }
-                ($podcast_off -and $adsections_off) { 'podcast, section'; break }
-                ($podcast_off -and $canvashome_off) { 'podcast, canvas'; break }
-                ($adsections_off -and $canvashome_off) { 'section, canvas'; break }
-                $podcast_off { 'podcast'; break }
-                $adsections_off { 'section'; break }
-                $canvashome_off { 'canvas'; break }
+                ($podcast_off -and $adsections_off -and $canvashome_off) { "'all'"; break }
+                ($podcast_off -and $adsections_off) { "['podcast', 'section']"; break }
+                ($podcast_off -and $canvashome_off) { "['podcast', 'canvas']"; break }
+                ($adsections_off -and $canvashome_off) { "['section', 'canvas']"; break }
+                $podcast_off { "'podcast'"; break }
+                $adsections_off { "'section'"; break }
+                $canvashome_off { "'canvas'"; break }
                 default { $null } 
             }
 
-            $section = $section -replace "sectionBlock\(data, ''\)", "sectionBlock(data, '$calltype')"
-
-            injection -p $xpui_spa_patch -f "spotx-helper" -n "sectionBlock.js" -c $section
+            if (!($calltype -eq "'canvas'" -and [version]$offline -le [version]"1.2.52.442")) {
+                $section = $section -replace "sectionBlock\(data, ''\)", "sectionBlock(data, $calltype)"
+                injection -p $xpui_spa_patch -f "spotx-helper" -n "sectionBlock.js" -c $section
+            }
         }
 
     }

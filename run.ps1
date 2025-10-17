@@ -2135,7 +2135,7 @@ if ($test_spa) {
                 default { $null } 
             }
 
-            if (!($calltype -eq "'canvas'" -and [version]$offline -le [version]"1.2.52.442")) {
+            if (!($calltype -eq "'canvas'" -and [version]$offline -le [version]"1.2.44.405")) {
                 $section = $section -replace "sectionBlock\(data, ''\)", "sectionBlock(data, $calltype)"
                 injection -p $xpui_spa_patch -f "spotx-helper" -n "sectionBlock.js" -c $section
             }

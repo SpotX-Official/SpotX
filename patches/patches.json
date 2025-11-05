@@ -1681,6 +1681,15 @@
                     "fr": "1.2.32",
                     "to": ""
                 }
+            },
+            "Tiltable3DArtwork": {
+                "name": "enableTiltable3DArtwork",
+                "description": "Enable tiltable 3D parallax effect on artwork (Cinema Mode and Cover Art Modal)",
+                "native_description": "Enable tiltable 3D parallax effect on artwork (Cinema Mode and Cover Art Modal)",
+                "version": {
+                    "fr": "1.2.7",
+                    "to": ""
+                }
             }
         },
         "CustomExp": {

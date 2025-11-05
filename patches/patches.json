@@ -1687,7 +1687,7 @@
                 "description": "Enable tiltable 3D parallax effect on artwork (Cinema Mode and Cover Art Modal)",
                 "native_description": "Enable tiltable 3D parallax effect on artwork (Cinema Mode and Cover Art Modal)",
                 "version": {
-                    "fr": "1.2.7",
+                    "fr": "1.2.76",
                     "to": ""
                 }
             }

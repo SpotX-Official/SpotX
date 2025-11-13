@@ -2294,7 +2294,10 @@ $regex1 = $old -notmatch $webjson.others.binary.block_update.add
 $regex2 = $old -notmatch $webjson.others.binary.block_slots.add
 $regex3 = $old -notmatch $webjson.others.binary.block_slots_2.add
 $regex4 = $old -notmatch $webjson.others.binary.block_slots_3.add
-$regex5 = $old -notmatch $webjson.others.binary.block_gabo.add
+$regex5 = $old -notmatch $(
+    if ([version]$offline -gt [version]'1.2.73.474') { $webjson.others.binary.block_gabo2.add }
+    else { $webjson.others.binary.block_gabo.add }
+)
 
 if ($regex1 -and $regex2 -and $regex3 -and $regex4 -and $regex5) {
 

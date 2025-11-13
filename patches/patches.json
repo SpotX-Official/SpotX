@@ -1944,10 +1944,19 @@
             "block_gabo": {
                 "version": {
                     "fr": "1.1.59",
-                    "to": ""
+                    "to": "1.2.73"
                 },
                 "add": "dodo(?=.receiver-service)",
                 "match": "gabo(?=.receiver-service)",
+                "replace": "dodo"
+            },
+            "block_gabo2": {
+                "version": {
+                    "fr": "1.2.74",
+                    "to": ""
+                },
+                "add": "dodo(?=.receiver-service(?:/public|[^/]))",
+                "match": "gabo(?=.receiver-service(?:/public|[^/]))",
                 "replace": "dodo"
             }
         },

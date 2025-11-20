@@ -680,6 +680,24 @@
                     "fr": "1.2.70",
                     "to": ""
                 }
+            },
+            "AgeAssuranceContent": {
+                "name": "enableAgeAssuranceContent",
+                "description": "Enables the age assurance feature for content aspects (e.g., switch to video)",
+                "native_description": "Enables the age assurance feature for content aspects (e.g., switch to video)",
+                "version": {
+                    "fr": "1.2.77",
+                    "to": ""
+                }
+            },
+            "AgeAssuranceSocial": {
+                "name": "enableAgeAssuranceSocial",
+                "description": "Enables the age assurance feature for social aspects (e.g., comments, friend feed)",
+                "native_description": "Enables the age assurance feature for social aspects (e.g., comments, friend feed)",
+                "version": {
+                    "fr": "1.2.77",
+                    "to": ""
+                }
             }
         },
         "EnableExp": {
@@ -1562,7 +1580,7 @@
                 "native_description": "Enable scroll to current line button in lyrics",
                 "version": {
                     "fr": "1.2.65",
-                    "to": ""
+                    "to": "1.2.76"
                 }
             },
             "PiPMiniPlayerSettings": {
@@ -2185,7 +2203,7 @@
                 "fr": "1.1.73",
                 "to": ""
             },
-            "match": "(permissionLevel:\"CONTRIBUTOR\".+?return)",
+            "match": "(permissionLevel:(?:\"CONTRIBUTOR\"|[\\w$]+)(?!\\s*=).+?return)",
             "replace": "$1 null;"
         },
         "byspotx": {

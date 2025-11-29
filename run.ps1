@@ -1691,7 +1691,13 @@ function Reset-Dll-Sign {
     }
 
     # byte patterns for x64 arch
-    $searchPattern_x64 = '30 01 00 00 5B C3 CC CC 48 89 5C 24 18 55'
+    # <= 1.2.77
+    $searchPattern_x64_old = '30 01 00 00 5B C3 CC CC 48 89 5C 24 18 55'
+    
+    # >= 1.2.78
+    $searchPattern_x64_new = '4A 01 CC CC CC 48 8B C4 48 89 58'
+
+    # common replace pattern for x64
     $replacePattern_x64 = 'B8 01 00 00 00 C3'
     $bytesToReplaceCount_x64 = 6
     
@@ -1719,10 +1725,16 @@ function Reset-Dll-Sign {
         Write-Verbose "Using ARM64 byte patterns"
     }
     else {
-        $searchPattern = ConvertTo-ByteArray $searchPattern_x64
         $replacePattern = ConvertTo-ByteArray $replacePattern_x64
         $bytesToReplaceCount = $bytesToReplaceCount_x64
-        Write-Verbose "Using x86/x64 byte patterns"
+        if ([version]$offline -ge [version]'1.2.78.354') {
+            $searchPattern = ConvertTo-ByteArray $searchPattern_x64_new
+            Write-Verbose "Using new x64 byte patterns (>= 1.2.78)"
+        }
+        else {
+            $searchPattern = ConvertTo-ByteArray $searchPattern_x64_old
+            Write-Verbose "Using old x64 byte patterns (<= 1.2.77)"
+        }
     }
 
     try {

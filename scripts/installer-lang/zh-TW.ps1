@@ -46,4 +46,5 @@
     HostBak         = "正在備份 hosts.bak..."
     HostDel         = "正在嘗試從原始 hosts 檔案中刪除不需要的網址..."
     HostError       = "在編輯 hosts 檔案時發生了錯誤，請手動編輯或以系統管理員身分執行腳本"
+    PressAnyKey     = "按任意鍵退出..."
 }

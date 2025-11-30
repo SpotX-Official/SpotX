@@ -46,4 +46,5 @@
     HostBak         = "Varmuuskopioidaan hosts.bak..."
     HostDel         = "Yritetään poistaa ei toivottuja URL-osoitteita alkuperäisestä hosts-tiedostosta..."
     HostError       = "Jotain meni pieleen, hosts-tiedostoton muokkaamisessa, muokkaa sitä manuaalisesti tai suorita komentosarja järjestelmänvalvojana"
+    PressAnyKey     = "Paina mitä tahansa näppäintä poistuaksesi..."
 }

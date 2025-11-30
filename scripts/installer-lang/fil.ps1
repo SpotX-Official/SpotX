@@ -46,4 +46,5 @@
     HostBak         = "Nagbabackup ng hosts.bak..."
     HostDel         = "Sinusubukang alisin ang mga hindi kanais-nais na URL mula sa orihinal na hosts file..."
     HostError       = "May naging problema sa pag-eedit ng hosts file, i-edit ito ng manu-mano o patakbuhin ang script bilang administrator"
+    PressAnyKey     = "Pindutin ang anumang key upang lumabas..."
 }

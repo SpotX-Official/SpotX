@@ -46,4 +46,5 @@
     HostBak         = "备份原始 hosts 文件为 hosts.bak..."
     HostDel         = "正在试图从原始 hosts 文件中删除不需要的 URL..."
     HostError       = "在编辑 hosts 文件时发生了错误,请手动编辑或以管理员身份重新运行该脚本。"
+    PressAnyKey     = "按任意键退出..."
 }

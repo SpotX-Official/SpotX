@@ -46,4 +46,5 @@
     HostBak         = "Sauvegarde de hosts.bak..."
     HostDel         = "Tentative de suppression des URLs indésirables du fichier hosts original..."
     HostError       = "Quelque chose ne s'est pas bien passé lors de l'édition du fichier hosts, modifiez le manuellement ou lancez le script en tant qu'administrateur"
+    PressAnyKey     = "Appuyez sur n'importe quelle touche pour quitter..."
 }

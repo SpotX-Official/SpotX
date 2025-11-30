@@ -46,4 +46,5 @@
     HostBak         = "hosts.bak にバックアップ中..."
     HostDel         = "元の hosts から望まない URL を削除中..."
     HostError       = "hosts ファイルの編集中に不明の問題が発生、手動で編集するか、管理者としてスクリプトを実行してください"
+    PressAnyKey     = "終了するには何かキーを押してください..."
 }

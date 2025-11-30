@@ -46,4 +46,5 @@
     HostBak         = "A hosts.bak mentése..."
     HostDel         = "A nem kívánt URL-ek eltávolítása az eredeti hosts fájlból..."
     HostError       = "Valami hiba történt a hosts fájl szerkesztése közben, szerkeszd meg manuálisan, vagy futtasd a szkriptet rendszergazdaként."
+    PressAnyKey     = "Nyomjon meg egy gombot a kilépéshez..."
 }

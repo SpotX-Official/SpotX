@@ -46,4 +46,5 @@
     HostBak         = "hosts.bak காப்புப்பிரதி..."
     HostDel         = "Original host filesலிருந்து தேவையற்ற URL களை அகற்ற முயற்சிக்கிறது ..."
     HostError       = "Hosts Filesயைத் திருத்தும் போது ஏதோ தவறு ஏற்பட்டது, அதை manualலாக திருத்தவும் அல்லது Scriptயை administratorராக இயக்கவும்"
+    PressAnyKey     = "Press any key to exit..."
 }

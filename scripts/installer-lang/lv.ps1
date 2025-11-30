@@ -46,4 +46,5 @@
     HostBak         = "Dublē hosts.bak ..."
     HostDel         = "Mēģina noņemt nevēlamus URL no sākotnējā hosts faila..."
     HostError       = "Kaut kas greizi aizgāja rediģējot hosts failu, rediģējiet to manuāli vai palaidiet skriptu ar administratora privilēģijām"
+    PressAnyKey     = "Nospiediet jebkuru taustiņu, lai izietu..."
 }

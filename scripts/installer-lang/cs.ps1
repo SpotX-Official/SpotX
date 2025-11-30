@@ -46,4 +46,5 @@
     HostBak         = "Zálohuji soubor hosts.bak..."
     HostDel         = "Pokouším se odebrat nechtěné URL adresy z originálního souboru hosts..."
     HostError       = "Něco se nepovedlo s úpravou souboru hosts, upravte ho manuálně nebo spusťte skript jako"
+    PressAnyKey     = "Stiskněte libovolnou klávesu pro ukončení..."
 }

@@ -579,7 +579,7 @@
                 "native_description": "Enable embedded display ads on NPV",
                 "version": {
                     "fr": "1.2.57",
-                    "to": ""
+                    "to": "1.2.77"
                 }
             },
             "EnhancedAdsClientDeconfliction": {
@@ -615,7 +615,7 @@
                 "native_description": "EWhen enabled, enhanced visibility logs will be sent for embedded ads",
                 "version": {
                     "fr": "1.2.63",
-                    "to": ""
+                    "to": "1.2.77"
                 }
             },
             "Hpto": {
@@ -660,7 +660,7 @@
                 "native_description": "Enable embedded ads fetching when canvas track is playing. Defaults to true since this is currently existing behavior",
                 "version": {
                     "fr": "1.2.72",
-                    "to": ""
+                    "to": "1.2.77"
                 }
             },
             "SponsoredPlaylistMockEndpoint": {
@@ -690,12 +690,47 @@
                     "to": ""
                 }
             },
-            "AgeAssuranceSocial": {
-                "name": "enableAgeAssuranceSocial",
-                "description": "Enables the age assurance feature for social aspects (e.g., comments, friend feed)",
-                "native_description": "Enables the age assurance feature for social aspects (e.g., comments, friend feed)",
+            "AgeAssuranceFriendActivity": {
+                "name": "enableAgeAssuranceFriendActivity",
                 "version": {
-                    "fr": "1.2.77",
+                    "fr": "1.2.78",
+                    "to": ""
+                }
+            },
+            "AgeAssuranceComments": {
+                "name": "enableAgeAssuranceComments",
+                "version": {
+                    "fr": "1.2.78",
+                    "to": ""
+                }
+            },
+            "AgeAssuranceProfileMenu": {
+                "name": "enableAgeAssuranceProfileMenu",
+                "version": {
+                    "fr": "1.2.78",
+                    "to": ""
+                }
+            },
+            "AgeAssuranceSettings": {
+                "name": "enableAgeAssuranceSettings",
+                "version": {
+                    "fr": "1.2.78",
+                    "to": ""
+                }
+            },
+            "UnderAgeBlockingModal": {
+                "name": "enableUnderAgeBlockingModal",
+                "native_description": "Enables the underage blocking modal for accounts in blocked/pending disabled state",
+                "version": {
+                    "fr": "1.2.78",
+                    "to": ""
+                }
+            },
+            "AdImpressionDoesNotIgnoreVisilibility": {
+                "name": "embeddedAdImpressionDoesNotIgnoreVisilibility",
+                "native_description": "If enabled, we do consider percent visibility when logging the display ad impression",
+                "version": {
+                    "fr": "1.2.78",
                     "to": ""
                 }
             }
@@ -1706,6 +1741,22 @@
                 "native_description": "Enable tiltable 3D parallax effect on artwork (Cinema Mode and Cover Art Modal)",
                 "version": {
                     "fr": "1.2.76",
+                    "to": ""
+                }
+            },
+            "ExclusiveModeSetting": {
+                "name": "enableExclusiveModeSetting",
+                "native_description": "Display a setting to enable exclusive mode for an output device",
+                "version": {
+                    "fr": "1.2.78",
+                    "to": ""
+                }
+            },
+            "ListPrivateByDefaultSetting": {
+                "name": "enableListPrivateByDefaultSetting",
+                "native_description": "Enable List Private By Default setting in Desktop Social Settings",
+                "version": {
+                    "fr": "1.2.78",
                     "to": ""
                 }
             }

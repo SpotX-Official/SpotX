@@ -46,4 +46,5 @@
     HostBak         = "Zálohujem súbor hosts.bak..."
     HostDel         = "Pokúšam sa odobrať nechcené URLs z originálneho hosts súboru..."
     HostError       = "Niečo sa nepodarilo s upravovaním súboru hosts, uprav ho manuálne alebo spusti skript ako administrátor"
+    PressAnyKey     = "Stlačte ľubovoľnú klávesu pre ukončenie..."
 }

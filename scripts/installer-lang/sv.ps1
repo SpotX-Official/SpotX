@@ -46,4 +46,5 @@
     HostBak         = "Backar upp hosts.bak..."
     HostDel         = "Försöker ta bort oönskade webbadresser från den ursprungliga hosts filen..."
     HostError       = "Något gick fel vid redigering av hosts filen, redigera den manuellt eller kör skriptet som administratör"
+    PressAnyKey     = "Tryck på valfri tangent för att avsluta..."
 }

@@ -46,4 +46,5 @@
     HostBak         = "Tworzenie kopii zapasowej pliku hosts.bak..."
     HostDel         = "Próba usunięcia niechcianych adresów URL z oryginalnego pliku hosts..."
     HostError       = "Coś poszło nie tak podczas edycji pliku hosts, edytuj go ręcznie lub uruchom skrypt jako administrator"
+    PressAnyKey     = "Naciśnij dowolny klawisz, aby wyjść..."
 }

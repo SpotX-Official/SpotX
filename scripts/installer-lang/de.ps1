@@ -46,4 +46,5 @@
     HostBak         = "Sichere hosts.bak..."
     HostDel         = "Versuche, unerwünschte URLs von der originalen hosts-Datei zu entfernen..."
     HostError       = "Beim Bearbeiten der hosts-Datei ist etwas schief gelaufen, bearbeiten Sie sie manuell oder führen Sie die Installation als Administrator aus"
+    PressAnyKey     = "Drücken Sie eine beliebige Taste zum Beenden..."
 }

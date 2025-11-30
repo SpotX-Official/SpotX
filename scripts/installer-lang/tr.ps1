@@ -46,4 +46,5 @@
     HostBak         = "hosts.bak dosyası yedekleniyor...."
     HostDel         = "Orijinal hosts dosyasından istenmeyen URL'ler kaldırılmaya çalışılıyor..."
     HostError       = "Hosts dosyasını düzenlerken bir şeyler ters gitti, elle düzenleyin veya kodu yönetici olarak çalıştırın"
+    PressAnyKey     = "Çıkmak için herhangi bir tuşa basın..."
 }

@@ -46,4 +46,5 @@
     HostBak         = "Membuat cadangan hosts.bak..."
     HostDel         = "Mencoba menghapus URL yang tidak diinginkan dari file hosts asli..."
     HostError       = "Ada yang salah saat mengedit file hosts, edit manual atau jalankan skrip sebagai administrator"
+    PressAnyKey     = "Tekan sembarang tombol untuk keluar..."
 }

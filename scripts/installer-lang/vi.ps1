@@ -46,4 +46,5 @@
     HostBak         = "Đang sao lưu hosts.bak..."
     HostDel         = "Đang xóa các URL không cần thiết khỏi tệp hosts..."
     HostError       = "Xảy ra lỗi khi đang chỉnh sửa tệp hosts. Hãy tự sửa hoặc chạy tệp này với tư cách quản trị viên"
+    PressAnyKey     = "Nhấn phím bất kỳ để thoát..."
 }

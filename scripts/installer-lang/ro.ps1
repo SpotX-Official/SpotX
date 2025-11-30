@@ -46,4 +46,5 @@
     HostBak         = "Se efectuează o copie de siguranță a fișierului hosts.bak..."
     HostDel         = "Se încearcă eliminarea URL-urilor nedorite din fișierul original hosts..."
     HostError       = "Ceva nu a mers bine in timpul editării fișierului hosts, editează-l manual sau rulează scriptul ca Administrator."
+    PressAnyKey     = "Apăsați orice tastă pentru a ieși..."
 }

@@ -46,4 +46,5 @@
     HostBak         = "Fazendo backup de hosts.bak..."
     HostDel         = "Tentando remover URLs indesejados do arquivo hosts original..."
     HostError       = "Algo deu errado ao editar o arquivo hosts, edite-o manualmente ou execute o script como Administrador"
+    PressAnyKey     = "Pressione qualquer tecla para sair..."
 }

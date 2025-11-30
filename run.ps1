@@ -130,7 +130,7 @@ function Format-LanguageCode {
     
     $supportLanguages = @(
         'be', 'bn', 'cs', 'de', 'el', 'en', 'es', 'fa', 'fi', 'fil', 'fr', 'hi', 'hu', 
-        'id', 'it', 'ja', 'ka', 'ko', 'lv', 'pl', 'pt', 'ro', 'ru', 'sk', 'sr', 
+        'id', 'it', 'ja', 'ka', 'ko', 'lv', 'pl', 'pt', 'ro', 'ru', 'sk', 'sr', 'sr-Latn',
         'sv', 'ta', 'tr', 'ua', 'vi', 'zh', 'zh-TW'
     )
     
@@ -232,8 +232,12 @@ function Format-LanguageCode {
             $returnCode = 'sk'
             break
         }
-        '^sr' {
+        '^sr$' {
             $returnCode = 'sr'
+            break
+        }
+        '^sr-Latn' {
+            $returnCode = 'sr-Latn'
             break
         }
         '^sv' {

@@ -232,7 +232,7 @@ function Format-LanguageCode {
             $returnCode = 'sk'
             break
         }
-        '^sr$' {
+        '^(sr|sr-Cyrl)$' {
             $returnCode = 'sr'
             break
         }

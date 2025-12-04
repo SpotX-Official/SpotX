@@ -270,18 +270,27 @@ function Format-LanguageCode {
             break
         }
     }
-        
+    
     # Checking the long language code
     if ($long_code -and $returnCode -NotIn $supportLanguages) {
-        $returnCode = $returnCode -split "-" | Select-Object -First 1
+        if ($returnCode -match '-') {
+            $intermediateCode = $returnCode.Substring(0, $returnCode.LastIndexOf('-'))
+            
+            if ($intermediateCode -in $supportLanguages) {
+                $returnCode = $intermediateCode
+            }
+            else {
+                $returnCode = $returnCode -split "-" | Select-Object -First 1
+            }
+        }
     }
-    # Checking the short language code
+
     if ($returnCode -NotIn $supportLanguages) {
-        # If the language code is not supported default to English.
+
         $returnCode = 'en'
     }
     return $returnCode 
-}
+}   
 
 $spotifyDirectory = Join-Path $env:APPDATA 'Spotify'
 $spotifyDirectory2 = Join-Path $env:LOCALAPPDATA 'Spotify'
@@ -402,7 +411,7 @@ if (!($version -and $version -match $match_v)) {
     }
     else {  
         # latest tested version for Win 10-12 
-        $onlineFull = "1.2.78.409.g6aead1f8-948"
+        $onlineFull = "1.2.78.418.gaeeb5ebd-1067"
     }
 }
 else {

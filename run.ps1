@@ -1,3 +1,4 @@
+[CmdletBinding()]
 param
 (
 
@@ -415,7 +416,7 @@ if (!($version -and $version -match $match_v)) {
     }
     else {  
         # latest tested version for Win 10-12 
-        $onlineFull = "1.2.78.418.gaeeb5ebd-1067"
+        $onlineFull = "1.2.79.425.g1d0fcf61-256"
     }
 }
 else {
@@ -1703,6 +1704,7 @@ function Extract-WebpackModules {
 }
 
 function Reset-Dll-Sign {
+    [CmdletBinding()]
     param (
         [string]$FilePath
     )
@@ -1777,8 +1779,19 @@ public class ScannerCore {
                 // ARM64 Prologue: STP X29, X30, [SP, -imm]! -> FD 7B .. A9
                 if ((currInst & 0xFF00FFFF) == 0xA9007BFD) { return i; }
             } else {
-                // x64 Prologue: Padding 0xCC
-                if (data[i] != 0xCC && data[i-1] == 0xCC) return i;
+                // x64: Look for at least 2 bytes of padding (CC or 90) followed by a valid function start
+                if (i >= 2) {
+                    if ((data[i-1] == 0xCC && data[i-2] == 0xCC) || (data[i-1] == 0x90 && data[i-2] == 0x90)) {
+                        if (data[i] != 0xCC && data[i] != 0x90) {
+                            // Check for common function start bytes:
+                            // 0x48 (REX.W), 0x40 (REX), 0x55 (push rbp), 0x53-0x57 (push reg)
+                            byte b = data[i];
+                            if (b == 0x48 || b == 0x40 || b == 0x55 || (b >= 0x53 && b <= 0x57)) {
+                                return i;
+                            }
+                        }
+                    }
+                }
             }
             if (startOffset - i > 20000) break; 
         }
@@ -1860,7 +1873,8 @@ public class ScannerCore {
                 $Rel = [BitConverter]::ToInt32($bytes, $i + 3)
                 $Target = (Get-RVA $i) + 7 + $Rel
                 if ($Target -eq $StringRVA) {
-                    $PatchOffset = [ScannerCore]::FindStart($bytes, $i, $false); break
+                    $PatchOffset = [ScannerCore]::FindStart($bytes, $i, $false)
+                    if ($PatchOffset -gt 0) { break }
                 }
             }
         }
@@ -1918,7 +1932,9 @@ function Get-PEArchitectureOffsets {
     return $result
 }
 
-function Remove-Sign([string]$filePath) {
+function Remove-Sign {
+    [CmdletBinding()]
+    param([string]$filePath)
     try {
         $bytes = [System.IO.File]::ReadAllBytes($filePath)
         $peHeaderOffset = [System.BitConverter]::ToUInt32($bytes, 0x3C)
@@ -1958,7 +1974,9 @@ function Remove-Sign([string]$filePath) {
     }
 }
 
-function Remove-Signature-FromFiles([string[]]$fileNames) {
+function Remove-Signature-FromFiles {
+    [CmdletBinding()]
+    param([string[]]$fileNames)
     foreach ($fileName in $fileNames) {
         $fullPath = Join-Path -Path $spotifyDirectory -ChildPath $fileName
         if (-not (Test-Path $fullPath)) {

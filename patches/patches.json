@@ -408,7 +408,7 @@
                 "native_description": "Enables impression logging for PiP",
                 "version": {
                     "fr": "1.2.32",
-                    "to": ""
+                    "to": "1.2.78"
                 }
             },
             "SwitchingBetweenHomeAdsAndHpto": {

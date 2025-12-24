@@ -2561,6 +2561,14 @@
             },
             "match": "=>\\{((?:(?!=>\\{).)*?(?=\"loggedin_upgrade_menu))",
             "replace": "=>{ return null; $1"
+        },
+        "hideEmptyYourEpisodes": {
+            "version": {
+                "fr": "1.2.78",
+                "to": ""
+            },
+            "match": "(includeYourEpisodes\\?\\{inclusionMode:[^,}]+\\.)INCLUDE_ALWAYS",
+            "replace": "$1INCLUDE_IF_NOT_EMPTY"
         }
     }
 }

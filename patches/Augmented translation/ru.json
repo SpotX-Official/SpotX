@@ -642,9 +642,5 @@
     "160": {
         "match": "\"Prompted by .0.\"",
         "replace": "\"Запрос от {0}\""
-    },
-    "161": {
-        "match": "\"Prompted playlist\"",
-        "replace": "\"Плейлист по запросу\""
     }
 }

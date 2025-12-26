@@ -1759,6 +1759,35 @@
                     "fr": "1.2.78",
                     "to": ""
                 }
+            },
+            "Wrapped2025ListenCount": {
+                "name": "enableWrapped2025ListenCount",
+                "native_description": "Enable displaying listen counts for tracks in Wrapped 2025 Your Top Songs playlists",
+                "version": {
+                    "fr": "1.2.80",
+                    "to": ""
+                }
+            },
+            "MagpiePrompting": {
+                "name": "enableMagpiePrompting",
+               "version": {
+                    "fr": "1.2.77",
+                    "to": ""
+                }
+            },
+            "MagpieScheduling": {
+                "name": "enableMagpieScheduling",
+               "version": {
+                    "fr": "1.2.77",
+                    "to": ""
+                }
+            },
+            "Magpie": {
+                "name": "enableMagpie",
+               "version": {
+                    "fr": "1.2.77",
+                    "to": ""
+                }
             }
         },
         "CustomExp": {
@@ -2543,7 +2572,7 @@
                 "fr": "1.2.55",
                 "to": ""
             },
-            "match": "\/(?:leavebehinds\/mock|leavebehinds|mock)\/",
+            "match": "\/(?:leavebehinds\/mock|leavebehinds|mock|sponsoredplaylist)\/",
             "replace": "/localhost/"
         },
         "upgradeButton": {

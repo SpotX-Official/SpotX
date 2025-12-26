@@ -1,6 +1,6 @@
 {
     "lang": {
-        "version": "1.2.74",
+        "version": "1.2.80",
         "language": "Russian"
     },
     "1": {
@@ -32,307 +32,619 @@
         "replace": "\"Добавить в другой плейлист\""
     },
     "8": {
-        "match": "\"Add to this playlist\"",
-        "replace": "\"Добавить в этот плейлист\""
-    },
-    "9": {
         "match": "\"Character counter\"",
         "replace": "\"Счетчик символов\""
     },
-    "10": {
+    "9": {
         "match": "\"Toggle lightsaber hilt. Current is [{]0[}].\"",
         "replace": "\"Переключить рукоять светового меча. Текущий {0}.\""
     },
-    "11": {
+    "10": {
         "match": "\"Doors at .0.\"",
         "replace": "\"Вход в {0}\""
     },
-    "12": {
+    "11": {
         "match": "\"Show at .0.\"",
         "replace": "\"Показ в {0}\""
     },
-    "13": {
+    "12": {
         "match": "\"Your Location\"",
         "replace": "\"Ваше местоположение\""
     },
-    "14": {
+    "13": {
         "match": "\"Override certain user attributes to test regionalized content programming. The overrides are only active in this app.\"",
         "replace": "\"Переопределите определенные атрибуты пользователя, чтобы протестировать региональное программирование контента. Переопределения активны только в этом приложении.\""
     },
-    "15": {
+    "14": {
         "match": " was released this week!",
         "replace": " был выпущен на этой неделе!"
     },
-    "16": {
+    "15": {
         "match": "\"Speed [{]0[}]×\"",
         "replace": "\"Скорость {0}×\""
     },
-    "17": {
+    "16": {
         "match": "\"Artist\"",
         "replace": "\"Исполнитель\""
     },
-    "18": {
+    "17": {
         "match": "\"... of ...\"",
         "replace": "\"{0} из {1}\""
     },
-    "19": {
+    "18": {
         "match": "\"Не удалось изменить\"",
         "replace": "\"Не удалось обновить\""
     },
-    "20": {
+    "19": {
         "match": "Dynamic loudness control for podcasts - Actively maintain optimal podcast volume level for a clear and balanced sound experience",
         "replace": "Динамическое управление громкостью для подкастов - активное поддержание оптимального уровня громкости подкаста для четкого и сбалансированного звукового восприятия"
     },
-    "21": {
+    "20": {
         "match": "\"Build .0. is available\"",
         "replace": "\"Сборка {0} доступна\""
     },
-    "22": {
+    "21": {
         "match": "\"Downloading build .0....\"",
         "replace": "\"Загрузка сборки {0}...\""
     },
-    "23": {
+    "22": {
         "match": "\"Build .0. is ready to install\"",
         "replace": "\"Сборка {0} готова к установке\""
     },
-    "24": {
+    "23": {
         "match": "\"Remove\"",
         "replace": "\"Удалить\""
     },
-    "25": {
+    "24": {
         "match": "\"Do not translate\"",
         "replace": "\"Не переводить\""
     },
-    "26": {
+    "25": {
         "match": "\"Translating to .0.\"",
         "replace": "\"Перевожу на {0}\""
     },
-    "27": {
+    "26": {
         "match": "\"Translation to .0. not available\"",
         "replace": "\"Перевод на {0} недоступен\""
     },
-    "28": {
+    "27": {
         "match": "\"Translate lyrics\"",
         "replace": "\"Перевести текст песни\""
     },
-    "29": {
+    "28": {
         "match": "\"Spotify MiniPlayer\"",
         "replace": "\"мини-плеер Spotify\""
     },
-    "30": {
+    "29": {
         "match": "\"Venue\"",
         "replace": "\"Место проведения\""
     },
-    "31": {
+    "30": {
         "match": "\"We couldn't find the venue\"",
         "replace": "\"Мы не смогли найти место проведения\""
     },
-    "32": {
-        "match": "\"Notifications\"",
-        "replace": "\"Уведомления\""
-    },
-    "33": {
+    "31": {
         "match": "\"Bring back to main window\"",
         "replace": "\"Вернуться к основному окну\""
     },
-    "34": {
-        "match": "\"You have no notifications\"",
-        "replace": "\"У вас нет уведомлений\""
-    },
-    "35": {
+    "32": {
         "match": "\"Chapter\"",
         "replace": "\"Глава\""
     },
-    "36": {
+    "33": {
         "match": "\"Song\"",
         "replace": "\"Трек\""
     },
-    "37": {
+    "34": {
         "match": "\"Episode\"",
         "replace": "\"Эпизод\""
     },
-    "38": {
+    "35": {
         "match": "\"The venue you requested couldn.t be found, please try again.\"",
         "replace": "\"Запрошенное вами место проведения не найдено, попробуйте снова.\""
     },
-    "39": {
+    "36": {
         "match": "\"There was an error fetching the venue.\"",
         "replace": "\"Произошла ошибка при получении места проведения.\""
     },
-    "40": {
+    "37": {
         "match": "\"Concerts\"",
         "replace": "\"Концерты\""
     },
-    "41": {
+    "38": {
         "match": "\"all times are local to the venue\"",
         "replace": "\"все время указано по месту проведения\""
     },
-    "42": {
+    "39": {
         "match": "\"Spotify Spotlight Presale\"",
         "replace": "\"Предпродажа Spotify Spotlight\""
     },
-    "43": {
+    "40": {
         "match": "\"Get access\"",
         "replace": "\"Получить доступ\""
     },
-    "44": {
+    "41": {
         "match": "\"Continue playing\"",
         "replace": "\"Продолжить воспроизведение\""
     },
-    "45": {
+    "42": {
         "match": "\"Fans First\"",
         "replace": "\"Для фанатов\""
     },
-    "46": {
+    "43": {
         "match": "\"Offer ends in .0.:.1.:.2.\"",
         "replace": "\"До конца предложения: {0}:{1}:{2}\""
     },
-    "47": {
+    "44": {
         "match": "\"Search in Authors\"",
         "replace": "\"Искать в Авторах\""
     },
-    "48": {
+    "45": {
         "match": "\"A soundtrack for every part of the day.\"",
         "replace": "\"Саундтрек для любого времени суток.\""
     },
-    "49": {
+    "46": {
         "match": "\"See your unique playlist\"",
         "replace": "\"Посмотрите свой уникальный плейлист\""
     },
-    "50": {
+    "47": {
         "match": "\"You.ll still get:\"",
         "replace": "\"Вы также получите:\""
     },
-    "51": {
+    "48": {
         "match": "\"Trending songs in .country. . Spotify\"",
         "replace": "\"Популярные песни в %country% | Spotify\""
     },
-    "52": {
+    "49": {
         "match": "\"Featured Charts in .country. . Spotify\"",
         "replace": "\"Избранные чарты в %country% . Spotify\""
     },
-    "53": {
+    "50": {
         "match": "\"Popular artists in .country. . Spotify\"",
         "replace": "\"Популярные исполнители в %country% | Spotify\""
     },
-    "54": {
+    "51": {
         "match": "\"Popular albums in .country. . Spotify\"",
         "replace": "\"Популярные альбомы в %country% | Spotify\""
     },
-    "55": {
+    "52": {
         "match": "\"Discover trending songs in .country. today.\"",
         "replace": "\"Откройте для себя трендовые песни в %country% сегодня.\""
     },
-    "56": {
+    "53": {
         "match": "\"Discover Featured Charts in .country. today.\"",
         "replace": "\"Откройте для себя избранные чарты в %country% сегодня.\""
     },
-    "57": {
+    "54": {
         "match": "\"Discover the most popular artists in .country. today.\"",
         "replace": "\"Откройте для себя самых популярных исполнителей в %country% сегодня.\""
     },
-    "58": {
+    "55": {
         "match": "\"Discover the most popular albums in .country. today.\"",
         "replace": "\"Откройте для себя самые популярные альбомы в %country% сегодня.\""
     },
-    "59": {
+    "56": {
         "match": "\"Close\"",
         "replace": "\"Закрыть\""
     },
-    "60": {
+    "57": {
         "match": "\"Ok, we won.t play music from this artist again.\"",
         "replace": "\"Хорошо, мы больше не будем воспроизводить музыку этого исполнителя\""
     },
-    "61": {
+    "58": {
         "match": "\"Compact list\"",
         "replace": "\"Компактный список\""
     },
-    "62": {
+    "59": {
         "match": "\"Compact grid\"",
         "replace": "\"Компактная сетка\""
     },
-    "63": {
+    "60": {
         "match": "\"Lyrics preview\"",
         "replace": "\"Превью текста\""
     },
-    "64": {
+    "61": {
         "match": "\"Show less\"",
         "replace": "\"Свернуть\""
     },
-    "65": {
+    "62": {
         "match": "\"Show more\"",
         "replace": "\"Развернуть\""
     },
-    "66": {
+    "63": {
         "match": "\"Hide lyrics\"",
         "replace": "\"Скрыть текст\""
     },
-    "67": {
+    "64": {
         "match": "\"Переключиться на видеорежим\"",
         "replace": "\"К видео\""
     },
-    "68": {
+    "65": {
         "match": "\"Переключиться на аудиорежим\"",
         "replace": "\"К аудио\""
     },
-    "69": {
+    "66": {
         "match": "\".\".name..\" was released .years. year ago this week!\"",
         "replace": "\"На этой неделе исполнился %years% год с момента выхода \\\"%name%\\\"!\""
     },
-    "70": {
+    "67": {
         "match": "((?:few|other)..)\".\".name..\" was released .years. years ago this week!\"",
         "replace": "$1\"На этой неделе исполнилось %years% года с момента выхода \\\"%name%\\\"!\""
     },
-    "71": {
+    "68": {
         "match": "(many..)\".\".name..\" was released .years. years ago this week!\"",
         "replace": "$1\"На этой неделе исполнилось %years% лет с момента выхода \\\"%name%\\\"!\""
     },
-    "72": {
+    "69": {
         "match": "\".Select Type. \"",
         "replace": "\"<Выберите тип>\""
     },
-    "73": {
+    "70": {
         "match": "\"Connect\"",
         "replace": "\"Подключить устройство\""
     },
-    "74": {
+    "71": {
         "match": "\"Синхронизация\"",
         "replace": "\"Синхронизировать\""
     },
-    "75": {
+    "72": {
         "match": "\"Browse the live events feed to find more concerts.\"",
         "replace": "\"Листайте нашу афишу, чтобы найти больше концертов.\""
     },
-    "76": {
+    "73": {
         "match": "\"No concerts found\"",
         "replace": "\"Концертов не найдено\""
     },
-    "77": {
+    "74": {
         "match": "\"Browse the live events feed to find more venues.\"",
         "replace": "\"Листайте нашу афишу, чтобы найти больше площадок.\""
     },
-    "78": {
+    "75": {
         "match": "\"No venues found\"",
         "replace": "\"Площадок не найдено\""
     },
-    "79": {
+    "76": {
         "match": "\"Concerts in Your Top Genre\"",
         "replace": "\"Концерты в вашем любимом жанре\""
     },
-    "80": {
+    "77": {
         "match": "\"Follow your favorite venues to discover and browse events happening near you\"",
         "replace": "\"Подписывайтесь на любимые площадки, чтобы открывать и просматривать события рядом с вами\""
     },
-    "81": {
+    "78": {
         "match": "\"Search results\"",
         "replace": "\"Результаты поиска\""
     },
-    "82": {
+    "79": {
         "match": "\"BPM\"",
         "replace": "\"Темп\""
     },
-    "83": {
+    "80": {
         "match": "\"Folder name is required\"",
         "replace": "\"Имя папки обязательно\""
+    },
+    "81": {
+        "match": "\"Generate\"",
+        "replace": "\"Сгенерировать\""
+    },
+    "82": {
+        "match": "\"Retry\"",
+        "replace": "\"Повторить\""
+    },
+    "83": {
+        "match": "\"Daily\"",
+        "replace": "\"Ежедневно\""
+    },
+    "84": {
+        "match": "\"Tracks update every day by 6am\"",
+        "replace": "\"Треки обновляются каждый день к 6 утра\""
+    },
+    "85": {
+        "match": "\"Doesn.t update\"",
+        "replace": "\"Не обновляется\""
+    },
+    "86": {
+        "match": "\"Set updates\"",
+        "replace": "\"Настроить обновления\""
+    },
+    "87": {
+        "match": "\"Never\"",
+        "replace": "\"Никогда\""
+    },
+    "88": {
+        "match": "\"You can still update tracks manually\"",
+        "replace": "\"Вы все еще можете обновлять треки вручную\""
+    },
+    "89": {
+        "match": "\"Unknown\"",
+        "replace": "\"Неизвестно\""
+    },
+    "90": {
+        "match": "\"Updates daily\"",
+        "replace": "\"Обновляется ежедневно\""
+    },
+    "91": {
+        "match": "\"Updates weekly\"",
+        "replace": "\"Обновляется еженедельно\""
+    },
+    "92": {
+        "match": "\"Weekly\"",
+        "replace": "\"Еженедельно\""
+    },
+    "93": {
+        "match": "\"Every week at 6am every...\"",
+        "replace": "\"Каждую неделю в 6 утра каждый...\""
+    },
+    "94": {
+        "match": "\"Updates every .0.\"",
+        "replace": "\"Обновляется каждый {0}\""
+    },
+    "95": {
+        "match": "\"Tracks in this playlist will update daily\"",
+        "replace": "\"Треки в этом плейлисте будут обновляться ежедневно\""
+    },
+    "96": {
+        "match": "\"Tracks in this playlist won.t update\"",
+        "replace": "\"Треки в этом плейлисте не будут обновляться\""
+    },
+    "97": {
+        "match": "\"Tracks in this playlist will update every .0.\"",
+        "replace": "\"Треки в этом плейлисте будут обновляться каждый {0}\""
+    },
+    "98": {
+        "match": "\"Got it\"",
+        "replace": "\"Понятно\""
+    },
+    "99": {
+        "match": "\"This.ll reset in .0., so come back then.\"",
+        "replace": "\"Сброс через {0}, возвращайтесь позже.\""
+    },
+    "100": {
+        "match": "\"Dismiss\"",
+        "replace": "\"Отклонить\""
+    },
+    "101": {
+        "match": "\"You.ve reached the limit for prompting playlists\"",
+        "replace": "\"Вы достигли лимита создания плейлистов по запросу\""
+    },
+    "102": {
+        "match": "\"Prompt\"",
+        "replace": "\"Запрос\""
+    },
+    "103": {
+        "match": "\"Prompted Playlist\"",
+        "replace": "\"Плейлист по запросу\""
+    },
+    "104": {
+        "match": "\"Customize prompt\"",
+        "replace": "\"Настроить запрос\""
+    },
+    "105": {
+        "match": "\"Friday\"",
+        "replace": "\"Пятница\""
+    },
+    "106": {
+        "match": "\"Monday\"",
+        "replace": "\"Понедельник\""
+    },
+    "107": {
+        "match": "\"Saturday\"",
+        "replace": "\"Суббота\""
+    },
+    "108": {
+        "match": "\"Sunday\"",
+        "replace": "\"Воскресенье\""
+    },
+    "109": {
+        "match": "\"Thursday\"",
+        "replace": "\"Четверг\""
+    },
+    "110": {
+        "match": "\"Tuesday\"",
+        "replace": "\"Вторник\""
+    },
+    "111": {
+        "match": "\"Wednesday\"",
+        "replace": "\"Среда\""
+    },
+    "112": {
+        "match": "\"Generate playlist\"",
+        "replace": "\"Создать плейлист\""
+    },
+    "113": {
+        "match": "\"See what this prompt would create based on your tastes\"",
+        "replace": "\"Посмотрите, что этот запрос создаст на основе ваших вкусов\""
+    },
+    "114": {
+        "match": "\"Beta\"",
+        "replace": "\"Бета\""
+    },
+    "115": {
+        "match": "\"Generate a playlist that curates and updates\"",
+        "replace": "\"Создать плейлист, который подбирается и обновляется\""
+    },
+    "116": {
+        "match": "\"Update now\"",
+        "replace": "\"Обновить сейчас\""
+    },
+    "117": {
+        "match": "\"Something went wrong. Please try again\"",
+        "replace": "\"Что-то пошло не так. Пожалуйста, попробуйте снова\""
+    },
+    "118": {
+        "match": "\"Private\"",
+        "replace": "\"Приватный\""
+    },
+    "119": {
+        "match": "\"Public\"",
+        "replace": "\"Публичный\""
+    },
+    "120": {
+        "match": "\"Set privacy\"",
+        "replace": "\"Настроить приватность\""
+    },
+    "121": {
+        "match": "\"Only you and people you invite will be able to view this prompt and playlist\"",
+        "replace": "\"Только вы и приглашенные вами люди смогут видеть этот запрос и плейлист\""
+    },
+    "122": {
+        "match": "\"Anyone will be able to view this prompt and playlist\"",
+        "replace": "\"Любой сможет видеть этот запрос и плейлист\""
+    },
+    "123": {
+        "match": "\"Learn\"",
+        "replace": "\"Узнать\""
+    },
+    "124": {
+        "match": "\"You.re prompting with an AI. Don.t include any sensitive data. .learn. how your data is managed and shared.\"",
+        "replace": "\"Вы делаете запрос к ИИ. Не указывайте конфиденциальные данные. %learn%, как управляются и передаются ваши данные.\""
+    },
+    "125": {
+        "match": "\"New prompt\"",
+        "replace": "\"Новый запрос\""
+    },
+    "126": {
+        "match": "\"Edit prompt\"",
+        "replace": "\"Изменить запрос\""
+    },
+    "127": {
+        "match": "\"Analyzing...\"",
+        "replace": "\"Анализ...\""
+    },
+    "128": {
+        "match": "\"Update playlist\"",
+        "replace": "\"Обновить плейлист\""
+    },
+    "129": {
+        "match": "\"Updating playlist\"",
+        "replace": "\"Обновление плейлиста\""
+    },
+    "130": {
+        "match": "\"Prompt playlist options\"",
+        "replace": "\"Настройки плейлиста по запросу\""
+    },
+    "131": {
+        "match": "\"Describe your perfect playlist, in as much detail as you want...\"",
+        "replace": "\"Опишите свой идеальный плейлист, настолько подробно, насколько хотите...\""
+    },
+    "132": {
+        "match": "\"Made for\"",
+        "replace": "\"Сделано для\""
+    },
+    "133": {
+        "match": "\"Prompted by\"",
+        "replace": "\"По запросу\""
+    },
+    "134": {
+        "match": "\"Ideas\"",
+        "replace": "\"Идеи\""
+    },
+    "135": {
+        "match": "\"This.ll reset soon.\"",
+        "replace": "\"Скоро сбросится.\""
+    },
+    "136": {
+        "match": "\"Hide ideas\"",
+        "replace": "\"Скрыть идеи\""
+    },
+    "137": {
+        "match": "\"Show ideas\"",
+        "replace": "\"Показать идеи\""
+    },
+    "138": {
+        "match": "\"Name & details\"",
+        "replace": "\"Название и детали\""
+    },
+    "139": {
+        "match": "\"Notes\"",
+        "replace": "\"Заметки\""
+    },
+    "140": {
+        "match": "\"View prompt\"",
+        "replace": "\"Посмотреть запрос\""
+    },
+    "141": {
+        "match": "\"Discard this prompt.\"",
+        "replace": "\"Отменить этот запрос?\""
+    },
+    "142": {
+        "match": "\"Cancel\"",
+        "replace": "\"Отмена\""
+    },
+    "143": {
+        "match": "\"Discard\"",
+        "replace": "\"Отменить\""
+    },
+    "144": {
+        "match": "\"Any changes you.ve made won.t be saved.\"",
+        "replace": "\"Любые внесенные изменения не будут сохранены.\""
+    },
+    "145": {
+        "match": "\"What you.ll get\"",
+        "replace": "\"Что вы получите\""
+    },
+    "146": {
+        "match": "\"Collapse .0.\"",
+        "replace": "\"Свернуть {0}\""
+    },
+    "147": {
+        "match": "\"Collapsed .0.\"",
+        "replace": "\"Свернуто {0}\""
+    },
+    "148": {
+        "match": "\"Audiobooks\"",
+        "replace": "\"Аудиокниги\""
+    },
+    "149": {
+        "match": "\"Music\"",
+        "replace": "\"Музыка\""
+    },
+    "150": {
+        "match": "\"Podcasts\"",
+        "replace": "\"Подкасты\""
+    },
+    "151": {
+        "match": "\"Expand .0.\"",
+        "replace": "\"Развернуть {0}\""
+    },
+    "152": {
+        "match": "\"Expanded .0.\"",
+        "replace": "\"Развернуто {0}\""
+    },
+    "153": {
+        "match": "\"Loading more items\"",
+        "replace": "\"Загрузка дополнительных элементов\""
+    },
+    "154": {
+        "match": "\"More items loaded\"",
+        "replace": "\"Загружено больше элементов\""
+    },
+    "155": {
+        "match": "\"Played\"",
+        "replace": "\"Прослушано\""
+    },
+    "156": {
+        "match": "\"Saved\"",
+        "replace": "\"Сохранено\""
+    },
+    "157": {
+        "match": "\"Shared\"",
+        "replace": "\"Поделились\""
+    },
+    "158": {
+        "match": "\"Generating...\"",
+        "replace": "\"Генерация...\""
+    },
+    "159": {
+        "match": "\"Made for .0.\"",
+        "replace": "\"Сделано для {0}\""
+    },
+    "160": {
+        "match": "\"Prompted by .0.\"",
+        "replace": "\"Запрос от {0}\""
+    },
+    "161": {
+        "match": "\"Prompted playlist\"",
+        "replace": "\"Плейлист по запросу\""
     }
 }

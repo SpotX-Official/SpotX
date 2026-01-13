@@ -1,0 +1,34 @@
+name: Update License Year
+
+on:
+  schedule:
+    - cron: '0 0 1 1 *'
+  workflow_dispatch: 
+
+permissions:
+  contents: write
+
+jobs:
+  update-license:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Update year in LICENSE
+        run: |
+          CURRENT_YEAR=$(date +'%Y')
+          sed -i -E "s/Copyright \(c\) ([0-9]{4})(-[0-9]{4})?/Copyright (c) \1-$CURRENT_YEAR/" LICENSE
+
+      - name: Commit and push changes
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add LICENSE
+          
+          if git diff --staged --quiet; then
+            echo "No changes needed"
+          else
+            git commit -m "chore: update license year to $(date +'%Y')"
+            git push
+          fi

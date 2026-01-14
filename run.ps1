@@ -416,7 +416,7 @@ if (!($version -and $version -match $match_v)) {
     }
     else {  
         # latest tested version for Win 10-12 
-        $onlineFull = "1.2.80.349.g2efc88b5-968"
+        $onlineFull = "1.2.81.264.gb4ad4efa-1866"
     }
 }
 else {
@@ -1235,7 +1235,7 @@ function Helper($paramname) {
                     } 
                 }
             }
-            if (!$premium) { Remove-Json -j $Enable -p 'RemoteDownloads', 'Magpie', 'MagpiePrompting', 'MagpieScheduling' }
+            if (!$premium) { Remove-Json -j $Enable -p 'RemoteDownloads', 'Magpie', 'MagpiePrompting', 'MagpieScheduling', 'MagpieCuration' }
 
             # Disable unimportant exp
             if ($exp_spotify) {

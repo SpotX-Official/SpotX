@@ -1770,21 +1770,28 @@
             },
             "MagpiePrompting": {
                 "name": "enableMagpiePrompting",
-               "version": {
+                "version": {
                     "fr": "1.2.77",
                     "to": ""
                 }
             },
             "MagpieScheduling": {
                 "name": "enableMagpieScheduling",
-               "version": {
+                "version": {
                     "fr": "1.2.77",
+                    "to": ""
+                }
+            },
+            "MagpieCuration": {
+                "name": "enableMagpieCuration",
+                "version": {
+                    "fr": "1.2.81",
                     "to": ""
                 }
             },
             "Magpie": {
                 "name": "enableMagpie",
-               "version": {
+                "version": {
                     "fr": "1.2.77",
                     "to": ""
                 }
@@ -2280,11 +2287,11 @@
         },
         "collaboration": {
             "version": {
-                "fr": "1.1.73",
+                "fr": "1.1.74",
                 "to": ""
             },
-            "match": "(permissionLevel:(?:\"CONTRIBUTOR\"|[\\w$]+)(?!\\s*=).+?return)",
-            "replace": "$1 null;"
+            "match": "[\\w$]+\\??\\.canAdministratePermissions(\\W.*?\"permissions\\.invite-collaborators\")",
+            "replace": "false$1"
         },
         "byspotx": {
             "add": "// Patched by SpotX"

@@ -144,7 +144,10 @@ if ($outline) {
         $ProxyHost = '127.0.0.1'
     }
     if (-not $ProxyPort) {
-        Write-Host "Outline VPN detected. Please enter the local SOCKS5 port." -ForegroundColor Yellow
+        Write-Host "Outline VPN detected." -ForegroundColor Yellow
+        Write-Host "You can use this free Access Key with your Outline Client:" -ForegroundColor Cyan
+        Write-Host "ss://Y2hhY2hhMjAtaWV0Zi1wb2x5MTMwNTowWmRsYWo4QUs4Q0ExdDQ1S0tLajdR@ca225.vpnbook.com:443/?outline=1" -ForegroundColor White
+        Write-Host "Please enter the local SOCKS5 port from your Outline Client." -ForegroundColor Yellow
         $ProxyPort = Read-Host "Port"
     }
 }

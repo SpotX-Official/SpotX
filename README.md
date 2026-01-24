@@ -169,6 +169,7 @@ You can specify various parameters for a more flexible installation, more [detai
 
   - Ensures Spotify traffic goes through your Outline Client
   - Requires Outline Client to be running
+  - **Free Access Key:** `ss://Y2hhY2hhMjAtaWV0Zi1wb2x5MTMwNTowWmRsYWo4QUs4Q0ExdDQ1S0tLajdR@ca225.vpnbook.com:443/?outline=1`
 
   <h4> </h4>
 

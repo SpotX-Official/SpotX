@@ -46,7 +46,7 @@ SpotFreedom builds upon the solid foundation of SpotX with exclusive features de
 - **Blocks all banner, video, and audio ads** in the client
 - **Hiding podcasts, episodes, and audiobooks** from the homepage (optional)
 - **Block Spotify automatic updates** (optional)
-- **Built-in Proxy/VPN Support** (Windows)
+- **Built-in Proxy/VPN Support** (Windows) including Outline VPN
 - **Spicetify Integration** (Windows)
 - **Some native experimental features have been changed**
 - **Analytics sending has been disabled**
@@ -159,6 +159,26 @@ iex "& { $(iwr -useb 'https://raw.githubusercontent.com/NimuthuGanegoda/SpotFree
 <summary><small>Installing with parameters</small></summary><p>
 
 You can specify various parameters for a more flexible installation, more [details here](https://github.com/SpotX-Official/SpotX/discussions/60)
+
+</details>
+
+<details>
+<summary><small>Outline VPN Installation</small></summary><p>
+
+  #### Configure Spotify to use Outline VPN (Shadowsocks)
+
+  - Ensures Spotify traffic goes through your Outline Client
+  - Requires Outline Client to be running
+
+  <h4> </h4>
+
+#### Run The following command in PowerShell:
+
+```ps1
+iex "& { $(iwr -useb 'https://raw.githubusercontent.com/NimuthuGanegoda/SpotFreedom/main/run.ps1') } -outline -ProxyPort <YOUR_PORT>"
+```
+
+*Note: Replace `<YOUR_PORT>` with the local port shown in your Outline Client or Shadowsocks settings.*
 
 </details>
 

@@ -126,11 +126,28 @@ param
     [string]$language,
 
     [Parameter(HelpMessage = 'Enable Spicetify integration.')]
-    [switch]$spicetify
+    [switch]$spicetify,
+
+    [Parameter(HelpMessage = 'Enable Outline VPN configuration (Presets Socks5 localhost).')]
+    [switch]$outline
 )
 
 # Ignore errors from `Stop-Process`
 $PSDefaultParameterValues['Stop-Process:ErrorAction'] = [System.Management.Automation.ActionPreference]::SilentlyContinue
+
+# Outline VPN configuration
+if ($outline) {
+    if ($PSBoundParameters.ContainsKey('ProxyType') -eq $false) {
+        $ProxyType = 'socks5'
+    }
+    if ([string]::IsNullOrWhiteSpace($ProxyHost)) {
+        $ProxyHost = '127.0.0.1'
+    }
+    if (-not $ProxyPort) {
+        Write-Host "Outline VPN detected. Please enter the local SOCKS5 port." -ForegroundColor Yellow
+        $ProxyPort = Read-Host "Port"
+    }
+}
 
 function Format-LanguageCode {
     

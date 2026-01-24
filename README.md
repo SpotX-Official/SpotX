@@ -11,12 +11,13 @@
 
 <h2>
   <div align="center">
-    <b>Patcher for Spotify Desktop Client on Windows, Linux and macOS </b>
+    <b>SpotFreedom - Patcher for Spotify Desktop Client</b>
   </div>
 </h2>
 
 <p align="center"> •
   <a href="#requirements">Requirements</a> •
+  <a href="#perks">Why SpotFreedom?</a> •
   <a href="#features">Features</a> •
   <a href="#installation--update">Installation</a> •
   <a href="#uninstall">Uninstall</a> •
@@ -31,11 +32,22 @@
 - **PowerShell:** 5.1 and above (Windows)
 - **Bash:** (Linux / macOS)
 
+<h1 id="perks">Why SpotFreedom?</h1>
+
+SpotFreedom builds upon the solid foundation of SpotX with exclusive features designed for advanced users:
+
+- **🌍 Built-in Proxy/VPN Support (Windows):** Easily configure proxies to bypass geo-restrictions directly via installation parameters.
+- **🎨 Seamless Spicetify Integration (Windows):** Automatically install or update Spicetify alongside your patches with the simple `-spicetify` switch.
+- **🛡️ Enhanced Stability:** Uses local patching methods to reduce reliance on external servers for patch data.
+- **🧹 Auto-Cleanup:** Automatically manages and cleans up temporary files (`SpotFreedom_Temp`) for a cleaner system.
+
 <h1 id="features">Features</h1>
 
 - **Blocks all banner, video, and audio ads** in the client
 - **Hiding podcasts, episodes, and audiobooks** from the homepage (optional)
 - **Block Spotify automatic updates** (optional)
+- **Built-in Proxy/VPN Support** (Windows)
+- **Spicetify Integration** (Windows)
 - **Some native experimental features have been changed**
 - **Analytics sending has been disabled**
 - **Advanced installation [parameters](https://github.com/SpotX-Official/SpotX/discussions/60)**

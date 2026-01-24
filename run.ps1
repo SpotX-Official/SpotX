@@ -115,7 +115,7 @@ param
     [string]$ProxyHost,
 
     [Parameter(HelpMessage = 'Proxy Port')]
-    [int]$ProxyPort,
+    [string]$ProxyPort,
 
     [Parameter(HelpMessage = 'Proxy Type (http, https, socks4, socks5). Default: http')]
     [ValidateSet('http', 'https', 'socks4', 'socks5')]
@@ -407,6 +407,18 @@ $lang = CallLang -clg $langCode
 
 Write-Host ($lang).Welcome
 Write-Host
+
+if ($ProxyPort) {
+    if ($ProxyPort -match "^ss://") {
+        Write-Host "Error: You have entered an Outline Access Key as the Proxy Port." -ForegroundColor Red
+        Write-Host "Please enter the local SOCKS5 port number from your Outline Client (e.g. 1080)." -ForegroundColor Yellow
+        Stop-Script
+    }
+    if (-not ($ProxyPort -as [int])) {
+        Write-Host "Error: Proxy Port must be a valid number." -ForegroundColor Red
+        Stop-Script
+    }
+}
 
 # Check version Windows
 $os = Get-CimInstance -ClassName "Win32_OperatingSystem" -ErrorAction SilentlyContinue
@@ -2484,7 +2496,7 @@ if (!($no_shortcut)) {
         }
 
         if ($ProxyHost -and $ProxyPort) {
-            $Shortcut.Arguments = "--proxy-server=`"$ProxyType://$ProxyHost:$ProxyPort`""
+            $Shortcut.Arguments = "--proxy-server=`"$($ProxyType)://$($ProxyHost):$($ProxyPort)`""
         }
 
         $Shortcut.Save()      
@@ -2505,7 +2517,7 @@ if (!(Test-Path $start_menu) -or ($ProxyHost -and $ProxyPort)) {
     }
 
     if ($ProxyHost -and $ProxyPort) {
-        $Shortcut.Arguments = "--proxy-server=`"$ProxyType://$ProxyHost:$ProxyPort`""
+        $Shortcut.Arguments = "--proxy-server=`"$($ProxyType)://$($ProxyHost):$($ProxyPort)`""
     }
 
     $Shortcut.Save()      

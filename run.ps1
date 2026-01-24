@@ -409,10 +409,14 @@ Write-Host ($lang).Welcome
 Write-Host
 
 if ($ProxyPort) {
-    if ($ProxyPort -match "^ss://") {
+    while ($ProxyPort -match "^ss://") {
         Write-Host "Error: You have entered an Outline Access Key as the Proxy Port." -ForegroundColor Red
-        Write-Host "Please enter the local SOCKS5 port number from your Outline Client (e.g. 1080)." -ForegroundColor Yellow
-        Stop-Script
+        Write-Host "The Access Key is used to configure your Outline Client software." -ForegroundColor Yellow
+        Write-Host "Please check your Outline Client to see which local port it is using (often 1080)." -ForegroundColor Yellow
+        $ProxyPort = Read-Host "Please enter the local SOCKS5 port number"
+        if ($ProxyPort -match "^ss://") {
+             Write-Host "You entered an Access Key again. We need the PORT number (e.g. 1080)." -ForegroundColor Red
+        }
     }
     if (-not ($ProxyPort -as [int])) {
         Write-Host "Error: Proxy Port must be a valid number." -ForegroundColor Red

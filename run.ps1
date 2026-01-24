@@ -110,6 +110,16 @@ param
 
     [Parameter(HelpMessage = 'Error log ru string.')]
     [switch]$err_ru,
+
+    [Parameter(HelpMessage = 'Proxy Host IP or Hostname')]
+    [string]$ProxyHost,
+
+    [Parameter(HelpMessage = 'Proxy Port')]
+    [int]$ProxyPort,
+
+    [Parameter(HelpMessage = 'Proxy Type (http, https, socks4, socks5). Default: http')]
+    [ValidateSet('http', 'https', 'socks4', 'socks5')]
+    [string]$ProxyType = 'http',
     
     [Parameter(HelpMessage = 'Select the desired language to use for installation. Default is the detected system language.')]
     [Alias('l')]
@@ -721,7 +731,7 @@ if (Test-Path -Path $hostsFilePath) {
 
 # Unique directory name based on time
 Push-Location -LiteralPath ([System.IO.Path]::GetTempPath())
-New-Item -Type Directory -Name "SpotX_Temp-$(Get-Date -UFormat '%Y-%m-%d_%H-%M-%S')" | Convert-Path | Set-Location
+New-Item -Type Directory -Name "SpotFreedom_Temp-$(Get-Date -UFormat '%Y-%m-%d_%H-%M-%S')" | Convert-Path | Set-Location
 
 if ($premium) {
     Write-Host ($lang).Prem`n
@@ -1033,14 +1043,31 @@ $webjson = Get -Url (Get-Link -e "/patches/patches.json") -RetrySeconds 5
         
 if ($webjson -eq $null) { 
     Write-Host
-    Write-Host "Failed to get patches.json" -ForegroundColor Red
-    $tempDirectory = $PWD
-    Pop-Location
-    Start-Sleep -Milliseconds 200
-    Remove-Item -Recurse -LiteralPath $tempDirectory 
-    Stop-Script
+    Write-Host "Failed to get patches.json. Continuing with SpotFreedom defaults..." -ForegroundColor Yellow
+    # Allow continuing without remote patches for SpotFreedom
+    $webjson = @{ others = @{ binary = @{}; discriptions = @{}; EnableExp = @{}; DisableExp = @{}; CustomExp = @{} }; free = @{}; VariousJs = @{} }
 }
 
+function Apply-FreedomPatches {
+    param([string]$content)
+
+    Write-Host " [SpotFreedom] Analyzing and patching xpui.js..." -ForegroundColor Cyan
+
+    # -----------------------------------------------------------------------
+    # SpotFreedom Patch Architecture
+    # -----------------------------------------------------------------------
+    # The original regexes are failing. Place new regex replacements here.
+    # Example:
+    # $content = $content -replace 'regex_pattern', 'replacement'
+
+    # Ensure isPremium = true (Placeholder)
+    # $content = $content -replace 'isPremium:\s*false', 'isPremium:true'
+
+    # Disable Ads (Placeholder)
+    # $content = $content -replace 'enableAds:\s*true', 'enableAds:false'
+
+    return $content
+}
 
 function Helper($paramname) {
 
@@ -1492,6 +1519,11 @@ function extract ($counts, $method, $name, $helper, $add, $patch) {
             $xpui = $reader.ReadToEnd()
             $reader.Close()
             if ($helper) { $xpui = Helper -paramname $helper } 
+
+            if ($name -eq 'xpui.js') {
+                $xpui = Apply-FreedomPatches -content $xpui
+            }
+
             if ($method -eq "zip") { $writer = New-Object System.IO.StreamWriter($file.Open()) }
             if ($method -eq "nonezip") { $writer = New-Object System.IO.StreamWriter -ArgumentList $file }
             $writer.BaseStream.SetLength(0)
@@ -1509,6 +1541,11 @@ function extract ($counts, $method, $name, $helper, $add, $patch) {
                 $xpui = $reader.ReadToEnd()
                 $reader.Close()
                 $xpui = Helper -paramname $helper 
+
+                if ($_.Name -eq 'xpui.js') {
+                    $xpui = Apply-FreedomPatches -content $xpui
+                }
+
                 $writer = New-Object System.IO.StreamWriter($_.Open())
                 $writer.BaseStream.SetLength(0)
                 $writer.Write($xpui)
@@ -2190,7 +2227,7 @@ if ($test_spa) {
                 }
                 else {
                     $binary_exe_bak = [System.IO.Path]::GetFileName($exe_bak)
-                    Write-Warning ("Backup copy {0} not found. Please reinstall Spotify and run SpotX again" -f $binary_exe_bak)
+                    Write-Warning ("Backup copy {0} not found. Please reinstall Spotify and run SpotFreedom again" -f $binary_exe_bak)
                     Pause
                     Exit
                 }
@@ -2201,7 +2238,7 @@ if ($test_spa) {
                 }
                 else {
                     $binary_chrome_elf_bak = [System.IO.Path]::GetFileName($chrome_elf_bak)
-                    Write-Warning ("Backup copy {0} not found. Please reinstall Spotify and run SpotX again" -f $binary_chrome_elf_bak)
+                    Write-Warning ("Backup copy {0} not found. Please reinstall Spotify and run SpotFreedom again" -f $binary_chrome_elf_bak)
                     Pause
                     Exit
                 }
@@ -2391,28 +2428,44 @@ $ErrorActionPreference = 'SilentlyContinue'
 if (!($no_shortcut)) {
 
     $desktop_folder = DesktopFolder
+    $target = "$desktop_folder\Spotify.lnk"
 
-    If (!(Test-Path $desktop_folder\Spotify.lnk)) {
-        $source = Join-Path $env:APPDATA 'Spotify\Spotify.exe'
-        $target = "$desktop_folder\Spotify.lnk"
-        $WorkingDir = "$env:APPDATA\Spotify"
+    if (!(Test-Path $target) -or ($ProxyHost -and $ProxyPort)) {
         $WshShell = New-Object -comObject WScript.Shell
         $Shortcut = $WshShell.CreateShortcut($target)
-        $Shortcut.WorkingDirectory = $WorkingDir
-        $Shortcut.TargetPath = $source
+
+        if ($Shortcut.TargetPath -eq "") {
+            $source = Join-Path $env:APPDATA 'Spotify\Spotify.exe'
+            $WorkingDir = "$env:APPDATA\Spotify"
+            $Shortcut.WorkingDirectory = $WorkingDir
+            $Shortcut.TargetPath = $source
+        }
+
+        if ($ProxyHost -and $ProxyPort) {
+            $Shortcut.Arguments = "--proxy-server=`"$ProxyType://$ProxyHost:$ProxyPort`""
+        }
+
         $Shortcut.Save()      
     }
 }
 
 # Create shortcut in start menu
-If (!(Test-Path $start_menu)) {
-    $source = Join-Path $env:APPDATA 'Spotify\Spotify.exe'
+if (!(Test-Path $start_menu) -or ($ProxyHost -and $ProxyPort)) {
     $target = $start_menu
-    $WorkingDir = "$env:APPDATA\Spotify"
     $WshShell = New-Object -comObject WScript.Shell
     $Shortcut = $WshShell.CreateShortcut($target)
-    $Shortcut.WorkingDirectory = $WorkingDir
-    $Shortcut.TargetPath = $source
+
+    if ($Shortcut.TargetPath -eq "") {
+        $source = Join-Path $env:APPDATA 'Spotify\Spotify.exe'
+        $WorkingDir = "$env:APPDATA\Spotify"
+        $Shortcut.WorkingDirectory = $WorkingDir
+        $Shortcut.TargetPath = $source
+    }
+
+    if ($ProxyHost -and $ProxyPort) {
+        $Shortcut.Arguments = "--proxy-server=`"$ProxyType://$ProxyHost:$ProxyPort`""
+    }
+
     $Shortcut.Save()      
 }
 
@@ -2439,7 +2492,7 @@ if ($regex1 -and $regex2 -and $regex3 -and $regex4 -and $regex5) {
 
 if (-not (Test-Path -LiteralPath $spotify_binary_bak)) {
     $name_binary = [System.IO.Path]::GetFileName($spotify_binary_bak)
-    Write-Warning ("Backup copy {0} not found. Please reinstall Spotify and run SpotX again" -f $name_binary)
+    Write-Warning ("Backup copy {0} not found. Please reinstall Spotify and run SpotFreedom again" -f $name_binary)
     Pause
     Exit
 }

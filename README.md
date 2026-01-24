@@ -11,7 +11,7 @@
 
 <h2>
   <div align="center">
-    <b>Patcher for Spotify Desktop Client on Windows </b>
+    <b>Patcher for Spotify Desktop Client on Windows, Linux and macOS </b>
   </div>
 </h2>
 
@@ -26,9 +26,10 @@
 
 <h1 id="requirements">Requirements</h1>
 
-- **OS:** Windows 7-11
+- **OS:** Windows 7-11 / Linux / macOS
 - **Spotify:** [Official desktop version](https://loadspot.pages.dev) (Microsoft Store version is not suitable)
-- **PowerShell:** 5.1 and above
+- **PowerShell:** 5.1 and above (Windows)
+- **Bash:** (Linux / macOS)
 
 <h1 id="features">Features</h1>
 
@@ -174,6 +175,14 @@ You can specify various parameters for a more flexible installation, more [detai
 </details>
 
 </details>
+
+<h1 id="installation-linux-mac">Installation on Linux & macOS</h1>
+
+#### Run the following command in terminal:
+
+```bash
+./spotx.sh
+```
 
 <h1 id="uninstall">Uninstall</h1>
 

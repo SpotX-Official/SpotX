@@ -427,6 +427,25 @@ if (!($version -and $version -match $match_v)) {
     else {  
         # latest tested version for Win 10-12 
         $onlineFull = "1.2.81.264.gb4ad4efa-1866"
+
+        try {
+            $versions = Invoke-RestMethod -Uri "https://loadspot.pages.dev/versions.json" -UseBasicParsing -ErrorAction SilentlyContinue
+            if ($versions) {
+                $latest = $versions.PSObject.Properties | Where-Object {
+                    $_.Value.buildType -eq 'Release' -and $_.Value.links.win.x64
+                } | Sort-Object -Property { [version]$_.Name } -Descending | Select-Object -First 1
+
+                if ($latest) {
+                    $url = $latest.Value.links.win.x64
+                    if ($url -match 'spotify_installer-(.+)\.exe') {
+                        $onlineFull = $matches[1]
+                    }
+                }
+            }
+        }
+        catch {
+            # Keep default
+        }
     }
 }
 else {

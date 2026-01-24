@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="https://github.com/SpotX-Official/SpotX/releases"><img src="https://spotx-official.github.io/images/logos/logo.png" /></a>
+  <a href="https://github.com/NimuthuGanegoda/SpotFreedom/releases"><img src="https://spotx-official.github.io/images/logos/logo.png" /></a>
 </p>
 
 <p align="center">
@@ -52,20 +52,14 @@
 
   <h4> </h4>
 
-#### Just download and run [Install_New_theme.bat](https://raw.githack.com/amd64fox/SpotX/main/Install_New_theme.bat)
+#### Just download and run [Install_New_theme.bat](https://raw.githack.com/NimuthuGanegoda/SpotFreedom/main/Install_New_theme.bat)
 
 or
 
 #### Run The following command in PowerShell:
 
 ```ps1
-iex "& { $(iwr -useb 'https://raw.githubusercontent.com/SpotX-Official/SpotX/refs/heads/main/run.ps1') } -new_theme"
-```
-
-#### mirror
-
-```ps1
-iex "& { $(iwr -useb 'https://spotx-official.github.io/SpotX/run.ps1') } -m -new_theme"
+iex "& { $(iwr -useb 'https://raw.githubusercontent.com/NimuthuGanegoda/SpotFreedom/main/run.ps1') } -new_theme"
 ```
 
 </details>
@@ -82,20 +76,14 @@ iex "& { $(iwr -useb 'https://spotx-official.github.io/SpotX/run.ps1') } -m -new
 
   <h4> </h4>
 
-#### Just download and run [Install_Old_theme.bat](https://raw.githack.com/amd64fox/SpotX/main/Install_Old_theme.bat)
+#### Just download and run [Install_Old_theme.bat](https://raw.githack.com/NimuthuGanegoda/SpotFreedom/main/Install_Old_theme.bat)
 
 or
 
 #### Run The following command in PowerShell:
 
 ```ps1
-iex "& { $(iwr -useb 'https://raw.githubusercontent.com/SpotX-Official/SpotX/refs/heads/main/run.ps1') } -v 1.2.13.661.ga588f749-4064 -confirm_spoti_recomended_over -block_update_on"
-```
-
-#### mirror
-
-```ps1
-iex "& { $(iwr -useb 'https://spotx-official.github.io/SpotX/run.ps1') } -m -v 1.2.13.661.ga588f749-4064 -confirm_spoti_recomended_over -block_update_on"
+iex "& { $(iwr -useb 'https://raw.githubusercontent.com/NimuthuGanegoda/SpotFreedom/main/run.ps1') } -v 1.2.13.661.ga588f749-4064 -confirm_spoti_recomended_over -block_update_on"
 ```
 
 </details>
@@ -117,20 +105,14 @@ iex "& { $(iwr -useb 'https://spotx-official.github.io/SpotX/run.ps1') } -m -v 1
 
 <h4> </h4>
 
-#### Just download and run [Install_Auto.bat](https://raw.githack.com/amd64fox/SpotX/main/scripts/Install_Auto.bat)
+#### Just download and run [Install_Auto.bat](https://raw.githack.com/NimuthuGanegoda/SpotFreedom/main/scripts/Install_Auto.bat)
 
 or
 
 #### Run The following command in PowerShell:
 
 ```ps1
-iex "& { $(iwr -useb 'https://raw.githubusercontent.com/SpotX-Official/SpotX/refs/heads/main/run.ps1') } -confirm_uninstall_ms_spoti -confirm_spoti_recomended_over -podcasts_off -block_update_on -start_spoti -new_theme -adsections_off -lyrics_stat spotify"
-```
-
-#### mirror
-
-```ps1
-iex "& { $(iwr -useb 'https://spotx-official.github.io/SpotX/run.ps1') } -m -confirm_uninstall_ms_spoti -confirm_spoti_recomended_over -podcasts_off -block_update_on -start_spoti -new_theme -adsections_off -lyrics_stat spotify"
+iex "& { $(iwr -useb 'https://raw.githubusercontent.com/NimuthuGanegoda/SpotFreedom/main/run.ps1') } -confirm_uninstall_ms_spoti -confirm_spoti_recomended_over -podcasts_off -block_update_on -start_spoti -new_theme -adsections_off -lyrics_stat spotify"
 ```
 
 </details>
@@ -149,20 +131,14 @@ iex "& { $(iwr -useb 'https://spotx-official.github.io/SpotX/run.ps1') } -m -con
 
   <h4> </h4>
 
-#### Just download and run [Install_Prem.bat](https://raw.githack.com/amd64fox/SpotX/main/scripts/Install_Prem.bat)
+#### Just download and run [Install_Prem.bat](https://raw.githack.com/NimuthuGanegoda/SpotFreedom/main/scripts/Install_Prem.bat)
 
 or
 
 #### Run The following command in PowerShell:
 
 ```ps1
-iex "& { $(iwr -useb 'https://raw.githubusercontent.com/SpotX-Official/SpotX/refs/heads/main/run.ps1') } -premium -new_theme"
-```
-
-#### mirror
-
-```ps1
-iex "& { $(iwr -useb 'https://spotx-official.github.io/SpotX/run.ps1') } -m -premium -new_theme"
+iex "& { $(iwr -useb 'https://raw.githubusercontent.com/NimuthuGanegoda/SpotFreedom/main/run.ps1') } -premium -new_theme"
 ```
 
 </details>
@@ -186,7 +162,7 @@ You can specify various parameters for a more flexible installation, more [detai
 
 <h1 id="uninstall">Uninstall</h1>
 
-- Just run [Uninstall.bat](https://raw.githack.com/amd64fox/SpotX/main/Uninstall.bat)
+- Just run [Uninstall.bat](https://raw.githack.com/NimuthuGanegoda/SpotFreedom/main/Uninstall.bat)
 
 or
 
@@ -198,4 +174,4 @@ or
 
 <h1 id="disclaimer">Disclaimer</h1>
 
-SpotX is a tool that modifies the official Spotify client, provided as an evaluation version — use it at your own risk.
+SpotFreedom is a tool that modifies the official Spotify client, provided as an evaluation version — use it at your own risk.

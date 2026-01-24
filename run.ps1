@@ -123,7 +123,10 @@ param
     
     [Parameter(HelpMessage = 'Select the desired language to use for installation. Default is the detected system language.')]
     [Alias('l')]
-    [string]$language
+    [string]$language,
+
+    [Parameter(HelpMessage = 'Enable Spicetify integration.')]
+    [switch]$spicetify
 )
 
 # Ignore errors from `Stop-Process`
@@ -2121,13 +2124,13 @@ $xpui_js_patch = Join-Path (Join-Path (Join-Path $env:APPDATA 'Spotify\Apps') 'x
 $test_spa = Test-Path -Path $xpui_spa_patch
 $test_js = Test-Path -Path $xpui_js_patch
 
-if ($test_spa -and $test_js) {
+if ($test_spa -and $test_js -and !($spicetify)) {
     Write-Host ($lang).Error -ForegroundColor Red
     Write-Host ($lang).FileLocBroken
     Stop-Script
 }
 
-if ($test_js) {
+if ($test_js -and !($spicetify)) {
     
     do {
         $ch = Read-Host -Prompt ($lang).Spicetify
@@ -2563,6 +2566,42 @@ app.autostart-mode="off"
         [System.IO.File]::WriteAllText($prefsPath, $content, [System.Text.UTF8Encoding]::new($false))
     }
 
+}
+
+# Spicetify Integration
+if ($spicetify) {
+    Write-Host " [Spicetify] Integration started..." -ForegroundColor Cyan
+
+    $spicetifyPath = "$env:LOCALAPPDATA\spicetify\spicetify.exe"
+    if (-not (Test-Path $spicetifyPath)) {
+        Write-Host " [Spicetify] Installing Spicetify..." -ForegroundColor Yellow
+        try {
+            iwr -useb https://raw.githubusercontent.com/spicetify/cli/main/install.ps1 | iex
+        }
+        catch {
+            Write-Host " [Spicetify] Installation failed: $_" -ForegroundColor Red
+        }
+    }
+    else {
+        Write-Host " [Spicetify] Updating Spicetify..." -ForegroundColor Yellow
+        & $spicetifyPath upgrade
+    }
+
+    if (Test-Path $spicetifyPath) {
+        Write-Host " [Spicetify] Applying changes..." -ForegroundColor Yellow
+
+        $spicetifyBackup = Join-Path $env:USERPROFILE '.spicetify\Backup'
+        if (Test-Path $spicetifyBackup) {
+            Remove-Item -Recurse -Force $spicetifyBackup -ErrorAction SilentlyContinue
+        }
+
+        & $spicetifyPath backup apply
+
+        Write-Host " [Spicetify] Integration complete." -ForegroundColor Green
+    }
+    else {
+         Write-Host " [Spicetify] Executable not found." -ForegroundColor Red
+    }
 }
 
 # Start Spotify

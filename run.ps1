@@ -205,17 +205,21 @@ function Restore-Backups {
     }
 }
 
-function Install-BlockTheSpot {
-    Write-Host "Installing BlockTheSpot (Ads & Premium Features)..." -ForegroundColor Cyan
-
-    # Clean old files
+function Remove-BlockTheSpot {
+    Write-Host "Checking for BlockTheSpot files..." -ForegroundColor Cyan
     $btsFiles = @('dpapi.dll', 'config.ini')
     foreach ($file in $btsFiles) {
         $path = Join-Path $spotifyDirectory $file
         if (Test-Path $path) {
+            Write-Host "Removing legacy file: $file" -ForegroundColor Yellow
             Remove-Item $path -Force -ErrorAction SilentlyContinue
         }
     }
+}
+
+function Install-BlockTheSpot {
+    Remove-BlockTheSpot
+    Write-Host "Installing BlockTheSpot (Ads & Premium Features)..." -ForegroundColor Cyan
 
     # Detect Architecture
     if (Test-Path $spotifyExecutable) {
@@ -270,7 +274,12 @@ function DesktopFolder {
 
 Stop-Spotify
 Restore-Backups
-Install-BlockTheSpot
+
+if ($bts) {
+    Install-BlockTheSpot
+} else {
+    Remove-BlockTheSpot
+}
 
 # Update Shortcuts with Proxy if requested
 if ($ProxyHost -and $ProxyPort) {

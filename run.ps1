@@ -1798,298 +1798,6 @@ function Extract-WebpackModules {
     return $decodedString
 }
 
-function Reset-Dll-Sign {
-    [CmdletBinding()]
-    param (
-        [string]$FilePath
-    )
-
-    $TargetStringText = "Check failed: sep_pos != std::wstring::npos."
-
-    $Patch_x64 = "B8 01 00 00 00 C3"
-
-    $Patch_ARM64 = "20 00 80 52 C0 03 5F D6"
-
-    $Patch_x64 = [byte[]]($Patch_x64 -split ' ' | ForEach-Object { [Convert]::ToByte($_, 16) })
-    $Patch_ARM64 = [byte[]]($Patch_ARM64 -split ' ' | ForEach-Object { [Convert]::ToByte($_, 16) })
-
-    $csharpCode = @"
-using System;
-using System.Collections.Generic;
-
-public class ScannerCore {
-    public static int FindBytes(byte[] data, byte[] pattern) {
-        for (int i = 0; i < data.Length - pattern.Length; i++) {
-            bool match = true;
-            for (int j = 0; j < pattern.Length; j++) {
-                if (data[i + j] != pattern[j]) { match = false; break; }
-            }
-            if (match) return i;
-        }
-        return -1;
-    }
-
-    public static List<int> FindXref_ARM64(byte[] data, ulong stringRVA, ulong sectionRVA, uint sectionRawPtr, uint sectionSize) {
-        List<int> results = new List<int>();
-        for (uint i = 0; i < sectionSize; i += 4) {
-            uint fileOffset = sectionRawPtr + i;
-            if (fileOffset + 8 > data.Length) break;
-            uint inst1 = BitConverter.ToUInt32(data, (int)fileOffset);
-            
-            // ADRP
-            if ((inst1 & 0x9F000000) == 0x90000000) {
-                int rd = (int)(inst1 & 0x1F);
-                long immLo = (inst1 >> 29) & 3;
-                long immHi = (inst1 >> 5) & 0x7FFFF;
-                long imm = (immHi << 2) | immLo;
-                if ((imm & 0x100000) != 0) { imm |= unchecked((long)0xFFFFFFFFFFE00000); }
-                imm = imm << 12; 
-                ulong pc = sectionRVA + i;
-                ulong pcPage = pc & 0xFFFFFFFFFFFFF000; 
-                ulong page = (ulong)((long)pcPage + imm);
-
-                uint inst2 = BitConverter.ToUInt32(data, (int)fileOffset + 4);
-                // ADD
-                if ((inst2 & 0xFF800000) == 0x91000000) {
-                    int rn = (int)((inst2 >> 5) & 0x1F);
-                    if (rn == rd) {
-                        long imm12 = (inst2 >> 10) & 0xFFF;
-                        ulong target = page + (ulong)imm12;
-                        if (target == stringRVA) { results.Add((int)fileOffset); }
-                    }
-                }
-            }
-        }
-        return results;
-    }
-
-    public static int FindStart(byte[] data, int startOffset, bool isArm) {
-        int step = isArm ? 4 : 1;
-        if (isArm && (startOffset % 4 != 0)) { startOffset -= (startOffset % 4); }
-
-        for (int i = startOffset; i > 0; i -= step) {
-            if (isArm) {
-                if (i < 4) break;
-                uint currInst = BitConverter.ToUInt32(data, i);
-                // ARM64 Prologue: STP X29, X30, [SP, -imm]! -> FD 7B .. A9
-                if ((currInst & 0xFF00FFFF) == 0xA9007BFD) { return i; }
-            } else {
-                // x64: Look for at least 2 bytes of padding (CC or 90) followed by a valid function start
-                if (i >= 2) {
-                    if ((data[i-1] == 0xCC && data[i-2] == 0xCC) || (data[i-1] == 0x90 && data[i-2] == 0x90)) {
-                        if (data[i] != 0xCC && data[i] != 0x90) {
-                            // Check for common function start bytes:
-                            // 0x48 (REX.W), 0x40 (REX), 0x55 (push rbp), 0x53-0x57 (push reg)
-                            byte b = data[i];
-                            if (b == 0x48 || b == 0x40 || b == 0x55 || (b >= 0x53 && b <= 0x57)) {
-                                return i;
-                            }
-                        }
-                    }
-                }
-            }
-            if (startOffset - i > 20000) break; 
-        }
-        return 0;
-    }
-}
-"@
-
-    if (-not ([System.Management.Automation.PSTypeName]'ScannerCore').Type) {
-        Add-Type -TypeDefinition $csharpCode
-    }
-    
-    Write-Verbose "Loading file: $FilePath"
-    if (-not (Test-Path $FilePath)) { 
-        Write-Warning "File Spotify.dll not found"
-        Stop-Script
-    }
-    $bytes = [System.IO.File]::ReadAllBytes($FilePath)
-
-    try {
-        $e_lfanew = [BitConverter]::ToInt32($bytes, 0x3C)
-        $Machine = [BitConverter]::ToUInt16($bytes, $e_lfanew + 4)
-        $IsArm64 = $false
-        $ArchName = "Unknown"
-        
-        if ($Machine -eq 0x8664) { $ArchName = "x64"; $IsArm64 = $false }
-        elseif ($Machine -eq 0xAA64) { $ArchName = "ARM64"; $IsArm64 = $true }
-        else { 
-            Write-Warning "Architecture not supported for patching Spotify.dll"
-            Stop-Script
-        }
-
-        Write-Verbose "Architecture: $ArchName"
-
-        $NumberOfSections = [BitConverter]::ToUInt16($bytes, $e_lfanew + 0x06)
-        $SizeOfOptionalHeader = [BitConverter]::ToUInt16($bytes, $e_lfanew + 0x14)
-        $SectionTableStart = $e_lfanew + 0x18 + $SizeOfOptionalHeader
-        
-        $Sections = @(); $CodeSection = $null
-        for ($i = 0; $i -lt $NumberOfSections; $i++) {
-            $secEntry = $SectionTableStart + ($i * 40)
-            $VA = [BitConverter]::ToUInt32($bytes, $secEntry + 12)
-            $RawSize = [BitConverter]::ToUInt32($bytes, $secEntry + 16)
-            $RawPtr = [BitConverter]::ToUInt32($bytes, $secEntry + 20)
-            $Chars = [BitConverter]::ToUInt32($bytes, $secEntry + 36)
-            $SecObj = [PSCustomObject]@{ VA = $VA; RawPtr = $RawPtr; RawSize = $RawSize }
-            $Sections += $SecObj
-            if (($Chars -band 0x20) -ne 0 -and $CodeSection -eq $null) { $CodeSection = $SecObj }
-        }
-    }
-    catch { 
-        Write-Warning "PE Error in Spotify.dll"
-        Stop-Script
-    }
-
-    function Get-RVA($FileOffset) {
-        foreach ($sec in $Sections) {
-            if ($FileOffset -ge $sec.RawPtr -and $FileOffset -lt ($sec.RawPtr + $sec.RawSize)) {
-                return ($FileOffset - $sec.RawPtr) + $sec.VA
-            }
-        }
-        return 0
-    }
-
-    Write-Verbose "Searching for function..."
-    $StringBytes = [System.Text.Encoding]::ASCII.GetBytes($TargetStringText)
-    $StringOffset = [ScannerCore]::FindBytes($bytes, $StringBytes)
-    if ($StringOffset -eq -1) { 
-        Write-Warning "String not found in Spotify.dll"
-        Stop-Script
-    }
-    $StringRVA = Get-RVA $StringOffset
-
-    $PatchOffset = 0
-    if (-not $IsArm64) {
-        $RawStart = $CodeSection.RawPtr; $RawEnd = $RawStart + $CodeSection.RawSize
-        for ($i = $RawStart; $i -lt $RawEnd; $i++) {
-            if ($bytes[$i] -eq 0x48 -and $bytes[$i + 1] -eq 0x8D -and $bytes[$i + 2] -eq 0x15) {
-                $Rel = [BitConverter]::ToInt32($bytes, $i + 3)
-                $Target = (Get-RVA $i) + 7 + $Rel
-                if ($Target -eq $StringRVA) {
-                    $PatchOffset = [ScannerCore]::FindStart($bytes, $i, $false)
-                    if ($PatchOffset -gt 0) { break }
-                }
-            }
-        }
-    }
-    else {
-        $Results = [ScannerCore]::FindXref_ARM64($bytes, [uint64]$StringRVA, [uint64]$CodeSection.VA, [uint32]$CodeSection.RawPtr, [uint32]$CodeSection.RawSize)
-        if ($Results.Count -gt 0) {
-            $PatchOffset = [ScannerCore]::FindStart($bytes, $Results[0], $true)
-        }
-    }
-
-    if ($PatchOffset -eq 0) { 
-        Write-Warning "Function not found in Spotify.dll"
-        Stop-Script
-    }
-
-    $BytesToWrite = if ($IsArm64) { $Patch_ARM64 } else { $Patch_x64 }
-
-    $CurrentBytes = @(); for ($i = 0; $i -lt $BytesToWrite.Length; $i++) { $CurrentBytes += $bytes[$PatchOffset + $i] }
-    $FoundHex = ($CurrentBytes | ForEach-Object { $_.ToString("X2") }) -join " "
-    Write-Verbose "Found (Offset: 0x$($PatchOffset.ToString("X"))): $FoundHex"
-
-    if ($CurrentBytes[0] -eq $BytesToWrite[0] -and $CurrentBytes[$BytesToWrite.Length - 1] -eq $BytesToWrite[$BytesToWrite.Length - 1]) {
-        Write-Warning "File Spotify.dll already patched"
-        return
-    }
-
-    Write-Verbose "Applying patch..."
-    for ($i = 0; $i -lt $BytesToWrite.Length; $i++) { $bytes[$PatchOffset + $i] = $BytesToWrite[$i] }
-
-    try {
-        [System.IO.File]::WriteAllBytes($FilePath, $bytes)
-        Write-Verbose "Success"
-    }
-    catch { 
-        Write-Warning "Write error in Spotify.dll $($_.Exception.Message)" 
-        Stop-Script
-    }
-}
-
-function Get-PEArchitectureOffsets {
-    param(
-        [byte[]]$bytes,
-        [int]$fileHeaderOffset
-    )
-    $machineType = [System.BitConverter]::ToUInt16($bytes, $fileHeaderOffset)
-    $result = @{ Architecture = $null; DataDirectoryOffset = 0 }
-    switch ($machineType) {
-        0x8664 { $result.Architecture = 'x64'; $result.DataDirectoryOffset = 112 }
-        0xAA64 { $result.Architecture = 'ARM64'; $result.DataDirectoryOffset = 112 }
-        0x014c { $result.Architecture = 'x86'; $result.DataDirectoryOffset = 96 }
-        default { $result.Architecture = 'Unknown'; $result.DataDirectoryOffset = $null }
-    }
-    $result.MachineType = $machineType
-    return $result
-}
-
-function Remove-Sign {
-    [CmdletBinding()]
-    param([string]$filePath)
-    try {
-        $bytes = [System.IO.File]::ReadAllBytes($filePath)
-        $peHeaderOffset = [System.BitConverter]::ToUInt32($bytes, 0x3C)
-        if ($bytes[$peHeaderOffset] -ne 0x50 -or $bytes[$peHeaderOffset + 1] -ne 0x45) {
-            Write-Warning "File '$(Split-Path $filePath -Leaf)' is not a valid PE file."
-            return $false
-        }
-        $fileHeaderOffset = $peHeaderOffset + 4
-        $optionalHeaderOffset = $fileHeaderOffset + 20
-        $archInfo = Get-PEArchitectureOffsets -bytes $bytes -fileHeaderOffset $fileHeaderOffset
-        if ($archInfo.DataDirectoryOffset -eq $null) {
-            Write-Warning "Unsupported architecture type ($($archInfo.MachineType.ToString('X'))) in file '$(Split-Path $filePath -Leaf)'."
-            return $false
-        }
-        $dataDirectoryOffsetWithinOptionalHeader = $archInfo.DataDirectoryOffset
-        $securityDirectoryIndex = 4
-        $certificateTableEntryOffset = $optionalHeaderOffset + $dataDirectoryOffsetWithinOptionalHeader + ($securityDirectoryIndex * 8)
-        if ($certificateTableEntryOffset + 8 -gt $bytes.Length) {
-            Write-Warning "Could not find Data Directory in file '$(Split-Path $filePath -Leaf)'. Header is corrupted or has non-standard format."
-            return $false
-        }
-        $rva = [System.BitConverter]::ToUInt32($bytes, $certificateTableEntryOffset)
-        $size = [System.BitConverter]::ToUInt32($bytes, $certificateTableEntryOffset + 4)
-        if ($rva -eq 0 -and $size -eq 0) {
-            Write-Host "Signature in file '$(Split-Path $filePath -Leaf)' is already absent." -ForegroundColor Yellow
-            return $true
-        }
-        for ($i = 0; $i -lt 8; $i++) {
-            $bytes[$certificateTableEntryOffset + $i] = 0
-        }
-        [System.IO.File]::WriteAllBytes($filePath, $bytes)
-        return $true
-    }
-    catch {
-        Write-Error "Error processing file '$filePath': $_"
-        return $false
-    }
-}
-
-function Remove-Signature-FromFiles {
-    [CmdletBinding()]
-    param([string[]]$fileNames)
-    foreach ($fileName in $fileNames) {
-        $fullPath = Join-Path -Path $spotifyDirectory -ChildPath $fileName
-        if (-not (Test-Path $fullPath)) {
-            Write-Error "File not found: $fullPath"
-            Stop-Script
-        }
-        try {
-            Write-Verbose "Processing file: $fileName"
-            if (Remove-Sign -filePath $fullPath) {
-                Write-Verbose "  -> Signature entry successfully zeroed."
-            }
-        }
-        catch {
-            Write-Error "Failed to process file '$fileName': $_"
-            Stop-Script
-        }
-    }
-}
 
 
 function Update-ZipEntry {
@@ -2527,44 +2235,37 @@ if (!(Test-Path $start_menu) -or ($ProxyHost -and $ProxyPort)) {
     $Shortcut.Save()      
 }
 
-$ANSI = [Text.Encoding]::GetEncoding(1251)
-$old = [IO.File]::ReadAllText($spotify_binary, $ANSI)
+# BlockTheSpot (DLL Injection)
+Write-Host "Downloading BlockTheSpot..." -ForegroundColor Cyan
+$btsZip = Join-Path $PWD 'chrome_elf.zip'
+$btsUrl = 'https://github.com/mrpond/BlockTheSpot/releases/latest/download/chrome_elf.zip'
 
-$regex1 = $old -notmatch $webjson.others.binary.block_update.add
-$regex2 = $old -notmatch $webjson.others.binary.block_slots.add
-$regex3 = $old -notmatch $webjson.others.binary.block_slots_2.add
-$regex4 = $old -notmatch $webjson.others.binary.block_slots_3.add
-$regex5 = $old -notmatch $(
-    if ([version]$offline -gt [version]'1.2.73.474') { $webjson.others.binary.block_gabo2.add }
-    else { $webjson.others.binary.block_gabo.add }
-)
+try {
+    # Download BlockTheSpot
+    Invoke-WebRequest -Uri $btsUrl -OutFile $btsZip -UseBasicParsing
 
-if ($regex1 -and $regex2 -and $regex3 -and $regex4 -and $regex5) {
+    if (Test-Path $btsZip) {
+        Write-Host "Extracting BlockTheSpot..." -ForegroundColor Cyan
+        Expand-Archive -Force -LiteralPath $btsZip -DestinationPath $PWD
 
-    if (Test-Path -LiteralPath $spotify_binary_bak) { 
-        Remove-Item $spotify_binary_bak -Recurse -Force
-        Start-Sleep -Milliseconds 150
+        $btsFiles = @('dpapi.dll', 'config.ini')
+        foreach ($file in $btsFiles) {
+            $src = Join-Path $PWD $file
+            if (Test-Path $src) {
+                Move-Item -Path $src -Destination $spotifyDirectory -Force
+                Write-Host "Installed $file" -ForegroundColor Green
+            } else {
+                Write-Warning "$file not found in extracted archive."
+            }
+        }
+
+        Remove-Item $btsZip -Force -ErrorAction SilentlyContinue
+    } else {
+        Write-Error "Failed to download BlockTheSpot."
     }
-    copy-Item $spotify_binary $spotify_binary_bak
+} catch {
+    Write-Error "Error installing BlockTheSpot: $_"
 }
-
-if (-not (Test-Path -LiteralPath $spotify_binary_bak)) {
-    $name_binary = [System.IO.Path]::GetFileName($spotify_binary_bak)
-    Write-Warning ("Backup copy {0} not found. Please reinstall Spotify and run SpotFreedom again" -f $name_binary)
-    Pause
-    Exit
-}
-
-# disable signature verification
-if ($spotify_binary_bak -eq $dll_bak) {
-    Reset-Dll-Sign -FilePath $spotifyDll
-
-    $files = @("Spotify.dll", "Spotify.exe", "chrome_elf.dll")
-    Remove-Signature-FromFiles $files
-}
-
-# binary patch
-extract -counts 'exe' -helper 'Binary'
 
 # fix login for old versions
 if ([version]$offline -ge [version]"1.1.87.612" -and [version]$offline -le [version]"1.2.5.1006") {

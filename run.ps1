@@ -129,7 +129,10 @@ param
     [switch]$spicetify,
 
     [Parameter(HelpMessage = 'Enable Outline VPN configuration (Presets Socks5 localhost).')]
-    [switch]$outline
+    [switch]$outline,
+
+    [Parameter(HelpMessage = 'Enable BlockTheSpot (DLL Injection). Warning: May cause black screen on new versions.')]
+    [switch]$bts
 )
 
 # Ignore errors from `Stop-Process`
@@ -1097,7 +1100,19 @@ if ($ch -eq 'n') {
 
 $ch = $null
 
-$webjson = Get -Url (Get-Link -e "/patches/patches.json") -RetrySeconds 5
+$localPatches = if ($PSScriptRoot) { Join-Path $PSScriptRoot "patches\patches.json" } else { $null }
+
+if ($localPatches -and (Test-Path $localPatches)) {
+    Write-Host "Loading local patches.json..." -ForegroundColor Cyan
+    try {
+        $webjson = Get-Content $localPatches -Raw | ConvertFrom-Json
+    } catch {
+        Write-Error "Failed to load local patches.json: $_"
+        $webjson = $null
+    }
+} else {
+    $webjson = Get -Url (Get-Link -e "/patches/patches.json") -RetrySeconds 5
+}
         
 if ($webjson -eq $null) { 
     Write-Host
@@ -2236,35 +2251,50 @@ if (!(Test-Path $start_menu) -or ($ProxyHost -and $ProxyPort)) {
 }
 
 # BlockTheSpot (DLL Injection)
-Write-Host "Downloading BlockTheSpot..." -ForegroundColor Cyan
-$btsZip = Join-Path $PWD 'chrome_elf.zip'
-$btsUrl = 'https://github.com/mrpond/BlockTheSpot/releases/latest/download/chrome_elf.zip'
+if ($bts) {
+    Write-Host "Downloading BlockTheSpot..." -ForegroundColor Cyan
+    $btsZip = Join-Path $PWD 'chrome_elf.zip'
+    $btsUrl = 'https://github.com/mrpond/BlockTheSpot/releases/latest/download/chrome_elf.zip'
 
-try {
-    # Download BlockTheSpot
-    Invoke-WebRequest -Uri $btsUrl -OutFile $btsZip -UseBasicParsing
+    try {
+        # Download BlockTheSpot
+        Invoke-WebRequest -Uri $btsUrl -OutFile $btsZip -UseBasicParsing
 
-    if (Test-Path $btsZip) {
-        Write-Host "Extracting BlockTheSpot..." -ForegroundColor Cyan
-        Expand-Archive -Force -LiteralPath $btsZip -DestinationPath $PWD
+        if (Test-Path $btsZip) {
+            Write-Host "Extracting BlockTheSpot..." -ForegroundColor Cyan
+            Expand-Archive -Force -LiteralPath $btsZip -DestinationPath $PWD
 
-        $btsFiles = @('dpapi.dll', 'config.ini')
-        foreach ($file in $btsFiles) {
-            $src = Join-Path $PWD $file
-            if (Test-Path $src) {
-                Move-Item -Path $src -Destination $spotifyDirectory -Force
-                Write-Host "Installed $file" -ForegroundColor Green
-            } else {
-                Write-Warning "$file not found in extracted archive."
+            $btsFiles = @('dpapi.dll', 'config.ini')
+            foreach ($file in $btsFiles) {
+                $src = Join-Path $PWD $file
+                if (Test-Path $src) {
+                    Move-Item -Path $src -Destination $spotifyDirectory -Force
+                    Write-Host "Installed $file" -ForegroundColor Green
+                } else {
+                    Write-Warning "$file not found in extracted archive."
+                }
             }
-        }
 
-        Remove-Item $btsZip -Force -ErrorAction SilentlyContinue
-    } else {
-        Write-Error "Failed to download BlockTheSpot."
+            Remove-Item $btsZip -Force -ErrorAction SilentlyContinue
+        } else {
+            Write-Error "Failed to download BlockTheSpot."
+        }
+    } catch {
+        Write-Error "Error installing BlockTheSpot: $_"
     }
-} catch {
-    Write-Error "Error installing BlockTheSpot: $_"
+} else {
+    Write-Host "BlockTheSpot (DLL Injection) is disabled by default to ensure stability." -ForegroundColor Yellow
+    Write-Host "Use -bts switch to enable it if needed." -ForegroundColor Gray
+
+    # Cleanup BlockTheSpot if present to fix black screen
+    $btsFiles = @('dpapi.dll', 'config.ini')
+    foreach ($file in $btsFiles) {
+        $path = Join-Path $spotifyDirectory $file
+        if (Test-Path $path) {
+            Remove-Item -Path $path -Force -ErrorAction SilentlyContinue
+            Write-Host "Removed legacy $file to prevent conflicts." -ForegroundColor Yellow
+        }
+    }
 }
 
 # fix login for old versions

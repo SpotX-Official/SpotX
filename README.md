@@ -48,9 +48,13 @@ SpotFreedom builds upon the solid foundation of SpotX with exclusive features de
 - **Block Spotify automatic updates** (optional)
 - **Built-in Proxy/VPN Support** (Windows) including Outline VPN
 - **Spicetify Integration** (Windows)
+- **BlockTheSpot Integration** (Optional via `-bts` switch)
 - **Some native experimental features have been changed**
 - **Analytics sending has been disabled**
 - **Advanced installation [parameters](https://github.com/SpotX-Official/SpotX/discussions/60)**
+
+> **Note on "Black Screen" Issues:**
+> BlockTheSpot (DLL Injection) is now **disabled by default** to prevent black screen issues on newer Spotify versions (1.2.30+). The installer will automatically clean up legacy BlockTheSpot files (`dpapi.dll`, `config.ini`) to fix broken installations. If you specifically need BlockTheSpot features, run the installer with the `-bts` parameter.
 
 <h1 id="installation--update">Installation / Update</h1>
 <h3>Choose installation type:</h3>

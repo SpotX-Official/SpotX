@@ -2235,48 +2235,10 @@ if (!(Test-Path $start_menu) -or ($ProxyHost -and $ProxyPort)) {
     $Shortcut.Save()      
 }
 
-# Restore clean binaries if they exist (Fix for previous Bad Image errors)
-if (Test-Path $exe_bak) {
-    Write-Host "Restoring Spotify.exe from backup..." -ForegroundColor Yellow
-    Remove-Item $spotifyExecutable -Force -ErrorAction SilentlyContinue
-    Move-Item $exe_bak $spotifyExecutable -Force
-}
-if (Test-Path $dll_bak) {
-    Write-Host "Restoring Spotify.dll from backup..." -ForegroundColor Yellow
-    Remove-Item $spotifyDll -Force -ErrorAction SilentlyContinue
-    Move-Item $dll_bak $spotifyDll -Force
-}
-if (Test-Path $chrome_elf_bak) {
-    Write-Host "Restoring chrome_elf.dll from backup..." -ForegroundColor Yellow
-    Remove-Item $chrome_elf -Force -ErrorAction SilentlyContinue
-    Move-Item $chrome_elf_bak $chrome_elf -Force
-}
-
 # BlockTheSpot (DLL Injection)
 Write-Host "Downloading BlockTheSpot..." -ForegroundColor Cyan
 $btsZip = Join-Path $PWD 'chrome_elf.zip'
-
-# Architecture Check for BlockTheSpot
-$bytes = [System.IO.File]::ReadAllBytes($spotifyExecutable)
-$peHeader = [System.BitConverter]::ToUInt16($bytes, 0x3C)
-$machine = [System.BitConverter]::ToUInt16($bytes, $peHeader + 4)
-$is64Bit = $machine -eq 0x8664
-
-if ($is64Bit) {
-    $btsUrl = 'https://github.com/mrpond/BlockTheSpot/releases/latest/download/chrome_elf.zip'
-} else {
-    Write-Warning "x86 Spotify detected. Using legacy BlockTheSpot version."
-    $btsUrl = 'https://github.com/mrpond/BlockTheSpot/releases/download/2023.5.20.80/chrome_elf.zip'
-}
-
-# Cleanup existing BlockTheSpot files before update
-$btsFiles = @('dpapi.dll', 'config.ini')
-foreach ($file in $btsFiles) {
-    $path = Join-Path $spotifyDirectory $file
-    if (Test-Path $path) {
-        Remove-Item $path -Force -ErrorAction SilentlyContinue
-    }
-}
+$btsUrl = 'https://github.com/mrpond/BlockTheSpot/releases/latest/download/chrome_elf.zip'
 
 try {
     # Download BlockTheSpot
@@ -2286,6 +2248,7 @@ try {
         Write-Host "Extracting BlockTheSpot..." -ForegroundColor Cyan
         Expand-Archive -Force -LiteralPath $btsZip -DestinationPath $PWD
 
+        $btsFiles = @('dpapi.dll', 'config.ini')
         foreach ($file in $btsFiles) {
             $src = Join-Path $PWD $file
             if (Test-Path $src) {

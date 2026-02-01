@@ -243,23 +243,67 @@ function Install-BlockTheSpot {
         return
     }
 
-    $btsZip = Join-Path ([System.IO.Path]::GetTempPath()) 'chrome_elf.zip'
-    
+    # Cache Configuration
+    $cacheDir = Join-Path $env:LOCALAPPDATA 'SpotFreedom'
+    if (-not (Test-Path $cacheDir)) {
+        New-Item -Path $cacheDir -ItemType Directory -Force | Out-Null
+    }
+
     if ($is64Bit) {
         $btsUrl = 'https://github.com/mrpond/BlockTheSpot/releases/latest/download/chrome_elf.zip'
         Write-Host "Detected x64 architecture." -ForegroundColor Green
+
+        # Resolve 'latest' redirect to get versioned URL
+        try {
+            $req = [System.Net.WebRequest]::Create($btsUrl)
+            $req.Method = "HEAD"
+            $req.AllowAutoRedirect = $false
+            $resp = $req.GetResponse()
+
+            if ($resp.StatusCode -eq [System.Net.HttpStatusCode]::Found -or
+                $resp.StatusCode -eq [System.Net.HttpStatusCode]::MovedPermanently -or
+                $resp.StatusCode -eq [System.Net.HttpStatusCode]::Redirect) {
+                $btsUrl = $resp.Headers["Location"]
+            }
+            $resp.Close()
+        } catch {
+            Write-Warning "Could not resolve BlockTheSpot version. Cache may be ineffective."
+        }
     } else {
         $btsUrl = 'https://github.com/mrpond/BlockTheSpot/releases/download/2023.5.20.80/chrome_elf.zip'
         Write-Warning "Detected x86 architecture. Using legacy BlockTheSpot."
     }
 
+    # Determine Cache Filename
+    $cacheFileName = 'chrome_elf.zip'
+    if ($btsUrl -match 'releases/download/([^/]+)/chrome_elf.zip') {
+        $version = $matches[1]
+        $cacheFileName = "chrome_elf_$version.zip"
+    } elseif ($is64Bit) {
+         $cacheFileName = "chrome_elf_latest_x64.zip"
+    } else {
+         $cacheFileName = "chrome_elf_legacy_x86.zip"
+    }
+
+    $btsZip = Join-Path $cacheDir $cacheFileName
+
     try {
-        Invoke-WebRequest -Uri $btsUrl -OutFile $btsZip -UseBasicParsing
+        if (-not (Test-Path $btsZip)) {
+            Write-Host "Downloading BlockTheSpot..." -ForegroundColor Cyan
+            Invoke-WebRequest -Uri $btsUrl -OutFile $btsZip -UseBasicParsing
+        } else {
+            Write-Host "Using cached BlockTheSpot: $cacheFileName" -ForegroundColor Green
+        }
         
         if (Test-Path $btsZip) {
-            Expand-Archive -Force -LiteralPath $btsZip -DestinationPath $spotifyDirectory
-            Write-Host "BlockTheSpot installed successfully." -ForegroundColor Green
-            Remove-Item $btsZip -Force -ErrorAction SilentlyContinue
+            try {
+                Expand-Archive -Force -LiteralPath $btsZip -DestinationPath $spotifyDirectory -ErrorAction Stop
+                Write-Host "BlockTheSpot installed successfully." -ForegroundColor Green
+            } catch {
+                Write-Warning "Failed to extract BlockTheSpot. Deleting corrupt cache file..."
+                Remove-Item $btsZip -Force -ErrorAction SilentlyContinue
+                throw $_
+            }
         } else {
             Write-Error "Failed to download BlockTheSpot."
         }

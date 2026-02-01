@@ -291,10 +291,14 @@ function Get-SpotifyVersion {
 function Is-Ver-Compatible ($ver, $fr, $to) {
     if (-not $ver) { return $true }
     try {
-        # Normalize version string (1.2.3.4.g123 -> 1.2.3.4)
-        if ($ver -match "^(\d+\.\d+\.\d+\.\d+)") { $ver = $matches[1] }
-
-        $v = [System.Version]$ver
+        $v = $null
+        if ($ver -is [System.Version]) {
+            $v = $ver
+        } else {
+            # Normalize version string (1.2.3.4.g123 -> 1.2.3.4)
+            if ($ver -match "^(\d+\.\d+\.\d+\.\d+)") { $ver = $matches[1] }
+            $v = [System.Version]$ver
+        }
 
         if (-not [string]::IsNullOrWhiteSpace($fr)) {
             $vFr = [System.Version]$fr
@@ -361,6 +365,17 @@ function Patch-XPUI {
     }
     Write-Host "Detected Spotify Version: $clientVerStr" -ForegroundColor Green
 
+    # Optimization: Parse version once to avoid repeated parsing in loop
+    $clientVerForCheck = $clientVerStr
+    try {
+        $tempVer = $clientVerStr
+        if ($tempVer -match "^(\d+\.\d+\.\d+\.\d+)") { $tempVer = $matches[1] }
+        $clientVerForCheck = [System.Version]$tempVer
+    } catch {
+        # Fallback to string if parsing failed
+        $clientVerForCheck = $clientVerStr
+    }
+
     # Locate xpui.js / css
     $xpuiJsPath = Join-Path $tempDir "xpui.js"
     $xpuiCssPath = Join-Path $tempDir "xpui.css"
@@ -389,7 +404,7 @@ function Patch-XPUI {
             $name = $_.Name
             $patch = $patchesJson.free.$name
 
-            if (Is-Ver-Compatible $clientVerStr $patch.version.fr $patch.version.to) {
+            if (Is-Ver-Compatible $clientVerForCheck $patch.version.fr $patch.version.to) {
                 $match = $patch.match
                 $replace = $patch.replace
 
@@ -412,7 +427,7 @@ function Patch-XPUI {
         $patchesJson.podcasts | Get-Member -MemberType NoteProperty | ForEach-Object {
             $name = $_.Name
             $patch = $patchesJson.podcasts.$name
-            if (Is-Ver-Compatible $clientVerStr $patch.version.fr $patch.version.to) {
+            if (Is-Ver-Compatible $clientVerForCheck $patch.version.fr $patch.version.to) {
                 try { $jsContent = $jsContent -replace $patch.match, $patch.replace } catch {}
             }
         }
@@ -427,7 +442,7 @@ function Patch-XPUI {
     $patchesJson.EnableExp | Get-Member -MemberType NoteProperty | ForEach-Object {
         $name = $_.Name
         $patch = $patchesJson.EnableExp.$name
-        if (Is-Ver-Compatible $clientVerStr $patch.version.fr $patch.version.to) {
+        if (Is-Ver-Compatible $clientVerForCheck $patch.version.fr $patch.version.to) {
             # Use 'name' property from JSON object, fallback to key name
             $expName = if ($patch.name) { $patch.name } else { $name }
             $enableExpList += "'$expName'"
@@ -438,7 +453,7 @@ function Patch-XPUI {
     $patchesJson.DisableExp | Get-Member -MemberType NoteProperty | ForEach-Object {
         $name = $_.Name
         $patch = $patchesJson.DisableExp.$name
-        if (Is-Ver-Compatible $clientVerStr $patch.version.fr $patch.version.to) {
+        if (Is-Ver-Compatible $clientVerForCheck $patch.version.fr $patch.version.to) {
              $expName = if ($patch.name) { $patch.name } else { $name }
              $disableExpList += "'$expName'"
         }
@@ -472,7 +487,7 @@ function Patch-XPUI {
         if ($name -eq "ForcedExp") { return } # Already handled
 
         $patch = $patchesJson.others.$name
-        if (Is-Ver-Compatible $clientVerStr $patch.version.fr $patch.version.to) {
+        if (Is-Ver-Compatible $clientVerForCheck $patch.version.fr $patch.version.to) {
 
             # Special handling for patches that add CSS
             if ($patch.add) {

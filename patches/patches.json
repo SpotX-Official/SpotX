@@ -2304,7 +2304,7 @@
         "collaboration": {
             "version": {
                 "fr": "1.1.74",
-                "to": "1.2.82"
+                "to": "1.2.81"
             },
             "match": "[\\w$]+\\??\\.canAdministratePermissions(\\W.*?\"permissions\\.invite-collaborators\")",
             "replace": "false$1"

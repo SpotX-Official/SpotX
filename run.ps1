@@ -123,8 +123,8 @@ param
     [Parameter(HelpMessage = 'Enable Spicetify integration.')]
     [switch]$spicetify,
 
-    [Parameter(HelpMessage = 'Enable Outline VPN configuration (Presets Socks5 localhost).')]
-    [switch]$outline,
+    [Parameter(HelpMessage = 'Disable Outline VPN configuration prompt.')]
+    [switch]$no_vpn,
 
     [Parameter(HelpMessage = 'Enable BlockTheSpot (DLL Injection). Warning: May cause black screen on new versions.')]
     [switch]$bts
@@ -148,7 +148,7 @@ $xpuiBak = Join-Path (Join-Path $env:APPDATA 'Spotify\Apps') 'xpui.bak'
 $start_menu = Join-Path $env:APPDATA 'Microsoft\Windows\Start Menu\Programs\Spotify.lnk'
 
 # Outline VPN configuration
-if ($outline) {
+if (-not $no_vpn) {
     if ($PSBoundParameters.ContainsKey('ProxyType') -eq $false) {
         $ProxyType = 'socks5'
     }
@@ -156,12 +156,17 @@ if ($outline) {
         $ProxyHost = '127.0.0.1'
     }
     if (-not $ProxyPort) {
-        Write-Host "Outline VPN detected." -ForegroundColor Yellow
-        Write-Host "You can use one of these free Access Keys with your Outline Client:" -ForegroundColor Cyan
+        Write-Host "VPN Support (Outline / OpenVPN)" -ForegroundColor Yellow
+        Write-Host "You can use one of these free Outline Access Keys:" -ForegroundColor Cyan
         Write-Host "Poland Server 1: ss://Y2hhY2hhMjAtaWV0Zi1wb2x5MTMwNTpwdmd6OXBx@pl134.vpnbook.com:443/?outline=1" -ForegroundColor White
         Write-Host "Poland Server 2: ss://Y2hhY2hhMjAtaWV0Zi1wb2x5MTMwNTpwdmd6OXBx@pl140.vpnbook.com:443/?outline=1" -ForegroundColor White
-        Write-Host "Canada Server 1: ss://Y2hhY2hhMjAtaWV0Zi1wb2x5MTMwNTpwdmd6OXBx@ca225.vpnbook.com:443/?outline=1" -ForegroundColor White
-        Write-Host "Please enter the local SOCKS5 port from your Outline Client." -ForegroundColor Yellow
+        Write-Host "Canada Server 3: ss://Y2hhY2hhMjAtaWV0Zi1wb2x5MTMwNTpwdmd6OXBx@ca225.vpnbook.com:443/?outline=1" -ForegroundColor White
+
+        Write-Host "`nAlso available (OpenVPN/WireGuard - requires separate client setup):" -ForegroundColor Gray
+        Write-Host "US16, US178, CA149, CA196, UK205, UK68, DE20, DE220, FR200, FR231" -ForegroundColor Gray
+        Write-Host "Get credentials at: https://www.vpnbook.com/freevpn" -ForegroundColor Gray
+
+        Write-Host "`nPlease enter the local SOCKS5 port from your Outline Client (Leave empty to skip proxy setup)." -ForegroundColor Yellow
         $ProxyPort = Read-Host "Port"
     }
 }

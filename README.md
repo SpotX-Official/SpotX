@@ -128,7 +128,7 @@ or
 #### Run The following command in PowerShell:
 
 ```ps1
-iex "& { $(irm 'https://raw.githubusercontent.com/NimuthuGanegoda/SpotFreedom/main/run.ps1') } -confirm_uninstall_ms_spoti -confirm_spoti_recomended_over -podcasts_off -block_update_on -start_spoti -new_theme -adsections_off -lyrics_stat spotify"
+iex "& { $(irm 'https://raw.githubusercontent.com/NimuthuGanegoda/SpotFreedom/main/run.ps1') } -confirm_uninstall_ms_spoti -confirm_spoti_recomended_over -podcasts_off -block_update_on -start_spoti -new_theme -adsections_off -lyrics_stat spotify -no_vpn"
 ```
 
 </details>
@@ -176,17 +176,23 @@ You can specify various parameters for a more flexible installation, more [detai
   - **Free Access Keys:**
     - **Poland Server 1:** `ss://Y2hhY2hhMjAtaWV0Zi1wb2x5MTMwNTpwdmd6OXBx@pl134.vpnbook.com:443/?outline=1`
     - **Poland Server 2:** `ss://Y2hhY2hhMjAtaWV0Zi1wb2x5MTMwNTpwdmd6OXBx@pl140.vpnbook.com:443/?outline=1`
-    - **Canada Server 1:** `ss://Y2hhY2hhMjAtaWV0Zi1wb2x5MTMwNTpwdmd6OXBx@ca225.vpnbook.com:443/?outline=1`
+    - **Canada Server 3:** `ss://Y2hhY2hhMjAtaWV0Zi1wb2x5MTMwNTpwdmd6OXBx@ca225.vpnbook.com:443/?outline=1`
+
+  > **Note:** VPN configuration is now prompted by default during installation. To disable this prompt, use the `-no_vpn` switch.
 
   <h4> </h4>
 
-#### Run The following command in PowerShell:
+#### Run The following command in PowerShell (Interactive):
 
 ```ps1
-iex "& { $(irm 'https://raw.githubusercontent.com/NimuthuGanegoda/SpotFreedom/main/run.ps1') } -outline -ProxyPort <YOUR_PORT>"
+iex "& { $(irm 'https://raw.githubusercontent.com/NimuthuGanegoda/SpotFreedom/main/run.ps1') }"
 ```
 
-*Note: Replace `<YOUR_PORT>` with the local port shown in your Outline Client or Shadowsocks settings.*
+#### To skip VPN configuration:
+
+```ps1
+iex "& { $(irm 'https://raw.githubusercontent.com/NimuthuGanegoda/SpotFreedom/main/run.ps1') } -no_vpn"
+```
 
 </details>
 

@@ -1534,7 +1534,7 @@
                 "native_description": "Enable new overlay scrollbars",
                 "version": {
                     "fr": "1.2.58",
-                    "to": ""
+                    "to": "1.2.81"
                 }
             },
             "FullscreenLibrary": {
@@ -1678,7 +1678,7 @@
                 "native_description": "Enable users to react and reply to comments.",
                 "version": {
                     "fr": "1.2.74",
-                    "to": ""
+                    "to": "1.2.81"
                 }
             },
             "ExcludeTrackFromTasteProfile": {
@@ -1752,6 +1752,14 @@
                     "to": ""
                 }
             },
+            "ForceVolumeInExclusiveMode": {
+                "name": "enableForceVolumeInExclusiveMode",
+                "native_description": "Enables the force volume toggle when exclusive mode is enabled",
+                "version": {
+                    "fr": "1.2.82",
+                    "to": ""
+                }
+            },
             "ListPrivateByDefaultSetting": {
                 "name": "enableListPrivateByDefaultSetting",
                 "native_description": "Enable List Private By Default setting in Desktop Social Settings",
@@ -1793,6 +1801,14 @@
                 "name": "enableMagpie",
                 "version": {
                     "fr": "1.2.77",
+                    "to": ""
+                }
+            },
+            "PlaylistExtenderBpmKey": {
+                "name": "enablePlaylistExtenderBpmKey",
+                "native_description": "Enable BPM and key columns in playlist recommendations",
+                "version": {
+                    "fr": "1.2.82",
                     "to": ""
                 }
             }
@@ -1925,7 +1941,7 @@
                 "value": "your_library",
                 "version": {
                     "fr": "1.2.57",
-                    "to": ""
+                    "to": "1.2.81"
                 }
             },
             "AdsDismissTimeInterval": {
@@ -2288,7 +2304,7 @@
         "collaboration": {
             "version": {
                 "fr": "1.1.74",
-                "to": ""
+                "to": "1.2.82"
             },
             "match": "[\\w$]+\\??\\.canAdministratePermissions(\\W.*?\"permissions\\.invite-collaborators\")",
             "replace": "false$1"

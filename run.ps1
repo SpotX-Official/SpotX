@@ -566,16 +566,6 @@ function Patch-XPUI {
         }
     }
 
-    # Special case: discriptions patch uses {0}, {1} placeholders
-    # We replaced it generically above, but the placeholders {0} remain.
-    # We should fix it.
-    if ($jsContent -match "\{0\} Github") {
-        $discriptions = $patchesJson.others.discriptions
-        $jsContent = $jsContent -replace "\{0\}", $discriptions.svggit
-        $jsContent = $jsContent -replace "\{1\}", $discriptions.svgtg
-        $jsContent = $jsContent -replace "\{2\}", $discriptions.svgfaq
-    }
-
     # Save Modified Files
     Set-Content -Path $xpuiJsPath -Value $jsContent -NoNewline -Encoding UTF8
     Set-Content -Path $xpuiCssPath -Value $cssContent -NoNewline -Encoding UTF8

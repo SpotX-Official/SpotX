@@ -173,8 +173,8 @@ if (-not $no_vpn) {
 
 function Stop-Spotify {
     Write-Host "Stopping Spotify..." -ForegroundColor Yellow
-    Get-Process -Name Spotify -ErrorAction SilentlyContinue | Stop-Process -Force
-    Get-Process -Name SpotifyWebHelper -ErrorAction SilentlyContinue | Stop-Process -Force
+    Stop-Process -Name Spotify -Force -ErrorAction SilentlyContinue
+    Stop-Process -Name SpotifyWebHelper -Force -ErrorAction SilentlyContinue
     Start-Sleep -Seconds 2
 }
 

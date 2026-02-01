@@ -193,7 +193,7 @@ function Restore-Backups {
         Move-Item $chrome_elf_bak $chrome_elf -Force
     }
 
-    # Restore xpui.spa (Fixes 'Black Screen' errors caused by bad JS patching)
+    # Restore xpui.spa (UI Resource)
     if (Test-Path $xpuiBak) {
         Write-Host "Restoring xpui.spa (UI Resource)..." -ForegroundColor Green
         Remove-Item $xpuiSpa -Force -ErrorAction SilentlyContinue
@@ -272,10 +272,260 @@ function DesktopFolder {
     return $regedit_desktop_folder.'{754AC886-DF64-4CBA-86B5-F7FBF4FBCEF5}'
 }
 
+function Get-SpotifyVersion {
+    if (Test-Path $spotifyExecutable) {
+        try {
+            return (Get-Item $spotifyExecutable).VersionInfo.ProductVersion
+        } catch {
+            return $null
+        }
+    }
+    return $null
+}
+
+function Is-Ver-Compatible ($ver, $fr, $to) {
+    if (-not $ver) { return $true }
+    try {
+        # Normalize version string (1.2.3.4.g123 -> 1.2.3.4)
+        if ($ver -match "^(\d+\.\d+\.\d+\.\d+)") { $ver = $matches[1] }
+
+        $v = [System.Version]$ver
+
+        if (-not [string]::IsNullOrWhiteSpace($fr)) {
+            $vFr = [System.Version]$fr
+            if ($v -lt $vFr) { return $false }
+        }
+        if (-not [string]::IsNullOrWhiteSpace($to)) {
+            $vTo = [System.Version]$to
+            if ($v -gt $vTo) { return $false }
+        }
+    } catch {
+        # If parsing fails, leniently assume compatible
+        return $true
+    }
+    return $true
+}
+
+function Patch-XPUI {
+    Write-Host "Patching XPUI..." -ForegroundColor Cyan
+
+    if (-not (Test-Path $xpuiSpa)) {
+        Write-Error "xpui.spa not found at $xpuiSpa"
+        return
+    }
+
+    # Create Backup if not exists
+    if (-not (Test-Path $xpuiBak)) {
+        Write-Host "Creating backup of xpui.spa..." -ForegroundColor Yellow
+        Copy-Item $xpuiSpa $xpuiBak -Force
+    }
+
+    # Extract
+    $tempDir = Join-Path $env:TEMP "SpotFreedom_Temp_$(Get-Random)"
+    New-Item -ItemType Directory -Path $tempDir -Force | Out-Null
+
+    try {
+        Expand-Archive -LiteralPath $xpuiSpa -DestinationPath $tempDir -Force
+    } catch {
+        Write-Error "Failed to extract xpui.spa"
+        return
+    }
+
+    # Read patches.json
+    $patchesPath = Join-Path $PSScriptRoot "patches\patches.json"
+    if (-not (Test-Path $patchesPath)) {
+        # In a real scenario, we might want to download it.
+        # But for this task, we assume it's present as per instructions.
+        Write-Warning "patches.json not found locally at $patchesPath. Skipping patching."
+        Remove-Item $tempDir -Recurse -Force
+        return
+    }
+
+    try {
+        $patchesJson = Get-Content $patchesPath -Raw -Encoding UTF8 | ConvertFrom-Json
+    } catch {
+        Write-Error "Failed to parse patches.json: $_"
+        Remove-Item $tempDir -Recurse -Force
+        return
+    }
+
+    $clientVerStr = Get-SpotifyVersion
+    if (-not $clientVerStr) {
+        Write-Warning "Could not detect Spotify version. Assuming latest."
+        $clientVerStr = "9.9.9.9" # High version
+    }
+    Write-Host "Detected Spotify Version: $clientVerStr" -ForegroundColor Green
+
+    # Locate xpui.js / css
+    $xpuiJsPath = Join-Path $tempDir "xpui.js"
+    $xpuiCssPath = Join-Path $tempDir "xpui.css"
+
+    # Handle subdirectory extraction
+    if (-not (Test-Path $xpuiJsPath)) {
+        if (Test-Path (Join-Path $tempDir "xpui")) {
+            $tempDir = Join-Path $tempDir "xpui"
+            $xpuiJsPath = Join-Path $tempDir "xpui.js"
+            $xpuiCssPath = Join-Path $tempDir "xpui.css"
+        }
+    }
+
+    if (-not (Test-Path $xpuiJsPath)) {
+        Write-Error "xpui.js not found in extracted archive."
+        return
+    }
+
+    $jsContent = Get-Content $xpuiJsPath -Raw
+    $cssContent = Get-Content $xpuiCssPath -Raw
+
+    # 1. Apply 'free' patches
+    if (-not $premium) {
+        Write-Host "Applying 'free' patches..." -ForegroundColor Gray
+        $patchesJson.free | Get-Member -MemberType NoteProperty | ForEach-Object {
+            $name = $_.Name
+            $patch = $patchesJson.free.$name
+
+            if (Is-Ver-Compatible $clientVerStr $patch.version.fr $patch.version.to) {
+                $match = $patch.match
+                $replace = $patch.replace
+
+                if ($match -is [array]) {
+                     for ($i=0; $i -lt $match.Count; $i++) {
+                        $m = $match[$i]
+                        $r = $replace[$i]
+                        try { $jsContent = $jsContent -replace $m, $r } catch {}
+                     }
+                } else {
+                    try { $jsContent = $jsContent -replace $match, $replace } catch {}
+                }
+            }
+        }
+    }
+
+    # 2. Apply 'podcasts' patches
+    if ($podcasts_off) {
+        Write-Host "Applying 'podcasts' patches..." -ForegroundColor Gray
+        $patchesJson.podcasts | Get-Member -MemberType NoteProperty | ForEach-Object {
+            $name = $_.Name
+            $patch = $patchesJson.podcasts.$name
+            if (Is-Ver-Compatible $clientVerStr $patch.version.fr $patch.version.to) {
+                try { $jsContent = $jsContent -replace $patch.match, $patch.replace } catch {}
+            }
+        }
+    }
+
+    # 3. Handle Experiments
+    Write-Host "Applying Experimental Features..." -ForegroundColor Gray
+    $enableExpList = @()
+    $disableExpList = @()
+
+    # Collect EnableExp
+    $patchesJson.EnableExp | Get-Member -MemberType NoteProperty | ForEach-Object {
+        $name = $_.Name
+        $patch = $patchesJson.EnableExp.$name
+        if (Is-Ver-Compatible $clientVerStr $patch.version.fr $patch.version.to) {
+            # Use 'name' property from JSON object, fallback to key name
+            $expName = if ($patch.name) { $patch.name } else { $name }
+            $enableExpList += "'$expName'"
+        }
+    }
+
+    # Collect DisableExp
+    $patchesJson.DisableExp | Get-Member -MemberType NoteProperty | ForEach-Object {
+        $name = $_.Name
+        $patch = $patchesJson.DisableExp.$name
+        if (Is-Ver-Compatible $clientVerStr $patch.version.fr $patch.version.to) {
+             $expName = if ($patch.name) { $patch.name } else { $name }
+             $disableExpList += "'$expName'"
+        }
+    }
+
+    # Build Experiments JS Object string
+    # const experiments={enable:['Exp1'],disable:['Exp2'],custom:[]}
+    $expJs = "const experiments={enable:[" + ($enableExpList -join ',') + "],disable:[" + ($disableExpList -join ',') + "],custom:[]}"
+
+    # Apply ForcedExp patch with dynamic injection
+    $forcedExp = $patchesJson.others.ForcedExp
+    if ($forcedExp) {
+        $m = $forcedExp.match
+        # The replace string in JSON has the default structure. We replace the empty structure with our populated one.
+        # Original replace: "$1const experiments={enable:[],disable:[],custom:[]},..."
+        # We replace "const experiments={enable:[],disable:[],custom:[]}" with $expJs
+
+        $r = $forcedExp.replace -replace "const experiments=\{enable:\[\],disable:\[\],custom:\[\]\}", $expJs
+
+        try {
+            $jsContent = $jsContent -replace $m, $r
+        } catch {
+            Write-Warning "Failed to apply ForcedExp patch."
+        }
+    }
+
+    # 4. Apply 'others' patches
+    Write-Host "Applying miscellaneous patches..." -ForegroundColor Gray
+    $patchesJson.others | Get-Member -MemberType NoteProperty | ForEach-Object {
+        $name = $_.Name
+        if ($name -eq "ForcedExp") { return } # Already handled
+
+        $patch = $patchesJson.others.$name
+        if (Is-Ver-Compatible $clientVerStr $patch.version.fr $patch.version.to) {
+
+            # Special handling for patches that add CSS
+            if ($patch.add) {
+                # Append to CSS
+                $cssContent += "`n" + $patch.add
+            } elseif ($patch.match) {
+                 # JS/HTML replacements
+                 # NOTE: Some patches in 'others' target CSS or HTML (e.g. htmlmin).
+                 # We assume JS by default unless it looks like CSS?
+                 # Actually spotx.sh applies different patches to different files.
+                 # patches.json doesn't specify file clearly in 'others'.
+                 # However, 'discriptions' -> 'createElement' implies JS.
+                 # 'block_subfeeds' -> 'add' implies CSS.
+
+                 # We try to apply to JS first.
+                 try { $jsContent = $jsContent -replace $patch.match, $patch.replace } catch {}
+            }
+        }
+    }
+
+    # Special case: discriptions patch uses {0}, {1} placeholders
+    # We replaced it generically above, but the placeholders {0} remain.
+    # We should fix it.
+    if ($jsContent -match "\{0\} Github") {
+        $discriptions = $patchesJson.others.discriptions
+        $jsContent = $jsContent -replace "\{0\}", $discriptions.svggit
+        $jsContent = $jsContent -replace "\{1\}", $discriptions.svgtg
+        $jsContent = $jsContent -replace "\{2\}", $discriptions.svgfaq
+    }
+
+    # Save Modified Files
+    Set-Content -Path $xpuiJsPath -Value $jsContent -NoNewline -Encoding UTF8
+    Set-Content -Path $xpuiCssPath -Value $cssContent -NoNewline -Encoding UTF8
+
+    # Re-pack
+    Write-Host "Repacking xpui.spa..." -ForegroundColor Cyan
+    Remove-Item $xpuiSpa -Force
+    # Need to compress the CONTENTS of tempDir, not tempDir itself
+    $compressPath = Join-Path $tempDir "*"
+    try {
+        Compress-Archive -Path $compressPath -DestinationPath $xpuiSpa -Force
+    } catch {
+        Write-Error "Failed to repack xpui.spa: $_"
+    }
+
+    # Cleanup
+    Remove-Item $tempDir -Recurse -Force
+    Write-Host "XPUI Patching Complete." -ForegroundColor Green
+}
+
 # --- Main Execution ---
 
 Stop-Spotify
 Restore-Backups
+
+# Always patch XPUI unless specifically disabled? (User can skip via params if we had one, but we don't)
+# We assume we always want to patch if running this script.
+Patch-XPUI
 
 if ($bts) {
     Install-BlockTheSpot

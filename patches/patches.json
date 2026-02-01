@@ -55,6 +55,40 @@
             },
             "match": "(\\(.,..jsxs\\)\\(.{1,3}|(.\\(\\).|..)createElement\\(.{1,4}),{(filterMatchQuery|filter:.,title|(variant:\"viola\",semanticColor:\"textSubdued\"|..:\"span\",variant:.{3,6}mesto,color:.{3,6}),htmlFor:\"desktop.settings.downloadQuality.+?).{1,6}get\\(\"desktop.settings.downloadQuality.title.+?(children:.{1,2}\\(.,.\\).+?,|\\(.,.\\){3,4},|,.\\)}},.\\(.,.\\)\\),)",
             "replace": ""
+        },
+        "hideUpgradeButton2": {
+            "version": {
+                "fr": "1.2.55",
+                "to": ""
+            },
+            "match": "\"free\"===",
+            "replace": "\"premium\"==="
+        },
+        "adsX2": {
+            "version": {
+                "fr": "1.2.55",
+                "to": ""
+            },
+            "match": "(?<=}/a)d(?=s)",
+            "replace": "b"
+        }
+    },
+    "podcasts": {
+        "hidePodcasts": {
+            "version": {
+                "fr": "1.1.70",
+                "to": "1.1.85"
+            },
+            "match": "withQueryParameters\\(.\\)\\{return this.queryParameters=.,this\\}",
+            "replace": "withQueryParameters(e){return this.queryParameters=(e.types?{...e, types: e.types.split(\",\").filter(_ => ![\"episode\",\"show\"].includes(_)).join(\",\")}:e),this}"
+        },
+        "hidePodcasts2": {
+            "version": {
+                "fr": "1.1.86",
+                "to": ""
+            },
+            "match": "(case 6:|const .=await .\\([^\\)]*\\);)((return .\\.abrupt\\(\\\"|return[ \\\"],?)(null!=n&&|return\\\",)?(.)(\\);case 9|\\??.errors\\?.*?Promise.reject.+?errors\\)+:.))",
+            "replace": "$1$5?.data?.home?.sectionContainer?.sections?.items?.forEach(x => x?.sectionItems?.items && (x.sectionItems.items = x.sectionItems.items.filter(i => !['Podcast','Audiobook','Episode'].includes(i?.content?.data?.__typename))));$2"
         }
     },
     "others": {

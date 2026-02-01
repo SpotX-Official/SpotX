@@ -229,6 +229,7 @@ function Install-BlockTheSpot {
     Write-Host "Installing BlockTheSpot (Ads & Premium Features)..." -ForegroundColor Cyan
 
     # Detect Architecture
+    $is64Bit = $true
     if (Test-Path $spotifyExecutable) {
         try {
             $bytes = [System.IO.File]::ReadAllBytes($spotifyExecutable)
@@ -236,7 +237,8 @@ function Install-BlockTheSpot {
             $machine = [System.BitConverter]::ToUInt16($bytes, $peHeader + 4)
             $is64Bit = $machine -eq 0x8664
         } catch {
-            $is64Bit = $true # Default to x64 if check fails
+            Write-Warning "Architecture detection failed. Defaulting to x64."
+            $is64Bit = $true
         }
     } else {
         Write-Warning "Spotify.exe not found. Is Spotify installed?"
@@ -533,21 +535,33 @@ function Patch-XPUI {
         $patch = $patchesJson.others.$name
         if (Is-Ver-Compatible $clientVerForCheck $patch.version.fr $patch.version.to) {
 
-            # Special handling for patches that add CSS
-            if ($patch.add) {
+            # Special handling for patches that add CSS (and only add CSS)
+            if ($patch.add -and -not $patch.match) {
                 # Append to CSS
                 $cssContent += "`n" + $patch.add
             } elseif ($patch.match) {
-                 # JS/HTML replacements
-                 # NOTE: Some patches in 'others' target CSS or HTML (e.g. htmlmin).
-                 # We assume JS by default unless it looks like CSS?
-                 # Actually spotx.sh applies different patches to different files.
-                 # patches.json doesn't specify file clearly in 'others'.
-                 # However, 'discriptions' -> 'createElement' implies JS.
-                 # 'block_subfeeds' -> 'add' implies CSS.
+                 $match = $patch.match
+                 $replace = $patch.replace
 
-                 # We try to apply to JS first.
-                 try { $jsContent = $jsContent -replace $patch.match, $patch.replace } catch {}
+                 # Handle placeholders {0}, {1} in replace string if 'add' property exists
+                 if ($patch.add) {
+                    try {
+                        $replace = $replace -replace "\{0\}", $patch.add
+                        if ($patch.add2) {
+                            $replace = $replace -replace "\{1\}", $patch.add2
+                        }
+                    } catch {}
+                 }
+
+                 if ($match -is [array]) {
+                     for ($i=0; $i -lt $match.Count; $i++) {
+                        $m = $match[$i]
+                        $r = if ($replace -is [array]) { $replace[$i] } else { $replace }
+                        try { $jsContent = $jsContent -replace $m, $r } catch {}
+                     }
+                 } else {
+                    try { $jsContent = $jsContent -replace $match, $replace } catch {}
+                 }
             }
         }
     }

@@ -621,6 +621,22 @@ function Remove-TempDirectory {
     }
 }
 
+function DesktopFolder {
+
+    # If the default Dekstop folder does not exist, then try to find it through the registry.
+    $ErrorActionPreference = 'SilentlyContinue' 
+    if (Test-Path "$env:USERPROFILE\Desktop") {  
+        $desktop_folder = "$env:USERPROFILE\Desktop"  
+    }
+
+    $regedit_desktop_folder = Get-ItemProperty -Path "Registry::HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders\"
+    $regedit_desktop = $regedit_desktop_folder.'{754AC886-DF64-4CBA-86B5-F7FBF4FBCEF5}'
+ 
+    if (!(Test-Path "$env:USERPROFILE\Desktop")) {
+        $desktop_folder = $regedit_desktop
+    }
+    return $desktop_folder
+}
 
 function Kill-Spotify {
     param (

@@ -740,16 +740,12 @@ if (Test-Path -Path $hostsFilePath) {
     }
 }
 
-# Temp directory creation moved to the download section (created only when needed).
-# Previously we changed code to create and use `$tempDirectory` explicitly near download step.
-
 if ($premium) {
     Write-Host ($lang).Prem`n
 }
 
 $spotifyInstalled = (Test-Path -LiteralPath $spotifyExecutable)
 
-# Если используется кастомный путь и Spotify не найден, завершить скрипт
 if ($SpotifyPath -and -not $spotifyInstalled) {
     Write-Warning "Spotify not found in custom path: $spotifyDirectory"
     Stop-Script
@@ -949,7 +945,6 @@ if (-not $SpotifyPath -and (-not $spotifyInstalled -or $upgrade_client)) {
     Get-ChildItem $spotifyDirectory -Exclude 'Users', 'prefs' | Remove-Item -Recurse -Force 
     Start-Sleep -Milliseconds 200
 
-    # Temp folder for downloads (create only when we will actually download)
     $tempDirName = "SpotX_Temp-$(Get-Date -UFormat '%Y-%m-%d_%H-%M-%S')"
     $tempDirectory = Join-Path ([System.IO.Path]::GetTempPath()) $tempDirName
     if (-not (Test-Path -LiteralPath $tempDirectory)) { New-Item -ItemType Directory -Path $tempDirectory | Out-Null }

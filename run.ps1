@@ -549,7 +549,7 @@ function downloadSp([string]$DownloadFolder) {
     
     try { 
         if ($curl_check) {
-            $stcode = curl.exe -Is -w "%{http_code} \n" -o /dev/null -k $web_Url --retry 2 --ssl-no-revoke
+            $stcode = curl.exe -Is -w "%{http_code} \n" -o NUL -k $web_Url --retry 2 --ssl-no-revoke
             if ($stcode.trim() -ne "200") {
                 Write-Host "Curl error code: $stcode"; throw
             }
@@ -578,7 +578,7 @@ function downloadSp([string]$DownloadFolder) {
         try { 
 
             if ($curl_check) {
-                $stcode = curl.exe -Is -w "%{http_code} \n" -o /dev/null -k $web_Url --retry 2 --ssl-no-revoke
+                $stcode = curl.exe -Is -w "%{http_code} \n" -o NUL -k $web_Url --retry 2 --ssl-no-revoke
                 if ($stcode.trim() -ne "200") {
                     Write-Host "Curl error code: $stcode"; throw
                 }

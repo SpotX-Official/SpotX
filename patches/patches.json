@@ -2621,6 +2621,14 @@
             },
             "match": "(includeYourEpisodes\\?\\{inclusionMode:[^,}]+\\.)INCLUDE_ALWAYS",
             "replace": "$1INCLUDE_IF_NOT_EMPTY"
+        },
+        "GenreHubHashFix": {
+            "version": {
+                "fr": "1.1.85",
+                "to": "1.1.99"
+            },
+            "match": "(sha256Hash:)([^}]+)",
+            "replace": "$1\"browsePage\"===e.name?\"4078a5c7df7638dfff465e5d4e03713fdbcab8b351b9db7cd2214f20b7b76a7a\":$2"
         }
     }
 }

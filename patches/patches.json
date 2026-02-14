@@ -2626,8 +2626,8 @@
                 "fr": "1.1.85",
                 "to": "1.1.99"
             },
-            "match": "(sha256Hash:)([^}]+)",
-            "replace": "$1\"browsePage\"===e.name?\"d8346883162a16a62a5b69e73e70c66a68c27b14265091cd9e1517f48334bbb3\":$2"
+            "match": "((sha256Hash: *await|return [^,]+,) *)([^ (]+[.]k[.]hash)[(]([^.()]+)[.]body[)]",
+            "replace": "$1(\"browsePage\"===$4.name?\"d8346883162a16a62a5b69e73e70c66a68c27b14265091cd9e1517f48334bbb3\":$3($4.body))"
         }
     }
 }

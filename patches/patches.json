@@ -733,6 +733,14 @@
                     "fr": "1.2.78",
                     "to": ""
                 }
+            },
+            "MadeForYou": {
+                "name": "enableMadeForYouEntryPoint",
+                "description": "Show 'Made For You' entry point in the left sidebar",
+                "version": {
+                    "fr": "1.1.67",
+                    "to": "1.1.95"
+                }
             }
         },
         "EnableExp": {
@@ -797,15 +805,6 @@
                 "version": {
                     "fr": "1.1.89",
                     "to": ""
-                }
-            },
-            "MadeForYou": {
-                "name": "enableMadeForYouEntryPoint",
-                "description": "Show 'Made For You' entry point in the left sidebar",
-                "native_description": "Show 'Made For You' entry point in the left sidebar",
-                "version": {
-                    "fr": "1.1.67",
-                    "to": "1.1.95"
                 }
             },
             "ClearAllDownloads": {
@@ -2628,7 +2627,7 @@
                 "to": "1.1.99"
             },
             "match": "(sha256Hash:)([^}]+)",
-            "replace": "$1\"browsePage\"===e.name?\"4078a5c7df7638dfff465e5d4e03713fdbcab8b351b9db7cd2214f20b7b76a7a\":$2"
+            "replace": "$1\"browsePage\"===e.name?\"d8346883162a16a62a5b69e73e70c66a68c27b14265091cd9e1517f48334bbb3\":$2"
         }
     }
 }

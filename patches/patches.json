@@ -597,7 +597,7 @@
                 "native_description": "Enable ad count feedback in NPV",
                 "version": {
                     "fr": "1.2.59",
-                    "to": ""
+                    "to": "1.2.82"
                 }
             },
             "SaxLeaderboardAds": {
@@ -606,7 +606,7 @@
                 "native_description": "Enable SAX Leaderboard Ad Format",
                 "version": {
                     "fr": "1.2.62",
-                    "to": ""
+                    "to": "1.2.82"
                 }
             },
             "EmbeddedAdVisibilityLogging": {

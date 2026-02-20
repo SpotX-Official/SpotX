@@ -2178,7 +2178,7 @@ if ($test_spa) {
     $reader.Close()
 
 
-    if ($offline -ge [version]'1.2.70.404') {
+    if ($offline -ge [version]'1.2.70.253') {
         
         $spotify_binary_bak = $dll_bak 
         $spotify_binary = $spotifyDll

@@ -319,6 +319,8 @@ $start_menu = Join-Path $env:APPDATA 'Microsoft\Windows\Start Menu\Programs\Spot
 $upgrade_client = $false
 $downgrading = $false
 $tempDirectory = $null
+$oldversion = $false
+$testversion = $false
 $ru = $false
 $podcast_off = $false
 $not_block_update = $false
@@ -761,9 +763,6 @@ if ($SpotifyPath -and -not $spotifyInstalled) {
 }
 
 if ($spotifyInstalled) {
-    $oldversion = $false
-    $testversion = $false
-    
     # Check version Spotify offline
     $offline = (Get-Item $spotifyExecutable).VersionInfo.FileVersion
  

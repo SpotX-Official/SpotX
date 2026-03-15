@@ -1077,6 +1077,7 @@ if ($webjson -eq $null) {
 function Helper($paramname) {
 
     $n = $paramname
+    $usedLiteralFallback = $false
 
     function Remove-Json {
         param (
@@ -1488,7 +1489,8 @@ function Helper($paramname) {
                         $found = $paramdata -match $pattern
                     }
                     catch {
-                        $found = $paramdata.Contains($pattern)
+                        $usedLiteralFallback = $true
+                        $found = $paramdata.IndexOf($pattern, [System.StringComparison]::OrdinalIgnoreCase) -ge 0
                     }
 
                     if ($found) { 
@@ -1496,7 +1498,9 @@ function Helper($paramname) {
                             $paramdata = $paramdata -replace $pattern, $replacement
                         }
                         catch {
-                            $paramdata = $paramdata.Replace($pattern, $replacement)
+                            $usedLiteralFallback = $true
+                            $escapedPattern = [regex]::Escape($pattern)
+                            $paramdata = [regex]::Replace($paramdata, $escapedPattern, [System.Text.RegularExpressions.MatchEvaluator]{ param($m) $replacement }, [System.Text.RegularExpressions.RegexOptions]::IgnoreCase)
                         }
                     }
                     else { 
@@ -1518,7 +1522,8 @@ function Helper($paramname) {
                     $found = $paramdata -match $pattern
                 }
                 catch {
-                    $found = $paramdata.Contains($pattern)
+                    $usedLiteralFallback = $true
+                    $found = $paramdata.IndexOf($pattern, [System.StringComparison]::OrdinalIgnoreCase) -ge 0
                 }
 
                 if ($found) { 
@@ -1526,7 +1531,9 @@ function Helper($paramname) {
                         $paramdata = $paramdata -replace $pattern, $replacement
                     }
                     catch {
-                        $paramdata = $paramdata.Replace($pattern, $replacement)
+                        $usedLiteralFallback = $true
+                        $escapedPattern = [regex]::Escape($pattern)
+                        $paramdata = [regex]::Replace($paramdata, $escapedPattern, [System.Text.RegularExpressions.MatchEvaluator]{ param($m) $replacement }, [System.Text.RegularExpressions.RegexOptions]::IgnoreCase)
                     }
                 }
                 else { 
@@ -1538,6 +1545,11 @@ function Helper($paramname) {
             }   
         }
     }
+
+    if ($usedLiteralFallback -and $paramname -in @('MinJs', 'Cssmin', 'HtmlLicMin', 'HtmlBlank', 'MinJson')) {
+        Write-Warning ("Literal fallback used while processing {0} for {1}. Changed asset formats may require skipping minification for this build." -f $paramname, $n)
+    }
+
     $paramdata
 }
 
@@ -2384,6 +2396,8 @@ if ($test_spa) {
     # Add discriptions (xpui-desktop-modals.js)
     extract -counts 'one' -method 'zip' -name 'xpui-desktop-modals.js' -helper 'Discriptions'
 
+    $minifyValidatedBuild = (-not $testversion) -and ([version]($offline -replace '(\d+\.\d+\.\d+)(.\d+)', '$1') -le [version]'1.2.81')
+
     # Disable Sentry 
     if ( [version]$offline -le [version]"1.2.56.502" ) {  
         $fileName = 'vendor~xpui.js'
@@ -2394,7 +2408,12 @@ if ($test_spa) {
     extract -counts 'one' -method 'zip' -name $fileName -helper 'DisableSentry'
 
     # Minification of all *.js
-    # Disabled locally: current patterns can corrupt recent Spotify assets.
+    if ($minifyValidatedBuild) {
+        extract -counts 'more' -name '*.js' -helper 'MinJs'
+    }
+    else {
+        Write-Warning ("Skipping JS minification for unsupported build {0}." -f $offline)
+    }
 
     # xpui.css
     if (!($premium)) {
@@ -2425,19 +2444,39 @@ if ($test_spa) {
     extract -counts 'one' -method 'zip' -name 'xpui.css' -helper "FixCss"
 
     # Remove RTL and minification of all *.css
-    # Disabled locally: current patterns can corrupt recent Spotify assets.
+    if ($minifyValidatedBuild) {
+        extract -counts 'more' -name '*.css' -helper 'Cssmin'
+    }
+    else {
+        Write-Warning ("Skipping CSS minification for unsupported build {0}." -f $offline)
+    }
     
     # licenses.html minification
-    # Disabled locally: current patterns can corrupt recent Spotify assets.
+    if ($minifyValidatedBuild) {
+        extract -counts 'one' -method 'zip' -name 'licenses.html' -helper 'HtmlLicMin'
+    }
+    else {
+        Write-Warning ("Skipping licenses.html minification for unsupported build {0}." -f $offline)
+    }
     # blank.html minification
-    # Disabled locally: current patterns can corrupt recent Spotify assets.
+    if ($minifyValidatedBuild) {
+        extract -counts 'one' -method 'zip' -name 'blank.html' -helper 'HtmlBlank'
+    }
+    else {
+        Write-Warning ("Skipping blank.html minification for unsupported build {0}." -f $offline)
+    }
     
     if ($ru) {
         # Additional translation of the ru.json file
         extract -counts 'more' -name '*ru.json' -helper 'RuTranslate'
     }
     # Minification of all *.json
-    # Disabled locally: current patterns can corrupt recent Spotify assets.
+    if ($minifyValidatedBuild) {
+        extract -counts 'more' -name '*.json' -helper 'MinJson'
+    }
+    else {
+        Write-Warning ("Skipping JSON minification for unsupported build {0}." -f $offline)
+    }
 }
 
 # Delete all files except "en" and "ru"

@@ -317,6 +317,15 @@ $spotifyUninstall = Join-Path ([System.IO.Path]::GetTempPath()) 'SpotifyUninstal
 $start_menu = Join-Path $env:APPDATA 'Microsoft\Windows\Start Menu\Programs\Spotify.lnk'
 
 $upgrade_client = $false
+$downgrading = $false
+$tempDirectory = $null
+$ru = $false
+$podcast_off = $false
+$not_block_update = $false
+$v8_snapshot = $null
+$adds = $null
+$css = $null
+$calltype = $null
 
 # Check version Powershell
 $psv = $PSVersionTable.PSVersion.major
@@ -752,6 +761,8 @@ if ($SpotifyPath -and -not $spotifyInstalled) {
 }
 
 if ($spotifyInstalled) {
+    $oldversion = $false
+    $testversion = $false
     
     # Check version Spotify offline
     $offline = (Get-Item $spotifyExecutable).VersionInfo.FileVersion
@@ -1065,6 +1076,7 @@ if ($webjson -eq $null) {
 
 function Helper($paramname) {
 
+    $n = $paramname
 
     function Remove-Json {
         param (
@@ -1114,7 +1126,7 @@ function Helper($paramname) {
             # htmlBlank minification
             $name = "patches.json.others."
             $n = "blank.html"
-            $contents = "blank.html"
+            $contents = "blankmin"
             $json = $webjson.others
         }
         "MinJs" { 
@@ -1452,6 +1464,9 @@ function Helper($paramname) {
 
     $contents | foreach { 
 
+        $matches = @($json.$PSItem.match)
+        $replacements = @($json.$PSItem.replace)
+
         if ( $json.$PSItem.version.to ) { $to = [version]$json.$PSItem.version.to -ge [version]$offline_patch } else { $to = $true }
         if ( $json.$PSItem.version.fr ) { $fr = [version]$json.$PSItem.version.fr -le [version]$offline_patch } else { $fr = $false }
         
@@ -1459,15 +1474,30 @@ function Helper($paramname) {
 
         if ($checkVer -or $translate) {
 
-            if ($json.$PSItem.match.Count -gt 1) {
+            if ($matches.Count -gt 1) {
 
-                $count = $json.$PSItem.match.Count - 1
+                $count = $matches.Count - 1
                 $numbers = 0
 
                 While ($numbers -le $count) {
 
-                    if ($paramdata -match $json.$PSItem.match[$numbers]) { 
-                        $paramdata = $paramdata -replace $json.$PSItem.match[$numbers], $json.$PSItem.replace[$numbers] 
+                    $pattern = [string]$matches[$numbers]
+                    $replacement = if ($numbers -lt $replacements.Count) { [string]$replacements[$numbers] } else { '' }
+
+                    try {
+                        $found = $paramdata -match $pattern
+                    }
+                    catch {
+                        $found = $paramdata.Contains($pattern)
+                    }
+
+                    if ($found) { 
+                        try {
+                            $paramdata = $paramdata -replace $pattern, $replacement
+                        }
+                        catch {
+                            $paramdata = $paramdata.Replace($pattern, $replacement)
+                        }
                     }
                     else { 
                         $notlog = "MinJs", "MinJson", "Cssmin"
@@ -1480,9 +1510,24 @@ function Helper($paramname) {
                     $numbers++
                 }
             }
-            if ($json.$PSItem.match.Count -eq 1) {
-                if ($paramdata -match $json.$PSItem.match) { 
-                    $paramdata = $paramdata -replace $json.$PSItem.match, $json.$PSItem.replace 
+            if ($matches.Count -eq 1) {
+                $pattern = [string]$matches[0]
+                $replacement = if ($replacements.Count -gt 0) { [string]$replacements[0] } else { '' }
+
+                try {
+                    $found = $paramdata -match $pattern
+                }
+                catch {
+                    $found = $paramdata.Contains($pattern)
+                }
+
+                if ($found) { 
+                    try {
+                        $paramdata = $paramdata -replace $pattern, $replacement
+                    }
+                    catch {
+                        $paramdata = $paramdata.Replace($pattern, $replacement)
+                    }
                 }
                 else { 
                     if (!($translate) -or $err_ru) {
@@ -1513,7 +1558,7 @@ function extract ($counts, $method, $name, $helper, $add, $patch) {
             $xpui = $reader.ReadToEnd()
             $reader.Close()
             if ($helper) { $xpui = Helper -paramname $helper } 
-            if ($method -eq "zip") { $writer = New-Object System.IO.StreamWriter($file.Open()) }
+            if ($method -eq "zip") { $writer = New-Object System.IO.StreamWriter($file.Open(), [System.Text.UTF8Encoding]::new($false)) }
             if ($method -eq "nonezip") { $writer = New-Object System.IO.StreamWriter -ArgumentList $file }
             $writer.BaseStream.SetLength(0)
             $writer.Write($xpui)
@@ -1530,7 +1575,7 @@ function extract ($counts, $method, $name, $helper, $add, $patch) {
                 $xpui = $reader.ReadToEnd()
                 $reader.Close()
                 $xpui = Helper -paramname $helper 
-                $writer = New-Object System.IO.StreamWriter($_.Open())
+                $writer = New-Object System.IO.StreamWriter($_.Open(), [System.Text.UTF8Encoding]::new($false))
                 $writer.BaseStream.SetLength(0)
                 $writer.Write($xpui)
                 $writer.Close()
@@ -2349,7 +2394,7 @@ if ($test_spa) {
     extract -counts 'one' -method 'zip' -name $fileName -helper 'DisableSentry'
 
     # Minification of all *.js
-    extract -counts 'more' -name '*.js' -helper 'MinJs'
+    # Disabled locally: current patterns can corrupt recent Spotify assets.
 
     # xpui.css
     if (!($premium)) {
@@ -2380,20 +2425,19 @@ if ($test_spa) {
     extract -counts 'one' -method 'zip' -name 'xpui.css' -helper "FixCss"
 
     # Remove RTL and minification of all *.css
-    extract -counts 'more' -name '*.css' -helper 'Cssmin'
+    # Disabled locally: current patterns can corrupt recent Spotify assets.
     
     # licenses.html minification
-
-    extract -counts 'one' -method 'zip' -name 'licenses.html' -helper 'HtmlLicMin'
+    # Disabled locally: current patterns can corrupt recent Spotify assets.
     # blank.html minification
-    extract -counts 'one' -method 'zip' -name 'blank.html' -helper 'HtmlBlank'
+    # Disabled locally: current patterns can corrupt recent Spotify assets.
     
     if ($ru) {
         # Additional translation of the ru.json file
         extract -counts 'more' -name '*ru.json' -helper 'RuTranslate'
     }
     # Minification of all *.json
-    extract -counts 'more' -name '*.json' -helper 'MinJson'
+    # Disabled locally: current patterns can corrupt recent Spotify assets.
 }
 
 # Delete all files except "en" and "ru"

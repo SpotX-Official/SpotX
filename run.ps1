@@ -1,8 +1,22 @@
 [CmdletBinding()]
 param
 (
+    [Parameter(HelpMessage = 'Latest recommended Spotify version for Windows 10+.')]
+    [string]$latest_full = "1.2.85.519.g549a528b",
 
-    [Parameter(HelpMessage = "Change recommended version of Spotify.")]
+    [Parameter(HelpMessage = 'Latest supported Spotify version for Windows 7-8.1')]
+    [string]$last_win7_full = "1.2.5.1006.g22820f93",
+
+    [Parameter(HelpMessage = 'Latest supported Spotify version for x86')]
+    [string]$last_x86_full = "1.2.53.440.g7b2f582a",
+
+
+    [Parameter(HelpMessage = 'Force a specific download method. Default is automatic selection.')]
+    [Alias('dm')]
+    [ValidateSet('curl', 'webclient')]
+    [string]$download_method,
+
+    [Parameter(HelpMessage = "Change recommended Spotify version. Example: 1.2.85.519.g549a528b.")]
     [Alias("v")]
     [string]$version,
 
@@ -402,44 +416,116 @@ $win8_1 = $win_os -match "\windows 8.1\b"
 $win8 = $win_os -match "\windows 8\b"
 $win7 = $win_os -match "\windows 7\b"
 
-$match_v = "^\d+\.\d+\.\d+\.\d+\.g[0-9a-f]{8}-\d+$"
+function Get-SystemArchitecture {
+    $archNames = @($env:PROCESSOR_ARCHITEW6432, $env:PROCESSOR_ARCHITECTURE) | Where-Object { $_ }
+
+    foreach ($archName in $archNames) {
+        switch ($archName.ToUpperInvariant()) {
+            'ARM64' { return 'arm64' }
+            'AMD64' { return 'x64' }
+            'X86' { return 'x86' }
+        }
+    }
+
+    return 'x64'
+}
+
+function Get-SpotifyVersionNumber {
+    param(
+        [Parameter(Mandatory = $true)]
+        [string]$SpotifyVersion
+    )
+
+    return [Version]($SpotifyVersion -replace '\.g[0-9a-f]{8}$', '')
+}
+
+function Get-SpotifyInstallerArchitecture {
+    param(
+        [Parameter(Mandatory = $true)]
+        [string]$SystemArchitecture,
+        [Parameter(Mandatory = $true)]
+        [version]$SpotifyVersion,
+        [Parameter(Mandatory = $true)]
+        [version]$LastX86SupportedVersion
+    )
+
+    switch ($SystemArchitecture) {
+        'arm64' { return 'arm64' }
+        'x64' {
+            if ($SpotifyVersion -le $LastX86SupportedVersion) {
+                return 'x86'
+            }
+
+            return 'x64'
+        }
+        'x86' {
+            if ($SpotifyVersion -le $LastX86SupportedVersion) {
+                return 'x86'
+            }
+
+            throw "Version $SpotifyVersion is not supported on x86 systems"
+        }
+        default { return 'x64' }
+    }
+}
+
+$spotifyDownloadBaseUrl = "https://broad-pine-bbc0.amd64fox1.workers.dev/download"
+$systemArchitecture = Get-SystemArchitecture
+
+$match_v = "^(?<version>\d+\.\d+\.\d+\.\d+\.g[0-9a-f]{8})(?:-\d+)?$"
+$versionIsSupported = $false
 if ($version) {
     if ($version -match $match_v) {
-        $onlineFull = $version
+        $onlineFull = $Matches.version
+        $versionIsSupported = $true
     }
     else {      
-        Write-Warning "Invalid $($version) format. Example: 1.2.13.661.ga588f749-4064"
+        Write-Warning "Invalid $($version) format. Example: 1.2.13.661.ga588f749 (legacy -4064 suffix is optional)"
         Write-Host
     }
 }
 
 $old_os = $win7 -or $win8 -or $win8_1
 
-# latest tested version for Win 7-8.1 
-$last_win7_full = "1.2.5.1006.g22820f93-1078"
+$last_win7 = Get-SpotifyVersionNumber -SpotifyVersion $last_win7_full
 
-if (!($version -and $version -match $match_v)) {
+$last_x86 = Get-SpotifyVersionNumber -SpotifyVersion $last_x86_full
+
+if (-not $versionIsSupported) {
     if ($old_os) { 
         $onlineFull = $last_win7_full
     }
+    elseif ($systemArchitecture -eq 'x86') {
+        $onlineFull = $last_x86_full
+    }
     else {  
         # latest tested version for Win 10-12 
-        $onlineFull = "1.2.84.477.gcfdf84e8-2359"
+        $onlineFull = $latest_full
     }
 }
 else {
-    if ($old_os) {
-        $last_win7 = "1.2.5.1006"
-        if ([version]($onlineFull -split ".g")[0] -gt [version]$last_win7) { 
+    $requestedOnlineVersion = Get-SpotifyVersionNumber -SpotifyVersion $onlineFull
 
-            Write-Warning ("Version {0} is only supported on Windows 10 and above" -f ($onlineFull -split ".g")[0])   
+    if ($old_os) {
+        if ($requestedOnlineVersion -gt $last_win7) { 
+
+            Write-Warning ("Version {0} is only supported on Windows 10 and above" -f $requestedOnlineVersion)
             Write-Warning ("The recommended version has been automatically changed to {0}, the latest supported version for Windows 7-8.1" -f $last_win7)
             Write-Host
             $onlineFull = $last_win7_full
+            $requestedOnlineVersion = $last_win7
         }
     }
+
+    if ($systemArchitecture -eq 'x86' -and $requestedOnlineVersion -gt $last_x86) {
+        Write-Warning ("Version {0} is not supported on 32-bit (x86) Windows systems" -f $requestedOnlineVersion)
+        Write-Warning ("The recommended version has been automatically changed to {0}, the latest supported version for x86 systems" -f $last_x86)
+        Write-Host
+        $onlineFull = $last_x86_full
+        $requestedOnlineVersion = $last_x86
+    }
 }
-$online = ($onlineFull -split ".g")[0]
+$online = (Get-SpotifyVersionNumber -SpotifyVersion $onlineFull).ToString()
 
 
 function Get {
@@ -529,75 +615,206 @@ function Mod-F {
     return $result
 }
 
+function Test-CurlAvailability {
+    try {
+        if (curl.exe -V) {
+            return $true
+        }
+    }
+    catch { }
+
+    return $false
+}
+
+function Resolve-SpotifyDownloadMethod {
+    param(
+        [string]$ForcedMethod
+    )
+
+    if ($ForcedMethod) {
+        switch ($ForcedMethod) {
+            'curl' {
+                if (Test-CurlAvailability) {
+                    return 'curl'
+                }
+
+                throw "Forced download method 'curl' is not available on this system"
+            }
+            'webclient' {
+                return 'webclient'
+            }
+        }
+    }
+
+    if (Test-CurlAvailability) {
+        return 'curl'
+    }
+
+    return 'webclient'
+}
+
+function Format-DownloadSizeMb {
+    param(
+        [long]$Bytes
+    )
+
+    return ('{0:N2} MB' -f ($Bytes / 1MB))
+}
+
+function Invoke-WebClientDownloadWithProgress {
+    param(
+        [Parameter(Mandatory = $true)]
+        [System.Net.WebClient]$WebClient,
+        [Parameter(Mandatory = $true)]
+        [string]$Url,
+        [Parameter(Mandatory = $true)]
+        [string]$DestinationPath
+    )
+
+    $fileName = Split-Path -Path $DestinationPath -Leaf
+    $previousProgressPreference = $ProgressPreference
+    $responseStream = $null
+    $fileStream = $null
+    $stopwatch = $null
+
+    try {
+        $ProgressPreference = 'Continue'
+        $responseStream = $WebClient.OpenRead($Url)
+
+        if ($null -eq $responseStream) {
+            throw "Failed to open response stream for $Url"
+        }
+
+        $totalBytes = 0L
+        $contentLength = $WebClient.ResponseHeaders['Content-Length']
+        if ($contentLength) {
+            $null = [long]::TryParse($contentLength, [ref]$totalBytes)
+        }
+
+        $fileStream = [System.IO.File]::Open($DestinationPath, [System.IO.FileMode]::Create, [System.IO.FileAccess]::Write, [System.IO.FileShare]::None)
+
+        $buffer = New-Object byte[] 262144
+        $bytesReceived = 0L
+        $progressUpdateIntervalMs = 200
+        $stopwatch = [System.Diagnostics.Stopwatch]::StartNew()
+        $lastProgressUpdateMs = - $progressUpdateIntervalMs
+
+        while (($bytesRead = $responseStream.Read($buffer, 0, $buffer.Length)) -gt 0) {
+            $fileStream.Write($buffer, 0, $bytesRead)
+            $bytesReceived += $bytesRead
+
+            if (($stopwatch.ElapsedMilliseconds - $lastProgressUpdateMs) -ge $progressUpdateIntervalMs) {
+                if ($totalBytes -gt 0) {
+                    $percentComplete = [Math]::Min([int][Math]::Floor(($bytesReceived / $totalBytes) * 100), 100)
+                    $status = "{0} / {1} ({2}%)" -f (Format-DownloadSizeMb -Bytes $bytesReceived), (Format-DownloadSizeMb -Bytes $totalBytes), $percentComplete
+                    Write-Progress -Activity "Downloading $fileName" -Status $status -PercentComplete $percentComplete
+                }
+                else {
+                    $status = "{0} downloaded" -f (Format-DownloadSizeMb -Bytes $bytesReceived)
+                    Write-Progress -Activity "Downloading $fileName" -Status $status -PercentComplete 0
+                }
+
+                $lastProgressUpdateMs = $stopwatch.ElapsedMilliseconds
+            }
+        }
+
+        if ($totalBytes -gt 0) {
+            $completedStatus = "{0} / {1} (100%)" -f (Format-DownloadSizeMb -Bytes $bytesReceived), (Format-DownloadSizeMb -Bytes $totalBytes)
+            Write-Progress -Activity "Downloading $fileName" -Status $completedStatus -PercentComplete 100
+        }
+
+        Write-Progress -Activity "Downloading $fileName" -Completed
+    }
+    finally {
+        if ($null -ne $stopwatch) {
+            $stopwatch.Stop()
+        }
+        if ($null -ne $fileStream) {
+            $fileStream.Dispose()
+        }
+        if ($null -ne $responseStream) {
+            $responseStream.Dispose()
+        }
+
+        Write-Progress -Activity "Downloading $fileName" -Completed
+        $ProgressPreference = $previousProgressPreference
+    }
+}
+
+function Invoke-SpotifyDownloadAttempt {
+    param(
+        [Parameter(Mandatory = $true)]
+        [string]$Url,
+        [Parameter(Mandatory = $true)]
+        [string]$DestinationPath,
+        [Parameter(Mandatory = $true)]
+        [System.Net.WebClient]$WebClient,
+        [Parameter(Mandatory = $true)]
+        [ValidateSet('curl', 'webclient')]
+        [string]$DownloadMethod
+    )
+
+    switch ($DownloadMethod) {
+        'curl' {
+            $stcode = curl.exe -Is -w "%{http_code}" -o NUL -k $Url --retry 2 --ssl-no-revoke
+            if ($stcode.trim() -ne "200") {
+                throw "Unexpected HTTP status: $($stcode.Trim())"
+            }
+
+            curl.exe -q -k $Url -o $DestinationPath --progress-bar --retry 3 --ssl-no-revoke
+            return
+        }
+        'webclient' {
+            Invoke-WebClientDownloadWithProgress -WebClient $WebClient -Url $Url -DestinationPath $DestinationPath
+            return
+        }
+    }
+}
+
 function downloadSp([string]$DownloadFolder) {
 
     $webClient = New-Object -TypeName System.Net.WebClient
 
-    Import-Module BitsTransfer
-        
-    $max_x86 = [Version]"1.2.53"
-    $versionParts = $onlineFull -split '\.'
-    $short = [Version]"$($versionParts[0]).$($versionParts[1]).$($versionParts[2])"
-    $arch = if ($short -le $max_x86) { "win32-x86" } else { "win32-x86_64" }
+    $spotifyVersion = Get-SpotifyVersionNumber -SpotifyVersion $onlineFull
+    $arch = Get-SpotifyInstallerArchitecture `
+        -SystemArchitecture $systemArchitecture `
+        -SpotifyVersion $spotifyVersion `
+        -LastX86SupportedVersion $last_x86
 
-    $web_Url = "https://upgrade.scdn.co/upgrade/client/$arch/spotify_installer-$onlineFull.exe"
+    $web_Url = "$spotifyDownloadBaseUrl/spotify_installer-$onlineFull-$arch.exe"
     $local_Url = Join-Path $DownloadFolder 'SpotifySetup.exe'
     $web_name_file = "SpotifySetup.exe"
-
-    try { if (curl.exe -V) { $curl_check = $true } }
-    catch { $curl_check = $false }
-    
-    try { 
-        if ($curl_check) {
-            $stcode = curl.exe -Is -w "%{http_code} \n" -o NUL -k $web_Url --retry 2 --ssl-no-revoke
-            if ($stcode.trim() -ne "200") {
-                Write-Host "Curl error code: $stcode"; throw
-            }
-            curl.exe -q -k $web_Url -o $local_Url --progress-bar --retry 3 --ssl-no-revoke
-            return
-        }
-        if (!($curl_check ) -and $null -ne (Get-Module -Name BitsTransfer -ListAvailable)) {
-            $ProgressPreference = 'Continue'
-            Start-BitsTransfer -Source  $web_Url -Destination $local_Url  -DisplayName ($lang).Download5 -Description "$online "
-            return
-        }
-        if (!($curl_check ) -and $null -eq (Get-Module -Name BitsTransfer -ListAvailable)) {
-            $webClient.DownloadFile($web_Url, $local_Url) 
-            return
-        }
+    try {
+        $selectedDownloadMethod = Resolve-SpotifyDownloadMethod -ForcedMethod $download_method
+    }
+    catch {
+        Write-Warning $_.Exception.Message
+        Stop-Script
     }
 
-    catch {
-        Write-Host
-        Write-Host ($lang).Download $web_name_file -ForegroundColor RED
-        $Error[0].Exception
-        Write-Host
-        Write-Host ($lang).Download2`n
-
-        Start-Sleep -Milliseconds 5000 
-        try { 
-
-            if ($curl_check) {
-                $stcode = curl.exe -Is -w "%{http_code} \n" -o NUL -k $web_Url --retry 2 --ssl-no-revoke
-                if ($stcode.trim() -ne "200") {
-                    Write-Host "Curl error code: $stcode"; throw
-                }
-                curl.exe -q -k $web_Url -o $local_Url --progress-bar --retry 3 --ssl-no-revoke
-                return
-            }
-            if (!($curl_check ) -and $null -ne (Get-Module -Name BitsTransfer -ListAvailable) -and !($curl_check )) {
-                Start-BitsTransfer -Source  $web_Url -Destination $local_Url  -DisplayName ($lang).Download5 -Description "$online "
-                return
-            }
-            if (!($curl_check ) -and $null -eq (Get-Module -Name BitsTransfer -ListAvailable) -and !($curl_check )) {
-                $webClient.DownloadFile($web_Url, $local_Url) 
-                return
-            }
+    for ($attempt = 1; $attempt -le 2; $attempt++) {
+        try {
+            Invoke-SpotifyDownloadAttempt `
+                -Url $web_Url `
+                -DestinationPath $local_Url `
+                -WebClient $webClient `
+                -DownloadMethod $selectedDownloadMethod
+            return
         }
-        
         catch {
+            Write-Host
+
+            if ($attempt -eq 1) {
+                Write-Host ($lang).Download $web_name_file -ForegroundColor RED
+                $_.Exception
+                Write-Host
+                Write-Host ($lang).Download2`n
+                Start-Sleep -Milliseconds 5000
+                continue
+            }
+
             Write-Host ($lang).Download3 -ForegroundColor RED
-            $Error[0].Exception
+            $_.Exception
             Write-Host
             Write-Host ($lang).Download4`n
 
@@ -605,6 +822,7 @@ function downloadSp([string]$DownloadFolder) {
                 Start-Sleep -Milliseconds 200
                 Remove-Item -Recurse -LiteralPath $DownloadFolder -ErrorAction SilentlyContinue
             }
+
             Stop-Script
         }
     }
@@ -691,51 +909,19 @@ if ($win10 -or $win11 -or $win8_1 -or $win8 -or $win12) {
         }
         if ($confirm_uninstall_ms_spoti) { $ch = 'y' }
         if ($ch -eq 'y') {      
-            $ProgressPreference = 'SilentlyContinue' # Hiding Progress Bars
-            if ($confirm_uninstall_ms_spoti) { Write-Host ($lang).MsSpoti3`n }
-            if (!($confirm_uninstall_ms_spoti)) { Write-Host ($lang).MsSpoti4`n }
-            Get-AppxPackage -Name SpotifyAB.SpotifyMusic | Remove-AppxPackage
+            $previousProgressPreference = $ProgressPreference
+            try {
+                $ProgressPreference = 'SilentlyContinue' # Hiding Progress Bars
+                if ($confirm_uninstall_ms_spoti) { Write-Host ($lang).MsSpoti3`n }
+                if (!($confirm_uninstall_ms_spoti)) { Write-Host ($lang).MsSpoti4`n }
+                Get-AppxPackage -Name SpotifyAB.SpotifyMusic | Remove-AppxPackage
+            }
+            finally {
+                $ProgressPreference = $previousProgressPreference
+            }
         }
         if ($ch -eq 'n') {
             Stop-Script
-        }
-    }
-}
-
-# Attempt to fix the hosts file
-$hostsFilePath = Join-Path $Env:windir 'System32\Drivers\Etc\hosts'
-$hostsBackupFilePath = Join-Path $Env:windir 'System32\Drivers\Etc\hosts.bak'
-
-if (Test-Path -Path $hostsFilePath) {
-
-    $hosts = [System.IO.File]::ReadAllLines($hostsFilePath)
-    $regex = "^(?!#|\|)((?:.*?(?:download|upgrade)\.scdn\.co|.*?spotify).*)"
-
-    if ($hosts -match $regex) {
-
-        Write-Host ($lang).HostInfo`n
-        Write-Host ($lang).HostBak`n
-
-        Copy-Item -Path $hostsFilePath -Destination $hostsBackupFilePath -ErrorAction SilentlyContinue
-
-        if ($?) {
-
-            Write-Host ($lang).HostDel
-
-            try {
-                $hosts = $hosts | Where-Object { $_ -notmatch $regex }
-                [System.IO.File]::WriteAllLines($hostsFilePath, $hosts)
-            }
-            catch {
-                Write-Host ($lang).HostError`n -ForegroundColor Red
-                $copyError = $Error[0]
-                Write-Host "Error: $($copyError.Exception.Message)`n" -ForegroundColor Red
-            }
-        }
-        else {
-            Write-Host ($lang).HostError`n -ForegroundColor Red
-            $copyError = $Error[0]
-            Write-Host "Error: $($copyError.Exception.Message)`n" -ForegroundColor Red
         }
     }
 }
@@ -828,40 +1014,6 @@ if ($spotifyInstalled) {
     
     # Unsupported version Spotify (skip if custom path is used)
     if ($testversion -and -not $SpotifyPath) {
-
-        # Submit unsupported version of Spotify to google form for further processing
-
-        $binary = if (Test-Path $spotifyDll) {
-            $spotifyDll
-        }
-        else {
-            $spotifyExecutable
-        }
-
-        Start-Job -ScriptBlock {
-            param($binary, $win_os, $psv, $online, $offline)
-
-            try { 
-                $country = [System.Globalization.RegionInfo]::CurrentRegion.EnglishName
-                $txt = [IO.File]::ReadAllText($binary)
-                $regex = "(?<![\w\-])(\d+)\.(\d+)\.(\d+)\.(\d+)(\.g[0-9a-f]{8})(?![\w\-])"
-                $matches = [regex]::Matches($txt, $regex)
-                $ver = $matches[0].Value
-                $Parameters = @{
-                    Uri    = 'https://docs.google.com/forms/d/e/1FAIpQLSegGsAgilgQ8Y36uw-N7zFF6Lh40cXNfyl1ecHPpZcpD8kdHg/formResponse'
-                    Method = 'POST'
-                    Body   = @{
-                        'entry.620327948'  = $ver
-                        'entry.1951747592' = $country
-                        'entry.1402903593' = $win_os
-                        'entry.860691305'  = $psv
-                        'entry.2067427976' = $online + " < " + $offline
-                    }   
-                }
-                Invoke-WebRequest @Parameters -UseBasicParsing -ErrorAction SilentlyContinue | Out-Null
-            }
-            catch { }
-        } -ArgumentList $binary, $win_os, $psv, $online, $offline | Out-Null
 
         if ($confirm_spoti_recomended_over -or $confirm_spoti_recomended_uninstall) {
             Write-Host ($lang).NewV`n

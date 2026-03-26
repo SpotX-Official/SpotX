@@ -661,6 +661,225 @@ function Format-DownloadSizeMb {
     return ('{0:N2} MB' -f ($Bytes / 1MB))
 }
 
+function Convert-CommandOutputToString {
+    param(
+        [object[]]$Output
+    )
+
+    if ($null -eq $Output) {
+        return ''
+    }
+
+    $lines = foreach ($item in @($Output)) {
+        if ($null -eq $item) {
+            continue
+        }
+
+        if ($item -is [System.Management.Automation.ErrorRecord]) {
+            $item.Exception.Message.TrimEnd()
+            continue
+        }
+
+        $item.ToString().TrimEnd()
+    }
+
+    return (@($lines) -join [Environment]::NewLine).Trim()
+}
+
+function Get-CurlHttpStatus {
+    param(
+        [string]$Output
+    )
+
+    $match = [regex]::Match([string]$Output, 'HTTP_STATUS:(\d{3})')
+    if ($match.Success) {
+        return $match.Groups[1].Value
+    }
+
+    return ''
+}
+
+function Get-CurlDiagnosticDetails {
+    param(
+        [string]$Output
+    )
+
+    if ([string]::IsNullOrWhiteSpace($Output)) {
+        return ''
+    }
+
+    $cleanLines = foreach ($line in ($Output -split '\r?\n')) {
+        $currentLine = [string]$line
+
+        if ([string]::IsNullOrWhiteSpace($currentLine)) {
+            continue
+        }
+
+        if ($currentLine -match '^\s*HTTP_STATUS:\d{3}\s*$') {
+            continue
+        }
+
+        if ($currentLine -match '^\s*[#O=\-]+\s*$') {
+            continue
+        }
+
+        $curlMessageIndex = $currentLine.IndexOf('curl:')
+        if ($curlMessageIndex -gt 0) {
+            $currentLine = $currentLine.Substring($curlMessageIndex)
+        }
+
+        $currentLine = $currentLine.Trim()
+
+        if ($currentLine) {
+            $currentLine
+        }
+    }
+
+    return (@($cleanLines) -join [Environment]::NewLine).Trim()
+}
+
+function Format-CurlFailureMessage {
+    param(
+        [string]$Url,
+        [string]$Stage,
+        [int]$ExitCode,
+        [string]$HttpStatus,
+        [string]$Details,
+        [string]$ResponseText
+    )
+
+    $lines = @(
+        "curl $Stage failed",
+        "URL: $Url"
+    )
+
+    if ($ExitCode -ne 0) {
+        $lines += "Exit code: $ExitCode"
+    }
+
+    if ($HttpStatus) {
+        $lines += "HTTP status: $HttpStatus"
+    }
+
+    if ($Details) {
+        $lines += "Details: $Details"
+    }
+
+    if ($ResponseText) {
+        $lines += "Server response: $ResponseText"
+    }
+
+    return ($lines -join [Environment]::NewLine)
+}
+
+function New-DownloadFailureException {
+    param(
+        [Parameter(Mandatory = $true)]
+        [string]$Message,
+        [string]$DownloadMethod,
+        [string]$FailureKind,
+        [string]$HttpStatus,
+        [int]$ExitCode = 0,
+        [System.Exception]$InnerException
+    )
+
+    if ($InnerException) {
+        $exception = New-Object System.Exception($Message, $InnerException)
+    }
+    else {
+        $exception = New-Object System.Exception($Message)
+    }
+
+    if ($DownloadMethod) {
+        $exception.Data['DownloadMethod'] = $DownloadMethod
+    }
+    if ($FailureKind) {
+        $exception.Data['FailureKind'] = $FailureKind
+    }
+    if ($HttpStatus) {
+        $exception.Data['HttpStatus'] = $HttpStatus
+    }
+    if ($ExitCode -ne 0) {
+        $exception.Data['ExitCode'] = $ExitCode
+    }
+
+    return $exception
+}
+
+function Write-DownloadFailureDetails {
+    param(
+        [Parameter(Mandatory = $true)]
+        [string]$Method,
+        [System.Exception]$Exception,
+        [string]$Title
+    )
+
+    if ($Title) {
+        Write-Host $Title -ForegroundColor Red
+    }
+
+    Write-Host "Download method: $Method" -ForegroundColor Yellow
+    if ($Exception) {
+        Write-Host $Exception.Message -ForegroundColor Yellow
+    }
+    Write-Host
+}
+
+function Invoke-DownloadMethodWithRetries {
+    param(
+        [Parameter(Mandatory = $true)]
+        [string]$Url,
+        [Parameter(Mandatory = $true)]
+        [string]$DestinationPath,
+        [Parameter(Mandatory = $true)]
+        [System.Net.WebClient]$WebClient,
+        [Parameter(Mandatory = $true)]
+        [ValidateSet('curl', 'webclient')]
+        [string]$DownloadMethod,
+        [Parameter(Mandatory = $true)]
+        [string]$FileName
+    )
+
+    $lastError = $null
+
+    for ($attempt = 1; $attempt -le 2; $attempt++) {
+        try {
+            if ($attempt -gt 1) {
+                Write-Host ("Download method: {0} (attempt {1}/2)" -f $DownloadMethod, $attempt) -ForegroundColor Yellow
+            }
+
+            Invoke-SpotifyDownloadAttempt `
+                -Url $Url `
+                -DestinationPath $DestinationPath `
+                -WebClient $WebClient `
+                -DownloadMethod $DownloadMethod
+
+            return [PSCustomObject]@{
+                Success = $true
+                Error = $null
+                Method = $DownloadMethod
+            }
+        }
+        catch {
+            $lastError = $_.Exception
+            Write-Host
+
+            if ($attempt -eq 1) {
+                Write-Host ($lang).Download $FileName -ForegroundColor RED
+                Write-DownloadFailureDetails -Method $DownloadMethod -Exception $lastError
+                Write-Host ($lang).Download2`n
+                Start-Sleep -Milliseconds 5000
+            }
+        }
+    }
+
+    return [PSCustomObject]@{
+        Success = $false
+        Error = $lastError
+        Method = $DownloadMethod
+    }
+}
+
 function Invoke-WebClientDownloadWithProgress {
     param(
         [Parameter(Mandatory = $true)]
@@ -756,16 +975,143 @@ function Invoke-SpotifyDownloadAttempt {
 
     switch ($DownloadMethod) {
         'curl' {
-            $stcode = curl.exe -Is -w "%{http_code}" -o NUL -k $Url --retry 2 --ssl-no-revoke
-            if ($stcode.trim() -ne "200") {
-                throw "Unexpected HTTP status: $($stcode.Trim())"
+            if (Test-Path -LiteralPath $DestinationPath) {
+                Remove-Item -LiteralPath $DestinationPath -Force -ErrorAction SilentlyContinue
             }
 
-            curl.exe -q -k $Url -o $DestinationPath --progress-bar --retry 3 --ssl-no-revoke
+            if ($null -eq $script:curlSupportsFailWithBody) {
+                try {
+                    $helpOutput = curl.exe --help all 2>$null
+                    $script:curlSupportsFailWithBody = [bool]($helpOutput -match '--fail-with-body')
+                }
+                catch {
+                    $script:curlSupportsFailWithBody = $false
+                }
+            }
+
+            $curlFailOption = if ($script:curlSupportsFailWithBody) { '--fail-with-body' } else { '--fail' }
+            $curlOutput = $null
+            $null = & curl.exe `
+                -q `
+                -L `
+                -k `
+                $curlFailOption `
+                --connect-timeout 15 `
+                --ssl-no-revoke `
+                --progress-bar `
+                -o $DestinationPath `
+                -w "`nHTTP_STATUS:%{http_code}`n" `
+                $Url `
+                2>&1 | Tee-Object -Variable curlOutput | Out-Host
+            $curlExitCode = $LASTEXITCODE
+
+            $curlOutputText = Convert-CommandOutputToString -Output $curlOutput
+            $httpStatus = Get-CurlHttpStatus -Output $curlOutputText
+            $curlDetails = Get-CurlDiagnosticDetails -Output $curlOutputText
+            $responseText = ''
+
+            if ([string]::IsNullOrWhiteSpace($curlDetails)) {
+                $curlDetails = "curl exited with code $curlExitCode"
+            }
+
+            if ($httpStatus) {
+                try {
+                    if (Test-Path -LiteralPath $DestinationPath) {
+                        $responseFile = Get-Item -LiteralPath $DestinationPath -ErrorAction Stop
+                        if ($responseFile.Length -gt 0) {
+                            $bytesToRead = [Math]::Min([int]$responseFile.Length, 4096)
+                            $stream = [System.IO.File]::OpenRead($DestinationPath)
+                            try {
+                                $buffer = New-Object byte[] $bytesToRead
+                                $bytesRead = $stream.Read($buffer, 0, $buffer.Length)
+                            }
+                            finally {
+                                $stream.Dispose()
+                            }
+
+                            if ($bytesRead -gt 0) {
+                                $responseText = [System.Text.Encoding]::UTF8.GetString($buffer, 0, $bytesRead)
+                                $responseText = $responseText -replace "[`0-\b\v\f\x0E-\x1F]", " "
+                                $responseText = ($responseText -replace '\s+', ' ').Trim()
+                            }
+                        }
+                    }
+                }
+                catch {
+                    $responseText = ''
+                }
+            }
+
+            $curlFailureKind = if ($httpStatus) { 'http' } else { 'network' }
+
+            if ($curlExitCode -ne 0) {
+                $message = Format-CurlFailureMessage -Url $Url -Stage 'download request' -ExitCode $curlExitCode -HttpStatus $httpStatus -Details $curlDetails -ResponseText $responseText
+                throw (New-DownloadFailureException -Message $message -DownloadMethod 'curl' -FailureKind $curlFailureKind -HttpStatus $httpStatus -ExitCode $curlExitCode)
+            }
+
+            if ($httpStatus -ne '200') {
+                $message = Format-CurlFailureMessage -Url $Url -Stage 'download request' -ExitCode $curlExitCode -HttpStatus $httpStatus -Details $curlDetails -ResponseText $responseText
+                throw (New-DownloadFailureException -Message $message -DownloadMethod 'curl' -FailureKind 'http' -HttpStatus $httpStatus -ExitCode $curlExitCode)
+            }
+
+            if (!(Test-Path -LiteralPath $DestinationPath)) {
+                throw "curl download failed`nURL: $Url`nDestination file was not created: $DestinationPath"
+            }
+
+            $downloadedFile = Get-Item -LiteralPath $DestinationPath -ErrorAction SilentlyContinue
+            if ($null -eq $downloadedFile -or $downloadedFile.Length -le 0) {
+                throw "curl download failed`nURL: $Url`nDownloaded file is empty: $DestinationPath"
+            }
+
             return
         }
         'webclient' {
-            Invoke-WebClientDownloadWithProgress -WebClient $WebClient -Url $Url -DestinationPath $DestinationPath
+            try {
+                Invoke-WebClientDownloadWithProgress -WebClient $WebClient -Url $Url -DestinationPath $DestinationPath
+            }
+            catch {
+                $webException = $_.Exception
+                $httpStatus = ''
+                $details = $webException.Message
+                $failureKind = 'network'
+
+                if ($webException -is [System.Net.WebException]) {
+                    $details = "WebException status: $($webException.Status)"
+
+                    $httpResponse = $webException.Response -as [System.Net.HttpWebResponse]
+                    if ($httpResponse) {
+                        $httpStatus = [string][int]$httpResponse.StatusCode
+                        $statusDescription = [string]$httpResponse.StatusDescription
+                        $failureKind = 'http'
+                        if ([string]::IsNullOrWhiteSpace($statusDescription)) {
+                            $details = $webException.Message
+                        }
+                        else {
+                            $details = $statusDescription
+                        }
+                    }
+                    elseif ($webException.Message) {
+                        $details = "WebException status: $($webException.Status)`n$($webException.Message)"
+                    }
+                }
+
+                $lines = @(
+                    'webclient download request failed',
+                    "URL: $Url"
+                )
+
+                if ($httpStatus) {
+                    $lines += "HTTP status: $httpStatus"
+                }
+
+                if ($details) {
+                    $lines += "Details: $details"
+                }
+
+                $message = $lines -join [Environment]::NewLine
+                throw (New-DownloadFailureException -Message $message -DownloadMethod 'webclient' -FailureKind $failureKind -HttpStatus $httpStatus -InnerException $webException)
+            }
+
             return
         }
     }
@@ -792,41 +1138,88 @@ function downloadSp([string]$DownloadFolder) {
         Stop-Script
     }
 
-    for ($attempt = 1; $attempt -le 2; $attempt++) {
-        try {
-            Invoke-SpotifyDownloadAttempt `
-                -Url $web_Url `
-                -DestinationPath $local_Url `
-                -WebClient $webClient `
-                -DownloadMethod $selectedDownloadMethod
+    $lastDownloadError = $null
+    $lastDownloadMethod = $selectedDownloadMethod
+
+    if ($selectedDownloadMethod -eq 'curl') {
+        $curlResult = Invoke-DownloadMethodWithRetries `
+            -Url $web_Url `
+            -DestinationPath $local_Url `
+            -WebClient $webClient `
+            -DownloadMethod 'curl' `
+            -FileName $web_name_file
+
+        if ($curlResult.Success) {
             return
         }
-        catch {
+
+        $lastDownloadError = $curlResult.Error
+        $lastDownloadMethod = $curlResult.Method
+
+        Write-DownloadFailureDetails -Method 'curl' -Exception $lastDownloadError -Title 'Curl download failed again'
+
+        $httpStatus = if ($lastDownloadError) { [string]$lastDownloadError.Data['HttpStatus'] } else { '' }
+        $shouldUseWebClientFallback = $httpStatus -ne '429'
+        if ($shouldUseWebClientFallback) {
+            Write-Host "Switching to WebClient fallback..." -ForegroundColor Yellow
             Write-Host
 
-            if ($attempt -eq 1) {
-                Write-Host ($lang).Download $web_name_file -ForegroundColor RED
-                $_.Exception
+            if (Test-Path -LiteralPath $local_Url) {
+                Remove-Item -LiteralPath $local_Url -Force -ErrorAction SilentlyContinue
+            }
+
+            try {
+                $lastDownloadMethod = 'webclient'
+                Write-Host "Download method: webclient (fallback)" -ForegroundColor Yellow
+                Invoke-SpotifyDownloadAttempt `
+                    -Url $web_Url `
+                    -DestinationPath $local_Url `
+                    -WebClient $webClient `
+                    -DownloadMethod 'webclient'
+                return
+            }
+            catch {
+                $lastDownloadError = $_.Exception
                 Write-Host
-                Write-Host ($lang).Download2`n
-                Start-Sleep -Milliseconds 5000
-                continue
+                Write-DownloadFailureDetails -Method 'webclient' -Exception $lastDownloadError -Title 'WebClient fallback failed'
             }
-
-            Write-Host ($lang).Download3 -ForegroundColor RED
-            $_.Exception
-            Write-Host
-            Write-Host ($lang).Download4`n
-
-            if ($DownloadFolder -and (Test-Path $DownloadFolder)) {
-                Start-Sleep -Milliseconds 200
-                Remove-Item -Recurse -LiteralPath $DownloadFolder -ErrorAction SilentlyContinue
+        }
+        else {
+            if ($httpStatus) {
+                Write-Host ("Skipping WebClient fallback because the server returned HTTP {0}." -f $httpStatus) -ForegroundColor Yellow
+                Write-Host
             }
-
-            Stop-Script
         }
     }
-} 
+    else {
+        $downloadResult = Invoke-DownloadMethodWithRetries `
+            -Url $web_Url `
+            -DestinationPath $local_Url `
+            -WebClient $webClient `
+            -DownloadMethod $selectedDownloadMethod `
+            -FileName $web_name_file
+
+        if ($downloadResult.Success) {
+            return
+        }
+
+        $lastDownloadError = $downloadResult.Error
+        $lastDownloadMethod = $downloadResult.Method
+    }
+
+    Write-Host ($lang).Download3 -ForegroundColor RED
+    if ($lastDownloadError) {
+        Write-DownloadFailureDetails -Method $lastDownloadMethod -Exception $lastDownloadError
+    }
+    Write-Host ($lang).Download4`n
+
+    if ($DownloadFolder -and (Test-Path $DownloadFolder)) {
+        Start-Sleep -Milliseconds 200
+        Remove-Item -Recurse -LiteralPath $DownloadFolder -ErrorAction SilentlyContinue
+    }
+
+    Stop-Script
+}
 
 function Remove-TempDirectory {
     param(

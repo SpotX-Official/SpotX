@@ -322,6 +322,7 @@ if ($SpotifyPath) {
     $spotifyDirectory = $SpotifyPath
 }
 $spotifyExecutable = Join-Path $spotifyDirectory 'Spotify.exe'
+$spotifyUninstaller = Join-Path $spotifyDirectory 'uninstall.exe'
 $spotifyDll = Join-Path $spotifyDirectory 'Spotify.dll' 
 $chrome_elf = Join-Path $spotifyDirectory 'chrome_elf.dll'
 $exe_bak = Join-Path $spotifyDirectory 'Spotify.bak'
@@ -599,6 +600,75 @@ function Unlock-Folder {
         }
     }
 }
+
+function Invoke-SpotifyUninstall {
+    param(
+        [Parameter(Mandatory = $true)]
+        [string]$InstalledVersion
+    )
+
+    $installedVersionObject = [version]$InstalledVersion
+
+    if ($installedVersionObject -ge [version]'1.2.84.476') {
+        if (-not (Test-Path -LiteralPath $spotifyUninstaller)) {
+            Write-Host "ERROR: " -ForegroundColor Red -NoNewline
+            Write-Host ("Spotify uninstall.exe was not found for version {0}. Aborting reinstall" -f $InstalledVersion) -ForegroundColor White
+            Stop-Script
+        }
+
+        try {
+            $launcher = Start-Process -FilePath $spotifyUninstaller `
+                -ArgumentList '/silent' `
+                -PassThru `
+                -WindowStyle Hidden `
+                -ErrorAction Stop
+
+            $launcher.WaitForExit()
+
+            $pollIntervalMs = 200
+            $pollMaxMs = 10000
+            $elapsedMs = 0
+
+            while ($elapsedMs -lt $pollMaxMs) {
+                $uninstallProcess = Get-Process -Name SpotifyUninstall -ErrorAction SilentlyContinue | Select-Object -First 1
+                if ($uninstallProcess) {
+                    Wait-Process -Name SpotifyUninstall -ErrorAction SilentlyContinue
+                    break
+                }
+
+                if (-not (Test-Path -LiteralPath $spotifyExecutable) -or -not (Test-Path -LiteralPath $spotifyDirectory)) {
+                    break
+                }
+
+                Start-Sleep -Milliseconds $pollIntervalMs
+                $elapsedMs += $pollIntervalMs
+            }
+        }
+        catch {
+            Write-Host "ERROR: " -ForegroundColor Red -NoNewline
+            Write-Host ("Failed to launch Spotify uninstaller for version {0}. {1}" -f $InstalledVersion, $_.Exception.Message) -ForegroundColor White
+            Stop-Script
+        }
+    }
+    else {
+        cmd /c $spotifyExecutable /UNINSTALL /SILENT
+        Wait-Process -Name SpotifyUninstall
+    }
+
+    Start-Sleep -Milliseconds 200
+
+    if (Test-Path -LiteralPath $spotifyDirectory) { Remove-Item -Recurse -Force -LiteralPath $spotifyDirectory -ErrorAction SilentlyContinue }
+    if (Test-Path -LiteralPath $spotifyDirectory2) { Remove-Item -Recurse -Force -LiteralPath $spotifyDirectory2 -ErrorAction SilentlyContinue }
+    if (Test-Path -LiteralPath $spotifyUninstall) { Remove-Item -Recurse -Force -LiteralPath $spotifyUninstall -ErrorAction SilentlyContinue }
+
+    $spotifyRemoved = (-not (Test-Path -LiteralPath $spotifyExecutable)) -or (-not (Test-Path -LiteralPath $spotifyDirectory))
+    if (-not $spotifyRemoved) {
+        Write-Host "ERROR: " -ForegroundColor Red -NoNewline
+        Write-Host ("Spotify uninstall failed for version {0}. Spotify is still installed" -f $InstalledVersion) -ForegroundColor White
+        Stop-Script
+    }
+}
+
 function Mod-F {
     param(
         [string] $template,
@@ -990,8 +1060,7 @@ function Invoke-SpotifyDownloadAttempt {
             }
 
             $curlFailOption = if ($script:curlSupportsFailWithBody) { '--fail-with-body' } else { '--fail' }
-            $curlOutput = $null
-            $null = & curl.exe `
+            $curlOutput = & curl.exe `
                 -q `
                 -L `
                 -k `
@@ -1001,8 +1070,7 @@ function Invoke-SpotifyDownloadAttempt {
                 --progress-bar `
                 -o $DestinationPath `
                 -w "`nHTTP_STATUS:%{http_code}`n" `
-                $Url `
-                2>&1 | Tee-Object -Variable curlOutput | Out-Host
+                $Url
             $curlExitCode = $LASTEXITCODE
 
             $curlOutputText = Convert-CommandOutputToString -Output $curlOutput
@@ -1391,12 +1459,7 @@ if ($spotifyInstalled) {
             if ($ch -eq 'y') {
                 Write-Host ($lang).DelOld`n 
                 $null = Unlock-Folder 
-                cmd /c $spotifyExecutable /UNINSTALL /SILENT
-                wait-process -name SpotifyUninstall
-                Start-Sleep -Milliseconds 200
-                if (Test-Path $spotifyDirectory) { Remove-Item -Recurse -Force -LiteralPath $spotifyDirectory }
-                if (Test-Path $spotifyDirectory2) { Remove-Item -Recurse -Force -LiteralPath $spotifyDirectory2 }
-                if (Test-Path $spotifyUninstall ) { Remove-Item -Recurse -Force -LiteralPath $spotifyUninstall }
+                Invoke-SpotifyUninstall -InstalledVersion $offline
             }
             if ($ch -eq 'n') { $ch = $null }
         }
@@ -1457,12 +1520,7 @@ if ($spotifyInstalled) {
                 if ($ch -eq 'y') {
                     Write-Host ($lang).DelNew`n
                     $null = Unlock-Folder
-                    cmd /c $spotifyExecutable /UNINSTALL /SILENT
-                    wait-process -name SpotifyUninstall
-                    Start-Sleep -Milliseconds 200
-                    if (Test-Path $spotifyDirectory) { Remove-Item -Recurse -Force -LiteralPath $spotifyDirectory }
-                    if (Test-Path $spotifyDirectory2) { Remove-Item -Recurse -Force -LiteralPath $spotifyDirectory2 }
-                    if (Test-Path $spotifyUninstall ) { Remove-Item -Recurse -Force -LiteralPath $spotifyUninstall }
+                    Invoke-SpotifyUninstall -InstalledVersion $offline
                 }
                 if ($ch -eq 'n') { $ch = $null }
             }

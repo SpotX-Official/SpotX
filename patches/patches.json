@@ -273,7 +273,7 @@
                 "native_description": "Enable Audiobook Ad Formats Exclusivity",
                 "version": {
                     "fr": "1.2.19",
-                    "to": ""
+                    "to": "1.2.84"
                 }
             },
             "NewAdsNpvNewVideoTakeoverSlot": {
@@ -363,7 +363,7 @@
                 "native_description": "Enable Fist Impression Takeover ads on Home Page",
                 "version": {
                     "fr": "1.2.31",
-                    "to": ""
+                    "to": "1.2.84"
                 }
             },
             "LearningHomeCard": {
@@ -417,6 +417,38 @@
                 "native_description": "Allow switching between the new Home Ads format and legacy HPTO format (as opposed to only showing the legacy HPTO format)",
                 "version": {
                     "fr": "1.2.34",
+                    "to": ""
+                }
+            },
+            "LimitedAdsLabelsOnPlaylistCards": {
+                "name": "enableLimitedAdsLabelsOnPlaylistCards",
+                "native_description": "Enables Limited Ads label rendering on playlist cards across Home, Browse, and Recents surfaces",
+                "version": {
+                    "fr": "1.2.86",
+                    "to": ""
+                }
+            },
+            "LimitedAdsLabelsOnSearch": {
+                "name": "enableLimitedAdsLabelsOnSearch",
+                "native_description": "Enables Limited Ads label rendering on Search surfaces",
+                "version": {
+                    "fr": "1.2.86",
+                    "to": ""
+                }
+            },
+            "AdFeedbackMilestone1": {
+                "name": "enable_ad_feedback_milestone_1",
+                "native_description": "Enable ad feedback milestone 1 feature",
+                "version": {
+                    "fr": "1.2.86",
+                    "to": ""
+                }
+            },
+            "LeaderboardCrossOriginIframe": {
+                "name": "enableLeaderboardCrossOriginIframe",
+                "native_description": "Enables cross-origin iframe rendering for leaderboard ads via CDN template",
+                "version": {
+                    "fr": "1.2.86",
                     "to": ""
                 }
             },
@@ -731,7 +763,7 @@
                 "native_description": "If enabled, we do consider percent visibility when logging the display ad impression",
                 "version": {
                     "fr": "1.2.78",
-                    "to": ""
+                    "to": "1.2.84"
                 }
             },
             "MadeForYou": {
@@ -1585,7 +1617,7 @@
                 "native_description": "Enable backend search history",
                 "version": {
                     "fr": "1.2.60",
-                    "to": ""
+                    "to": "1.2.85"
                 }
             },
             "SyncingSearchHistoryToBackend": {
@@ -1594,7 +1626,7 @@
                 "native_description": "Enables syncing search history to the backend",
                 "version": {
                     "fr": "1.2.75",
-                    "to": ""
+                    "to": "1.2.85"
                 }
             },
             "WatchFeedEntityPages": {
@@ -1711,7 +1743,7 @@
                 "native_description": "Enable profile visibility controls in the settings & profile page",
                 "version": {
                     "fr": "1.2.74",
-                    "to": ""
+                    "to": "1.2.85"
                 }
             },
             "ShuffleSettings": {
@@ -1815,6 +1847,46 @@
                 "native_description": "Enable BPM and key columns in playlist recommendations",
                 "version": {
                     "fr": "1.2.82",
+                    "to": ""
+                }
+            },
+            "ShareActionBarButton": {
+                "name": "enableShareActionBarButton",
+                "native_description": "Shows a share button in entity page action bars that opens the share dialog",
+                "version": {
+                    "fr": "1.2.86",
+                    "to": ""
+                }
+            },
+            "ShareDialog": {
+                "name": "enableShareDialog",
+                "native_description": "Enables the share dialog modal instead of the share submenu",
+                "version": {
+                    "fr": "1.2.86",
+                    "to": ""
+                }
+            },
+            "UserVideoSettings": {
+                "name": "enableUserVideoSettings",
+                "native_description": "Show video preference settings for users to control video playback types",
+                "version": {
+                    "fr": "1.2.86",
+                    "to": ""
+                }
+            },
+            "AdFeedbackEmbeddedNpvCarouselKillSwitch": {
+                "name": "enable_ad_feedback_embedded_npv_carousel",
+                "native_description": "Kill switch for ad feedback on embedded NPV carousel format",
+                "version": {
+                    "fr": "1.2.86",
+                    "to": ""
+                }
+            },
+            "AdFeedbackEmbeddedNpvDisplayKillSwitch": {
+                "name": "enable_ad_feedback_embedded_npv_display",
+                "native_description": "Kill switch for ad feedback on embedded NPV display format",
+                "version": {
+                    "fr": "1.2.86",
                     "to": ""
                 }
             }
@@ -1957,7 +2029,7 @@
                 "value": "0",
                 "version": {
                     "fr": "1.2.59",
-                    "to": ""
+                    "to": "1.2.84"
                 }
             },
             "AdsRefreshTimeInterval": {
@@ -2017,7 +2089,7 @@
                 "value": "enabled",
                 "version": {
                     "fr": "1.2.73",
-                    "to": ""
+                    "to": "1.2.85"
                 }
             },
             "SearchResultsAsList": {

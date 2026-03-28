@@ -2,7 +2,7 @@
 param
 (
     [Parameter(HelpMessage = 'Latest recommended Spotify version for Windows 10+.')]
-    [string]$latest_full = "1.2.85.519.g549a528b",
+    [string]$latest_full = "1.2.86.502.g8cd7fb22",
 
     [Parameter(HelpMessage = 'Latest supported Spotify version for Windows 7-8.1')]
     [string]$last_win7_full = "1.2.5.1006.g22820f93",
@@ -22,6 +22,10 @@ param
 
     [Parameter(HelpMessage = 'Custom path to Spotify installation directory. Default is %APPDATA%\Spotify.')]
     [string]$SpotifyPath,
+
+    [Parameter(HelpMessage = 'Custom local path to patches.json')]
+    [Alias('cp')]
+    [string]$CustomPatchesPath,
 
     [Parameter(HelpMessage = "Use github.io mirror instead of raw.githubusercontent.")]
     [Alias("m")]
@@ -564,6 +568,36 @@ function Get {
     Write-Host "ERROR: " -ForegroundColor Red -NoNewline; Write-Host "Failed to retrieve data from $Url" -ForegroundColor White
     Write-Host
     return $null
+}
+
+function Get-PatchesJson {
+    param (
+        [string]$LocalPath
+    )
+
+    if ($LocalPath) {
+        try {
+            $resolvedPath = Resolve-Path -LiteralPath $LocalPath -ErrorAction Stop | Select-Object -ExpandProperty Path
+
+            if (-not (Test-Path -LiteralPath $resolvedPath -PathType Leaf)) {
+                throw "File not found: $resolvedPath"
+            }
+
+            Write-Host ("Using local patches.json: {0}" -f $resolvedPath)
+
+            $jsonContent = [System.IO.File]::ReadAllText($resolvedPath, [System.Text.Encoding]::UTF8)
+            return $jsonContent | ConvertFrom-Json -ErrorAction Stop
+        }
+        catch {
+            Write-Host
+            Write-Host "Failed to load local patches.json" -ForegroundColor Red
+            Write-Host $_.Exception.Message -ForegroundColor Red
+            Write-Host
+            return $null
+        }
+    }
+
+    return Get -Url (Get-Link -e "/patches/patches.json") -RetrySeconds 5
 }
 
 
@@ -1656,11 +1690,11 @@ if ($ch -eq 'n') {
 
 $ch = $null
 
-$webjson = Get -Url (Get-Link -e "/patches/patches.json") -RetrySeconds 5
+$webjson = Get-PatchesJson -LocalPath $CustomPatchesPath
         
 if ($webjson -eq $null) { 
     Write-Host
-    Write-Host "Failed to get patches.json" -ForegroundColor Red
+    Write-Host "Failed to load patches.json" -ForegroundColor Red
     Remove-TempDirectory -Directory $tempDirectory
     Stop-Script
 }

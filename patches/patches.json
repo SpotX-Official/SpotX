@@ -1874,6 +1874,14 @@
                     "to": ""
                 }
             },
+            "VideoQualityEnabled": {
+                "name": "isVideoQualityEnabled",
+                "native_description": "Enables video quality settings and the in-player quality picker",
+                "version": {
+                    "fr": "1.2.84",
+                    "to": ""
+                }
+            },
             "AdFeedbackEmbeddedNpvCarouselKillSwitch": {
                 "name": "enable_ad_feedback_embedded_npv_carousel",
                 "native_description": "Kill switch for ad feedback on embedded NPV carousel format",

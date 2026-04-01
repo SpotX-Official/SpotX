@@ -116,6 +116,9 @@ param
     [Parameter(HelpMessage = 'Do not create desktop shortcut.')]
     [switch]$no_shortcut,
 
+    [Parameter(HelpMessage = 'Disable sending new versions')]
+    [switch]$sendversion_off,
+
     [Parameter(HelpMessage = 'Static color for lyrics.')]
     [ArgumentCompleter({ param($cmd, $param, $wordToComplete)
             [array] $validValues = @('blue', 'blueberry', 'discord', 'drot', 'default', 'forest', 'fresh', 'github', 'lavender', 'orange', 'postlight', 'pumpkin', 'purple', 'radium', 'relish', 'red', 'sandbar', 'spotify', 'spotify#2', 'strawberry', 'turquoise', 'yellow', 'zing', 'pinkle', 'krux', 'royal', 'oceano')
@@ -960,8 +963,8 @@ function Invoke-DownloadMethodWithRetries {
 
             return [PSCustomObject]@{
                 Success = $true
-                Error = $null
-                Method = $DownloadMethod
+                Error   = $null
+                Method  = $DownloadMethod
             }
         }
         catch {
@@ -979,8 +982,8 @@ function Invoke-DownloadMethodWithRetries {
 
     return [PSCustomObject]@{
         Success = $false
-        Error = $lastError
-        Method = $DownloadMethod
+        Error   = $lastError
+        Method  = $DownloadMethod
     }
 }
 
@@ -2899,6 +2902,15 @@ if ($test_spa) {
 
     # Forced exp
     extract -counts 'one' -method 'zip' -name 'xpui.js' -helper 'ForcedExp' -add $webjson.others.byspotx.add
+
+    # Send new versions
+    if (!($sendversion_off)) {
+        $checkVersion = Get -Url (Get-Link -e "/js-helper/checkVersion.js")
+
+        if ($checkVersion -ne $null) {
+            injection -p $xpui_spa_patch -f "spotx-helper" -n "checkVersion.js" -c $checkVersion
+        }
+    }
 
     # Hiding Ad-like sections or turn off podcasts from the homepage
     if ($podcast_off -or $adsections_off -or $canvashome_off) {

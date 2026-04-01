@@ -474,7 +474,7 @@ function Get-SpotifyInstallerArchitecture {
     }
 }
 
-$spotifyDownloadBaseUrl = "https://broad-pine-bbc0.amd64fox1.workers.dev/download"
+$spotifyDownloadBaseUrl = "https://loadspot.amd64fox1.workers.dev/download"
 $systemArchitecture = Get-SystemArchitecture
 
 $match_v = "^(?<version>\d+\.\d+\.\d+\.\d+\.g[0-9a-f]{8})(?:-\d+)?$"

@@ -788,6 +788,23 @@ function Patch-Binary ($patchesJson) {
 
     Write-Host "Patching Spotify.exe..." -ForegroundColor Cyan
 
+    $clientVerStr = Get-SpotifyVersion
+    if (-not $clientVerStr) {
+        # Fallback if version detection fails, assume latest to avoid applying old patches
+        $clientVerStr = "9.9.9.9"
+    }
+
+    # Optimization: Parse version once
+    $clientVerForCheck = $clientVerStr
+    try {
+        $tempVer = $clientVerStr
+        if ($tempVer -match "^(\d+\.\d+\.\d+\.\d+)") { $tempVer = $matches[1] }
+        $clientVerForCheck = [System.Version]$tempVer
+    } catch {
+        # Fallback to string if parsing failed
+        $clientVerForCheck = $clientVerStr
+    }
+
     # 1251 is used by upstream
     $ANSI = [Text.Encoding]::GetEncoding(1251)
 
@@ -802,10 +819,11 @@ function Patch-Binary ($patchesJson) {
             # Checks based on parameters
             if ($name -eq "block_update" -and $block_update_off) { return } # Skip if updates allowed
             if ($name -match "block_slots" -and $premium) { return } # Skip ad blocks if premium
-            if ($name -match "block_gabo" -and $premium) { return } # Skip gabo if premium (?) - upstream uses complex logic
 
-            # Upstream logic for block_gabo: matches version. Assuming safe to apply if not matched?
-            # Actually upstream logic iterates and replaces.
+            # Check version compatibility
+            if (-not (Is-Ver-Compatible $clientVerForCheck $patch.version.fr $patch.version.to)) {
+                 return # Skip this iteration
+            }
 
             if ($patch.match -and $patch.replace) {
                  if ($content -match $patch.match) {

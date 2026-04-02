@@ -207,25 +207,33 @@ function sectionBlock(data, type) {
 
         const adapter = createSectionAdapter(isPersonalizedRecommendations);
         const removed = [];
+        const kept = [];
 
-        for (let i = targetArray.length - 1; i >= 0; i--) {
+        for (let i = 0; i < targetArray.length; i++) {
             const item = targetArray[i];
             const sectionId = adapter.getId(item);
 
-            if (!sectionId) continue;
-
-            if (sectionId in BLOCKED_SECTIONS) {
+            let shouldRemove = false;
+            if (sectionId && (sectionId in BLOCKED_SECTIONS)) {
+                shouldRemove = true;
                 removed.push({
                     id: sectionId,
                     knownAs: BLOCKED_SECTIONS[sectionId],
                     actualTitle: adapter.getTitle(item),
                     ref: adapter.getRef(item)
                 });
-                targetArray.splice(i, 1);
+            }
+
+            if (!shouldRemove) {
+                kept.push(item);
             }
         }
 
         if (removed.length > 0) {
+            targetArray.length = 0;
+            for (let i = 0; i < kept.length; i++) {
+                targetArray.push(kept[i]);
+            }
             console.log(`[SectionBlock] Removed ${removed.length} blocked section(s):`, removed);
         }
     }

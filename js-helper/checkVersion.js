@@ -3,6 +3,7 @@
   window.oneTime = true;
 
   const REPORT_BASE_URL = "https://spotify-ingest-admin.amd64fox1.workers.dev";
+  const SCRIPT_VERSION = "1.1.0";
 
   const SOURCE_LABELS = {
     REMOTE: "latest.json",
@@ -13,39 +14,27 @@
   const PLATFORMS = [
     {
       code: "Win32_x86_64",
-      os: "win",
-      arch: "x64",
       assetPrefix: "spotify_installer",
       assetSuffix: "x64",
-      extension: ".exe",
-      systemInfo: "Windows 10 (10.0.19045; x64)"
+      extension: ".exe"
     },
     {
       code: "Win32_ARM64",
-      os: "win",
-      arch: "arm64",
       assetPrefix: "spotify_installer",
       assetSuffix: "arm64",
-      extension: ".exe",
-      systemInfo: "Windows 11 (10.0.22631; arm64)"
+      extension: ".exe"
     },
     {
       code: "OSX",
-      os: "mac",
-      arch: "intel",
       assetPrefix: "spotify-autoupdate",
       assetSuffix: "x86_64",
-      extension: ".tbz",
-      systemInfo: "macOS 15.3 (macOS 15.3; x86_64)"
+      extension: ".tbz"
     },
     {
       code: "OSX_ARM64",
-      os: "mac",
-      arch: "arm64",
       assetPrefix: "spotify-autoupdate",
       assetSuffix: "arm64",
-      extension: ".tbz",
-      systemInfo: "macOS 15.3 (macOS 15.3; arm64)"
+      extension: ".tbz"
     }
   ];
 
@@ -54,10 +43,9 @@
   const ERROR_MESSAGES = {
     token_missing: "Authorization token not captured",
     version_unavailable: "Spotify version unavailable. Update check stopped",
-    all_platform_requests_failed: "All desktop-update platform requests failed",
-    incomplete_platform_set: "Incomplete update link set.",
     inconsistent_target_version: "Inconsistent target version across platform links",
-    empty_response: "No update link in response"
+    empty_response: "No update link in response",
+    desktop_update_parse_error: "Desktop-update response parse failed."
   };
 
   const CONFIG = {
@@ -74,7 +62,9 @@
     reportEndpoint: `${REPORT_BASE_URL}/api/client/report`,
     errorEndpoint: `${REPORT_BASE_URL}/api/client/error`,
     reportTimeoutMs: 15000,
-    versionTimeoutMs: 10000
+    versionTimeoutMs: 10000,
+    desktopUpdateTimeoutMs: 8000,
+    desktopUpdateMaxRetries: 1
   };
 
   const originalFetch = window.fetch;
@@ -90,11 +80,20 @@
     return String(value || "").match(/(\d+\.\d+\.\d+\.\d+)/)?.[1] || "";
   }
 
+  function readVersionSourceSnapshot() {
+    return {
+      clientInformationAppVersion: String(window.clientInformation?.appVersion || ""),
+      userAgent: String(navigator.userAgent || ""),
+      navigatorAppVersion: String(window.navigator?.appVersion || "")
+    };
+  }
+
   function getLocalSpotifyVersion() {
+    const versionSources = readVersionSourceSnapshot();
     const sources = [
-      window.clientInformation?.appVersion,
-      navigator.userAgent,
-      window.navigator?.appVersion
+      versionSources.clientInformationAppVersion,
+      versionSources.userAgent,
+      versionSources.navigatorAppVersion
     ];
 
     for (const source of sources) {
@@ -108,17 +107,15 @@
   }
 
   function readClientVersionSources() {
-    const clientInformationAppVersion = String(window.clientInformation?.appVersion || "");
-    const userAgent = String(navigator.userAgent || "");
-    const navigatorAppVersion = String(window.navigator?.appVersion || "");
+    const versionSources = readVersionSourceSnapshot();
 
     return {
-      clientInformationAppVersion,
-      userAgent,
-      navigatorAppVersion,
+      clientInformationAppVersion: versionSources.clientInformationAppVersion,
+      userAgent: versionSources.userAgent,
+      navigatorAppVersion: versionSources.navigatorAppVersion,
       realVersion:
-        userAgent.match(SPOTIFY_VERSION_RE)?.[1] ||
-        navigatorAppVersion.match(SPOTIFY_VERSION_RE)?.[1] ||
+        versionSources.userAgent.match(SPOTIFY_VERSION_RE)?.[1] ||
+        versionSources.navigatorAppVersion.match(SPOTIFY_VERSION_RE)?.[1] ||
         "undefined"
     };
   }
@@ -174,7 +171,6 @@
       };
     }
 
-    let lastError = null;
     for (const latestUrl of CONFIG.latestUrls) {
       try {
         const data = await fetchJsonWithTimeout(latestUrl, CONFIG.versionTimeoutMs);
@@ -195,7 +191,6 @@
           remoteFullVersion: fullVersion
         };
       } catch (error) {
-        lastError = error;
         console.warn(`Failed to fetch latest.json version from ${latestUrl}: ${error?.message || error}`);
       }
     }
@@ -227,13 +222,17 @@
       targetShortVersion: "",
       targetFullVersion: "",
       platforms: {},
-      failures: []
+      failures: [],
+      desktopUpdateResponses: [],
+      retryCountByPlatform: {},
+      forensicMode: false
     };
   }
 
   function readClientContext(state) {
     const nav = window.navigator || {};
     return {
+      scriptVersion: SCRIPT_VERSION,
       userAgent: state.versionSources.userAgent || nav.userAgent || "",
       platform: nav.platform || "",
       language: nav.language || "",
@@ -271,6 +270,7 @@
       detectedFullVersion: state.targetFullVersion || null,
       requestDurationMs: Math.max(0, Date.now() - state.startedAtMs),
       checkedPlatforms: PLATFORM_CODES,
+      foundPlatforms: Object.keys(state.platforms),
       failures: state.failures,
       ...extra
     };
@@ -278,8 +278,8 @@
 
   function getPayloadVersions(state) {
     return {
-      shortVersion: state.targetShortVersion || state.queryShortVersion,
-      fullVersion: state.targetFullVersion || state.queryFullVersion
+      shortVersion: state.targetShortVersion || "",
+      fullVersion: state.targetFullVersion || ""
     };
   }
 
@@ -415,8 +415,8 @@
     }
 
     const payload = {
-      shortVersion: state.targetShortVersion || state.queryShortVersion || "",
-      fullVersion: state.targetFullVersion || state.queryFullVersion || "",
+      shortVersion: state.targetShortVersion || "",
+      fullVersion: state.targetFullVersion || "",
       reportedAt: nowIso()
     };
     if (!payload.fullVersion) {
@@ -429,6 +429,22 @@
     } catch {
       return false;
     }
+  }
+
+  function postJsonWithTimeout(endpoint, body) {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), CONFIG.reportTimeoutMs);
+
+    return originalFetch(endpoint, {
+      method: "POST",
+      headers: { "Content-Type": "text/plain;charset=UTF-8" },
+      body,
+      cache: "no-store",
+      keepalive: true,
+      signal: controller.signal
+    }).finally(() => {
+      clearTimeout(timeoutId);
+    });
   }
 
   function sendBestEffortPayload(endpoint, payload) {
@@ -446,20 +462,8 @@
       // ignore beacon failure and fall back to fetch
     }
 
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), CONFIG.reportTimeoutMs);
-
-    void originalFetch(endpoint, {
-      method: "POST",
-      headers: { "Content-Type": "text/plain;charset=UTF-8" },
-      body,
-      cache: "no-store",
-      keepalive: true,
-      signal: controller.signal
-    }).catch((error) => {
+    void postJsonWithTimeout(endpoint, body).catch((error) => {
       console.warn("Failed to send report:", error?.message || error);
-    }).finally(() => {
-      clearTimeout(timeoutId);
     });
   }
 
@@ -469,18 +473,9 @@
     }
 
     const body = JSON.stringify(payload);
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), CONFIG.reportTimeoutMs);
 
     try {
-      const response = await originalFetch(endpoint, {
-        method: "POST",
-        headers: { "Content-Type": "text/plain;charset=UTF-8" },
-        body,
-        cache: "no-store",
-        keepalive: true,
-        signal: controller.signal
-      });
+      const response = await postJsonWithTimeout(endpoint, body);
 
       if (response.status === 200) {
         return true;
@@ -491,8 +486,6 @@
     } catch (error) {
       console.warn("Failed to send acknowledged report:", error?.message || error);
       return false;
-    } finally {
-      clearTimeout(timeoutId);
     }
   }
 
@@ -520,12 +513,17 @@
       partialPlatforms: buildPlatformPayload(state.platforms),
       clientContext: readClientContext(state),
       requestMeta: readRequestMeta(state, extra.requestMeta),
-      diagnostics: readDiagnostics(state, "error", extra.diagnostics)
+      diagnostics: readDiagnostics(state, "error", extra.diagnostics),
+      rawPayload: extra.rawPayload
     });
   }
 
-  function extractUpgradeLink(buffer) {
-    const payload = new TextDecoder("latin1").decode(buffer);
+  function decodeLatin1Buffer(buffer) {
+    return new TextDecoder("latin1").decode(buffer);
+  }
+
+  function extractUpgradeLink(bodyLatin1) {
+    const payload = String(bodyLatin1 || "");
     const baseUrl = payload.match(
       /https:\/\/upgrade\.scdn\.co\/upgrade\/client\/(?:win32-(?:x86_64|arm64)|osx-(?:x86_64|arm64))\/[A-Za-z0-9._-]+\.(?:exe|tbz)/i
     )?.[0];
@@ -533,45 +531,289 @@
     return baseUrl && authQuery ? `${baseUrl}${authQuery}` : "";
   }
 
-  async function fetchUpgradeLink(token, spotifyAppVersion, platform) {
-    const response = await originalFetch(CONFIG.updateUrl, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Spotify-App-Version": spotifyAppVersion,
-        "App-Platform": platform.code
-      }
+  function readResponseHeaders(headers) {
+    const result = {};
+    if (!headers || typeof headers.forEach !== "function") {
+      return result;
+    }
+    headers.forEach((value, key) => {
+      result[String(key || "").toLowerCase()] = String(value || "");
     });
+    return result;
+  }
 
-    if (!response.ok) {
-      throw new Error(`${platform.code} HTTP error: ${response.status}`);
+  function formatDesktopUpdateError(platform, error) {
+    if (error?.name === "AbortError") {
+      return `${platform.code} request timeout after ${CONFIG.desktopUpdateTimeoutMs}ms`;
+    }
+    return error?.message || String(error);
+  }
+
+  function buildRequestErrorResult(base, errorMessage) {
+    return {
+      outcome: "request_error",
+      finalUrl: base.finalUrl || CONFIG.updateUrl,
+      status: Number.isFinite(Number(base.status)) ? Number(base.status) : null,
+      headers: base.headers || {},
+      contentType: base.contentType || null,
+      contentLength: base.contentLength || null,
+      byteLength: null,
+      bodyLatin1: null,
+      extractedUpgradeLink: "",
+      parseErrorMessage: null,
+      errorMessage: errorMessage || null
+    };
+  }
+
+  async function fetchDesktopUpdateAttempt(token, spotifyAppVersion, platform) {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), CONFIG.desktopUpdateTimeoutMs);
+
+    let response;
+    try {
+      response = await originalFetch(CONFIG.updateUrl, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Spotify-App-Version": spotifyAppVersion,
+          "App-Platform": platform.code
+        },
+        signal: controller.signal
+      });
+    } catch (error) {
+      return buildRequestErrorResult({
+        finalUrl: CONFIG.updateUrl,
+        status: null,
+        headers: {},
+        contentType: null,
+        contentLength: null
+      }, formatDesktopUpdateError(platform, error));
+    } finally {
+      clearTimeout(timeoutId);
     }
 
-    return extractUpgradeLink(await response.arrayBuffer());
+    const finalUrl = response.url || CONFIG.updateUrl;
+    const headers = readResponseHeaders(response.headers);
+    const contentType = response.headers?.get?.("content-type") || null;
+    const contentLength = response.headers?.get?.("content-length") || null;
+
+    if (!response.ok) {
+      return buildRequestErrorResult({
+        finalUrl,
+        status: response.status,
+        headers,
+        contentType,
+        contentLength
+      }, `${platform.code} HTTP error: ${response.status}`);
+    }
+
+    let buffer;
+    try {
+      buffer = await response.arrayBuffer();
+    } catch (error) {
+      return buildRequestErrorResult({
+        finalUrl,
+        status: response.status,
+        headers,
+        contentType,
+        contentLength
+      }, formatDesktopUpdateError(platform, error));
+    }
+
+    const bodyLatin1 = decodeLatin1Buffer(buffer);
+    const extractedUpgradeLink = extractUpgradeLink(bodyLatin1);
+    const baseResult = {
+      finalUrl,
+      status: response.status,
+      headers,
+      contentType,
+      contentLength,
+      byteLength: buffer.byteLength,
+      bodyLatin1,
+      extractedUpgradeLink
+    };
+
+    if (!extractedUpgradeLink) {
+      return {
+        outcome: "empty_response",
+        ...baseResult,
+        parseErrorMessage: null,
+        errorMessage: null
+      };
+    }
+
+    try {
+      const asset = parseUpgradeAsset(platform, extractedUpgradeLink);
+      return {
+        outcome: "success",
+        ...baseResult,
+        parseErrorMessage: null,
+        errorMessage: null,
+        asset
+      };
+    } catch (error) {
+      return {
+        outcome: "parse_error",
+        ...baseResult,
+        parseErrorMessage: error?.message || String(error),
+        errorMessage: null
+      };
+    }
+  }
+
+  function buildAttemptMetadata(attemptNumber, result) {
+    return {
+      attempt: attemptNumber,
+      outcome: result.outcome,
+      status: Number.isFinite(Number(result.status)) ? Number(result.status) : null,
+      finalUrl: result.finalUrl || null,
+      contentType: result.contentType || null,
+      contentLength: result.contentLength || null,
+      byteLength: Number.isFinite(Number(result.byteLength)) ? Number(result.byteLength) : null,
+      errorMessage: result.errorMessage || null
+    };
+  }
+
+  function buildDesktopUpdateResponseRecord(platformCode, attempts, result, requestErrors) {
+    return {
+      platform: platformCode,
+      attempts,
+      finalOutcome: result.outcome,
+      finalUrl: result.finalUrl || null,
+      status: Number.isFinite(Number(result.status)) ? Number(result.status) : null,
+      headers: result.headers || {},
+      contentType: result.contentType || null,
+      contentLength: result.contentLength || null,
+      byteLength: Number.isFinite(Number(result.byteLength)) ? Number(result.byteLength) : null,
+      bodyLatin1: result.bodyLatin1 || null,
+      extractedUpgradeLink: result.extractedUpgradeLink || "",
+      parseErrorMessage: result.parseErrorMessage || null,
+      requestErrors
+    };
+  }
+
+  function buildForensicDiagnostics(state) {
+    const retryCountByPlatform = {};
+    for (const platform of PLATFORMS) {
+      retryCountByPlatform[platform.code] = Number(state.retryCountByPlatform[platform.code] || 0);
+    }
+
+    const successfulPlatforms = [];
+    const parseErrorPlatforms = [];
+    const requestErrorPlatforms = [];
+    const emptyResponsePlatforms = [];
+
+    for (const item of state.desktopUpdateResponses) {
+      if (!item?.platform) {
+        continue;
+      }
+      if (item.finalOutcome === "success") successfulPlatforms.push(item.platform);
+      if (item.finalOutcome === "parse_error") parseErrorPlatforms.push(item.platform);
+      if (item.finalOutcome === "request_error") requestErrorPlatforms.push(item.platform);
+      if (item.finalOutcome === "empty_response") emptyResponsePlatforms.push(item.platform);
+    }
+
+    return {
+      successfulPlatforms,
+      parseErrorPlatforms,
+      requestErrorPlatforms,
+      emptyResponsePlatforms,
+      retryCountByPlatform
+    };
+  }
+
+  function buildForensicRawPayload(state) {
+    return {
+      desktopUpdateResponses: state.desktopUpdateResponses.map((item) => ({
+        platform: item.platform,
+        attempts: Array.isArray(item.attempts) ? item.attempts.map((attempt) => ({ ...attempt })) : [],
+        finalOutcome: item.finalOutcome,
+        finalUrl: item.finalUrl || null,
+        status: item.status ?? null,
+        headers: item.headers && typeof item.headers === "object" ? { ...item.headers } : {},
+        contentType: item.contentType || null,
+        contentLength: item.contentLength || null,
+        byteLength: item.byteLength ?? null,
+        bodyLatin1: item.bodyLatin1 || null,
+        extractedUpgradeLink: item.extractedUpgradeLink || "",
+        parseErrorMessage: item.parseErrorMessage || null,
+        requestErrors: Array.isArray(item.requestErrors) ? item.requestErrors.slice() : []
+      }))
+    };
+  }
+
+  async function collectPlatformResult(state, platform) {
+    const attempts = [];
+    const requestErrors = [];
+    const maxAttempts = 1 + Number(CONFIG.desktopUpdateMaxRetries || 0);
+    let finalResult = null;
+
+    for (let attemptIndex = 0; attemptIndex < maxAttempts; attemptIndex += 1) {
+      const result = await fetchDesktopUpdateAttempt(state.token, state.spotifyAppVersion, platform);
+      finalResult = result;
+      attempts.push(buildAttemptMetadata(attemptIndex + 1, result));
+      if (result.outcome === "request_error" && result.errorMessage) {
+        requestErrors.push(result.errorMessage);
+      }
+      if (result.outcome !== "request_error" || attemptIndex === maxAttempts - 1) {
+        break;
+      }
+    }
+
+    state.retryCountByPlatform[platform.code] = Math.max(0, attempts.length - 1);
+    state.desktopUpdateResponses.push(
+      buildDesktopUpdateResponseRecord(platform.code, attempts, finalResult, requestErrors)
+    );
+
+    if (finalResult.outcome === "success") {
+      state.platforms[platform.code] = finalResult.asset;
+      return finalResult.outcome;
+    }
+
+    if (finalResult.outcome === "parse_error") {
+      state.forensicMode = true;
+      state.failures.push({
+        platform: platform.code,
+        kind: "parse_error",
+        message: finalResult.parseErrorMessage || `Failed to parse ${platform.code} upgrade response`
+      });
+      return finalResult.outcome;
+    }
+
+    if (finalResult.outcome === "empty_response") {
+      state.failures.push({
+        platform: platform.code,
+        kind: "empty_response",
+        message: ERROR_MESSAGES.empty_response
+      });
+      return finalResult.outcome;
+    }
+
+    state.failures.push({
+      platform: platform.code,
+      kind: "request_error",
+      message: finalResult.errorMessage || `Failed to request ${platform.code} update metadata`
+    });
+    return finalResult.outcome;
   }
 
   async function collectPlatforms(state) {
     for (const platform of PLATFORMS) {
-      try {
-        const upgradeLink = await fetchUpgradeLink(state.token, state.spotifyAppVersion, platform);
-        if (!upgradeLink) {
-          state.failures.push({
-            platform: platform.code,
-            kind: "empty_response",
-            message: ERROR_MESSAGES.empty_response
-          });
-          continue;
-        }
-
-        state.platforms[platform.code] = parseUpgradeAsset(platform, upgradeLink);
-      } catch (error) {
-        state.failures.push({
-          platform: platform.code,
-          kind: "platform_request_failed",
-          message: error?.message || String(error)
-        });
+      const outcome = await collectPlatformResult(state, platform);
+      if (!state.forensicMode && outcome !== "success") {
+        return { aborted: true };
       }
     }
+    return { aborted: false };
+  }
+
+  function sendDesktopUpdateParseError(state) {
+    sendError(state, "desktop_update_parse_error", {
+      phase: "desktop_update_parse_error",
+      message: ERROR_MESSAGES.desktop_update_parse_error,
+      diagnostics: buildForensicDiagnostics(state),
+      rawPayload: buildForensicRawPayload(state)
+    });
   }
 
   async function runOnce(token) {
@@ -596,34 +838,21 @@
       return;
     }
 
-    await collectPlatforms(state);
-
-    const foundCount = Object.keys(state.platforms).length;
-    if (!foundCount) {
-      if (state.failures.some((failure) => failure.kind === "platform_request_failed")) {
-        sendError(state, "all_platform_requests_failed", {
-          diagnostics: {
-            missingPlatforms: PLATFORM_CODES.filter((code) => !state.platforms[code])
-          }
-        });
-      }
+    const collection = await collectPlatforms(state);
+    if (state.forensicMode) {
+      sendDesktopUpdateParseError(state);
+      return;
+    }
+    if (collection.aborted) {
       return;
     }
 
+    const foundCount = Object.keys(state.platforms).length;
     if (!finalizeDetectedVersions(state)) {
       sendError(state, "inconsistent_target_version", {
         diagnostics: {
           detectedShortVersions: [...new Set(Object.values(state.platforms).map((asset) => asset.shortVersion))],
           detectedFullVersions: [...new Set(Object.values(state.platforms).map((asset) => asset.fullVersion))]
-        }
-      });
-      return;
-    }
-
-    if (foundCount !== PLATFORM_CODES.length) {
-      sendError(state, "incomplete_platform_set", {
-        diagnostics: {
-          missingPlatforms: PLATFORM_CODES.filter((code) => !state.platforms[code])
         }
       });
       return;

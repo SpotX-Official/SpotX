@@ -400,13 +400,34 @@ function Restore-Backups {
 
 function Remove-BlockTheSpot {
     Write-Host "Checking for BlockTheSpot files..." -ForegroundColor Cyan
-    $btsFiles = @('dpapi.dll', 'config.ini')
+
+    # Remove new BTS files
+    $btsFiles = @('blockthespot.dll', 'config.ini')
     foreach ($file in $btsFiles) {
         $path = Join-Path $spotifyDirectory $file
         if (Test-Path $path) {
-            Write-Host "Removing legacy file: $file" -ForegroundColor Yellow
+            Write-Host "Removing file: $file" -ForegroundColor Yellow
             Remove-Item $path -Force -ErrorAction SilentlyContinue
         }
+    }
+
+    # Restore original chrome_elf.dll from chrome_elf_required.dll
+    $chrome_elf_req = Join-Path $spotifyDirectory 'chrome_elf_required.dll'
+    if (Test-Path $chrome_elf_req) {
+        # If the patched chrome_elf.dll exists, delete it first
+        if (Test-Path $chrome_elf) {
+            Write-Host "Removing patched chrome_elf.dll..." -ForegroundColor Yellow
+            Remove-Item $chrome_elf -Force -ErrorAction SilentlyContinue
+        }
+
+        Rename-Item $chrome_elf_req 'chrome_elf.dll' -Force
+        Write-Host "Restored original chrome_elf.dll." -ForegroundColor Green
+    }
+
+    # Legacy cleanup (dpapi.dll)
+    if (Test-Path (Join-Path $spotifyDirectory 'dpapi.dll')) {
+        Write-Host "Removing legacy file: dpapi.dll" -ForegroundColor Yellow
+        Remove-Item (Join-Path $spotifyDirectory 'dpapi.dll') -Force -ErrorAction SilentlyContinue
     }
 }
 
@@ -475,6 +496,16 @@ function Install-BlockTheSpot {
 
     $btsZip = Join-Path $cacheDir $cacheFileName
 
+    # Download Config.ini
+    $configUrl = 'https://raw.githubusercontent.com/mrpond/BlockTheSpot/master/config.ini'
+    $configPath = Join-Path $spotifyDirectory 'config.ini'
+    try {
+        Write-Host "Downloading config.ini..." -ForegroundColor Cyan
+        Invoke-WebRequest -Uri $configUrl -OutFile $configPath -UseBasicParsing
+    } catch {
+        Write-Warning "Failed to download config.ini: $_"
+    }
+
     try {
         if (-not (Test-Path $btsZip)) {
             Write-Host "Downloading BlockTheSpot..." -ForegroundColor Cyan
@@ -484,6 +515,17 @@ function Install-BlockTheSpot {
         }
         
         if (Test-Path $btsZip) {
+            # Rename original chrome_elf.dll BEFORE extracting new one
+            $chrome_elf_req = Join-Path $spotifyDirectory 'chrome_elf_required.dll'
+            if (Test-Path $chrome_elf) {
+                if (-not (Test-Path $chrome_elf_req)) {
+                    Write-Host "Renaming original chrome_elf.dll to chrome_elf_required.dll..." -ForegroundColor Yellow
+                    Rename-Item $chrome_elf -NewName "chrome_elf_required.dll" -Force
+                } else {
+                    Write-Host "chrome_elf_required.dll already exists. Skipping rename." -ForegroundColor Gray
+                }
+            }
+
             try {
                 Expand-Archive -Force -LiteralPath $btsZip -DestinationPath $spotifyDirectory -ErrorAction Stop
                 Write-Host "BlockTheSpot installed successfully." -ForegroundColor Green

@@ -11,6 +11,17 @@ if exist "%SPOTIFY_PATH%\config.ini" (
     del /s /q "%SPOTIFY_PATH%\config.ini" > NUL 2>&1
 )
 
+if exist "%SPOTIFY_PATH%\blockthespot.dll" (
+    del /s /q "%SPOTIFY_PATH%\blockthespot.dll" > NUL 2>&1
+)
+
+if exist "%SPOTIFY_PATH%\chrome_elf_required.dll" (
+    if exist "%SPOTIFY_PATH%\chrome_elf.dll" (
+        del /s /q "%SPOTIFY_PATH%\chrome_elf.dll" > NUL 2>&1
+    )
+    move "%SPOTIFY_PATH%\chrome_elf_required.dll" "%SPOTIFY_PATH%\chrome_elf.dll" > NUL 2>&1
+)
+
 if exist "%SPOTIFY_PATH%\chrome_elf.dll.bak" (
     del /s /q "%SPOTIFY_PATH%\chrome_elf.dll" > NUL 2>&1
     move "%SPOTIFY_PATH%\chrome_elf.dll.bak" "%SPOTIFY_PATH%\chrome_elf.dll" > NUL 2>&1

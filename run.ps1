@@ -255,37 +255,174 @@ $xpuiBak = Join-Path (Join-Path $env:APPDATA 'Spotify\Apps') 'xpui.bak'
 $start_menu = Join-Path $env:APPDATA 'Microsoft\Windows\Start Menu\Programs\Spotify.lnk'
 $upgrade_client = $false
 
-function Stop-Script {
-    param(
-        [string]$Message = ($lang).StopScript
-    )
+function Load-WebView2 {
+    $wv2Version = "1.0.2929.43"
+    $wv2PkgUrl = "https://www.nuget.org/api/v2/package/Microsoft.Web.WebView2/$wv2Version"
+    $cacheDir = Join-Path $env:LOCALAPPDATA 'SpotFreedom\WebView2'
+    $managedDllPath = Join-Path $cacheDir "Microsoft.Web.WebView2.WinForms.dll"
 
-    Write-Host $Message
+    if (-not (Test-Path $cacheDir)) {
+        New-Item -Path $cacheDir -ItemType Directory -Force | Out-Null
+    }
 
-    switch ($Host.Name) {
-        "Windows PowerShell ISE Host" {
-            pause
-            break
-        }
-        default {
-            Write-Host ($lang).PressAnyKey
-            [void][System.Console]::ReadKey($true)
-            break
+    if (-not (Test-Path $managedDllPath)) {
+        Write-Host "Downloading WebView2 dependencies..." -ForegroundColor Cyan
+        $zipPath = Join-Path $cacheDir "webview2.zip"
+        try {
+            Invoke-WebRequest -Uri $wv2PkgUrl -OutFile $zipPath -UseBasicParsing
+
+            # Extract
+            $extractPath = Join-Path $cacheDir "temp"
+            Expand-Archive -LiteralPath $zipPath -DestinationPath $extractPath -Force
+
+            # Copy managed DLLs (net462 is safer for modern usage, but net45 exists in older packages)
+            $libPath = Join-Path $extractPath "lib\net462"
+            if (-not (Test-Path $libPath)) { $libPath = Join-Path $extractPath "lib\net45" }
+
+            Copy-Item (Join-Path $libPath "Microsoft.Web.WebView2.Core.dll") $cacheDir -Force
+            Copy-Item (Join-Path $libPath "Microsoft.Web.WebView2.WinForms.dll") $cacheDir -Force
+
+            # Copy native loader
+            $arch = "x64"
+            if ([IntPtr]::Size -eq 4) { $arch = "x86" }
+            if ($env:PROCESSOR_ARCHITECTURE -match "ARM64") { $arch = "arm64" }
+
+            $nativePath = Join-Path $extractPath "runtimes\win-$arch\native\WebView2Loader.dll"
+            Copy-Item $nativePath $cacheDir -Force
+
+            # Cleanup
+            Remove-Item $extractPath -Recurse -Force
+            Remove-Item $zipPath -Force
+        } catch {
+            Write-Warning "Failed to download/install WebView2 dependencies: $_"
+            return $false
         }
     }
 
-    Exit
+    try {
+        # Ensure WebView2Loader.dll can be found
+        if ($env:PATH -notlike "*$cacheDir*") {
+            $env:PATH += ";$cacheDir"
+        }
+
+        Add-Type -Path (Join-Path $cacheDir "Microsoft.Web.WebView2.Core.dll")
+        Add-Type -Path (Join-Path $cacheDir "Microsoft.Web.WebView2.WinForms.dll")
+        Add-Type -AssemblyName System.Windows.Forms
+        Add-Type -AssemblyName System.Drawing
+        return $true
+    } catch {
+        Write-Warning "Failed to load WebView2 assemblies: $_"
+        return $false
+    }
 }
 
-function Get-Link {
-    param (
-        [Alias("e")]
-        [string]$endlink
-    )
+function Show-WebView2Window {
+    param([string]$url)
 
-    switch ($mirror) {
-        $true { return "https://raw.githack.com/NimuthuGanegoda/SpotFreedom/main" + $endlink }
-        default { return "https://raw.githubusercontent.com/NimuthuGanegoda/SpotFreedom/main" + $endlink }
+    try {
+        $form = New-Object System.Windows.Forms.Form
+        $form.Text = "SpotFreedom - VPN Selector"
+        $form.Size = New-Object System.Drawing.Size(1000, 800)
+        $form.StartPosition = "CenterScreen"
+        $form.Icon = [System.Drawing.Icon]::ExtractAssociatedIcon((Join-Path $env:SystemRoot "System32\shell32.dll"))
+
+        # Try to use Spotify icon if available
+        $spotifyExe = Join-Path $env:APPDATA 'Spotify\Spotify.exe'
+        if (Test-Path $spotifyExe) {
+            try { $form.Icon = [System.Drawing.Icon]::ExtractAssociatedIcon($spotifyExe) } catch {}
+        }
+
+        $wv2 = New-Object Microsoft.Web.WebView2.WinForms.WebView2
+        $wv2.Dock = "Fill"
+
+        # Result capture
+        $script:vpnResult = $null
+
+        $wv2.add_WebMessageReceived({
+            param($sender, $e)
+            try {
+                $json = $e.TryGetWebMessageAsString()
+                $obj = $json | ConvertFrom-Json
+                if ($obj.action -eq "select" -or $obj.action -eq "skip") {
+                    $script:vpnResult = $obj
+                    $form.Close()
+                }
+            } catch {}
+        })
+
+        $form.Controls.Add($wv2)
+
+        # Initialize
+        $userDataFolder = Join-Path $env:LOCALAPPDATA 'SpotFreedom\WebView2\UserData'
+        if (-not (Test-Path $userDataFolder)) { New-Item -Path $userDataFolder -ItemType Directory -Force | Out-Null }
+
+        try {
+            $envOpts = [Microsoft.Web.WebView2.Core.CoreWebView2Environment]::CreateAsync($null, $userDataFolder, $null).GetAwaiter().GetResult()
+            $wv2.EnsureCoreWebView2Async($envOpts).GetAwaiter().GetResult()
+            $wv2.Source = [Uri]$url
+        } catch {
+            Write-Warning "Failed to initialize WebView2 environment. Is Edge/WebView2 Runtime installed?"
+            $form.Dispose()
+            return $null
+        }
+
+        $form.ShowDialog() | Out-Null
+        $form.Dispose()
+
+        return $script:vpnResult
+    } catch {
+        Write-Warning "Error showing WebView2 window: $_"
+        return $null
+    }
+}
+
+# Function to show VPN Server Selection UI
+# This launches an interactive HTML UI to help users browse and select VPN servers
+# Supports WebView2 for direct communication, falling back to default browser
+function Show-VPNServerUI {
+    $vpnHtmlPath = Join-Path $PSScriptRoot "vpn-selector.html"
+    
+    if (-not (Test-Path $vpnHtmlPath)) {
+        Write-Host "VPN selector UI not found at: $vpnHtmlPath" -ForegroundColor Red
+        return $false
+    }
+
+    Write-Host "`nLaunching VPN Server Selection UI..." -ForegroundColor Cyan
+
+    # Try WebView2
+    if (Load-WebView2) {
+        Write-Host "Opening in embedded WebView2 window..." -ForegroundColor Cyan
+        $result = Show-WebView2Window -url $vpnHtmlPath
+        
+        if ($result) {
+            if ($result.action -eq "select" -and $result.server) {
+                $s = $result.server
+                Write-Host "`n✅ Selected Server: $($s.name)" -ForegroundColor Green
+                Write-Host "   Location: $($s.location)" -ForegroundColor Gray
+
+                if ($s.accessKey) {
+                    Set-Clipboard -Value $s.accessKey
+                    Write-Host "   Outline Access Key copied to clipboard!" -ForegroundColor Yellow
+                }
+                return $true
+            } elseif ($result.action -eq "skip") {
+                Write-Host "VPN setup skipped." -ForegroundColor Gray
+                return $true
+            }
+        }
+    }
+
+    # Fallback to default browser
+    Write-Host "Opening VPN selector in your default browser..." -ForegroundColor Yellow
+    try {
+        Start-Process $vpnHtmlPath
+        Write-Host "`nPlease review the VPN servers in the UI that just opened." -ForegroundColor Green
+        Write-Host "Copy your chosen server's access key, then return here to continue..." -ForegroundColor Yellow
+        return $true
+    }
+    catch {
+        Write-Host "Could not launch VPN UI: $_" -ForegroundColor Red
+        return $false
     }
 }
 
@@ -524,13 +661,34 @@ function Restore-Backups {
 
 function Remove-BlockTheSpot {
     Write-Host "Checking for BlockTheSpot files..." -ForegroundColor Cyan
-    $btsFiles = @('dpapi.dll', 'config.ini')
+
+    # Remove new BTS files
+    $btsFiles = @('blockthespot.dll', 'config.ini')
     foreach ($file in $btsFiles) {
         $path = Join-Path $spotifyDirectory $file
         if (Test-Path $path) {
-            Write-Host "Removing legacy file: $file" -ForegroundColor Yellow
+            Write-Host "Removing file: $file" -ForegroundColor Yellow
             Remove-Item $path -Force -ErrorAction SilentlyContinue
         }
+    }
+
+    # Restore original chrome_elf.dll from chrome_elf_required.dll
+    $chrome_elf_req = Join-Path $spotifyDirectory 'chrome_elf_required.dll'
+    if (Test-Path $chrome_elf_req) {
+        # If the patched chrome_elf.dll exists, delete it first
+        if (Test-Path $chrome_elf) {
+            Write-Host "Removing patched chrome_elf.dll..." -ForegroundColor Yellow
+            Remove-Item $chrome_elf -Force -ErrorAction SilentlyContinue
+        }
+
+        Rename-Item $chrome_elf_req 'chrome_elf.dll' -Force
+        Write-Host "Restored original chrome_elf.dll." -ForegroundColor Green
+    }
+
+    # Legacy cleanup (dpapi.dll)
+    if (Test-Path (Join-Path $spotifyDirectory 'dpapi.dll')) {
+        Write-Host "Removing legacy file: dpapi.dll" -ForegroundColor Yellow
+        Remove-Item (Join-Path $spotifyDirectory 'dpapi.dll') -Force -ErrorAction SilentlyContinue
     }
 }
 
@@ -2104,52 +2262,43 @@ function Helper($paramname) {
                 Remove-Json -j $VarJs -p "lyrics-old-on"
             }
 
-            if (!($devtools)) { Remove-Json -j $VarJs -p "dev-tools" }
+    # Download Config.ini
+    $configUrl = 'https://raw.githubusercontent.com/mrpond/BlockTheSpot/master/config.ini'
+    $configPath = Join-Path $spotifyDirectory 'config.ini'
+    try {
+        Write-Host "Downloading config.ini..." -ForegroundColor Cyan
+        Invoke-WebRequest -Uri $configUrl -OutFile $configPath -UseBasicParsing
+    } catch {
+        Write-Warning "Failed to download config.ini: $_"
+    }
 
-            else {
-                if ([version]$offline -ge [version]"1.2.35.663") {
-
-                    # Create a copy of 'dev-tools'
-                    $newDevTools = $webjson.VariousJs.'dev-tools'.PSObject.Copy()
-                    
-                    # Delete the first item and change the version
-                    $newDevTools.match = $newDevTools.match[0], $newDevTools.match[2]
-                    $newDevTools.replace = $newDevTools.replace[0], $newDevTools.replace[2]
-                    $newDevTools.version.fr = '1.2.35'
-                    
-                    # Assign a copy of 'devtools' to the 'devtools' property in $web json.others
-                    $webjson.others | Add-Member -Name 'dev-tools' -Value $newDevTools -MemberType NoteProperty
-					
-                    # leave only first item in $web json.Various Js.'devtools' match & replace
-                    $webjson.VariousJs.'dev-tools'.match = $webjson.VariousJs.'dev-tools'.match[1]
-                    $webjson.VariousJs.'dev-tools'.replace = $webjson.VariousJs.'dev-tools'.replace[1] 
-                }
-            }
-
-            if ($urlform_goofy -and $idbox_goofy) {
-                $webjson.VariousJs.goofyhistory.replace = $webjson.VariousJs.goofyhistory.replace -f "`"$urlform_goofy`"", "`"$idbox_goofy`""
-            }
-            else { Remove-Json -j $VarJs -p "goofyhistory" }
-            
-            if (!($ru)) { Remove-Json -j $VarJs -p "offrujs" }
-
-            if (!($premium) -or ($cache_limit)) {
-                if (!($premium)) { 
-                    $adds += $webjson.VariousJs.product_state.add
-                }
-
-                if ($cache_limit) { 
+    try {
+        if (-not (Test-Path $btsZip)) {
+            Write-Host "Downloading BlockTheSpot..." -ForegroundColor Cyan
+            Invoke-WebRequest -Uri $btsUrl -OutFile $btsZip -UseBasicParsing
+        } else {
+            Write-Host "Using cached BlockTheSpot: $cacheFileName" -ForegroundColor Green
+        }
         
-                    if ($cache_limit -lt 500) { $cache_limit = 500 }
-                    if ($cache_limit -gt 20000) { $cache_limit = 20000 }
-                        
-                    $adds2 = $webjson.VariousJs.product_state.add2
-                    if (!([string]::IsNullOrEmpty($adds))) { $adds2 = ',' + $adds2 }
-                    $adds += $adds2 -f $cache_limit
-
+        if (Test-Path $btsZip) {
+            # Rename original chrome_elf.dll BEFORE extracting new one
+            $chrome_elf_req = Join-Path $spotifyDirectory 'chrome_elf_required.dll'
+            if (Test-Path $chrome_elf) {
+                if (-not (Test-Path $chrome_elf_req)) {
+                    Write-Host "Renaming original chrome_elf.dll to chrome_elf_required.dll..." -ForegroundColor Yellow
+                    Rename-Item $chrome_elf -NewName "chrome_elf_required.dll" -Force
+                } else {
+                    Write-Host "chrome_elf_required.dll already exists. Skipping rename." -ForegroundColor Gray
                 }
-                $repl = $webjson.VariousJs.product_state.replace
-                $webjson.VariousJs.product_state.replace = $repl -f "{pairs:{$adds}}"
+            }
+
+            try {
+                Expand-Archive -Force -LiteralPath $btsZip -DestinationPath $spotifyDirectory -ErrorAction Stop
+                Write-Host "BlockTheSpot installed successfully." -ForegroundColor Green
+            } catch {
+                Write-Warning "Failed to extract BlockTheSpot. Deleting corrupt cache file..."
+                Remove-Item $btsZip -Force -ErrorAction SilentlyContinue
+                throw $_
             }
             else { Remove-Json -j $VarJs -p 'product_state' }
 
@@ -2675,6 +2824,23 @@ function Patch-Binary ($patchesJson) {
 
     Write-Host "Patching Spotify.exe..." -ForegroundColor Cyan
 
+    $clientVerStr = Get-SpotifyVersion
+    if (-not $clientVerStr) {
+        # Fallback if version detection fails, assume latest to avoid applying old patches
+        $clientVerStr = "9.9.9.9"
+    }
+
+    # Optimization: Parse version once
+    $clientVerForCheck = $clientVerStr
+    try {
+        $tempVer = $clientVerStr
+        if ($tempVer -match "^(\d+\.\d+\.\d+\.\d+)") { $tempVer = $matches[1] }
+        $clientVerForCheck = [System.Version]$tempVer
+    } catch {
+        # Fallback to string if parsing failed
+        $clientVerForCheck = $clientVerStr
+    }
+
     # 1251 is used by upstream
     $ANSI = [Text.Encoding]::GetEncoding(1251)
 
@@ -2689,10 +2855,11 @@ function Patch-Binary ($patchesJson) {
             # Checks based on parameters
             if ($name -eq "block_update" -and $block_update_off) { return } # Skip if updates allowed
             if ($name -match "block_slots" -and $premium) { return } # Skip ad blocks if premium
-            if ($name -match "block_gabo" -and $premium) { return } # Skip gabo if premium (?) - upstream uses complex logic
 
-            # Upstream logic for block_gabo: matches version. Assuming safe to apply if not matched?
-            # Actually upstream logic iterates and replaces.
+            # Check version compatibility
+            if (-not (Is-Ver-Compatible $clientVerForCheck $patch.version.fr $patch.version.to)) {
+                 return # Skip this iteration
+            }
 
             if ($patch.match -and $patch.replace) {
                  if ($content -match $patch.match) {
@@ -2836,8 +3003,10 @@ if ($test_js) {
         }
     }
 
-    $bak_spa = Join-Path (Join-Path $spotifyDirectory 'Apps') 'xpui.bak'
-    $test_bak_spa = Test-Path -Path $bak_spa
+    # 3. Handle Experiments
+    Write-Host "Applying Experimental Features..." -ForegroundColor Gray
+    $enableExpList = [System.Collections.Generic.List[string]]::new()
+    $disableExpList = [System.Collections.Generic.List[string]]::new()
 
     # Collect EnableExp
     $patchesJson.EnableExp | Get-Member -MemberType NoteProperty | ForEach-Object {
@@ -2846,7 +3015,7 @@ if ($test_js) {
         if (Is-Ver-Compatible $clientVerForCheck $patch.version.fr $patch.version.to) {
             # Use 'name' property from JSON object, fallback to key name
             $expName = if ($patch.name) { $patch.name } else { $name }
-            $enableExpList += "'$expName'"
+            $enableExpList.Add("'$expName'")
         }
     }
 
@@ -2856,7 +3025,7 @@ if ($test_js) {
         $patch = $patchesJson.DisableExp.$name
         if (Is-Ver-Compatible $clientVerForCheck $patch.version.fr $patch.version.to) {
              $expName = if ($patch.name) { $patch.name } else { $name }
-             $disableExpList += "'$expName'"
+             $disableExpList.Add("'$expName'")
         }
     }
 

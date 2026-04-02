@@ -927,8 +927,8 @@ function Patch-XPUI ($patchesJson) {
 
     # 3. Handle Experiments
     Write-Host "Applying Experimental Features..." -ForegroundColor Gray
-    $enableExpList = @()
-    $disableExpList = @()
+    $enableExpList = [System.Collections.Generic.List[string]]::new()
+    $disableExpList = [System.Collections.Generic.List[string]]::new()
 
     # Collect EnableExp
     $patchesJson.EnableExp | Get-Member -MemberType NoteProperty | ForEach-Object {
@@ -937,7 +937,7 @@ function Patch-XPUI ($patchesJson) {
         if (Is-Ver-Compatible $clientVerForCheck $patch.version.fr $patch.version.to) {
             # Use 'name' property from JSON object, fallback to key name
             $expName = if ($patch.name) { $patch.name } else { $name }
-            $enableExpList += "'$expName'"
+            $enableExpList.Add("'$expName'")
         }
     }
 
@@ -947,7 +947,7 @@ function Patch-XPUI ($patchesJson) {
         $patch = $patchesJson.DisableExp.$name
         if (Is-Ver-Compatible $clientVerForCheck $patch.version.fr $patch.version.to) {
              $expName = if ($patch.name) { $patch.name } else { $name }
-             $disableExpList += "'$expName'"
+             $disableExpList.Add("'$expName'")
         }
     }
 

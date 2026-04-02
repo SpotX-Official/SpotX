@@ -147,31 +147,173 @@ $xpuiSpa = Join-Path (Join-Path $env:APPDATA 'Spotify\Apps') 'xpui.spa'
 $xpuiBak = Join-Path (Join-Path $env:APPDATA 'Spotify\Apps') 'xpui.bak'
 $start_menu = Join-Path $env:APPDATA 'Microsoft\Windows\Start Menu\Programs\Spotify.lnk'
 
-# Function to show VPN Server Selection UI
-# This launches an interactive HTML UI to help users browse and select VPN servers
-# The UI is informative and displays all available servers from vpnbook.com
-# Note: Opens in default browser as a visual guide; users still configure via PowerShell prompts
-function Show-VPNServerUI {
-    $vpnHtmlPath = Join-Path $PSScriptRoot "vpn-selector.html"
-    
-    if (Test-Path $vpnHtmlPath) {
-        Write-Host "`nLaunching VPN Server Selection UI..." -ForegroundColor Cyan
-        Write-Host "Opening VPN selector in your default browser..." -ForegroundColor Yellow
-        
+function Load-WebView2 {
+    $wv2Version = "1.0.2929.43"
+    $wv2PkgUrl = "https://www.nuget.org/api/v2/package/Microsoft.Web.WebView2/$wv2Version"
+    $cacheDir = Join-Path $env:LOCALAPPDATA 'SpotFreedom\WebView2'
+    $managedDllPath = Join-Path $cacheDir "Microsoft.Web.WebView2.WinForms.dll"
+
+    if (-not (Test-Path $cacheDir)) {
+        New-Item -Path $cacheDir -ItemType Directory -Force | Out-Null
+    }
+
+    if (-not (Test-Path $managedDllPath)) {
+        Write-Host "Downloading WebView2 dependencies..." -ForegroundColor Cyan
+        $zipPath = Join-Path $cacheDir "webview2.zip"
         try {
-            # Open the HTML file in default browser as an informative visual guide
-            Start-Process $vpnHtmlPath
-            Write-Host "`nPlease review the VPN servers in the UI that just opened." -ForegroundColor Green
-            Write-Host "Copy your chosen server's access key, then return here to continue..." -ForegroundColor Yellow
-            return $true
-        }
-        catch {
-            Write-Host "Could not launch VPN UI: $_" -ForegroundColor Red
+            Invoke-WebRequest -Uri $wv2PkgUrl -OutFile $zipPath -UseBasicParsing
+
+            # Extract
+            $extractPath = Join-Path $cacheDir "temp"
+            Expand-Archive -LiteralPath $zipPath -DestinationPath $extractPath -Force
+
+            # Copy managed DLLs (net462 is safer for modern usage, but net45 exists in older packages)
+            $libPath = Join-Path $extractPath "lib\net462"
+            if (-not (Test-Path $libPath)) { $libPath = Join-Path $extractPath "lib\net45" }
+
+            Copy-Item (Join-Path $libPath "Microsoft.Web.WebView2.Core.dll") $cacheDir -Force
+            Copy-Item (Join-Path $libPath "Microsoft.Web.WebView2.WinForms.dll") $cacheDir -Force
+
+            # Copy native loader
+            $arch = "x64"
+            if ([IntPtr]::Size -eq 4) { $arch = "x86" }
+            if ($env:PROCESSOR_ARCHITECTURE -match "ARM64") { $arch = "arm64" }
+
+            $nativePath = Join-Path $extractPath "runtimes\win-$arch\native\WebView2Loader.dll"
+            Copy-Item $nativePath $cacheDir -Force
+
+            # Cleanup
+            Remove-Item $extractPath -Recurse -Force
+            Remove-Item $zipPath -Force
+        } catch {
+            Write-Warning "Failed to download/install WebView2 dependencies: $_"
             return $false
         }
     }
-    else {
+
+    try {
+        # Ensure WebView2Loader.dll can be found
+        if ($env:PATH -notlike "*$cacheDir*") {
+            $env:PATH += ";$cacheDir"
+        }
+
+        Add-Type -Path (Join-Path $cacheDir "Microsoft.Web.WebView2.Core.dll")
+        Add-Type -Path (Join-Path $cacheDir "Microsoft.Web.WebView2.WinForms.dll")
+        Add-Type -AssemblyName System.Windows.Forms
+        Add-Type -AssemblyName System.Drawing
+        return $true
+    } catch {
+        Write-Warning "Failed to load WebView2 assemblies: $_"
+        return $false
+    }
+}
+
+function Show-WebView2Window {
+    param([string]$url)
+
+    try {
+        $form = New-Object System.Windows.Forms.Form
+        $form.Text = "SpotFreedom - VPN Selector"
+        $form.Size = New-Object System.Drawing.Size(1000, 800)
+        $form.StartPosition = "CenterScreen"
+        $form.Icon = [System.Drawing.Icon]::ExtractAssociatedIcon((Join-Path $env:SystemRoot "System32\shell32.dll"))
+
+        # Try to use Spotify icon if available
+        $spotifyExe = Join-Path $env:APPDATA 'Spotify\Spotify.exe'
+        if (Test-Path $spotifyExe) {
+            try { $form.Icon = [System.Drawing.Icon]::ExtractAssociatedIcon($spotifyExe) } catch {}
+        }
+
+        $wv2 = New-Object Microsoft.Web.WebView2.WinForms.WebView2
+        $wv2.Dock = "Fill"
+
+        # Result capture
+        $script:vpnResult = $null
+
+        $wv2.add_WebMessageReceived({
+            param($sender, $e)
+            try {
+                $json = $e.TryGetWebMessageAsString()
+                $obj = $json | ConvertFrom-Json
+                if ($obj.action -eq "select" -or $obj.action -eq "skip") {
+                    $script:vpnResult = $obj
+                    $form.Close()
+                }
+            } catch {}
+        })
+
+        $form.Controls.Add($wv2)
+
+        # Initialize
+        $userDataFolder = Join-Path $env:LOCALAPPDATA 'SpotFreedom\WebView2\UserData'
+        if (-not (Test-Path $userDataFolder)) { New-Item -Path $userDataFolder -ItemType Directory -Force | Out-Null }
+
+        try {
+            $envOpts = [Microsoft.Web.WebView2.Core.CoreWebView2Environment]::CreateAsync($null, $userDataFolder, $null).GetAwaiter().GetResult()
+            $wv2.EnsureCoreWebView2Async($envOpts).GetAwaiter().GetResult()
+            $wv2.Source = [Uri]$url
+        } catch {
+            Write-Warning "Failed to initialize WebView2 environment. Is Edge/WebView2 Runtime installed?"
+            $form.Dispose()
+            return $null
+        }
+
+        $form.ShowDialog() | Out-Null
+        $form.Dispose()
+
+        return $script:vpnResult
+    } catch {
+        Write-Warning "Error showing WebView2 window: $_"
+        return $null
+    }
+}
+
+# Function to show VPN Server Selection UI
+# This launches an interactive HTML UI to help users browse and select VPN servers
+# Supports WebView2 for direct communication, falling back to default browser
+function Show-VPNServerUI {
+    $vpnHtmlPath = Join-Path $PSScriptRoot "vpn-selector.html"
+    
+    if (-not (Test-Path $vpnHtmlPath)) {
         Write-Host "VPN selector UI not found at: $vpnHtmlPath" -ForegroundColor Red
+        return $false
+    }
+
+    Write-Host "`nLaunching VPN Server Selection UI..." -ForegroundColor Cyan
+
+    # Try WebView2
+    if (Load-WebView2) {
+        Write-Host "Opening in embedded WebView2 window..." -ForegroundColor Cyan
+        $result = Show-WebView2Window -url $vpnHtmlPath
+        
+        if ($result) {
+            if ($result.action -eq "select" -and $result.server) {
+                $s = $result.server
+                Write-Host "`n✅ Selected Server: $($s.name)" -ForegroundColor Green
+                Write-Host "   Location: $($s.location)" -ForegroundColor Gray
+
+                if ($s.accessKey) {
+                    Set-Clipboard -Value $s.accessKey
+                    Write-Host "   Outline Access Key copied to clipboard!" -ForegroundColor Yellow
+                }
+                return $true
+            } elseif ($result.action -eq "skip") {
+                Write-Host "VPN setup skipped." -ForegroundColor Gray
+                return $true
+            }
+        }
+    }
+
+    # Fallback to default browser
+    Write-Host "Opening VPN selector in your default browser..." -ForegroundColor Yellow
+    try {
+        Start-Process $vpnHtmlPath
+        Write-Host "`nPlease review the VPN servers in the UI that just opened." -ForegroundColor Green
+        Write-Host "Copy your chosen server's access key, then return here to continue..." -ForegroundColor Yellow
+        return $true
+    }
+    catch {
+        Write-Host "Could not launch VPN UI: $_" -ForegroundColor Red
         return $false
     }
 }

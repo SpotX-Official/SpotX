@@ -5,7 +5,7 @@
 <p align="center">
   <a href="https://github.com/NimuthuGanegoda/SpotFreedom"><img src="https://img.shields.io/badge/SpotFreedom-Repository-blue"></a>
   <a href="https://github.com/NimuthuGanegoda/SpotFreedom/releases"><img src="https://img.shields.io/badge/Releases-Latest-green"></a>
-  <a href="https://telegra.ph/SpotX-FAQ-09-19"><img src="https://img.shields.io/badge/FAQ-Read-orange"></a>
+  <a href="https://github.com/NimuthuGanegoda/SpotFreedom#faq"><img src="https://img.shields.io/badge/FAQ-Read-orange"></a>
 </p>
 
 <h2>
@@ -38,7 +38,7 @@ SpotFreedom uses BlockTheSpot (https://github.com/mrpond/BlockTheSpot) as its co
 
 - **🚫 BlockTheSpot Integration:** Uses the proven DLL injection method from BlockTheSpot for superior ad-blocking.
 - **🔄 Automatic Update Checking:** Verifies the latest Spotify version from loadspot.pages.dev to ensure patches remain compatible.
-- **🌍 Built-in Proxy/VPN Support:** Easily configure proxies to bypass geo-restrictions directly via installation parameters (Windows only).
+- **🌍 Built-in Proxy Support:** Configure Spotify to use a proxy via installation parameters (Windows only).
 - **🎨 Seamless Spicetify Integration:** Automatically install or update Spicetify alongside your patches with the simple `-spicetify` switch (Windows only).
 - **🛡️ Enhanced Stability:** Uses local patching methods to reduce reliance on external servers for patch data.
 - **🧹 Auto-Cleanup:** Automatically manages and cleans up temporary files (`SpotFreedom_Temp`) for a cleaner system.
@@ -49,11 +49,11 @@ SpotFreedom uses BlockTheSpot (https://github.com/mrpond/BlockTheSpot) as its co
 - **Hiding podcasts, episodes, and audiobooks** from the homepage (optional)
 - **Block Spotify automatic updates** (optional)
 - **Automatic version checking** from loadspot.pages.dev to ensure compatibility with the latest Spotify version
-- **Built-in Proxy/VPN Support** including Outline VPN (Windows only)
+- **Built-in Proxy Support** (Windows only)
 - **Spicetify Integration** (Windows only)
 - **BlockTheSpot Integration** (Enabled by default, uses DLL injection from https://github.com/mrpond/BlockTheSpot)
 - **Some native experimental features have been changed**
-- **Advanced installation [parameters](https://github.com/SpotX-Official/SpotX/discussions/60)**
+- **Advanced installation parameters** via `run.ps1` switches
 
 > **Note on BlockTheSpot:**
 > BlockTheSpot (DLL Injection) is now **enabled by default** as the primary ad-blocking method. This provides enhanced ad-blocking capabilities using the proven approach from https://github.com/mrpond/BlockTheSpot. If you experience issues or prefer the native binary patching method instead, you can disable BlockTheSpot by running the installer with the `-no_bts` parameter.
@@ -68,7 +68,7 @@ SpotFreedom uses BlockTheSpot (https://github.com/mrpond/BlockTheSpot) as its co
   #### During installation, you need to confirm some actions, also contains:
 
   - New theme activated (new right and left sidebar, some cover change)
-  - All [experimental features](https://github.com/SpotX-Official/SpotX/discussions/50) included
+  - All bundled experimental features included
 
   <h4> </h4>
 
@@ -92,7 +92,7 @@ iex "& { $(irm 'https://raw.githubusercontent.com/NimuthuGanegoda/SpotFreedom/ma
   - Forced installation of version 1.2.13 (since the old theme was removed in subsequent versions)
   - Old theme activated
   - Automatic blocking of Spotify updates
-  - All [experimental features](https://github.com/SpotX-Official/SpotX/discussions/50) included
+  - All bundled experimental features included
 
   <h4> </h4>
 
@@ -103,13 +103,7 @@ or
 #### Run the following command in PowerShell:
 
 ```ps1
-iex "& { $(iwr -useb 'https://raw.githubusercontent.com/SpotX-Official/SpotX/refs/heads/main/run.ps1') } -v 1.2.13.661.ga588f749 -confirm_spoti_recomended_over -block_update_on"
-```
-
-#### mirror
-
-```ps1
-iex "& { $(iwr -useb 'https://spotx-official.github.io/SpotX/run.ps1') } -m -v 1.2.13.661.ga588f749 -confirm_spoti_recomended_over -block_update_on"
+iex "& { $(irm 'https://raw.githubusercontent.com/NimuthuGanegoda/SpotFreedom/main/run.ps1') } -v 1.2.13.661.ga588f749 -confirm_spoti_recomended_over -block_update_on"
 ```
 
 </details>
@@ -121,9 +115,9 @@ iex "& { $(iwr -useb 'https://spotx-official.github.io/SpotX/run.ps1') } -m -v 1
 
   - New theme activated (new right and left sidebar, some cover change)
   - Hiding podcasts/episodes/audiobooks from the homepage
-  - Activated [static theme](https://github.com/SpotX-Official/SpotX/discussions/50#discussioncomment-4096066) <kbd>spotify</kbd> for lyrics
-  - Hiding [ad-like sections](https://github.com/SpotX-Official/SpotX/discussions/50#discussioncomment-4478943)
-  - All [experimental features](https://github.com/SpotX-Official/SpotX/discussions/50) included
+  - Activated static theme <kbd>spotify</kbd> for lyrics
+  - Hiding ad-like sections
+  - All bundled experimental features included
   - Removal of Spotify MS if it was found
   - Installation of the recommended version of Spotify (if another client has already been found, it will be installed over)
   - Blocking of Spotify updates
@@ -153,7 +147,7 @@ iex "& { $(irm 'https://raw.githubusercontent.com/NimuthuGanegoda/SpotFreedom/ma
 
   - New theme activated (new right and left sidebar, some cover change)
   - Disabled only audio ads in podcasts
-  - All [experimental features](https://github.com/SpotX-Official/SpotX/discussions/50) included
+  - All bundled experimental features included
 
   <h4> </h4>
 
@@ -172,43 +166,7 @@ iex "& { $(irm 'https://raw.githubusercontent.com/NimuthuGanegoda/SpotFreedom/ma
 <details>
 <summary><small>Installing with parameters</small></summary><p>
 
-You can specify various parameters for a more flexible installation, more [details here](https://github.com/SpotX-Official/SpotX/discussions/60)
-
-</details>
-
-<details>
-<summary><small>Outline VPN Configuration (Windows only)</small></summary><p>
-
-  #### Configure Spotify to use Outline VPN (Shadowsocks)
-
-  - Ensures Spotify traffic goes through your Outline Client
-  - Requires Outline Client to be running
-  - **🎨 NEW: Interactive VPN Server UI** - A graphical interface will automatically open to help you select from available VPN servers
-  - **Free VPN Servers from VPNBook.com:**
-    - **Outline/Shadowsocks Servers (Recommended):**
-      - **Poland Server 1:** `ss://Y2hhY2hhMjAtaWV0Zi1wb2x5MTMwNTpwdmd6OXBx@pl134.vpnbook.com:443/?outline=1`
-      - **Poland Server 2:** `ss://Y2hhY2hhMjAtaWV0Zi1wb2x5MTMwNTpwdmd6OXBx@pl140.vpnbook.com:443/?outline=1`
-      - **Canada Server 3:** `ss://Y2hhY2hhMjAtaWV0Zi1wb2x5MTMwNTpwdmd6OXBx@ca225.vpnbook.com:443/?outline=1`
-    - **OpenVPN/WireGuard Servers (Requires separate client):**
-      - US: US16, US178 | Canada: CA149, CA196
-      - UK: UK205, UK68 | Germany: DE20, DE220 | France: FR200, FR231
-      - Get credentials at: [https://www.vpnbook.com/freevpn](https://www.vpnbook.com/freevpn)
-
-  > **Note:** VPN configuration is now prompted by default during installation with an interactive UI. To disable this prompt, use the `-no_vpn` switch.
-
-  <h4> </h4>
-
-#### Run the following command in PowerShell (Interactive mode with VPN prompt):
-
-```ps1
-iex "& { $(irm 'https://raw.githubusercontent.com/NimuthuGanegoda/SpotFreedom/main/run.ps1') }"
-```
-
-#### To skip VPN configuration prompt:
-
-```ps1
-iex "& { $(irm 'https://raw.githubusercontent.com/NimuthuGanegoda/SpotFreedom/main/run.ps1') } -no_vpn"
-```
+You can specify various parameters for a more flexible installation by passing switches directly to `run.ps1`
 
 </details>
 
@@ -232,7 +190,7 @@ or
 
 <h1 id="faq">FAQ</h1>
 
- Read [FAQ](https://telegra.ph/SpotX-FAQ-09-19)
+ Read the repository documentation in this README
 
 <h1 id="disclaimer">Disclaimer</h1>
 

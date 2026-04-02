@@ -148,15 +148,89 @@ param
     [Parameter(HelpMessage = 'Enable Spicetify integration.')]
     [switch]$spicetify,
 
-    [Parameter(HelpMessage = 'Disable Outline VPN configuration prompt.')]
-    [switch]$no_vpn,
-
     [Parameter(HelpMessage = 'Disable BlockTheSpot (DLL Injection) and use native binary patching instead.')]
     [switch]$no_bts
 )
 
 # Ignore errors from `Stop-Process`
 $PSDefaultParameterValues['Stop-Process:ErrorAction'] = [System.Management.Automation.ActionPreference]::SilentlyContinue
+
+function Format-LanguageCode {
+
+    # Normalizes and confirms support of the selected language.
+    [CmdletBinding()]
+    [OutputType([string])]
+    param
+    (
+        [string]$LanguageCode
+    )
+
+    $supportLanguages = @(
+        'be', 'bn', 'cs', 'de', 'el', 'en', 'es', 'fa', 'fi', 'fil', 'fr', 'hi', 'hu',
+        'id', 'it', 'ja', 'ka', 'ko', 'lv', 'pl', 'pt', 'ro', 'ru', 'sk', 'sr', 'sr-Latn',
+        'sv', 'ta', 'tr', 'ua', 'vi', 'zh', 'zh-TW'
+    )
+
+    switch -Regex ($LanguageCode) {
+        '^be' { $returnCode = 'be'; break }
+        '^bn' { $returnCode = 'bn'; break }
+        '^cs' { $returnCode = 'cs'; break }
+        '^de' { $returnCode = 'de'; break }
+        '^el' { $returnCode = 'el'; break }
+        '^en' { $returnCode = 'en'; break }
+        '^es' { $returnCode = 'es'; break }
+        '^fa' { $returnCode = 'fa'; break }
+        '^fi$' { $returnCode = 'fi'; break }
+        '^fil' { $returnCode = 'fil'; break }
+        '^fr' { $returnCode = 'fr'; break }
+        '^hi' { $returnCode = 'hi'; break }
+        '^hu' { $returnCode = 'hu'; break }
+        '^id' { $returnCode = 'id'; break }
+        '^it' { $returnCode = 'it'; break }
+        '^ja' { $returnCode = 'ja'; break }
+        '^ka' { $returnCode = 'ka'; break }
+        '^ko' { $returnCode = 'ko'; break }
+        '^lv' { $returnCode = 'lv'; break }
+        '^pl' { $returnCode = 'pl'; break }
+        '^pt' { $returnCode = 'pt'; break }
+        '^ro' { $returnCode = 'ro'; break }
+        '^(ru|py)' { $returnCode = 'ru'; break }
+        '^sk' { $returnCode = 'sk'; break }
+        '^(sr|sr-Cyrl)$' { $returnCode = 'sr'; break }
+        '^sr-Latn' { $returnCode = 'sr-Latn'; break }
+        '^sv' { $returnCode = 'sv'; break }
+        '^ta' { $returnCode = 'ta'; break }
+        '^tr' { $returnCode = 'tr'; break }
+        '^ua' { $returnCode = 'ua'; break }
+        '^vi' { $returnCode = 'vi'; break }
+        '^(zh|zh-CN)$' { $returnCode = 'zh'; break }
+        '^zh-TW' { $returnCode = 'zh-TW'; break }
+        Default {
+            $returnCode = $PSUICulture
+            $long_code = $true
+            break
+        }
+    }
+
+    if ($long_code -and $returnCode -NotIn $supportLanguages) {
+        if ($returnCode -match '-') {
+            $intermediateCode = $returnCode.Substring(0, $returnCode.LastIndexOf('-'))
+
+            if ($intermediateCode -in $supportLanguages) {
+                $returnCode = $intermediateCode
+            }
+            else {
+                $returnCode = $returnCode -split "-" | Select-Object -First 1
+            }
+        }
+    }
+
+    if ($returnCode -NotIn $supportLanguages) {
+        $returnCode = 'en'
+    }
+
+    return $returnCode
+}
 
 # Set Tls12
 [Net.ServicePointManager]::SecurityProtocol = [Net.ServicePointManager]::SecurityProtocol -bor [Net.SecurityProtocolType]::Tls12;
@@ -175,16 +249,49 @@ $chrome_elf = Join-Path $spotifyDirectory 'chrome_elf.dll'
 $exe_bak = Join-Path $spotifyDirectory 'Spotify.bak'
 $dll_bak = Join-Path $spotifyDirectory 'Spotify.dll.bak'
 $chrome_elf_bak = Join-Path $spotifyDirectory 'chrome_elf.dll.bak'
+$spotifyUninstall = Join-Path ([System.IO.Path]::GetTempPath()) 'SpotifyUninstall.exe'
 $xpuiSpa = Join-Path (Join-Path $env:APPDATA 'Spotify\Apps') 'xpui.spa'
 $xpuiBak = Join-Path (Join-Path $env:APPDATA 'Spotify\Apps') 'xpui.bak'
 $start_menu = Join-Path $env:APPDATA 'Microsoft\Windows\Start Menu\Programs\Spotify.lnk'
+$upgrade_client = $false
 
-# Function to show VPN Server Selection UI
-# This launches an interactive HTML UI to help users browse and select VPN servers
-# The UI is informative and displays all available servers from vpnbook.com
-# Note: Opens in default browser as a visual guide; users still configure via PowerShell prompts
-function Show-VPNServerUI {
-    $vpnHtmlPath = Join-Path $PSScriptRoot "vpn-selector.html"
+function Stop-Script {
+    param(
+        [string]$Message = ($lang).StopScript
+    )
+
+    Write-Host $Message
+
+    switch ($Host.Name) {
+        "Windows PowerShell ISE Host" {
+            pause
+            break
+        }
+        default {
+            Write-Host ($lang).PressAnyKey
+            [void][System.Console]::ReadKey($true)
+            break
+        }
+    }
+
+    Exit
+}
+
+function Get-Link {
+    param (
+        [Alias("e")]
+        [string]$endlink
+    )
+
+    switch ($mirror) {
+        $true { return "https://raw.githack.com/NimuthuGanegoda/SpotFreedom/main" + $endlink }
+        default { return "https://raw.githubusercontent.com/NimuthuGanegoda/SpotFreedom/main" + $endlink }
+    }
+}
+
+function CallLang($clg) {
+
+    $ProgressPreference = 'SilentlyContinue'
     
     try {
         $response = (iwr -Uri (Get-Link -e "/scripts/installer-lang/$clg.ps1") -UseBasicParsing).Content
@@ -357,60 +464,21 @@ function Get {
 
     for ($i = 0; $i -lt $MaxRetries; $i++) {
         try {
-            # Open the HTML file in default browser as an informative visual guide
-            Start-Process $vpnHtmlPath
-            Write-Host "`nPlease review the VPN servers in the UI that just opened." -ForegroundColor Green
-            Write-Host "Copy your chosen server's access key, then return here to continue..." -ForegroundColor Yellow
-            return $true
+            $response = Invoke-RestMethod @params
+            return $response
         }
         catch {
-            Write-Host "Could not launch VPN UI: $_" -ForegroundColor Red
-            return $false
+            Write-Warning "Attempt $($i+1) of $MaxRetries failed: $_"
+            if ($i -lt $MaxRetries - 1) {
+                Start-Sleep -Seconds $RetrySeconds
+            }
         }
     }
-    else {
-        Write-Host "VPN selector UI not found at: $vpnHtmlPath" -ForegroundColor Red
-        return $false
-    }
-}
 
-# Outline VPN configuration
-if (-not $no_vpn) {
-    if ($PSBoundParameters.ContainsKey('ProxyType') -eq $false) {
-        $ProxyType = 'socks5'
-    }
-    if ([string]::IsNullOrWhiteSpace($ProxyHost)) {
-        $ProxyHost = '127.0.0.1'
-    }
-    if (-not $ProxyPort) {
-        Write-Host "`n================================================" -ForegroundColor Cyan
-        Write-Host "        VPN Configuration (VPNBook.com)" -ForegroundColor Yellow
-        Write-Host "================================================" -ForegroundColor Cyan
-        
-        # Try to show the UI first
-        $uiLaunched = Show-VPNServerUI
-        
-        if ($uiLaunched) {
-            Write-Host "`n🌐 Available VPN Servers from VPNBook.com:" -ForegroundColor Green
-        }
-        else {
-            Write-Host "`nFalling back to text-based selection..." -ForegroundColor Yellow
-        }
-        
-        Write-Host "`nOutline/Shadowsocks Servers (Recommended):" -ForegroundColor Cyan
-        Write-Host "  Poland Server 1: ss://Y2hhY2hhMjAtaWV0Zi1wb2x5MTMwNTpwdmd6OXBx@pl134.vpnbook.com:443/?outline=1" -ForegroundColor White
-        Write-Host "  Poland Server 2: ss://Y2hhY2hhMjAtaWV0Zi1wb2x5MTMwNTpwdmd6OXBx@pl140.vpnbook.com:443/?outline=1" -ForegroundColor White
-        Write-Host "  Canada Server 3: ss://Y2hhY2hhMjAtaWV0Zi1wb2x5MTMwNTpwdmd6OXBx@ca225.vpnbook.com:443/?outline=1" -ForegroundColor White
-
-        Write-Host "`nOpenVPN/WireGuard Servers (Requires separate client):" -ForegroundColor Gray
-        Write-Host "  US: US16, US178 | Canada: CA149, CA196" -ForegroundColor Gray
-        Write-Host "  UK: UK205, UK68 | Germany: DE20, DE220 | France: FR200, FR231" -ForegroundColor Gray
-        Write-Host "  Get credentials at: https://www.vpnbook.com/freevpn" -ForegroundColor Gray
-
-        Write-Host "`n📝 Enter the local SOCKS5 port from your Outline Client" -ForegroundColor Yellow
-        Write-Host "   (Leave empty to skip proxy setup)" -ForegroundColor Gray
-        $ProxyPort = Read-Host "Port"
-    }
+    Write-Host
+    Write-Host "ERROR: " -ForegroundColor Red -NoNewline; Write-Host "Failed to retrieve data from $Url" -ForegroundColor White
+    Write-Host
+    return $null
 }
 
 function Stop-Spotify {
@@ -484,7 +552,7 @@ function Install-BlockTheSpot {
         }
     } else {
         Write-Warning "Spotify.exe not found. Is Spotify installed?"
-        return
+        return $false
     }
 
     # Cache Configuration
@@ -543,6 +611,7 @@ function Install-BlockTheSpot {
             try {
                 Expand-Archive -Force -LiteralPath $btsZip -DestinationPath $spotifyDirectory -ErrorAction Stop
                 Write-Host "BlockTheSpot installed successfully." -ForegroundColor Green
+                return $true
             } catch {
                 Write-Warning "Failed to extract BlockTheSpot. Deleting corrupt cache file..."
                 Remove-Item $btsZip -Force -ErrorAction SilentlyContinue
@@ -554,6 +623,8 @@ function Install-BlockTheSpot {
     } catch {
         Write-Error "Error installing BlockTheSpot: $_"
     }
+
+    return $false
 }
 
 function DesktopFolder {
@@ -714,11 +785,14 @@ function Mod-F {
         [string] $template,
         [object[]] $arguments
     )
-    
-    .DESCRIPTION
-    Fetches version information from loadspot.pages.dev to determine 
-    the latest available Spotify version and download URL.
-    
+
+    $result = $template
+    for ($i = 0; $i -lt $arguments.Length; $i++) {
+        $placeholder = "{${i}}"
+        $value = $arguments[$i]
+        $result = $result -replace [regex]::Escape($placeholder), $value
+    }
+
     return $result
 }
 
@@ -1585,7 +1659,7 @@ if (-not $SpotifyPath -and (-not $spotifyInstalled -or $upgrade_client)) {
     Get-ChildItem $spotifyDirectory -Exclude 'Users', 'prefs' | Remove-Item -Recurse -Force 
     Start-Sleep -Milliseconds 200
 
-    $tempDirName = "SpotX_Temp-$(Get-Date -UFormat '%Y-%m-%d_%H-%M-%S')"
+    $tempDirName = "SpotFreedom_Temp-$(Get-Date -UFormat '%Y-%m-%d_%H-%M-%S')"
     $tempDirectory = Join-Path ([System.IO.Path]::GetTempPath()) $tempDirName
     if (-not (Test-Path -LiteralPath $tempDirectory)) { New-Item -ItemType Directory -Path $tempDirectory | Out-Null }
 
@@ -2309,7 +2383,7 @@ function Is-Ver-Compatible ($ver, $fr, $to) {
     return $true
 }
 
-# --- SpotX Native Functions ---
+# --- SpotFreedom Native Functions ---
 
 function Reset-Dll-Sign {
     [CmdletBinding()]
@@ -2666,7 +2740,7 @@ if ($test_js) {
     while ($ch -notmatch '^y$|^n$')
 
     if ($ch -eq 'y') { 
-        $Url = "https://telegra.ph/SpotX-FAQ-09-19#Can-I-use-SpotX-and-Spicetify-together?"
+        $Url = "https://github.com/NimuthuGanegoda/SpotFreedom#installation--update"
         Start-Process $Url
     }
 
@@ -2832,7 +2906,10 @@ if ($no_bts) {
 Patch-XPUI $patchesJson
 
 if (-not $no_bts) {
-    Install-BlockTheSpot
+    if (-not (Install-BlockTheSpot)) {
+        Write-Warning "BlockTheSpot installation failed. Falling back to native binary patching."
+        Patch-Binary $patchesJson
+    }
 } else {
     Remove-BlockTheSpot
 }
@@ -3118,7 +3195,7 @@ if ($regex1 -and $regex2 -and $regex3 -and $regex4 -and $regex5) {
 
 if (-not (Test-Path -LiteralPath $spotify_binary_bak)) {
     $name_binary = [System.IO.Path]::GetFileName($spotify_binary_bak)
-    Write-Warning ("Backup copy {0} not found. Please reinstall Spotify and run SpotX again" -f $name_binary)
+    Write-Warning ("Backup copy {0} not found. Please reinstall Spotify and run SpotFreedom again" -f $name_binary)
     Pause
     Exit
 }

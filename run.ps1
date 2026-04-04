@@ -478,6 +478,7 @@ function Get-SpotifyInstallerArchitecture {
 }
 
 $spotifyDownloadBaseUrl = "https://loadspot.amd64fox1.workers.dev/download"
+$spotifyTemporaryDownloadBaseUrl = "https://loadspot.amd64fox1.workers.dev/temporary-download"
 $systemArchitecture = Get-SystemArchitecture
 
 $match_v = "^(?<version>\d+\.\d+\.\d+\.\d+\.g[0-9a-f]{8})(?:-\d+)?$"
@@ -1232,7 +1233,13 @@ function downloadSp([string]$DownloadFolder) {
         -SpotifyVersion $spotifyVersion `
         -LastX86SupportedVersion $last_x86
 
-    $web_Url = "$spotifyDownloadBaseUrl/spotify_installer-$onlineFull-$arch.exe"
+    $downloadBaseUrl = $spotifyDownloadBaseUrl
+    if ($onlineFull -eq $latest_full -and $arch -eq 'x64') {
+        # Temporary route for the latest x64 build while Cloudflare rechecks the file
+        $downloadBaseUrl = $spotifyTemporaryDownloadBaseUrl
+    }
+
+    $web_Url = "$downloadBaseUrl/spotify_installer-$onlineFull-$arch.exe"
     $local_Url = Join-Path $DownloadFolder 'SpotifySetup.exe'
     $web_name_file = "SpotifySetup.exe"
     try {

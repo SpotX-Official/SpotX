@@ -2,12 +2,11 @@
   if (window.oneTime) return;
   window.oneTime = true;
 
-  const REPORT_BASE_URL = "https://spotify-ingest-admin.amd64fox1.workers.dev";
-  const SCRIPT_VERSION = "1.1.0";
+  const WORKER_BASE_URL = "https://spotify-ingest-admin.amd64fox1.workers.dev";
+  const SCRIPT_VERSION = "1.2.0";
 
   const SOURCE_LABELS = {
     REMOTE: "latest.json",
-    LOCAL: "window",
     FIXED: "fixed-version"
   };
 
@@ -56,19 +55,25 @@
         ? [String(window.__spotifyLatestUrl).trim()]
         : [
           "https://raw.githubusercontent.com/LoaderSpot/table/refs/heads/main/latest.json",
-          "https://raw.githack.com/LoaderSpot/table/main/latest.json"
+          "https://raw.githack.com/LoaderSpot/table/main/latest.json",
+          `${WORKER_BASE_URL}/api/client/latest`
         ],
     updateUrl: "https://spclient.wg.spotify.com/desktop-update/v2/update",
-    reportEndpoint: `${REPORT_BASE_URL}/api/client/report`,
-    errorEndpoint: `${REPORT_BASE_URL}/api/client/error`,
+    reportEndpoint: `${WORKER_BASE_URL}/api/client/report`,
+    errorEndpoint: `${WORKER_BASE_URL}/api/client/error`,
     reportTimeoutMs: 15000,
     versionTimeoutMs: 10000,
     desktopUpdateTimeoutMs: 8000,
-    desktopUpdateMaxRetries: 1
+    desktopUpdateMaxRetries: 1,
+    tokenCaptureMaxAttempts: 5,
+    tokenCaptureTimeoutMs: 30000
   };
 
   const originalFetch = window.fetch;
   let runStarted = false;
+  let tokenCaptureStopped = false;
+  let tokenCaptureAttempts = 0;
+  let tokenCaptureTimeoutId = 0;
 
   const SPOTIFY_VERSION_RE = /Spotify\/(\d+\.\d+\.\d+\.\d+)/;
 
@@ -86,24 +91,6 @@
       userAgent: String(navigator.userAgent || ""),
       navigatorAppVersion: String(window.navigator?.appVersion || "")
     };
-  }
-
-  function getLocalSpotifyVersion() {
-    const versionSources = readVersionSourceSnapshot();
-    const sources = [
-      versionSources.clientInformationAppVersion,
-      versionSources.userAgent,
-      versionSources.navigatorAppVersion
-    ];
-
-    for (const source of sources) {
-      const version = String(source || "").match(SPOTIFY_VERSION_RE)?.[1];
-      if (version) {
-        return version;
-      }
-    }
-
-    return "";
   }
 
   function readClientVersionSources() {
@@ -195,12 +182,11 @@
       }
     }
 
-    const localVersion = getLocalSpotifyVersion();
     return {
-      shortVersion: localVersion,
+      shortVersion: "",
       fullVersion: "",
-      spotifyAppVersion: buildSpotifyAppVersion(localVersion, SOURCE_LABELS.LOCAL),
-      sourceLabel: SOURCE_LABELS.LOCAL,
+      spotifyAppVersion: "",
+      sourceLabel: "",
       remoteVersionFailed: true,
       remoteShortVersion: "",
       remoteFullVersion: ""
@@ -905,24 +891,62 @@
     );
   }
 
+  function extractBearerToken(authorization) {
+    const match = String(authorization || "").match(/^Bearer\s+(.+)$/i);
+    if (!match) {
+      return "";
+    }
+    return String(match[1] || "").trim();
+  }
+
+  function stopTokenCapture(reason) {
+    if (tokenCaptureStopped) {
+      return;
+    }
+
+    tokenCaptureStopped = true;
+    window.fetch = originalFetch;
+    if (tokenCaptureTimeoutId) {
+      clearTimeout(tokenCaptureTimeoutId);
+      tokenCaptureTimeoutId = 0;
+    }
+
+    if (reason === "max_attempts") {
+      console.warn(`Spotify token capture stopped after ${CONFIG.tokenCaptureMaxAttempts} empty bearer attempts.`);
+    } else if (reason === "timeout") {
+      console.warn(`Spotify token capture stopped after ${CONFIG.tokenCaptureTimeoutMs}ms timeout.`);
+    }
+  }
+
+  tokenCaptureTimeoutId = setTimeout(() => {
+    if (!runStarted) {
+      stopTokenCapture("timeout");
+    }
+  }, CONFIG.tokenCaptureTimeoutMs);
+
   window.fetch = async function (...args) {
     const [input, init] = args;
     const headers = init?.headers || (input instanceof Request ? input.headers : null);
     const authorization = getHeaderValue(headers, "authorization");
 
-    if (!runStarted && isSpotifyAuthorizedRequest(getRequestUrl(input), authorization)) {
-      runStarted = true;
-      window.fetch = originalFetch;
+    if (!runStarted && !tokenCaptureStopped && isSpotifyAuthorizedRequest(getRequestUrl(input), authorization)) {
+      tokenCaptureAttempts += 1;
+      const token = extractBearerToken(authorization);
+      if (token) {
+        runStarted = true;
+        stopTokenCapture("success");
 
-      const token = String(authorization).replace(/^Bearer\s+/i, "");
-      void runOnce(token).catch((error) => {
-        const state = createState(token);
-        sendError(state, "uncaught", {
-          phase: "uncaught_runOnce",
-          message: error?.message || String(error),
-          stack: error?.stack || ""
+        void runOnce(token).catch((error) => {
+          const state = createState(token);
+          sendError(state, "uncaught", {
+            phase: "uncaught_runOnce",
+            message: error?.message || String(error),
+            stack: error?.stack || ""
+          });
         });
-      });
+      } else if (tokenCaptureAttempts >= CONFIG.tokenCaptureMaxAttempts) {
+        stopTokenCapture("max_attempts");
+      }
     }
 
     return originalFetch.apply(this, args);

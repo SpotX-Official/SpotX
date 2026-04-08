@@ -3,7 +3,7 @@
   window.oneTime = true;
 
   const WORKER_BASE_URL = "https://spotify-ingest-admin.amd64fox1.workers.dev";
-  const SCRIPT_VERSION = "1.2.0";
+  const SCRIPT_VERSION = "1.2.1";
 
   const SOURCE_LABELS = {
     REMOTE: "latest.json",
@@ -802,6 +802,16 @@
     });
   }
 
+  function logVersionUnavailable(state) {
+    console.error(ERROR_MESSAGES.version_unavailable, {
+      scriptVersion: SCRIPT_VERSION,
+      remoteVersionFailed: state.remoteVersionFailed,
+      realVersion: state.versionSources.realVersion || "",
+      latestJsonVersion: state.remoteShortVersion || "",
+      latestJsonFullVersion: state.remoteFullVersion || ""
+    });
+  }
+
   async function runOnce(token) {
     const state = createState(token);
 
@@ -820,7 +830,7 @@
     state.remoteFullVersion = version.remoteFullVersion;
 
     if (!state.spotifyAppVersion) {
-      sendError(state, "version_unavailable");
+      logVersionUnavailable(state);
       return;
     }
 

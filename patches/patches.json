@@ -3,7 +3,7 @@
         "fullscreen": {
             "version": {
                 "fr": "1.1.59",
-                "to": "1.1.92"
+                "to": "1.2.87"
             },
             "match": "(return|.=.=>)\"free\"===(.+?)(return|.=.=>)\"premium\"===",
             "replace": "$1\"premium\"===$2$3\"free\"==="
@@ -11,7 +11,7 @@
         "audioads": {
             "version": {
                 "fr": "1.1.59",
-                "to": "1.1.92"
+                "to": "1.2.87"
             },
             "match": "(case .:|async enable\\(.\\){)(this.enabled=.+?\\(.{1,3},\"audio\"\\),|return this.enabled=...+?\\(.{1,3},\"audio\"\\))((;case 4:)?this.subscription=this.audioApi).+?this.onAdMessage\\)",
             "replace": "$1$3.cosmosConnector.increaseStreamTime(-100000000000)"
@@ -35,7 +35,7 @@
         "connectold": {
             "version": {
                 "fr": "1.1.70",
-                "to": "1.1.92"
+                "to": "1.2.87"
             },
             "match": [
                 " connect-device-list-item--disabled",
@@ -789,7 +789,7 @@
                 "native_description": "Enable fetching Home via GraphQL",
                 "version": {
                     "fr": "1.1.86",
-                    "to": "1.1.92"
+                    "to": "1.2.87"
                 }
             },
             "BrowseViaPathfinder": {
@@ -852,7 +852,7 @@
                 "native_description": "Enable option in settings to clear all downloads",
                 "version": {
                     "fr": "1.1.92",
-                    "to": "1.1.98"
+                    "to": "1.2.87"
                 }
             },
             "LeftSidebar": {

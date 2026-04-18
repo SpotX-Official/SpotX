@@ -303,8 +303,6 @@ $directUrl = 'https://{0}/download/spotify_installer-{1}-{2}.exe' -f $downloadHo
 
 Add-ReportSection -Title 'Environment'
 Add-ReportLine ("Date: {0}" -f (Get-Date).ToString('yyyy-MM-dd HH:mm:ss zzz'))
-Add-ReportLine ("ComputerName: {0}" -f $env:COMPUTERNAME)
-Add-ReportLine ("UserName: {0}" -f $env:USERNAME)
 Add-ReportLine ("PowerShell: {0}" -f $PSVersionTable.PSVersion)
 Add-ReportLine ("Architecture: {0}" -f $architecture)
 Add-ReportLine ("LatestFull: {0}" -f $latestFull)

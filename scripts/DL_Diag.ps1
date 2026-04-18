@@ -129,6 +129,30 @@ function Invoke-WebClientStep {
     }
 }
 
+function Copy-TextToClipboard {
+    param(
+        [Parameter(Mandatory = $true)]
+        [string]$Text
+    )
+
+    try {
+        if (Get-Command Set-Clipboard -ErrorAction SilentlyContinue) {
+            Set-Clipboard -Value $Text -ErrorAction Stop
+            return $true
+        }
+
+        if (Get-Command clip.exe -ErrorAction SilentlyContinue) {
+            $Text | clip.exe
+            return ($LASTEXITCODE -eq 0)
+        }
+    }
+    catch {
+        return $false
+    }
+
+    return $false
+}
+
 function Get-DiagnosticArchitecture {
     $arch = $env:PROCESSOR_ARCHITEW6432
     if ([string]::IsNullOrWhiteSpace($arch)) {
@@ -336,7 +360,25 @@ else {
 
 Invoke-WebClientStep -Title 'WebClient direct stable' -Uri $directUrl
 
+$finalOutputLines = New-Object 'System.Collections.Generic.List[string]'
+$finalOutputLines.Add('----- BEGIN DIAGNOSTICS -----') | Out-Null
+
+foreach ($line in $reportLines) {
+    $finalOutputLines.Add($line) | Out-Null
+}
+
+$finalOutputLines.Add('----- END DIAGNOSTICS -----') | Out-Null
+$finalOutputText = [string]::Join([Environment]::NewLine, $finalOutputLines)
+$clipboardCopied = Copy-TextToClipboard -Text $finalOutputText
+
 Write-Host
+if ($clipboardCopied) {
+    Write-Host 'Diagnostics copied to clipboard' -ForegroundColor Green
+}
+else {
+    Write-Host 'Clipboard copy failed, copy the text below manually' -ForegroundColor Yellow
+}
+
 Write-Host '----- BEGIN DIAGNOSTICS -----' -ForegroundColor Cyan
 
 foreach ($line in $reportLines) {

@@ -372,13 +372,6 @@ $finalOutputText = [string]::Join([Environment]::NewLine, $finalOutputLines)
 $clipboardCopied = Copy-TextToClipboard -Text $finalOutputText
 
 Write-Host
-if ($clipboardCopied) {
-    Write-Host 'Diagnostics copied to clipboard' -ForegroundColor Green
-}
-else {
-    Write-Host 'Clipboard copy failed, copy the text below manually' -ForegroundColor Yellow
-}
-
 Write-Host '----- BEGIN DIAGNOSTICS -----' -ForegroundColor Cyan
 
 foreach ($line in $reportLines) {
@@ -386,3 +379,12 @@ foreach ($line in $reportLines) {
 }
 
 Write-Host '----- END DIAGNOSTICS -----' -ForegroundColor Cyan
+
+if ($clipboardCopied) {
+    Write-Host
+    Write-Host 'Diagnostics copied to clipboard' -ForegroundColor Green
+}
+else {
+    Write-Host
+    Write-Host 'Clipboard copy failed, copy the text above manually' -ForegroundColor Yellow
+}

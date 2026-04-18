@@ -5,6 +5,40 @@ $defaultLatestFull = '1.2.86.502.g8cd7fb22'
 $stableFull = '1.2.13.661.ga588f749'
 
 $reportLines = New-Object 'System.Collections.Generic.List[string]'
+$sensitivePatterns = New-Object 'System.Collections.Generic.List[object]'
+
+function Add-SensitivePattern {
+    param(
+        [string]$Pattern,
+        [string]$Replacement = '[redacted]'
+    )
+
+    if (-not [string]::IsNullOrWhiteSpace($Pattern)) {
+        $script:sensitivePatterns.Add([PSCustomObject]@{
+            Pattern     = $Pattern
+            Replacement = $Replacement
+        }) | Out-Null
+    }
+}
+
+function Protect-DiagnosticText {
+    param(
+        [AllowNull()]
+        [string]$Text
+    )
+
+    if ($null -eq $Text) {
+        return $null
+    }
+
+    $value = [string]$Text
+
+    foreach ($item in $script:sensitivePatterns) {
+        $value = [regex]::Replace($value, $item.Pattern, $item.Replacement)
+    }
+
+    $value
+}
 
 function Add-ReportLine {
     param(
@@ -12,7 +46,7 @@ function Add-ReportLine {
         [string]$Line = ''
     )
 
-    [void]$script:reportLines.Add($Line)
+    [void]$script:reportLines.Add((Protect-DiagnosticText -Text $Line))
 }
 
 function Add-ReportSection {
@@ -56,6 +90,45 @@ function Invoke-WebRequestCompat {
     Invoke-WebRequest @params
 }
 
+function Invoke-WebClientStep {
+    param(
+        [Parameter(Mandatory = $true)]
+        [string]$Title,
+        [Parameter(Mandatory = $true)]
+        [string]$Uri
+    )
+
+    Invoke-PowerShellStep -Title $Title -Action {
+        $wc = New-Object System.Net.WebClient
+        $stream = $null
+
+        try {
+            $stream = $wc.OpenRead($Uri)
+            $buffer = New-Object byte[] 1
+            [void]$stream.Read($buffer, 0, 1)
+
+            $lines = New-Object 'System.Collections.Generic.List[string]'
+            $lines.Add('WEBCLIENT_OK') | Out-Null
+            $lines.Add(("Url: {0}" -f $Uri)) | Out-Null
+
+            if ($wc.ResponseHeaders) {
+                foreach ($headerName in $wc.ResponseHeaders.AllKeys) {
+                    $lines.Add(("{0}: {1}" -f $headerName, $wc.ResponseHeaders[$headerName])) | Out-Null
+                }
+            }
+
+            $lines
+        }
+        finally {
+            if ($stream) {
+                $stream.Dispose()
+            }
+
+            $wc.Dispose()
+        }
+    }
+}
+
 function Get-DiagnosticArchitecture {
     $arch = $env:PROCESSOR_ARCHITEW6432
     if ([string]::IsNullOrWhiteSpace($arch)) {
@@ -68,6 +141,21 @@ function Get-DiagnosticArchitecture {
         default { return 'x86' }
     }
 }
+
+if (-not [string]::IsNullOrWhiteSpace($env:COMPUTERNAME)) {
+    Add-SensitivePattern -Pattern ([regex]::Escape($env:COMPUTERNAME)) -Replacement '[redacted-host]'
+}
+
+if (-not [string]::IsNullOrWhiteSpace($env:USERNAME)) {
+    Add-SensitivePattern -Pattern ([regex]::Escape($env:USERNAME)) -Replacement '[redacted-user]'
+}
+
+if (-not [string]::IsNullOrWhiteSpace($env:USERPROFILE)) {
+    Add-SensitivePattern -Pattern ([regex]::Escape($env:USERPROFILE)) -Replacement '[redacted-profile]'
+}
+
+Add-SensitivePattern -Pattern '(?<![\d.])(?:\d{1,3}\.){3}\d{1,3}(?![\d.])' -Replacement '[redacted-ipv4]'
+Add-SensitivePattern -Pattern '(?i)(?<![0-9a-f:])((?:[0-9a-f]{1,4}:){7}[0-9a-f]{1,4}|(?:[0-9a-f]{1,4}:){1,7}:|(?:[0-9a-f]{1,4}:){1,6}:[0-9a-f]{1,4}|(?:[0-9a-f]{1,4}:){1,5}(?::[0-9a-f]{1,4}){1,2}|(?:[0-9a-f]{1,4}:){1,4}(?::[0-9a-f]{1,4}){1,3}|(?:[0-9a-f]{1,4}:){1,3}(?::[0-9a-f]{1,4}){1,4}|(?:[0-9a-f]{1,4}:){1,2}(?::[0-9a-f]{1,4}){1,5}|[0-9a-f]{1,4}:(?:(?::[0-9a-f]{1,4}){1,6})|:(?:(?::[0-9a-f]{1,4}){1,7}|:))(?![0-9a-f:])' -Replacement '[redacted-ipv6]'
 
 function Format-ExceptionDetails {
     param(
@@ -102,7 +190,7 @@ function Invoke-CurlStep {
     }
 
     try {
-        $output = & curl.exe @Arguments 2>&1
+        $output = & curl.exe '-sS' @Arguments 2>&1
         Add-CommandOutput -Lines ($output | ForEach-Object { [string]$_ })
         Add-ReportLine ("ExitCode: {0}" -f $LASTEXITCODE)
     }
@@ -235,41 +323,20 @@ else {
     Add-ReportLine 'Skipped because temporary route is only used for x64 latest build'
 }
 
+Invoke-CurlStep -Title 'HEAD direct stable' -Arguments @('-I', '-L', '-k', '--ssl-no-revoke', $directUrl)
 Invoke-CurlStep -Title '1MB direct stable' -Arguments @('-L', '-k', '--ssl-no-revoke', '--fail-with-body', '--connect-timeout', '15', '-r', '0-1048575', '-o', 'NUL', '-D', '-', '-w', "`nHTTP_STATUS:%{http_code}`n", $directUrl)
 
-Invoke-PowerShellStep -Title 'WebClient test' -Action {
-    $webClientUrl = if ($tempUrl) { $tempUrl } else { $directUrl }
-    $wc = New-Object System.Net.WebClient
-    $stream = $null
-
-    try {
-        $stream = $wc.OpenRead($webClientUrl)
-        $buffer = New-Object byte[] 1
-        [void]$stream.Read($buffer, 0, 1)
-
-        $lines = New-Object 'System.Collections.Generic.List[string]'
-        $lines.Add('WEBCLIENT_OK') | Out-Null
-        $lines.Add(("Url: {0}" -f $webClientUrl)) | Out-Null
-
-        if ($wc.ResponseHeaders) {
-            foreach ($headerName in $wc.ResponseHeaders.AllKeys) {
-                $lines.Add(("{0}: {1}" -f $headerName, $wc.ResponseHeaders[$headerName])) | Out-Null
-            }
-        }
-
-        $lines
-    }
-    finally {
-        if ($stream) {
-            $stream.Dispose()
-        }
-
-        $wc.Dispose()
-    }
+if ($tempUrl) {
+    Invoke-WebClientStep -Title 'WebClient temp' -Uri $tempUrl
+}
+else {
+    Add-ReportSection -Title 'WebClient temp'
+    Add-ReportLine 'Skipped because temporary route is only used for x64 latest build'
 }
 
+Invoke-WebClientStep -Title 'WebClient direct stable' -Uri $directUrl
+
 Write-Host
-Write-Host 'Copy everything between the markers below and send it to SpotX support' -ForegroundColor Yellow
 Write-Host '----- BEGIN DIAGNOSTICS -----' -ForegroundColor Cyan
 
 foreach ($line in $reportLines) {

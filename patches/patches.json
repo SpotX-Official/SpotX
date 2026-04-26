@@ -780,6 +780,22 @@
                     "fr": "1.2.84",
                     "to": ""
                 }
+            },
+            "ad_feedback_in_stream": {
+                "name": "enable_ad_feedback_in_stream",
+                "description": "Enable new ad feedback UX for in-stream ads",
+                "version": {
+                    "fr": "1.2.88",
+                    "to": ""
+                }
+            },
+            "HarmonyMediaPlaybackReporting": {
+                "name": "enableHarmonyMediaPlaybackReporting",
+                "description": "Enable the reporting of media playback events in Harmony",
+                "version": {
+                    "fr": "1.2.88",
+                    "to": ""
+                }
             }
         },
         "EnableExp": {
@@ -2645,6 +2661,7 @@
             "replace": "min:250,max:400"
         },
         "filtertags_locale_fix": {
+            "disable": true,
             "version": {
                 "fr": "1.2.29",
                 "to": ""

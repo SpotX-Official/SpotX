@@ -2,7 +2,7 @@
 param
 (
     [Parameter(HelpMessage = 'Latest recommended Spotify version for Windows 10+.')]
-    [string]$latest_full = "1.2.86.502.g8cd7fb22",
+    [string]$latest_full = "1.2.88.483.g8aa8628e",
 
     [Parameter(HelpMessage = 'Latest supported Spotify version for Windows 7-8.1')]
     [string]$last_win7_full = "1.2.5.1006.g22820f93",
@@ -106,9 +106,6 @@ param
 
     [Parameter(HelpMessage = 'Enable right sidebar coloring to match cover color)')]
     [switch]$rightsidebarcolor,
-    
-    [Parameter(HelpMessage = 'Returns old lyrics')]
-    [switch]$old_lyrics,
 
     [Parameter(HelpMessage = 'Disable native lyrics')]
     [switch]$lyrics_block,
@@ -137,7 +134,11 @@ param
     
     [Parameter(HelpMessage = 'Select the desired language to use for installation. Default is the detected system language.')]
     [Alias('l')]
-    [string]$language
+    [string]$language,
+
+    # Deprecated parameters
+    [Parameter(HelpMessage = 'Deprecated, old lyrics are enabled by default')]
+    [switch]$old_lyrics
 )
 
 # Ignore errors from `Stop-Process`
@@ -405,6 +406,15 @@ $lang = CallLang -clg $langCode
 Write-Host ($lang).Welcome
 Write-Host
 
+if ($old_lyrics) {
+    Write-Warning @"
+-old_lyrics is deprecated
+    Old lyrics are enabled by default
+    Remove this parameter from your command line
+"@
+    Write-Host
+}
+
 # Check version Windows
 $os = Get-CimInstance -ClassName "Win32_OperatingSystem" -ErrorAction SilentlyContinue
 if ($os) {
@@ -587,7 +597,8 @@ function Get-PatchesJson {
                 throw "File not found: $resolvedPath"
             }
 
-            Write-Host ("Using local patches.json: {0}" -f $resolvedPath)
+            Write-Host ("Using a local file for patches: {0}" -f $resolvedPath)
+            Write-Host
 
             $jsonContent = [System.IO.File]::ReadAllText($resolvedPath, [System.Text.Encoding]::UTF8)
             return $jsonContent | ConvertFrom-Json -ErrorAction Stop
@@ -1848,7 +1859,12 @@ function Helper($paramname) {
                 Move-Json -n 'DevicePickerSidePanel' -t $Enable -f $Disable
             }
 
-            if ([version]$offline -ge [version]'1.2.41.434' -and $lyrics_block) { Move-Json -n 'Lyrics' -t $Enable -f $Disable } 
+            if ([version]$offline -ge [version]'1.2.41.434' -and $lyrics_block) { Move-Json -n 'Lyrics' -t $Enable -f $Disable }
+
+            Remove-Json -j $Enable -p 'RightSidebarLyrics'
+            if ($Custom.PSObject.Properties.Name -contains 'LyricsVariationsInNPV') {
+                $Custom.LyricsVariationsInNPV.value = "CONTROL"
+            }
 
             if ([version]$offline -eq [version]'1.2.30.1135') { Move-Json -n 'QueueOnRightPanel' -t $Enable -f $Disable }
 
@@ -1896,11 +1912,6 @@ function Helper($paramname) {
                 }
                 else {
                     if (!($rightsidebarcolor)) { Remove-Json -j $Enable -p 'RightSidebarColors' }
-                    
-                    if ($old_lyrics) { 
-                        Remove-Json -j $Enable -p 'RightSidebarLyrics' 
-                        $Custom.LyricsVariationsInNPV.value = "CONTROL"
-                    } 
                 }
             }
             if (!$premium) { Remove-Json -j $Enable -p 'RemoteDownloads', 'Magpie', 'MagpiePrompting', 'MagpieScheduling', 'MagpieCuration' }
@@ -1910,7 +1921,7 @@ function Helper($paramname) {
                 $objects = @(
                     @{
                         Object           = $webjson.others.CustomExp.psobject.properties
-                        PropertiesToKeep = @('LyricsUpsell')
+                        PropertiesToKeep = @('LyricsUpsell', 'LyricsVariationsInNPV')
                     },
                     @{
                         Object           = $webjson.others.EnableExp.psobject.properties
@@ -2098,6 +2109,10 @@ function Helper($paramname) {
     $offline_patch = $offline -replace '(\d+\.\d+\.\d+)(.\d+)', '$1'
 
     $contents | foreach { 
+
+        if ($json.$PSItem.disable -eq $true) {
+            return
+        }
 
         if ( $json.$PSItem.version.to ) { $to = [version]$json.$PSItem.version.to -ge [version]$offline_patch } else { $to = $true }
         if ( $json.$PSItem.version.fr ) { $fr = [version]$json.$PSItem.version.fr -le [version]$offline_patch } else { $fr = $false }

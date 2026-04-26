@@ -42,7 +42,9 @@ body .KDhLFoEqoClhH12bsfrS {
 /* lyrics not available message */
 .C3pBU1DsOUJJOAv89ZFT,
 .T67LFP0PElpfkkLuegQt,
-.e7eFLioNSG5PAi1qVFT4 {
+.e7eFLioNSG5PAi1qVFT4,
+.l2060qoyWU4J9ihSxHLE,
+.hfTlyhd7WCIk9xmP {
     color: var(--musixmatch) !important;
 }
 
@@ -50,7 +52,8 @@ body .KDhLFoEqoClhH12bsfrS {
 .FUYNhisXTCmbzt9IDxnT,
 .tr8V5eHsUaIkOYVw7eSG,
 .hW9km7ku6_iggdWDR_Lg,
-.lofIAg8Ixko3mfBrbfej {
+.lofIAg8Ixko3mfBrbfej,
+.bbJIIopLxggQmv5x {
     --lyrics-color-active: var(--current) !important;
     --lyrics-color-inactive: var(--next) !important;
     --lyrics-color-passed: var(--past) !important;
@@ -69,7 +72,11 @@ body .KDhLFoEqoClhH12bsfrS {
 ._LKG3z7SnerR0eigPCoK:hover,
 .NHVfxGs2HwmI_fly2JC4:hover,
 .gaHIufRWhoWbiT8S6zuM:hover,
-.FQYXZaa0aDIrse54YlYO:hover {
+.FQYXZaa0aDIrse54YlYO:hover,
+.PSyA4iign083ZV6vOqPj:hover,
+.Plu0zvuRv7kOQwsQ02cC:hover,
+.Mnf9PkrVHsX90BNf:hover,
+.XiH9KR6bhDwEFykV:hover {
     color: var(--hover) !important;
     /* remove underline */
     text-decoration: none !important;

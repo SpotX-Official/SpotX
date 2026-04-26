@@ -489,6 +489,7 @@ function Get-SpotifyInstallerArchitecture {
 
 $spotifyDownloadBaseUrl = "https://loadspot.amd64fox1.workers.dev/download"
 $spotifyTemporaryDownloadBaseUrl = "https://loadspot.amd64fox1.workers.dev/temporary-download"
+$spotifyTemporaryDownloadVersion = "1.2.86.502.g8cd7fb22"
 $systemArchitecture = Get-SystemArchitecture
 
 $match_v = "^(?<version>\d+\.\d+\.\d+\.\d+\.g[0-9a-f]{8})(?:-\d+)?$"
@@ -1245,8 +1246,7 @@ function downloadSp([string]$DownloadFolder) {
         -LastX86SupportedVersion $last_x86
 
     $downloadBaseUrl = $spotifyDownloadBaseUrl
-    if ($onlineFull -eq $latest_full -and $arch -eq 'x64') {
-        # Temporary route for the latest x64 build while Cloudflare rechecks the file
+    if ($onlineFull -eq $spotifyTemporaryDownloadVersion -and $arch -eq 'x64') {
         $downloadBaseUrl = $spotifyTemporaryDownloadBaseUrl
     }
 

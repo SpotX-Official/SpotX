@@ -157,7 +157,7 @@ function Format-LanguageCode {
     $supportLanguages = @(
         'be', 'bn', 'cs', 'de', 'el', 'en', 'es', 'fa', 'fi', 'fil', 'fr', 'hi', 'hu', 
         'id', 'it', 'ja', 'ka', 'ko', 'lv', 'pl', 'pt', 'ro', 'ru', 'sk', 'sr', 'sr-Latn',
-        'sv', 'ta', 'tr', 'ua', 'vi', 'zh', 'zh-TW'
+        'sv', 'ta', 'tr', 'uk', 'vi', 'zh', 'zh-TW'
     )
     
     # Trim the language code down to two letter code.
@@ -278,8 +278,8 @@ function Format-LanguageCode {
             $returnCode = 'tr'
             break
         }
-        '^ua' {
-            $returnCode = 'ua'
+        '^uk' {
+            $returnCode = 'uk'
             break
         }
         '^vi' {

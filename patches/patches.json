@@ -1191,7 +1191,7 @@
                 "native_description": "Show top tracks and top artists on profile page",
                 "version": {
                     "fr": "1.2.22",
-                    "to": ""
+                    "to": "1.2.89"
                 }
             },
             "EightShortcuts": {
@@ -2736,7 +2736,7 @@
         "hideEmptyYourEpisodes": {
             "version": {
                 "fr": "1.2.78",
-                "to": ""
+                "to": "1.2.89"
             },
             "match": "(includeYourEpisodes\\?\\{inclusionMode:[^,}]+\\.)INCLUDE_ALWAYS",
             "replace": "$1INCLUDE_IF_NOT_EMPTY"

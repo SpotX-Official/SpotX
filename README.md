@@ -27,7 +27,7 @@
 <h1 id="requirements">Requirements</h1>
 
 - **OS:** Windows 7-11
-- **Spotify:** [Official desktop version](https://loadspot.pages.dev) (Microsoft Store version is not suitable)
+- **Spotify:** [Official desktop version](https://loadspot.vercel.app/) (Microsoft Store version is not suitable)
 - **PowerShell:** 5.1 and above
 
 <h1 id="features">Features</h1>

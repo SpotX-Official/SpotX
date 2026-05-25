@@ -1581,6 +1581,8 @@ if ($spotifyInstalled) {
 
     $arr1 = $online -split '\.' | foreach { [int]$_ }
     $arr2 = $offline -split '\.' | foreach { [int]$_ }
+    $oldversion = $false
+    $testversion = $false
 
     # compare each element of the array in order from most significant to least significant.
     for ($i = 0; $i -lt $arr1.Length; $i++) {

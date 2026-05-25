@@ -339,6 +339,7 @@ $chrome_elf_bak = Join-Path $spotifyDirectory 'chrome_elf.dll.bak'
 $spotifyUninstall = Join-Path ([System.IO.Path]::GetTempPath()) 'SpotifyUninstall.exe'
 $start_menu = Join-Path $env:APPDATA 'Microsoft\Windows\Start Menu\Programs\Spotify.lnk'
 
+# Defaults for installer state that may be read before a branch assigns it.
 $upgrade_client = $false
 $downgrading = $false
 $ru = $false

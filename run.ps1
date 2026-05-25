@@ -340,6 +340,12 @@ $spotifyUninstall = Join-Path ([System.IO.Path]::GetTempPath()) 'SpotifyUninstal
 $start_menu = Join-Path $env:APPDATA 'Microsoft\Windows\Start Menu\Programs\Spotify.lnk'
 
 $upgrade_client = $false
+$downgrading = $false
+$ru = $false
+$podcast_off = $false
+$css = $null
+$calltype = $null
+$tempDirectory = $null
 
 # Check version Powershell
 $psv = $PSVersionTable.PSVersion.major

@@ -340,6 +340,13 @@ $spotifyUninstall = Join-Path ([System.IO.Path]::GetTempPath()) 'SpotifyUninstal
 $start_menu = Join-Path $env:APPDATA 'Microsoft\Windows\Start Menu\Programs\Spotify.lnk'
 
 $upgrade_client = $false
+$downgrading = $false
+$ru = $false
+$podcast_off = $false
+$css = $null
+$calltype = $null
+$tempDirectory = $null
+$script:curlSupportsFailWithBody = $null
 
 # Check version Powershell
 $psv = $PSVersionTable.PSVersion.major
@@ -370,6 +377,18 @@ function Stop-Script {
     }
     Exit
 }
+
+function Stop-BrokenSpotifyFiles {
+    param(
+        [string]$Details
+    )
+
+    if ($Details) { Write-Warning $Details }
+    Write-Host ($lang).Error -ForegroundColor Red
+    Write-Host ($lang).FileLocBroken
+    Stop-Script
+}
+
 function Get-Link {
     param (
         [Alias("e")]
@@ -1581,6 +1600,8 @@ if ($spotifyInstalled) {
 
     $arr1 = $online -split '\.' | foreach { [int]$_ }
     $arr2 = $offline -split '\.' | foreach { [int]$_ }
+    $oldversion = $false
+    $testversion = $false
 
     # compare each element of the array in order from most significant to least significant.
     for ($i = 0; $i -lt $arr1.Length; $i++) {
@@ -1870,6 +1891,20 @@ function Helper($paramname) {
             $from | Add-Member -MemberType NoteProperty -Name $propertyName -Value $to.$propertyName
             Remove-Json -j $to -p $propertyName
         }
+    }
+    function Get-JsonValue {
+        param (
+            [AllowNull()]
+            [object]$Object,
+
+            [Parameter(Mandatory = $true)]
+            [string]$Name
+        )
+
+        if ($null -eq $Object) { return $null }
+        $property = $Object.PSObject.Properties[$Name]
+        if ($null -eq $property) { return $null }
+        return $property.Value
     }
 
     switch ( $paramname ) {
@@ -2189,6 +2224,7 @@ function Helper($paramname) {
 
             if (!($ru)) { Remove-Json -j $VarJs -p "offrujs" }
 
+            $adds = $null
             if (!($premium) -or ($cache_limit)) {
                 if (!($premium)) {
                     $adds += $webjson.VariousJs.product_state.add
@@ -2222,46 +2258,65 @@ function Helper($paramname) {
 
     $contents | foreach {
 
-        if ($json.$PSItem.disable -eq $true) {
+        $contentName = $PSItem
+        $contentPatch = Get-JsonValue -Object $json -Name $contentName
+        if ($null -eq $contentPatch) {
             return
         }
 
-        if ( $json.$PSItem.version.to ) { $to = [version]$json.$PSItem.version.to -ge [version]$offline_patch } else { $to = $true }
-        if ( $json.$PSItem.version.fr ) { $fr = [version]$json.$PSItem.version.fr -le [version]$offline_patch } else { $fr = $false }
+        if ((Get-JsonValue -Object $contentPatch -Name 'disable') -eq $true) {
+            return
+        }
+
+        $version = Get-JsonValue -Object $contentPatch -Name 'version'
+        $versionTo = Get-JsonValue -Object $version -Name 'to'
+        $versionFr = Get-JsonValue -Object $version -Name 'fr'
+
+        if ($versionTo) { $to = [version]$versionTo -ge [version]$offline_patch } else { $to = $true }
+        if ($versionFr) { $fr = [version]$versionFr -le [version]$offline_patch } else { $fr = $false }
 
         $checkVer = $fr -and $to; $translate = $paramname -eq "RuTranslate"
 
         if ($checkVer -or $translate) {
 
-            if ($json.$PSItem.match.Count -gt 1) {
+            $matchValue = Get-JsonValue -Object $contentPatch -Name 'match'
+            $replaceValue = Get-JsonValue -Object $contentPatch -Name 'replace'
+            if ($null -eq $matchValue -or $null -eq $replaceValue) {
+                return
+            }
 
-                $count = $json.$PSItem.match.Count - 1
+            $matchPatterns = @($matchValue)
+            $replacements = @($replaceValue)
+
+            if ($matchPatterns.Count -gt 1) {
+
+                $count = $matchPatterns.Count - 1
                 $numbers = 0
 
                 While ($numbers -le $count) {
 
-                    if ($paramdata -match $json.$PSItem.match[$numbers]) {
-                        $paramdata = $paramdata -replace $json.$PSItem.match[$numbers], $json.$PSItem.replace[$numbers]
+                    if ($paramdata -match $matchPatterns[$numbers]) {
+                        $paramdata = $paramdata -replace $matchPatterns[$numbers], $replacements[$numbers]
                     }
                     else {
                         $notlog = "MinJs", "MinJson", "Cssmin"
                         if ($paramname -notin $notlog) {
 
                             Write-Host $novariable -ForegroundColor red -NoNewline
-                            Write-Host "$name$PSItem $numbers"'in'$n
+                            Write-Host "$name$contentName $numbers"'in'$n
                         }
                     }
                     $numbers++
                 }
             }
-            if ($json.$PSItem.match.Count -eq 1) {
-                if ($paramdata -match $json.$PSItem.match) {
-                    $paramdata = $paramdata -replace $json.$PSItem.match, $json.$PSItem.replace
+            if ($matchPatterns.Count -eq 1) {
+                if ($paramdata -match $matchPatterns[0]) {
+                    $paramdata = $paramdata -replace $matchPatterns[0], $replacements[0]
                 }
                 else {
                     if (!($translate) -or $err_ru) {
                         Write-Host $novariable -ForegroundColor red -NoNewline
-                        Write-Host "$name$PSItem"'in'$n
+                        Write-Host "$name$contentName"'in'$n
                     }
                 }
             }
@@ -2271,52 +2326,77 @@ function Helper($paramname) {
 }
 
 function extract ($counts, $method, $name, $helper, $add, $patch) {
-    switch ( $counts ) {
-        "one" {
-            if ($method -eq "zip") {
+    $zip = $null
+    $reader = $null
+    $writer = $null
+
+    try {
+        switch ( $counts ) {
+            "one" {
+                if ($method -eq "zip") {
+                    Add-Type -Assembly 'System.IO.Compression.FileSystem'
+                    $xpui_spa_patch = Join-Path (Join-Path $spotifyDirectory 'Apps') 'xpui.spa'
+                    $zip = [System.IO.Compression.ZipFile]::Open($xpui_spa_patch, 'update')
+                    $file = $zip.GetEntry($name)
+                    if ($null -eq $file) { throw "Archive entry not found: $name" }
+                    $reader = New-Object System.IO.StreamReader($file.Open())
+                }
+                elseif ($method -eq "nonezip") {
+                    $file = Get-Item (Join-Path (Join-Path (Join-Path $spotifyDirectory 'Apps') 'xpui') $name) -ErrorAction Stop
+                    $reader = New-Object -TypeName System.IO.StreamReader -ArgumentList $file
+                }
+                else {
+                    throw "Unsupported extraction method: $method"
+                }
+
+                $xpui = $reader.ReadToEnd()
+                $reader.Dispose()
+                $reader = $null
+
+                if ($helper) { $xpui = Helper -paramname $helper }
+                if ($method -eq "zip") { $writer = New-Object System.IO.StreamWriter($file.Open()) }
+                if ($method -eq "nonezip") { $writer = New-Object System.IO.StreamWriter -ArgumentList $file }
+                $writer.BaseStream.SetLength(0)
+                $writer.Write($xpui)
+                if ($add) { $add | foreach { $writer.Write([System.Environment]::NewLine + $PSItem ) } }
+                $writer.Dispose()
+                $writer = $null
+            }
+            "more" {
                 Add-Type -Assembly 'System.IO.Compression.FileSystem'
                 $xpui_spa_patch = Join-Path (Join-Path $spotifyDirectory 'Apps') 'xpui.spa'
                 $zip = [System.IO.Compression.ZipFile]::Open($xpui_spa_patch, 'update')
-                $file = $zip.GetEntry($name)
-                $reader = New-Object System.IO.StreamReader($file.Open())
+                $entries = @($zip.Entries | Where-Object { $_.FullName -like $name -and $_.FullName.Split('/') -notcontains 'spotx-helper' })
+
+                foreach ($entry in $entries) {
+                    $reader = New-Object System.IO.StreamReader($entry.Open())
+                    $xpui = $reader.ReadToEnd()
+                    $reader.Dispose()
+                    $reader = $null
+
+                    $xpui = Helper -paramname $helper
+                    $writer = New-Object System.IO.StreamWriter($entry.Open())
+                    $writer.BaseStream.SetLength(0)
+                    $writer.Write($xpui)
+                    $writer.Dispose()
+                    $writer = $null
+                }
             }
-            if ($method -eq "nonezip") {
-                $file = Get-Item (Join-Path (Join-Path (Join-Path $spotifyDirectory 'Apps') 'xpui') $name)
-                $reader = New-Object -TypeName System.IO.StreamReader -ArgumentList $file
-            }
-            $xpui = $reader.ReadToEnd()
-            $reader.Close()
-            if ($helper) { $xpui = Helper -paramname $helper }
-            if ($method -eq "zip") { $writer = New-Object System.IO.StreamWriter($file.Open()) }
-            if ($method -eq "nonezip") { $writer = New-Object System.IO.StreamWriter -ArgumentList $file }
-            $writer.BaseStream.SetLength(0)
-            $writer.Write($xpui)
-            if ($add) { $add | foreach { $writer.Write([System.Environment]::NewLine + $PSItem ) } }
-            $writer.Close()
-            if ($method -eq "zip") { $zip.Dispose() }
-        }
-        "more" {
-            Add-Type -Assembly 'System.IO.Compression.FileSystem'
-            $xpui_spa_patch = Join-Path (Join-Path $spotifyDirectory 'Apps') 'xpui.spa'
-            $zip = [System.IO.Compression.ZipFile]::Open($xpui_spa_patch, 'update')
-            $zip.Entries | Where-Object { $_.FullName -like $name -and $_.FullName.Split('/') -notcontains 'spotx-helper' } | foreach {
-                $reader = New-Object System.IO.StreamReader($_.Open())
-                $xpui = $reader.ReadToEnd()
-                $reader.Close()
+            "exe" {
+                $ANSI = [Text.Encoding]::GetEncoding(1251)
+                $xpui = [IO.File]::ReadAllText($spotify_binary, $ANSI)
                 $xpui = Helper -paramname $helper
-                $writer = New-Object System.IO.StreamWriter($_.Open())
-                $writer.BaseStream.SetLength(0)
-                $writer.Write($xpui)
-                $writer.Close()
+                [IO.File]::WriteAllText($spotify_binary, $xpui, $ANSI)
             }
-            $zip.Dispose()
         }
-        "exe" {
-            $ANSI = [Text.Encoding]::GetEncoding(1251)
-            $xpui = [IO.File]::ReadAllText($spotify_binary, $ANSI)
-            $xpui = Helper -paramname $helper
-            [IO.File]::WriteAllText($spotify_binary, $xpui, $ANSI)
-        }
+    }
+    catch {
+        Stop-BrokenSpotifyFiles -Details "Error: $($_.Exception.Message)"
+    }
+    finally {
+        if ($null -ne $reader) { $reader.Dispose() }
+        if ($null -ne $writer) { $writer.Dispose() }
+        if ($null -ne $zip) { $zip.Dispose() }
     }
 }
 
@@ -2341,9 +2421,11 @@ function injection {
     $folderPathInArchive = "$($FolderInArchive)/"
 
     Add-Type -AssemblyName System.IO.Compression.FileSystem
-    $archive = [System.IO.Compression.ZipFile]::Open($ArchivePath, 'Update')
+    $archive = $null
 
     try {
+        $archive = [System.IO.Compression.ZipFile]::Open($ArchivePath, 'Update')
+
         for ($i = 0; $i -lt $FileNames.Length; $i++) {
             $fileName = $FileNames[$i]
             $fileContent = $FileContents[$i]
@@ -2403,6 +2485,9 @@ function injection {
         else {
             Write-Warning "index.html not found in xpui.spa"
         }
+    }
+    catch {
+        Stop-BrokenSpotifyFiles -Details "Error: $($_.Exception.Message)"
     }
     finally {
         if ($archive -ne $null) {
@@ -2891,6 +2976,9 @@ if ($test_spa) {
     # Check for the presence of xpui.js in the xpui.spa archive
 
     $archive_spa = $null
+    $xpuiJsEntry = $null
+    $v8_snapshot = $null
+    $archiveError = $null
 
     try {
         $archive_spa = [System.IO.Compression.ZipFile]::OpenRead($xpui_spa_patch)
@@ -2929,27 +3017,45 @@ if ($test_spa) {
         }
     }
     catch {
-        Write-Warning "Error: $($_.Exception.Message)"
+        $archiveError = $_.Exception
     }
     finally {
         if ($null -ne $archive_spa) {
             $archive_spa.Dispose()
         }
-        if (-not $v8_snapshot -and $null -eq $xpuiJsEntry) {
-            Write-Warning "v8_context_snapshot file not found, cannot create xpui.js"
-            Stop-Script
-        }
+    }
+
+    if ($archiveError) {
+        Stop-BrokenSpotifyFiles -Details "Error: $($archiveError.Message)"
+    }
+
+    if (-not $v8_snapshot -and $null -eq $xpuiJsEntry) {
+        Write-Warning "v8_context_snapshot file not found, cannot create xpui.js"
+        Stop-Script
     }
 
     $bak_spa = Join-Path (Join-Path $spotifyDirectory 'Apps') 'xpui.bak'
     $test_bak_spa = Test-Path -Path $bak_spa
 
     # Make a backup copy of xpui.spa if it is original
-    $zip = [System.IO.Compression.ZipFile]::Open($xpui_spa_patch, 'update')
-    $entry = $zip.GetEntry('xpui.js')
-    $reader = New-Object System.IO.StreamReader($entry.Open())
-    $patched_by_spotx = $reader.ReadToEnd()
-    $reader.Close()
+    $zip = $null
+    $reader = $null
+
+    try {
+        $zip = [System.IO.Compression.ZipFile]::Open($xpui_spa_patch, 'update')
+        $entry = $zip.GetEntry('xpui.js')
+        if ($null -eq $entry) { throw "Archive entry not found: xpui.js" }
+
+        $reader = New-Object System.IO.StreamReader($entry.Open())
+        $patched_by_spotx = $reader.ReadToEnd()
+    }
+    catch {
+        Stop-BrokenSpotifyFiles -Details "Error: $($_.Exception.Message)"
+    }
+    finally {
+        if ($null -ne $reader) { $reader.Dispose() }
+        if ($null -ne $zip) { $zip.Dispose() }
+    }
 
 
     if ($offline -ge [version]'1.2.70.253') {
@@ -2963,8 +3069,6 @@ if ($test_spa) {
     }
 
     If ($patched_by_spotx -match 'patched by spotx') {
-        $zip.Dispose()
-
         if ($test_bak_spa) {
             Remove-Item $xpui_spa_patch -Recurse -Force
             Rename-Item $bak_spa $xpui_spa_patch
@@ -3006,7 +3110,6 @@ if ($test_spa) {
         }
 
     }
-    $zip.Dispose()
     Copy-Item $xpui_spa_patch $bak_spa
 
     if ($spotify_binary_bak -eq $dll_bak) {
@@ -3018,15 +3121,23 @@ if ($test_spa) {
     # Remove all languages except En and Ru from xpui.spa
     if ($ru) {
         $null = [Reflection.Assembly]::LoadWithPartialName('System.IO.Compression')
-        $stream = New-Object IO.FileStream($xpui_spa_patch, [IO.FileMode]::Open)
-        $mode = [IO.Compression.ZipArchiveMode]::Update
-        $zip_xpui = New-Object IO.Compression.ZipArchive($stream, $mode)
+        $stream = $null
+        $zip_xpui = $null
 
-        ($zip_xpui.Entries | Where-Object { $_.FullName -match "i18n" -and $_.FullName -inotmatch "(ru|en.json|longest)" }) | foreach { $_.Delete() }
+        try {
+            $stream = New-Object IO.FileStream($xpui_spa_patch, [IO.FileMode]::Open)
+            $mode = [IO.Compression.ZipArchiveMode]::Update
+            $zip_xpui = New-Object IO.Compression.ZipArchive($stream, $mode)
 
-        $zip_xpui.Dispose()
-        $stream.Close()
-        $stream.Dispose()
+            ($zip_xpui.Entries | Where-Object { $_.FullName -match "i18n" -and $_.FullName -inotmatch "(ru|en.json|longest)" }) | foreach { $_.Delete() }
+        }
+        catch {
+            Stop-BrokenSpotifyFiles -Details "Error: $($_.Exception.Message)"
+        }
+        finally {
+            if ($null -ne $zip_xpui) { $zip_xpui.Dispose() }
+            if ($null -ne $stream) { $stream.Dispose() }
+        }
     }
 
     # Full screen mode activation and removing "Upgrade to premium" menu, upgrade button, disabling a playlist sponsor

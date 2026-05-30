@@ -1853,8 +1853,45 @@ if ($webjson -eq $null) {
     Stop-Script
 }
 
+function Get-JsonValue {
+    param (
+        [AllowNull()]
+        [object]$Object,
 
-function Helper($paramname) {
+        [Parameter(Mandatory = $true)]
+        [string]$Name
+    )
+
+    if ($null -eq $Object) { return $null }
+    $property = $Object.PSObject.Properties[$Name]
+    if ($null -eq $property) { return $null }
+    return $property.Value
+}
+
+function Test-PatchVersionMatch {
+    param (
+        [AllowNull()]
+        [object]$Patch,
+
+        [switch]$Translate
+    )
+
+    if ($null -eq $Patch) { return $false }
+    if ((Get-JsonValue -Object $Patch -Name 'disable') -eq $true) { return $false }
+    if ($Translate) { return $true }
+
+    $version = Get-JsonValue -Object $Patch -Name 'version'
+    $versionTo = Get-JsonValue -Object $version -Name 'to'
+    $versionFr = Get-JsonValue -Object $version -Name 'fr'
+    $offline_patch = $offline -replace '(\d+\.\d+\.\d+)(.\d+)', '$1'
+
+    if ($versionTo) { $to = [version]$versionTo -ge [version]$offline_patch } else { $to = $true }
+    if ($versionFr) { $fr = [version]$versionFr -le [version]$offline_patch } else { $fr = $false }
+
+    return $fr -and $to
+}
+
+function Helper($paramname, [switch]$CheckOnly) {
 
 
     function Remove-Json {
@@ -1892,21 +1929,6 @@ function Helper($paramname) {
             Remove-Json -j $to -p $propertyName
         }
     }
-    function Get-JsonValue {
-        param (
-            [AllowNull()]
-            [object]$Object,
-
-            [Parameter(Mandatory = $true)]
-            [string]$Name
-        )
-
-        if ($null -eq $Object) { return $null }
-        $property = $Object.PSObject.Properties[$Name]
-        if ($null -eq $property) { return $null }
-        return $property.Value
-    }
-
     switch ( $paramname ) {
         "HtmlLicMin" {
             # licenses.html minification
@@ -1936,6 +1958,7 @@ function Helper($paramname) {
             # Remove indent for old theme xpui.css
             $name = "patches.json.others."
             $n = "xpui.css"
+            $contents = "fix-old-theme"
             $json = $webjson.others
         }
         "Fixjs" {
@@ -1959,14 +1982,16 @@ function Helper($paramname) {
         "Discriptions" {
             # Add discriptions (xpui-desktop-modals.js)
 
-            $svg_tg = $webjson.others.discriptions.svgtg
-            $svg_git = $webjson.others.discriptions.svggit
-            $svg_faq = $webjson.others.discriptions.svgfaq
-            $replace = $webjson.others.discriptions.replace
+            if (!$CheckOnly) {
+                $svg_tg = $webjson.others.discriptions.svgtg
+                $svg_git = $webjson.others.discriptions.svggit
+                $svg_faq = $webjson.others.discriptions.svgfaq
+                $replace = $webjson.others.discriptions.replace
 
-            $replacedText = $replace -f $svg_git, $svg_tg, $svg_faq
+                $replacedText = $replace -f $svg_git, $svg_tg, $svg_faq
 
-            $webjson.others.discriptions.replace = '$1"' + $replacedText + '"})'
+                $webjson.others.discriptions.replace = '$1"' + $replacedText + '"})'
+            }
 
             $name = "patches.json.others."
             $n = "xpui-desktop-modals.js"
@@ -1982,6 +2007,14 @@ function Helper($paramname) {
         }
         "ForcedExp" {
             # Forced disable some exp (xpui.js)
+            if ($CheckOnly) {
+                $name = "patches.json.others."
+                $n = "xpui.js"
+                $contents = "ForcedExp"
+                $json = $webjson.others
+                break
+            }
+
             $offline_patch = $offline -replace '(\d+\.\d+\.\d+)(.\d+)', '$1'
             $Enable = $webjson.others.EnableExp
             $Disable = $webjson.others.DisableExp
@@ -2152,6 +2185,13 @@ function Helper($paramname) {
             $json = $webjsonru
         }
         "Binary" {
+            if ($CheckOnly) {
+                $name = "patches.json.others.binary."
+                $n = "Spotify.exe"
+                $contents = $webjson.others.binary.psobject.properties.name
+                $json = $webjson.others.binary
+                break
+            }
 
             $binary = $webjson.others.binary
 
@@ -2179,7 +2219,21 @@ function Helper($paramname) {
             $json = $webjson.others
 
         }
+        "HomeV2-js" {
+
+            $name = "patches.json.others."
+            $n = "home-v2.js"
+            $contents = "fixHomeV2EmptyResponseCheck"
+            $json = $webjson.others
+        }
         "VariousofXpui-js" {
+            if ($CheckOnly) {
+                $name = "patches.json.VariousJs."
+                $n = "xpui.js"
+                $contents = $webjson.VariousJs.psobject.properties.name
+                $json = $webjson.VariousJs
+                break
+            }
 
             $VarJs = $webjson.VariousJs
 
@@ -2254,35 +2308,31 @@ function Helper($paramname) {
     }
     $paramdata = $xpui
     $novariable = "Didn't find variable "
-    $offline_patch = $offline -replace '(\d+\.\d+\.\d+)(.\d+)', '$1'
 
-    $contents | foreach {
+    foreach ($contentName in @($contents)) {
+        if ([string]::IsNullOrEmpty($contentName)) {
+            continue
+        }
 
-        $contentName = $PSItem
         $contentPatch = Get-JsonValue -Object $json -Name $contentName
         if ($null -eq $contentPatch) {
-            return
+            continue
         }
 
         if ((Get-JsonValue -Object $contentPatch -Name 'disable') -eq $true) {
-            return
+            continue
         }
 
-        $version = Get-JsonValue -Object $contentPatch -Name 'version'
-        $versionTo = Get-JsonValue -Object $version -Name 'to'
-        $versionFr = Get-JsonValue -Object $version -Name 'fr'
+        $translate = $paramname -eq "RuTranslate"
+        $checkVer = Test-PatchVersionMatch -Patch $contentPatch -Translate:$translate
 
-        if ($versionTo) { $to = [version]$versionTo -ge [version]$offline_patch } else { $to = $true }
-        if ($versionFr) { $fr = [version]$versionFr -le [version]$offline_patch } else { $fr = $false }
-
-        $checkVer = $fr -and $to; $translate = $paramname -eq "RuTranslate"
-
-        if ($checkVer -or $translate) {
+        if ($checkVer) {
+            if ($CheckOnly) { return $true }
 
             $matchValue = Get-JsonValue -Object $contentPatch -Name 'match'
             $replaceValue = Get-JsonValue -Object $contentPatch -Name 'replace'
             if ($null -eq $matchValue -or $null -eq $replaceValue) {
-                return
+                continue
             }
 
             $matchPatterns = @($matchValue)
@@ -2322,6 +2372,7 @@ function Helper($paramname) {
             }
         }
     }
+    if ($CheckOnly) { return $false }
     $paramdata
 }
 
@@ -2329,6 +2380,8 @@ function extract ($counts, $method, $name, $helper, $add, $patch) {
     $zip = $null
     $reader = $null
     $writer = $null
+
+    if ($helper -and $null -eq $add -and !(Helper -paramname $helper -CheckOnly)) { return }
 
     try {
         switch ( $counts ) {
@@ -3209,6 +3262,7 @@ if ($test_spa) {
         injection -p $xpui_spa_patch -f "spotx-helper/lyrics-color" -n @("rules.css", "colors.css") -c @($rulesContent, $colorsContent) -i "rules.css"
 
     }
+    extract -counts 'one' -method 'zip' -name 'home-v2.js' -helper 'HomeV2-js'
     extract -counts 'one' -method 'zip' -name 'xpui.js' -helper 'VariousofXpui-js'
 
     if ([version]$offline -ge [version]"1.1.85.884" -and [version]$offline -le [version]"1.2.57.463") {
@@ -3270,7 +3324,6 @@ if ($test_spa) {
     if ($null -ne $css ) { extract -counts 'one' -method 'zip' -name 'xpui.css' -add $css }
 
     # Old UI fix
-    $contents = "fix-old-theme"
     extract -counts 'one' -method 'zip' -name 'xpui.css' -helper "FixCss"
 
     # Remove RTL and minification of all *.css

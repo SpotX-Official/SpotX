@@ -2587,7 +2587,7 @@
         "fixHomeV2EmptyResponseCheck": {
             "version": {
                 "fr": "1.1.92",
-                "to": "1.2.45"
+                "to": "1.2.44"
             },
             "match": "(\"HomeResponsePayload\"[\\s\\S]{0,500}?)0\\s*===\\s*([A-Za-z_$][\\w$]*)\\.sectionContainer\\.sections\\.totalCount\\s*\\|\\|\\s*0\\s*===\\s*\\2\\.sectionContainer\\.sections\\.items\\.length",
             "replace": "$1!Array.isArray(null==$2||null==$2.sectionContainer||null==$2.sectionContainer.sections?void 0:$2.sectionContainer.sections.items)||0===$2.sectionContainer.sections.items.length"

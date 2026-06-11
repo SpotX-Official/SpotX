@@ -390,7 +390,7 @@
                 "native_description": "Enable esperanto Migration for Leaderboard Ad Format",
                 "version": {
                     "fr": "1.2.32",
-                    "to": ""
+                    "to": "1.2.90"
                 }
             },
             "SponsoredPlaylistEsperantoMigration": {
@@ -449,7 +449,7 @@
                 "native_description": "Enables cross-origin iframe rendering for leaderboard ads via CDN template",
                 "version": {
                     "fr": "1.2.86",
-                    "to": ""
+                    "to": "1.2.90"
                 }
             },
             "LyricsUpsell": {
@@ -802,6 +802,14 @@
                 "description": "Gates the report ad menu item in the ad overflow context menu",
                 "version": {
                     "fr": "1.2.89",
+                    "to": ""
+                }
+            },
+            "HptoLayoutRewrite": {
+                "name": "enableHptoLayoutRewrite",
+                "description": "Enable the new HomeAdCard flexbox layout rewrite",
+                "version": {
+                    "fr": "1.2.92",
                     "to": ""
                 }
             }
@@ -1866,6 +1874,14 @@
                     "to": ""
                 }
             },
+            "MagpieAudiobookRows": {
+                "name": "enableMagpieAudiobookRows",
+                "version": {
+                    "fr": "1.2.92",
+                    "to": ""
+                }
+            },
+
             "PlaylistExtenderBpmKey": {
                 "name": "enablePlaylistExtenderBpmKey",
                 "native_description": "Enable BPM and key columns in playlist recommendations",

@@ -2,7 +2,7 @@
 param
 (
     [Parameter(HelpMessage = 'Latest recommended Spotify version for Windows 10+.')]
-    [string]$latest_full = "1.2.90",
+    [string]$latest_full = "1.2.92",
 
     [Parameter(HelpMessage = 'Latest supported Spotify version for Windows 7-8.1')]
     [string]$last_win7_full = "1.2.5.1006.g22820f93",
@@ -2094,7 +2094,7 @@ function Helper($paramname, [switch]$CheckOnly) {
                     if (!($rightsidebarcolor)) { Remove-Json -j $Enable -p 'RightSidebarColors' }
                 }
             }
-            if (!$premium) { Remove-Json -j $Enable -p 'RemoteDownloads', 'Magpie', 'MagpiePrompting', 'MagpieScheduling', 'MagpieCuration' }
+            if (!$premium) { Remove-Json -j $Enable -p 'RemoteDownloads', 'Magpie', 'MagpiePrompting', 'MagpieScheduling', 'MagpieCuration', 'MagpieAudiobookRows' }
 
             # Disable unimportant exp
             if ($exp_spotify) {

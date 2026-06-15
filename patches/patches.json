@@ -1881,7 +1881,6 @@
                     "to": ""
                 }
             },
-
             "PlaylistExtenderBpmKey": {
                 "name": "enablePlaylistExtenderBpmKey",
                 "native_description": "Enable BPM and key columns in playlist recommendations",
@@ -1943,6 +1942,14 @@
                 "native_description": "Show 'Make this a playlist' button when filtering Liked Songs by genre",
                 "version": {
                     "fr": "1.2.89",
+                    "to": ""
+                }
+            },
+            "UserTopTracks": {
+                "name": "enableUserTopTracks",
+                "native_description": "Enable User Top Tracks shelf on the profile page and the dedicated /top/tracks route. Disable via rollout to kill the feature ahead of any List Platform migration",
+                "version": {
+                    "fr": "1.2.90",
                     "to": ""
                 }
             }

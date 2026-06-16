@@ -1,7 +1,7 @@
 @echo off
 
 :: Line for changing spotx parameters, each parameter should be separated by a space
-set param=-premium -new_theme
+set param=-premium -new_theme -no_pause
 
 set url='https://raw.githubusercontent.com/SpotX-Official/SpotX/refs/heads/main/run.ps1'
 set url2='https://spotx-official.github.io/SpotX/run.ps1'

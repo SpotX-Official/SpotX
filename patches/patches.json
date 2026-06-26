@@ -2487,14 +2487,14 @@
                 "to": ""
             },
             "match": [
-                "<li><a href=\"#[A-Za-z0-9]{5}\">zlib<\/a><\/li>\n(.|\n)*<\/p><!-- END CONTAINER DEPS LICENSES -->(<\/div>)",
-                "\t",
-                "  ",
-                "(?m)(^\\s*\r?\n)",
-                "\r?\n(?!\\(1|\\d)"
+                "(?s)<li><a href=\"#[A-Za-z0-9]{5}\">zlib<\/a><\/li>.*?<\/p><!-- END CONTAINER DEPS LICENSES -->(<\/div>)|(<p>Third-party licenses[^<]*Desktop UI code:<\/p>\\s*<ul\\b[^>]*>(?:\\s*<li><a href=\"[^\"]+\">.*?<\/a><\/li>){1,8}).*?(<\/ul>).*\\z|(<p>Third-party licenses[^<]*Desktop UI code:<\/p>)\\s*\\z",
+                "\t|\\z",
+                "  |\\z",
+                "(?m)(^\\s*\r?\n)|\\z",
+                "\r?\n(?!\\(1|\\d)|\\z"
             ],
             "replace": [
-                "$2",
+                "$1$2$3$4",
                 "",
                 "",
                 "",

@@ -793,7 +793,7 @@
                 "name": "enable_ad_feedback_home_free",
                 "description": "Kill switch for ad feedback on home ad format for free users",
                 "version": {
-                    "fr": "1.2.94",
+                    "fr": "1.2.93",
                     "to": ""
                 }
             },

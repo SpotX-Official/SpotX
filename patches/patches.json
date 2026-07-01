@@ -557,7 +557,7 @@
                 "native_description": "Enable Canvas for ads",
                 "version": {
                     "fr": "1.2.52",
-                    "to": ""
+                    "to": "1.2.92"
                 }
             },
             "ConnectedStateObserver": {
@@ -786,6 +786,30 @@
                 "description": "Enable new ad feedback UX for in-stream ads",
                 "version": {
                     "fr": "1.2.88",
+                    "to": ""
+                }
+            },
+            "ad_feedback_home_free": {
+                "name": "enable_ad_feedback_home_free",
+                "description": "Kill switch for ad feedback on home ad format for free users",
+                "version": {
+                    "fr": "1.2.94",
+                    "to": ""
+                }
+            },
+            "ad_feedback_home_premium": {
+                "name": "enable_ad_feedback_home_premium",
+                "description": "Kill switch for ad feedback on home ad format for premium users",
+                "version": {
+                    "fr": "1.2.93",
+                    "to": ""
+                }
+            },
+            "ad_feedback_milestone_3": {
+                "name": "enable_ad_feedback_milestone_3",
+                "description": "Enable ad feedback milestone 3 feature",
+                "version": {
+                    "fr": "1.2.93",
                     "to": ""
                 }
             },

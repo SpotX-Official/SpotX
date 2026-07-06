@@ -1976,6 +1976,14 @@
                     "fr": "1.2.90",
                     "to": ""
                 }
+            },
+            "crossfade_enabled": {
+                "name": "crossfade_enabled",
+                "native_description": "When true, shows the Crossfade toggle in Advanced Playback settings. When false, the setting is hidden.",
+                "version": {
+                    "fr": "1.2.89",
+                    "to": ""
+                }
             }
         },
         "CustomExp": {

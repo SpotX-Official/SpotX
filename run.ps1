@@ -2644,38 +2644,34 @@ function Extract-WebpackModules {
     return $decodedString
 }
 
-function Reset-Dll-Sign {
-    [CmdletBinding()]
-    param (
-        [string]$FilePath
-    )
-
-    $TargetStringText = "Check failed: sep_pos != std::wstring::npos."
-
-    $Patch_x64 = "B8 01 00 00 00 C3"
-
-    $Patch_ARM64 = "20 00 80 52 C0 03 5F D6"
-
-    $Patch_x64 = [byte[]]($Patch_x64 -split ' ' | ForEach-Object { [Convert]::ToByte($_, 16) })
-    $Patch_ARM64 = [byte[]]($Patch_ARM64 -split ' ' | ForEach-Object { [Convert]::ToByte($_, 16) })
+function Initialize-BinaryScanner {
+    if (([System.Management.Automation.PSTypeName]'BinaryScanner').Type) {
+        return
+    }
 
     $csharpCode = @"
 using System;
 using System.Collections.Generic;
 
-public class ScannerCore {
-    public static int FindBytes(byte[] data, byte[] pattern) {
-        for (int i = 0; i < data.Length - pattern.Length; i++) {
-            bool match = true;
-            for (int j = 0; j < pattern.Length; j++) {
-                if (data[i + j] != pattern[j]) { match = false; break; }
+public static class BinaryScanner {
+    public static int FindBytes(byte[] data, byte[] pattern, int start) {
+        if (data == null || pattern == null || pattern.Length == 0) return -1;
+        if (start < 0) start = 0;
+        for (int i = start; i <= data.Length - pattern.Length; i++) {
+            if (data[i] != pattern[0]) continue;
+            bool matched = true;
+            for (int j = 1; j < pattern.Length; j++) {
+                if (data[i + j] != pattern[j]) {
+                    matched = false;
+                    break;
+                }
             }
-            if (match) return i;
+            if (matched) return i;
         }
         return -1;
     }
 
-    public static List<int> FindXref_ARM64(byte[] data, ulong stringRVA, ulong sectionRVA, uint sectionRawPtr, uint sectionSize) {
+    public static List<int> FindXrefArm64(byte[] data, ulong stringRVA, ulong sectionRVA, uint sectionRawPtr, uint sectionSize) {
         List<int> results = new List<int>();
         for (uint i = 0; i < sectionSize; i += 4) {
             uint fileOffset = sectionRawPtr + i;
@@ -2709,7 +2705,7 @@ public class ScannerCore {
         return results;
     }
 
-    public static int FindStart(byte[] data, int startOffset, bool isArm) {
+    public static int FindFunctionStart(byte[] data, int startOffset, bool isArm) {
         int step = isArm ? 4 : 1;
         if (isArm && (startOffset % 4 != 0)) { startOffset -= (startOffset % 4); }
 
@@ -2717,15 +2713,13 @@ public class ScannerCore {
             if (isArm) {
                 if (i < 4) break;
                 uint currInst = BitConverter.ToUInt32(data, i);
-                // ARM64 Prologue: STP X29, X30, [SP, -imm]! -> FD 7B .. A9
+                // ARM64 prologue
                 if ((currInst & 0xFF00FFFF) == 0xA9007BFD) { return i; }
             } else {
-                // x64: Look for at least 2 bytes of padding (CC or 90) followed by a valid function start
+                // x64 padding before function start
                 if (i >= 2) {
-                    if ((data[i-1] == 0xCC && data[i-2] == 0xCC) || (data[i-1] == 0x90 && data[i-2] == 0x90)) {
+                    if ((data[i - 1] == 0xCC && data[i - 2] == 0xCC) || (data[i - 1] == 0x90 && data[i - 2] == 0x90)) {
                         if (data[i] != 0xCC && data[i] != 0x90) {
-                            // Check for common function start bytes:
-                            // 0x48 (REX.W), 0x40 (REX), 0x55 (push rbp), 0x53-0x57 (push reg)
                             byte b = data[i];
                             if (b == 0x48 || b == 0x40 || b == 0x55 || (b >= 0x53 && b <= 0x57)) {
                                 return i;
@@ -2738,12 +2732,174 @@ public class ScannerCore {
         }
         return 0;
     }
+
+    public static long[] FindRipRefs(byte[] bytes, int start, int length, long imageBase, long targetVa, int[] rawPtrs, int[] rawSizes, int[] virtualAddresses) {
+        var result = new List<long>();
+        int end = Math.Min(bytes.Length - 8, start + length - 8);
+        for (int p = start; p < end; p++) {
+            for (int k = 0; k < 2; k++) {
+                int dispOffset = k == 0 ? 2 : 3;
+                long nextRva = OffsetToRva(p + dispOffset + 4, rawPtrs, rawSizes, virtualAddresses);
+                if (nextRva < 0) continue;
+                int disp = BitConverter.ToInt32(bytes, p + dispOffset);
+                long target = imageBase + nextRva + disp;
+                if (target == targetVa) result.Add(p);
+            }
+        }
+        return result.ToArray();
+    }
+
+    public static int[] FindCallsToRva(byte[] bytes, int start, int length, long targetRva, int[] rawPtrs, int[] rawSizes, int[] virtualAddresses) {
+        var result = new List<int>();
+        int end = Math.Min(bytes.Length - 16, start + length - 16);
+        for (int p = start; p < end; p++) {
+            if (bytes[p] != 0xE8) continue;
+            long nextRva = OffsetToRva(p + 5, rawPtrs, rawSizes, virtualAddresses);
+            if (nextRva < 0) continue;
+            int disp = BitConverter.ToInt32(bytes, p + 1);
+            if (nextRva + disp == targetRva && bytes[p + 5] == 0x88) {
+                result.Add(p);
+            }
+        }
+        return result.ToArray();
+    }
+
+    public static long[] FindFunctionRange(byte[] bytes, int pdataRawPtr, int pdataRawSize, long rva) {
+        int end = Math.Min(bytes.Length - 11, pdataRawPtr + pdataRawSize - 11);
+        for (int p = pdataRawPtr; p < end; p += 12) {
+            long begin = BitConverter.ToUInt32(bytes, p);
+            long finish = BitConverter.ToUInt32(bytes, p + 4);
+            if (begin > 0 && finish > begin && rva >= begin && rva < finish) {
+                return new long[] { begin, finish };
+            }
+        }
+        return Array.Empty<long>();
+    }
+
+    private static long OffsetToRva(int offset, int[] rawPtrs, int[] rawSizes, int[] virtualAddresses) {
+        for (int i = 0; i < rawPtrs.Length; i++) {
+            if (offset >= rawPtrs[i] && offset < rawPtrs[i] + rawSizes[i]) {
+                return (long)virtualAddresses[i] + (offset - rawPtrs[i]);
+            }
+        }
+        return -1;
+    }
 }
 "@
 
-    if (-not ([System.Management.Automation.PSTypeName]'ScannerCore').Type) {
-        Add-Type -TypeDefinition $csharpCode
+    Add-Type -TypeDefinition $csharpCode
+}
+
+function Convert-HexStringToBytes {
+    param([string]$HexString)
+
+    return [byte[]]($HexString -split '\s+' | Where-Object { $_ } | ForEach-Object { [Convert]::ToByte($_, 16) })
+}
+
+function Read-PEUInt16([byte[]]$Bytes, [int]$Offset) { [BitConverter]::ToUInt16($Bytes, $Offset) }
+function Read-PEUInt32([byte[]]$Bytes, [int]$Offset) { [BitConverter]::ToUInt32($Bytes, $Offset) }
+function Read-PEUInt64([byte[]]$Bytes, [int]$Offset) { [BitConverter]::ToUInt64($Bytes, $Offset) }
+
+function Get-PEArchitectureOffsets {
+    param([UInt16]$MachineType)
+
+    $result = @{ Architecture = $null; DataDirectoryOffset = $null }
+    switch ($MachineType) {
+        0x8664 { $result.Architecture = 'x64'; $result.DataDirectoryOffset = 112 }
+        0xAA64 { $result.Architecture = 'ARM64'; $result.DataDirectoryOffset = 112 }
+        0x014c { $result.Architecture = 'x86'; $result.DataDirectoryOffset = 96 }
+        default { $result.Architecture = 'Unknown'; $result.DataDirectoryOffset = $null }
     }
+    $result.MachineType = $MachineType
+    return $result
+}
+
+function Get-PEFileInfo {
+    param([byte[]]$Bytes)
+
+    $peHeaderOffset = [int](Read-PEUInt32 $Bytes 0x3C)
+    if ($Bytes[$peHeaderOffset] -ne 0x50 -or $Bytes[$peHeaderOffset + 1] -ne 0x45) {
+        throw 'Invalid PE file'
+    }
+
+    $fileHeaderOffset = $peHeaderOffset + 4
+    $optionalHeaderOffset = $fileHeaderOffset + 20
+    $machineType = Read-PEUInt16 $Bytes $fileHeaderOffset
+    $archInfo = Get-PEArchitectureOffsets -MachineType $machineType
+    $optionalHeaderMagic = Read-PEUInt16 $Bytes $optionalHeaderOffset
+
+    if ($optionalHeaderMagic -eq 0x20b) {
+        $imageBase = [int64](Read-PEUInt64 $Bytes ($optionalHeaderOffset + 24))
+    }
+    elseif ($optionalHeaderMagic -eq 0x10b) {
+        $imageBase = [int64](Read-PEUInt32 $Bytes ($optionalHeaderOffset + 28))
+    }
+    else {
+        throw 'Unsupported optional header format'
+    }
+
+    $numberOfSections = [int](Read-PEUInt16 $Bytes ($fileHeaderOffset + 2))
+    $optionalHeaderSize = [int](Read-PEUInt16 $Bytes ($fileHeaderOffset + 16))
+    $sectionTableStart = $optionalHeaderOffset + $optionalHeaderSize
+    $sections = @()
+    $codeSection = $null
+
+    for ($i = 0; $i -lt $numberOfSections; $i++) {
+        $sectionOffset = $sectionTableStart + ($i * 40)
+        $nameBytes = $Bytes[$sectionOffset..($sectionOffset + 7)]
+        $name = ([Text.Encoding]::ASCII.GetString($nameBytes) -replace "`0.*$", '')
+        $characteristics = Read-PEUInt32 $Bytes ($sectionOffset + 36)
+        $section = [PSCustomObject]@{
+            Name           = $name
+            VirtualSize    = [int64](Read-PEUInt32 $Bytes ($sectionOffset + 8))
+            VirtualAddress = [int64](Read-PEUInt32 $Bytes ($sectionOffset + 12))
+            RawSize        = [int64](Read-PEUInt32 $Bytes ($sectionOffset + 16))
+            RawPtr         = [int64](Read-PEUInt32 $Bytes ($sectionOffset + 20))
+            Characteristics = $characteristics
+        }
+        $sections += $section
+        if (($characteristics -band 0x20) -ne 0 -and $null -eq $codeSection) {
+            $codeSection = $section
+        }
+    }
+
+    return [PSCustomObject]@{
+        PeHeaderOffset      = $peHeaderOffset
+        FileHeaderOffset    = $fileHeaderOffset
+        OptionalHeaderOffset = $optionalHeaderOffset
+        MachineType         = $machineType
+        Architecture        = $archInfo.Architecture
+        DataDirectoryOffset = $archInfo.DataDirectoryOffset
+        ImageBase           = $imageBase
+        Sections            = $sections
+        CodeSection         = $codeSection
+    }
+}
+
+function Get-PERvaFromOffset {
+    param(
+        [object[]]$Sections,
+        [int64]$Offset
+    )
+
+    foreach ($section in $Sections) {
+        if ($Offset -ge $section.RawPtr -and $Offset -lt ($section.RawPtr + $section.RawSize)) {
+            return [int64]$section.VirtualAddress + ($Offset - $section.RawPtr)
+        }
+    }
+    return $null
+}
+
+function Reset-Dll-Sign {
+    [CmdletBinding()]
+    param (
+        [string]$FilePath
+    )
+
+    $TargetStringText = "Check failed: sep_pos != std::wstring::npos."
+    $Patch_x64 = Convert-HexStringToBytes "B8 01 00 00 00 C3"
+    $Patch_ARM64 = Convert-HexStringToBytes "20 00 80 52 C0 03 5F D6"
+    Initialize-BinaryScanner
 
     Write-Verbose "Loading file: $FilePath"
     if (-not (Test-Path $FilePath)) {
@@ -2753,34 +2909,19 @@ public class ScannerCore {
     $bytes = [System.IO.File]::ReadAllBytes($FilePath)
 
     try {
-        $e_lfanew = [BitConverter]::ToInt32($bytes, 0x3C)
-        $Machine = [BitConverter]::ToUInt16($bytes, $e_lfanew + 4)
-        $IsArm64 = $false
-        $ArchName = "Unknown"
+        $peInfo = Get-PEFileInfo -Bytes $bytes
+        $IsArm64 = $peInfo.Architecture -eq 'ARM64'
 
-        if ($Machine -eq 0x8664) { $ArchName = "x64"; $IsArm64 = $false }
-        elseif ($Machine -eq 0xAA64) { $ArchName = "ARM64"; $IsArm64 = $true }
-        else {
+        if ($peInfo.Architecture -ne 'x64' -and -not $IsArm64) {
             Write-Warning "Architecture not supported for patching Spotify.dll"
             Stop-Script
         }
 
-        Write-Verbose "Architecture: $ArchName"
+        Write-Verbose "Architecture: $($peInfo.Architecture)"
 
-        $NumberOfSections = [BitConverter]::ToUInt16($bytes, $e_lfanew + 0x06)
-        $SizeOfOptionalHeader = [BitConverter]::ToUInt16($bytes, $e_lfanew + 0x14)
-        $SectionTableStart = $e_lfanew + 0x18 + $SizeOfOptionalHeader
-
-        $Sections = @(); $CodeSection = $null
-        for ($i = 0; $i -lt $NumberOfSections; $i++) {
-            $secEntry = $SectionTableStart + ($i * 40)
-            $VA = [BitConverter]::ToUInt32($bytes, $secEntry + 12)
-            $RawSize = [BitConverter]::ToUInt32($bytes, $secEntry + 16)
-            $RawPtr = [BitConverter]::ToUInt32($bytes, $secEntry + 20)
-            $Chars = [BitConverter]::ToUInt32($bytes, $secEntry + 36)
-            $SecObj = [PSCustomObject]@{ VA = $VA; RawPtr = $RawPtr; RawSize = $RawSize }
-            $Sections += $SecObj
-            if (($Chars -band 0x20) -ne 0 -and $CodeSection -eq $null) { $CodeSection = $SecObj }
+        if ($null -eq $peInfo.CodeSection) {
+            Write-Warning "Code section not found in Spotify.dll"
+            Stop-Script
         }
     }
     catch {
@@ -2788,42 +2929,40 @@ public class ScannerCore {
         Stop-Script
     }
 
-    function Get-RVA($FileOffset) {
-        foreach ($sec in $Sections) {
-            if ($FileOffset -ge $sec.RawPtr -and $FileOffset -lt ($sec.RawPtr + $sec.RawSize)) {
-                return ($FileOffset - $sec.RawPtr) + $sec.VA
-            }
-        }
-        return 0
-    }
-
     Write-Verbose "Searching for function..."
     $StringBytes = [System.Text.Encoding]::ASCII.GetBytes($TargetStringText)
-    $StringOffset = [ScannerCore]::FindBytes($bytes, $StringBytes)
+    $StringOffset = [BinaryScanner]::FindBytes($bytes, $StringBytes, 0)
     if ($StringOffset -eq -1) {
         Write-Warning "String not found in Spotify.dll"
         Stop-Script
     }
-    $StringRVA = Get-RVA $StringOffset
+    $StringRVA = Get-PERvaFromOffset -Sections $peInfo.Sections -Offset $StringOffset
+    if ($null -eq $StringRVA) {
+        Write-Warning "String RVA not found in Spotify.dll"
+        Stop-Script
+    }
 
     $PatchOffset = 0
     if (-not $IsArm64) {
-        $RawStart = $CodeSection.RawPtr; $RawEnd = $RawStart + $CodeSection.RawSize
+        $RawStart = $peInfo.CodeSection.RawPtr; $RawEnd = $RawStart + $peInfo.CodeSection.RawSize
         for ($i = $RawStart; $i -lt $RawEnd; $i++) {
             if ($bytes[$i] -eq 0x48 -and $bytes[$i + 1] -eq 0x8D -and $bytes[$i + 2] -eq 0x15) {
                 $Rel = [BitConverter]::ToInt32($bytes, $i + 3)
-                $Target = (Get-RVA $i) + 7 + $Rel
+                $CurrentRva = Get-PERvaFromOffset -Sections $peInfo.Sections -Offset $i
+                if ($null -eq $CurrentRva) { continue }
+
+                $Target = $CurrentRva + 7 + $Rel
                 if ($Target -eq $StringRVA) {
-                    $PatchOffset = [ScannerCore]::FindStart($bytes, $i, $false)
+                    $PatchOffset = [BinaryScanner]::FindFunctionStart($bytes, $i, $false)
                     if ($PatchOffset -gt 0) { break }
                 }
             }
         }
     }
     else {
-        $Results = [ScannerCore]::FindXref_ARM64($bytes, [uint64]$StringRVA, [uint64]$CodeSection.VA, [uint32]$CodeSection.RawPtr, [uint32]$CodeSection.RawSize)
+        $Results = [BinaryScanner]::FindXrefArm64($bytes, [uint64]$StringRVA, [uint64]$peInfo.CodeSection.VirtualAddress, [uint32]$peInfo.CodeSection.RawPtr, [uint32]$peInfo.CodeSection.RawSize)
         if ($Results.Count -gt 0) {
-            $PatchOffset = [ScannerCore]::FindStart($bytes, $Results[0], $true)
+            $PatchOffset = [BinaryScanner]::FindFunctionStart($bytes, $Results[0], $true)
         }
     }
 
@@ -2856,21 +2995,87 @@ public class ScannerCore {
     }
 }
 
-function Get-PEArchitectureOffsets {
-    param(
-        [byte[]]$bytes,
-        [int]$fileHeaderOffset
+function Set-CrossfadeEnabledBinaryPatch {
+    [CmdletBinding()]
+    param (
+        [string]$FilePath
     )
-    $machineType = [System.BitConverter]::ToUInt16($bytes, $fileHeaderOffset)
-    $result = @{ Architecture = $null; DataDirectoryOffset = 0 }
-    switch ($machineType) {
-        0x8664 { $result.Architecture = 'x64'; $result.DataDirectoryOffset = 112 }
-        0xAA64 { $result.Architecture = 'ARM64'; $result.DataDirectoryOffset = 112 }
-        0x014c { $result.Architecture = 'x86'; $result.DataDirectoryOffset = 96 }
-        default { $result.Architecture = 'Unknown'; $result.DataDirectoryOffset = $null }
+
+    try {
+        Initialize-BinaryScanner
+
+        if (-not (Test-Path -LiteralPath $FilePath)) {
+            throw "File Spotify.dll not found"
+        }
+
+        $bytes = [System.IO.File]::ReadAllBytes($FilePath)
+        $peInfo = Get-PEFileInfo -Bytes $bytes
+
+        if ($peInfo.Architecture -ne 'x64') {
+            throw "Architecture $($peInfo.Architecture) is not supported for crossfade_enabled patch"
+        }
+
+        $text = $peInfo.Sections | Where-Object { $_.Name -eq '.text' } | Select-Object -First 1
+        $pdata = $peInfo.Sections | Where-Object { $_.Name -eq '.pdata' } | Select-Object -First 1
+
+        if (-not $text -or -not $pdata) {
+            throw "Required PE sections were not found"
+        }
+
+        $rawPtrs = [int[]]($peInfo.Sections | ForEach-Object { [int]$_.RawPtr })
+        $rawSizes = [int[]]($peInfo.Sections | ForEach-Object { [int]$_.RawSize })
+        $virtualAddresses = [int[]]($peInfo.Sections | ForEach-Object { [int]$_.VirtualAddress })
+
+        $needle = [Text.Encoding]::ASCII.GetBytes('crossfade_enabled')
+        $needleOffset = [BinaryScanner]::FindBytes($bytes, $needle, 0)
+        if ($needleOffset -lt 0) {
+            throw "crossfade_enabled was not found"
+        }
+
+        $needleRva = Get-PERvaFromOffset -Sections $peInfo.Sections -Offset $needleOffset
+        if ($null -eq $needleRva) {
+            throw "crossfade_enabled RVA was not found"
+        }
+
+        $needleVa = [int64]$peInfo.ImageBase + [int64]$needleRva
+        $refOffsets = @([BinaryScanner]::FindRipRefs($bytes, [int]$text.RawPtr, [int]$text.RawSize, [int64]$peInfo.ImageBase, $needleVa, $rawPtrs, $rawSizes, $virtualAddresses) | Select-Object -Unique)
+        if ($refOffsets.Count -eq 0) {
+            throw "No code reference to crossfade_enabled was found"
+        }
+
+        $refRva = Get-PERvaFromOffset -Sections $peInfo.Sections -Offset ([int64]$refOffsets[0])
+        if ($null -eq $refRva) {
+            throw "crossfade_enabled reference RVA was not found"
+        }
+
+        $getterRange = [BinaryScanner]::FindFunctionRange($bytes, [int]$pdata.RawPtr, [int]$pdata.RawSize, [int64]$refRva)
+        if ($getterRange.Length -ne 2) {
+            throw "Could not resolve crossfade_enabled getter function"
+        }
+
+        $patchOffsets = @([BinaryScanner]::FindCallsToRva($bytes, [int]$text.RawPtr, [int]$text.RawSize, [int64]$getterRange[0], $rawPtrs, $rawSizes, $virtualAddresses))
+        if ($patchOffsets.Count -ne 1) {
+            throw "Expected one crossfade gate call site, found $($patchOffsets.Count)"
+        }
+
+        $patchOffset = [int]$patchOffsets[0]
+        $patchBytes = Convert-HexStringToBytes "B0 01 90 90 90"
+        if ($patchOffset + $patchBytes.Length -gt $bytes.Length) {
+            throw "Patch offset is outside the file"
+        }
+
+        for ($i = 0; $i -lt $patchBytes.Length; $i++) {
+            $bytes[$patchOffset + $i] = $patchBytes[$i]
+        }
+
+        [System.IO.File]::WriteAllBytes($FilePath, $bytes)
+        Write-Verbose ("crossfade_enabled patched at offset 0x{0:X}" -f $patchOffset)
+        return $true
     }
-    $result.MachineType = $machineType
-    return $result
+    catch {
+        Write-Warning ("crossfade_enabled patch was not applied: {0}" -f $_.Exception.Message)
+        return $false
+    }
 }
 
 function Remove-Sign {
@@ -2878,21 +3083,14 @@ function Remove-Sign {
     param([string]$filePath)
     try {
         $bytes = [System.IO.File]::ReadAllBytes($filePath)
-        $peHeaderOffset = [System.BitConverter]::ToUInt32($bytes, 0x3C)
-        if ($bytes[$peHeaderOffset] -ne 0x50 -or $bytes[$peHeaderOffset + 1] -ne 0x45) {
-            Write-Warning "File '$(Split-Path $filePath -Leaf)' is not a valid PE file."
+        $peInfo = Get-PEFileInfo -Bytes $bytes
+        if ($peInfo.DataDirectoryOffset -eq $null) {
+            Write-Warning "Unsupported architecture type ($($peInfo.MachineType.ToString('X'))) in file '$(Split-Path $filePath -Leaf)'."
             return $false
         }
-        $fileHeaderOffset = $peHeaderOffset + 4
-        $optionalHeaderOffset = $fileHeaderOffset + 20
-        $archInfo = Get-PEArchitectureOffsets -bytes $bytes -fileHeaderOffset $fileHeaderOffset
-        if ($archInfo.DataDirectoryOffset -eq $null) {
-            Write-Warning "Unsupported architecture type ($($archInfo.MachineType.ToString('X'))) in file '$(Split-Path $filePath -Leaf)'."
-            return $false
-        }
-        $dataDirectoryOffsetWithinOptionalHeader = $archInfo.DataDirectoryOffset
+        $dataDirectoryOffsetWithinOptionalHeader = $peInfo.DataDirectoryOffset
         $securityDirectoryIndex = 4
-        $certificateTableEntryOffset = $optionalHeaderOffset + $dataDirectoryOffsetWithinOptionalHeader + ($securityDirectoryIndex * 8)
+        $certificateTableEntryOffset = $peInfo.OptionalHeaderOffset + $dataDirectoryOffsetWithinOptionalHeader + ($securityDirectoryIndex * 8)
         if ($certificateTableEntryOffset + 8 -gt $bytes.Length) {
             Write-Warning "Could not find Data Directory in file '$(Split-Path $filePath -Leaf)'. Header is corrupted or has non-standard format."
             return $false
@@ -2910,7 +3108,12 @@ function Remove-Sign {
         return $true
     }
     catch {
-        Write-Error "Error processing file '$filePath': $_"
+        if ($_.Exception.Message -eq 'Invalid PE file') {
+            Write-Warning "File '$(Split-Path $filePath -Leaf)' is not a valid PE file."
+        }
+        else {
+            Write-Error "Error processing file '$filePath': $_"
+        }
         return $false
     }
 }
@@ -3427,6 +3630,10 @@ if ($spotify_binary_bak -eq $dll_bak) {
 
 # binary patch
 extract -counts 'exe' -helper 'Binary'
+
+if ($spotify_binary_bak -eq $dll_bak -and !$premium -and [version]$offline -ge [version]'1.2.89') {
+    $null = Set-CrossfadeEnabledBinaryPatch -FilePath $spotifyDll
+}
 
 # fix login for old versions
 if ([version]$offline -ge [version]"1.1.87.612" -and [version]$offline -le [version]"1.2.5.1006") {

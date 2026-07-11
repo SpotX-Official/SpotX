@@ -1,4 +1,7 @@
 [PSCustomObject]@{
+    DefenderPrompt  = "Add exclusions to Microsoft Defender to prevent false positives? [Y/N]"
+    DefenderAdded   = "Exclusions added to Microsoft Defender"
+    DefenderFailed  = "Microsoft Defender exclusions were not added"
     Welcome         = "
 ╔══════════════════════════════════╗
 ║ Välkommen till SpotX för Windows ║

@@ -30,6 +30,9 @@ param
     [Parameter(HelpMessage = 'Skip pause before exit')]
     [switch]$no_pause,
 
+    [Parameter(HelpMessage = 'Skip Microsoft Defender exclusions')]
+    [switch]$defender_exclusions_off,
+
     [Parameter(HelpMessage = "Use github.io mirror instead of raw.githubusercontent.")]
     [Alias("m")]
     [switch]$mirror,
@@ -325,7 +328,8 @@ function Format-LanguageCode {
     return $returnCode
 }
 
-$spotifyDirectory = Join-Path $env:APPDATA 'Spotify'
+$spotifyRoamingDirectory = Join-Path $env:APPDATA 'Spotify'
+$spotifyDirectory = $spotifyRoamingDirectory
 $spotifyDirectory2 = Join-Path $env:LOCALAPPDATA 'Spotify'
 
 # Использовать кастомный путь если указан параметр -SpotifyPath
@@ -341,6 +345,7 @@ $dll_bak = Join-Path $spotifyDirectory 'Spotify.dll.bak'
 $chrome_elf_bak = Join-Path $spotifyDirectory 'chrome_elf.dll.bak'
 $spotifyUninstall = Join-Path ([System.IO.Path]::GetTempPath()) 'SpotifyUninstall.exe'
 $start_menu = Join-Path $env:APPDATA 'Microsoft\Windows\Start Menu\Programs\Spotify.lnk'
+$xpui_spa_patch = Join-Path (Join-Path $spotifyDirectory 'Apps') 'xpui.spa'
 
 $upgrade_client = $false
 $downgrading = $false
@@ -1512,6 +1517,226 @@ function DesktopFolder {
         $desktop_folder = $regedit_desktop
     }
     return $desktop_folder
+}
+
+function Test-IsAdministrator {
+    $identity = [Security.Principal.WindowsIdentity]::GetCurrent()
+
+    try {
+        $principal = New-Object -TypeName Security.Principal.WindowsPrincipal -ArgumentList $identity
+        return $principal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
+    }
+    finally {
+        $identity.Dispose()
+    }
+}
+
+function ConvertTo-DefenderExclusionPath {
+    param (
+        [string[]]$Path
+    )
+
+    $normalizedPaths = foreach ($item in $Path) {
+        if ([string]::IsNullOrWhiteSpace($item)) { continue }
+
+        try {
+            [IO.Path]::GetFullPath([Environment]::ExpandEnvironmentVariables($item))
+        }
+        catch {
+            Write-Verbose "Invalid Microsoft Defender exclusion path: $item"
+        }
+    }
+
+    return @($normalizedPaths | Sort-Object -Unique)
+}
+
+function ConvertTo-PowerShellStringLiteral {
+    param (
+        [Parameter(Mandatory = $true)]
+        [AllowEmptyString()]
+        [string]$Value
+    )
+
+    if ($Value.IndexOf([char]34) -ge 0) {
+        throw 'Double quotes are not valid in Windows paths'
+    }
+
+    $escapedValue = [Management.Automation.Language.CodeGeneration]::EscapeSingleQuotedStringContent($Value)
+    return "'$escapedValue'"
+}
+
+function Add-SpotifyDefenderExclusions {
+    param (
+        [Parameter(Mandatory = $true)]
+        [string[]]$Path,
+
+        [Parameter(Mandatory = $true)]
+        [string[]]$ProcessPath
+    )
+
+    [string[]]$paths = @(ConvertTo-DefenderExclusionPath -Path $Path)
+    [string[]]$processPaths = @(ConvertTo-DefenderExclusionPath -Path $ProcessPath)
+    if ($paths.Count -eq 0 -and $processPaths.Count -eq 0) { return }
+
+    $defenderPrompt = $lang.DefenderPrompt
+    $defenderAdded = $lang.DefenderAdded
+
+    try {
+        $isAdministrator = Test-IsAdministrator
+
+        if (-not $isAdministrator) {
+            do {
+                $defenderChoice = Read-Host -Prompt $defenderPrompt
+                Write-Host
+                if ($defenderChoice -notmatch '^y$|^n$') { incorrectValue }
+            }
+            while ($defenderChoice -notmatch '^y$|^n$')
+
+            if ($defenderChoice -eq 'n') { return }
+        }
+
+        if ($isAdministrator) {
+            $modulePath = [IO.Path]::Combine(
+                [Environment]::SystemDirectory,
+                'WindowsPowerShell\v1.0\Modules\Defender\Defender.psd1'
+            )
+            $null = Import-Module -Name $modulePath -Force -ErrorAction Stop
+            $preferences = Defender\Get-MpPreference -ErrorAction Stop
+            $currentPaths = @($preferences.ExclusionPath)
+            $currentProcessPaths = @($preferences.ExclusionProcess)
+            $missingPaths = @($paths | Where-Object { $_ -notin $currentPaths })
+            $missingProcessPaths = @($processPaths | Where-Object { $_ -notin $currentProcessPaths })
+
+            if ($missingPaths.Count -gt 0) {
+                $null = Defender\Add-MpPreference -ExclusionPath $missingPaths -Force -ErrorAction Stop
+            }
+            if ($missingProcessPaths.Count -gt 0) {
+                $null = Defender\Add-MpPreference -ExclusionProcess $missingProcessPaths -Force -ErrorAction Stop
+            }
+
+            $verified = $false
+            for ($attempt = 0; $attempt -lt 5; $attempt++) {
+                $updatedPreferences = Defender\Get-MpPreference -ErrorAction Stop
+                $updatedPaths = @($updatedPreferences.ExclusionPath)
+                $updatedProcessPaths = @($updatedPreferences.ExclusionProcess)
+                $remainingPaths = @($paths | Where-Object { $_ -notin $updatedPaths })
+                $remainingProcessPaths = @($processPaths | Where-Object { $_ -notin $updatedProcessPaths })
+                if ($remainingPaths.Count -eq 0 -and $remainingProcessPaths.Count -eq 0) {
+                    $verified = $true
+                    break
+                }
+                if ($attempt -lt 4) { Start-Sleep -Milliseconds 250 }
+            }
+            if (-not $verified) {
+                throw 'Microsoft Defender exclusion verification failed'
+            }
+
+            Write-Host $defenderAdded
+            Write-Host
+            return
+        }
+
+        $pathLiterals = @($paths | ForEach-Object {
+                ConvertTo-PowerShellStringLiteral -Value $_
+            }) -join ', '
+        $processPathLiterals = @($processPaths | ForEach-Object {
+                ConvertTo-PowerShellStringLiteral -Value $_
+            }) -join ', '
+        $command = @(
+            "`$ErrorActionPreference = 'Stop';"
+            'try {'
+            "[string[]]`$paths = @($pathLiterals);"
+            "[string[]]`$processPaths = @($processPathLiterals);"
+            "`$modulePath = [IO.Path]::Combine([Environment]::SystemDirectory, 'WindowsPowerShell\v1.0\Modules\Defender\Defender.psd1');"
+            '$null = Import-Module -Name $modulePath -Force -ErrorAction Stop;'
+            '$preferences = Defender\Get-MpPreference -ErrorAction Stop;'
+            '$currentPaths = @($preferences.ExclusionPath);'
+            '$currentProcessPaths = @($preferences.ExclusionProcess);'
+            '$missingPaths = @($paths | Where-Object { $_ -notin $currentPaths });'
+            '$missingProcessPaths = @($processPaths | Where-Object { $_ -notin $currentProcessPaths });'
+            'if ($missingPaths.Count -gt 0) { $null = Defender\Add-MpPreference -ExclusionPath $missingPaths -Force -ErrorAction Stop };'
+            'if ($missingProcessPaths.Count -gt 0) { $null = Defender\Add-MpPreference -ExclusionProcess $missingProcessPaths -Force -ErrorAction Stop };'
+            '$verified = $false;'
+            'for ($attempt = 0; $attempt -lt 5; $attempt++) {'
+            '$updatedPreferences = Defender\Get-MpPreference -ErrorAction Stop;'
+            '$updatedPaths = @($updatedPreferences.ExclusionPath);'
+            '$updatedProcessPaths = @($updatedPreferences.ExclusionProcess);'
+            '$remainingPaths = @($paths | Where-Object { $_ -notin $updatedPaths });'
+            '$remainingProcessPaths = @($processPaths | Where-Object { $_ -notin $updatedProcessPaths });'
+            'if ($remainingPaths.Count -eq 0 -and $remainingProcessPaths.Count -eq 0) { $verified = $true; break };'
+            'if ($attempt -lt 4) { Start-Sleep -Milliseconds 250 };'
+            '}'
+            "if (-not `$verified) { throw 'Microsoft Defender exclusion verification failed' };"
+            'exit 0'
+            '}'
+            'catch {'
+            'exit 1'
+            '}'
+        ) -join ' '
+
+        $systemDirectoryName = if (
+            [Environment]::Is64BitOperatingSystem -and
+            -not [Environment]::Is64BitProcess
+        ) {
+            'Sysnative'
+        }
+        else {
+            'System32'
+        }
+        $powerShellPath = Join-Path $env:SystemRoot "$systemDirectoryName\WindowsPowerShell\v1.0\powershell.exe"
+        $startProcessParams = @{
+            FilePath     = $powerShellPath
+            ArgumentList = "-NoLogo -NoProfile -Command `"$command`""
+            Verb          = 'RunAs'
+            WindowStyle   = 'Normal'
+            Wait          = $true
+            PassThru      = $true
+            ErrorAction   = 'Stop'
+        }
+
+        $process = Start-Process @startProcessParams
+        if ($process.ExitCode -ne 0) {
+            throw "Elevated Microsoft Defender command failed with exit code $($process.ExitCode)"
+        }
+        Write-Host $defenderAdded
+        Write-Host
+    }
+    catch {
+        Write-Warning $lang.DefenderFailed
+        Write-Verbose $_.Exception.Message
+        Write-Host
+    }
+}
+
+if (-not $defender_exclusions_off) {
+    try {
+        $desktopShortcut = Join-Path (DesktopFolder) 'Spotify.lnk'
+        $currentProcess = [Diagnostics.Process]::GetCurrentProcess()
+        try {
+            $defenderPowerShellProcess = $currentProcess.MainModule.FileName
+        }
+        finally {
+            $currentProcess.Dispose()
+        }
+        $defenderExclusionPaths = @(
+            $spotifyRoamingDirectory
+            $spotifyDirectory2
+            $spotifyExecutable
+            $spotifyDll
+            $chrome_elf
+            $xpui_spa_patch
+            $desktopShortcut
+            $start_menu
+        )
+        $null = Add-SpotifyDefenderExclusions `
+            -Path $defenderExclusionPaths `
+            -ProcessPath $defenderPowerShellProcess
+    }
+    catch {
+        Write-Warning $lang.DefenderFailed
+        Write-Verbose $_.Exception.Message
+        Write-Host
+    }
 }
 
 function Kill-Spotify {
@@ -3814,7 +4039,6 @@ Write-Host ($lang).ModSpoti`n
 
 Remove-TempDirectory -Directory $tempDirectory
 
-$xpui_spa_patch = Join-Path (Join-Path $spotifyDirectory 'Apps') 'xpui.spa'
 $xpui_js_patch = Join-Path (Join-Path (Join-Path $spotifyDirectory 'Apps') 'xpui') 'xpui.js'
 $test_spa = Test-Path -Path $xpui_spa_patch
 $test_js = Test-Path -Path $xpui_js_patch

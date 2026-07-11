@@ -2211,7 +2211,7 @@
             "block_slots": {
                 "version": {
                     "fr": "1.1.59",
-                    "to": ""
+                    "to": "1.2.93"
                 },
                 "add": "slot}(?=.{3,8}(override_url|queued_ads))",
                 "match": "slots(?=.{3,8}(override_url|queued_ads))",
@@ -2220,7 +2220,7 @@
             "block_slots_2": {
                 "version": {
                     "fr": "1.2.55",
-                    "to": ""
+                    "to": "1.2.93"
                 },
                 "add": "slot}(?=.{25,35}state)",
                 "match": "slots(?=.{25,35}state)",
@@ -2229,7 +2229,7 @@
             "block_slots_3": {
                 "version": {
                     "fr": "1.2.55",
-                    "to": ""
+                    "to": "1.2.93"
                 },
                 "add": "}(?=payload=)",
                 "match": "\\?(?=payload=)",

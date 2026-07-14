@@ -3066,7 +3066,17 @@ public static class BinaryScanner {
 }
 "@
 
-    Add-Type -TypeDefinition $csharpCode
+    try {
+        Add-Type -TypeDefinition $csharpCode -ErrorAction Stop
+    }
+    catch {
+        $compilerError = $_.Exception.Message -split '\r?\n' | Select-Object -First 1
+        throw "BinaryScanner initialization failed: $compilerError"
+    }
+
+    if (-not ([System.Management.Automation.PSTypeName]'BinaryScanner').Type) {
+        throw "BinaryScanner initialization failed: Type was not loaded"
+    }
 }
 
 function Convert-HexStringToBytes {
@@ -3199,7 +3209,13 @@ function Reset-Dll-Sign {
     $TargetStringText = "Check failed: sep_pos != std::wstring::npos."
     $Patch_x64 = Convert-HexStringToBytes "B8 01 00 00 00 C3"
     $Patch_ARM64 = Convert-HexStringToBytes "20 00 80 52 C0 03 5F D6"
-    Initialize-BinaryScanner
+    try {
+        Initialize-BinaryScanner
+    }
+    catch {
+        Write-Warning $_.Exception.Message
+        Stop-Script
+    }
 
     Write-Verbose "Loading file: $FilePath"
     if (-not (Test-Path $FilePath)) {
@@ -3231,8 +3247,21 @@ function Reset-Dll-Sign {
 
     Write-Verbose "Searching for function..."
     $StringBytes = [System.Text.Encoding]::ASCII.GetBytes($TargetStringText)
-    $StringOffset = [BinaryScanner]::FindBytes($bytes, $StringBytes, 0)
-    if ($StringOffset -eq -1) {
+    try {
+        $StringOffset = & {
+            $ErrorActionPreference = "Stop"
+            [BinaryScanner]::FindBytes($bytes, $StringBytes, 0)
+        }
+    }
+    catch {
+        Write-Warning ("BinaryScanner scan failed for Spotify.dll: {0}" -f $_.Exception.Message)
+        Stop-Script
+    }
+    if ($null -eq $StringOffset) {
+        Write-Warning "BinaryScanner returned no result for Spotify.dll"
+        Stop-Script
+    }
+    if ($StringOffset -lt 0) {
         Write-Warning "String not found in Spotify.dll"
         Stop-Script
     }

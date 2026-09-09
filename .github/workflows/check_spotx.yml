@@ -15,7 +15,8 @@ jobs:
     runs-on: windows-latest
 
     steps:
-    - name: Run Spotx
+    - name: Prepare checks
+      id: prepare
       shell: powershell
       env:
         SPOTIFY_VERSION: ${{ inputs.version }}
@@ -46,6 +47,7 @@ jobs:
         # Incoming parameters
         $parameters = @{
           Verbose = $true
+          no_pause = $true
           new_theme = $true
           version = $spotifyVersion
           confirm_spoti_recomended_over = $true
@@ -59,7 +61,49 @@ jobs:
           lyrics_block = $true
         }
         
-        # Run Spotx
         $spotxUrl = "https://raw.githubusercontent.com/SpotX-Official/SpotX/refs/heads/main/run.ps1"
-        $spotxScript = [scriptblock]::Create((Invoke-WebRequest -UseBasicParsing -Uri $spotxUrl).Content)
+        Invoke-WebRequest -UseBasicParsing -Uri $spotxUrl -OutFile "$env:RUNNER_TEMP\spotx.ps1"
+        $parameters | Export-Clixml -LiteralPath "$env:RUNNER_TEMP\spotx-parameters.xml"
+
+    - name: Run SpotX (x64)
+      shell: powershell
+      run: |
+        $parameters = Import-Clixml -LiteralPath "$env:RUNNER_TEMP\spotx-parameters.xml"
+        $spotxScript = [scriptblock]::Create((Get-Content -LiteralPath "$env:RUNNER_TEMP\spotx.ps1" -Raw -Encoding UTF8))
+        & $spotxScript @parameters
+
+    - name: Run SpotX (ARM64 files)
+      if: ${{ !cancelled() && steps.prepare.outcome == 'success' }}
+      shell: powershell
+      run: |
+        $parameters = Import-Clixml -LiteralPath "$env:RUNNER_TEMP\spotx-parameters.xml"
+        $checkVersion = $parameters.version
+        $installedSpotify = Join-Path $env:APPDATA 'Spotify\Spotify.exe'
+        if (Test-Path -LiteralPath $installedSpotify) {
+          $checkVersion = (Get-Item -LiteralPath $installedSpotify).VersionInfo.FileVersion
+        }
+
+        $unpackerUrl = 'https://raw.githubusercontent.com/SpotX-Official/Spotify-EXE-Unpacker/refs/heads/main'
+        foreach ($script in @('spotify_exe_unpacker.py', 'scripts/download_spotify_installer.py')) {
+          $scriptPath = Join-Path $env:RUNNER_TEMP (Split-Path $script -Leaf)
+          Invoke-WebRequest -UseBasicParsing -Uri "$unpackerUrl/$script" -OutFile $scriptPath
+        }
+
+        $installerOutput = Join-Path $env:RUNNER_TEMP 'spotify-arm64.txt'
+        python "$env:RUNNER_TEMP\download_spotify_installer.py" --version $checkVersion --architecture arm64 --download-dir "$env:RUNNER_TEMP\spotify-arm64-installer" --github-output $installerOutput
+        if ($LASTEXITCODE -ne 0) { throw 'ARM64 installer download failed' }
+
+        $installer = @{}
+        foreach ($line in Get-Content -LiteralPath $installerOutput) {
+          $key, $value = $line -split '=', 2
+          $installer[$key] = $value
+        }
+
+        $parameters.SpotifyPath = Join-Path $env:RUNNER_TEMP 'Spotify-arm64'
+        $parameters.version = $installer.fullversion
+        $parameters.defender_exclusions_off = $true
+        python "$env:RUNNER_TEMP\spotify_exe_unpacker.py" $installer.installer_path --output $parameters.SpotifyPath
+        if ($LASTEXITCODE -ne 0) { throw 'ARM64 installer extraction failed' }
+
+        $spotxScript = [scriptblock]::Create((Get-Content -LiteralPath "$env:RUNNER_TEMP\spotx.ps1" -Raw -Encoding UTF8))
         & $spotxScript @parameters

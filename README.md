@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="https://github.com/SpotX-Official/SpotX/releases"><img src="https://spotx-official.github.io/images/logos/logo.png" /></a>
+  <a href="https://github.com/SpotX-Official/SpotX/releases"><img src=".github/Pic/logo.png" /></a>
 </p>
 
 <p align="center">

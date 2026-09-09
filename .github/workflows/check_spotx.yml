@@ -83,26 +83,43 @@ jobs:
           $checkVersion = (Get-Item -LiteralPath $installedSpotify).VersionInfo.FileVersion
         }
 
-        $unpackerUrl = 'https://raw.githubusercontent.com/SpotX-Official/Spotify-EXE-Unpacker/refs/heads/main'
-        foreach ($script in @('spotify_exe_unpacker.py', 'scripts/download_spotify_installer.py')) {
-          $scriptPath = Join-Path $env:RUNNER_TEMP (Split-Path $script -Leaf)
-          Invoke-WebRequest -UseBasicParsing -Uri "$unpackerUrl/$script" -OutFile $scriptPath
+        $jsonUrl = 'https://raw.githubusercontent.com/LoaderSpot/table/refs/heads/main/table/versions.json'
+        $manifest = Invoke-RestMethod -Uri $jsonUrl
+        $entry = $manifest.PSObject.Properties | Where-Object {
+          $_.Name -eq $checkVersion -or $_.Value.fullversion -eq $checkVersion -or
+          ($checkVersion -match '^\d+\.\d+\.\d+$' -and $_.Name.StartsWith("$checkVersion."))
+        } | Sort-Object { [version]$_.Name } -Descending | Select-Object -First 1
+        $installer = $entry.Value.win.arm64
+        if (-not $installer.url -or $installer.size -le 0) {
+          throw "No ARM64 installer found for Spotify $checkVersion"
+        }
+        if ($entry.Value.fullversion -notmatch '^\d+\.\d+\.\d+\.\d+\.g[0-9a-f]{8}$') {
+          throw "Invalid Spotify fullversion for $checkVersion"
         }
 
-        $installerOutput = Join-Path $env:RUNNER_TEMP 'spotify-arm64.txt'
-        python "$env:RUNNER_TEMP\download_spotify_installer.py" --version $checkVersion --architecture arm64 --download-dir "$env:RUNNER_TEMP\spotify-arm64-installer" --github-output $installerOutput
-        if ($LASTEXITCODE -ne 0) { throw 'ARM64 installer download failed' }
-
-        $installer = @{}
-        foreach ($line in Get-Content -LiteralPath $installerOutput) {
-          $key, $value = $line -split '=', 2
-          $installer[$key] = $value
+        $installerPath = Join-Path $env:RUNNER_TEMP 'SpotifySetup-arm64.exe'
+        Write-Host "ARM64 Spotify version: $($entry.Value.fullversion)"
+        Write-Host "Source: $($installer.url)"
+        for ($attempt = 1; $attempt -le 3; $attempt++) {
+          Write-Host "ARM64 installer download attempt $attempt/3"
+          curl.exe -q -L --fail-with-body --connect-timeout 15 --progress-bar -o $installerPath --url $installer.url
+          if ($LASTEXITCODE -eq 0) {
+            $downloadedSize = (Get-Item -LiteralPath $installerPath).Length
+            if ($downloadedSize -eq $installer.size) { break }
+            Write-Warning "ARM64 installer size mismatch: expected $($installer.size), got $downloadedSize"
+          }
+          if ($attempt -eq 3) { throw 'ARM64 installer download failed after 3 attempts' }
+          Start-Sleep -Seconds 5
         }
+
+        $unpackerUrl = 'https://raw.githubusercontent.com/SpotX-Official/Spotify-EXE-Unpacker/refs/heads/main/spotify_exe_unpacker.py'
+        $unpackerPath = Join-Path $env:RUNNER_TEMP 'spotify_exe_unpacker.py'
+        Invoke-WebRequest -UseBasicParsing -Uri $unpackerUrl -OutFile $unpackerPath
 
         $parameters.SpotifyPath = Join-Path $env:RUNNER_TEMP 'Spotify-arm64'
-        $parameters.version = $installer.fullversion
+        $parameters.version = $entry.Value.fullversion
         $parameters.defender_exclusions_off = $true
-        python "$env:RUNNER_TEMP\spotify_exe_unpacker.py" $installer.installer_path --output $parameters.SpotifyPath
+        python $unpackerPath $installerPath --output $parameters.SpotifyPath
         if ($LASTEXITCODE -ne 0) { throw 'ARM64 installer extraction failed' }
 
         $spotxScript = [scriptblock]::Create((Get-Content -LiteralPath "$env:RUNNER_TEMP\spotx.ps1" -Raw -Encoding UTF8))

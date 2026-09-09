@@ -2,7 +2,7 @@
 param
 (
     [Parameter(HelpMessage = 'Latest recommended Spotify version for Windows 10+.')]
-    [string]$latest_full = "1.2.99",
+    [string]$latest_full = "1.3.0",
 
     [Parameter(HelpMessage = 'Latest supported Spotify version for Windows 7-8.1')]
     [string]$last_win7_full = "1.2.5.1006.g22820f93",
@@ -5396,6 +5396,12 @@ if ($test_spa) {
     }
     # Minification of all *.json
     extract -counts 'more' -name '*.json' -helper 'MinJson'
+
+    if ($patched_by_spotx.StartsWith('var __webpack_modules__={')) {
+        # Skip snapshot creation in Spicetify
+        Get-ChildItem -LiteralPath $spotifyDirectory -Filter 'v8_context_snapshot*.bin' -File |
+            Rename-Item -NewName { 'V' + $_.Name.Substring(1) } -ErrorAction Stop
+    }
 }
 
 # Delete all files except "en" and "ru"

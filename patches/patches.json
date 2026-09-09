@@ -1294,7 +1294,7 @@
                 "native_description": "Enable list / compact mode in entity pages",
                 "version": {
                     "fr": "1.2.24",
-                    "to": ""
+                    "to": "1.2.99"
                 }
             },
             "UserTopContent": {
@@ -2721,21 +2721,21 @@
                 "fr": "1.2.30",
                 "to": ""
             },
-            "add": " :is(.weV_qxFz4gF5sPotO10y, .BMtRRwqaJD_95vJFMFD0, .eguwzH_QWTBXry7hiNj3, .qV_CxbowaNkMarye, .qV_CxbowaNkMarye):has([for=\"desktop.settings.downloadQuality\"]) {display: none}"
+            "add": " :is(.weV_qxFz4gF5sPotO10y, .BMtRRwqaJD_95vJFMFD0, .eguwzH_QWTBXry7hiNj3, .qV_CxbowaNkMarye, .Z6yfNoSJ6OjiEBGI5Osr):has([for=\"desktop.settings.downloadQuality\"]) {display: none}"
         },
         "downloadicon": {
             "version": {
                 "fr": "1.1.74",
                 "to": ""
             },
-            "add": " .BKsbV2Xl786X9a09XROH, .GWCBhKJqeZal3n5tCQwl, .pX3IkLhEry0wVfiU {display:none}"
+            "add": " .BKsbV2Xl786X9a09XROH, .GWCBhKJqeZal3n5tCQwl, .pX3IkLhEry0wVfiU, .IOXdOZpz_OhQUj2M3A0e {display:none}"
         },
         "submenudownload": {
             "version": {
                 "fr": "1.1.74",
                 "to": ""
             },
-            "add": " .pzkhLqffqF_4hucrVVQA, .egE6UQjF_UUoCzvMxREj, .Y98_oiegQgSpY_o7hoKG, .tT_JypfxNakuY1jHgyBN, .zVA1h9TUy8QQBogj {display:none}"
+            "add": " :is(.pzkhLqffqF_4hucrVVQA, .egE6UQjF_UUoCzvMxREj, .Y98_oiegQgSpY_o7hoKG, .tT_JypfxNakuY1jHgyBN, .zVA1h9TUy8QQBogj, .l7XabbfpobRNm8SpemYx)[role=menuitemcheckbox] {display:none}"
         },
         "veryhighstream": {
             "version": {
@@ -2808,7 +2808,7 @@
                 "fr": "1.1.70",
                 "to": ""
             },
-            "match": "(ADS_PREMIUM,isPremium:).(.{20,60}?isHptoHidden:).",
+            "match": "(ADS_PREMIUM,isPremium:).(.{20,300}?isHptoHidden:).",
             "replace": "$1true$2true"
         },
         "sentry": {

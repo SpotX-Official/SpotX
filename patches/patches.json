@@ -21,8 +21,8 @@
                 "fr": "1.1.59",
                 "to": ""
             },
-            "match": "adsEnabled:!0",
-            "replace": "adsEnabled:!1"
+            "match": "\\b(adsEnabled[:=])!0",
+            "replace": "$1!1"
         },
         "playlistsponsor": {
             "version": {
@@ -2808,7 +2808,7 @@
                 "fr": "1.1.70",
                 "to": ""
             },
-            "match": "(ADS_PREMIUM,isPremium:).(.{20,300}?isHptoHidden:).",
+            "match": "(ADS_PREMIUM,isPremium:|\\.isPremium=)[\\w$]+(?:\\.payload)?(.{20,300}?isHptoHidden[:=])[\\w$]+(?:\\.payload)?",
             "replace": "$1true$2true"
         },
         "sentry": {

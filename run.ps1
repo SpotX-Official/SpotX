@@ -4632,17 +4632,25 @@ function Find-X64CrossfadeEnabledBinaryPatchLocation {
 
     $gateContextPattern = Convert-HexStringToBytes '48 8B 0B 00 00 00 00 00 88 45 00 48 8D 4D 00 E8'
     $gateContextMask = Convert-HexStringToBytes 'FF FF FF 00 00 00 00 00 FF FF 00 FF FF FF 00 FF'
+    $extendedGateContextPattern = Convert-HexStringToBytes '48 8B 0B 00 00 00 00 00 88 45 00 48 8B 0B E8 00 00 00 00 88 45 00 48 8D 4D 00 E8'
+    $extendedGateContextMask = Convert-HexStringToBytes 'FF FF FF 00 00 00 00 00 FF FF 00 FF FF FF FF 00 00 00 00 FF FF 00 FF FF FF 00 FF'
     $hasGateContext = {
         param([int]$Candidate)
 
-        if (-not [BinaryScannerV3]::MatchMaskedBytes($Bytes, $Candidate - 3, $gateContextPattern, $gateContextMask)) {
+        $contextLength = if ([BinaryScannerV3]::MatchMaskedBytes($Bytes, $Candidate - 3, $gateContextPattern, $gateContextMask)) {
+            $gateContextPattern.Length
+        }
+        elseif ([BinaryScannerV3]::MatchMaskedBytes($Bytes, $Candidate - 3, $extendedGateContextPattern, $extendedGateContextMask)) {
+            $extendedGateContextPattern.Length
+        }
+        else {
             return $false
         }
         $candidateRva = Get-PERvaFromOffset -Sections $PeInfo.Sections -Offset $Candidate
         if ($null -eq $candidateRva) { return $false }
         $callerRange = Get-BinaryPatchFunctionRange -Bytes $Bytes -PeInfo $PeInfo -Context $context -Rva $candidateRva
         return $callerRange.Length -eq 2 -and ([int64]$candidateRva - 3) -ge [int64]$callerRange[0] -and
-            ([int64]$candidateRva + 13) -le [int64]$callerRange[1]
+            ([int64]$candidateRva - 3 + $contextLength) -le [int64]$callerRange[1]
     }
 
     $originalCandidates = @([BinaryScannerV3]::FindCrossfadeGateCallsToRva(
@@ -4748,13 +4756,30 @@ function Find-Arm64CrossfadeEnabledBinaryPatchLocation {
         if (($addAnchor -band [uint32]0xFFC0001FL) -ne [uint32]0x91000003L) { continue }
 
         $movKey = Read-Arm64Instruction -Bytes $Bytes -Offset ($addOffset + 4)
-        $movOwner = Read-Arm64Instruction -Bytes $Bytes -Offset ($addOffset + 8)
-        $movDefault = Read-Arm64Instruction -Bytes $Bytes -Offset ($addOffset + 12)
-        $movResolver = Read-Arm64Instruction -Bytes $Bytes -Offset ($addOffset + 16)
-        $addOtherKey = Read-Arm64Instruction -Bytes $Bytes -Offset ($addOffset + 20)
-        $patchOffset = $addOffset + 24
+        if (($movKey -band [uint32]0x9F000000L) -eq [uint32]0x90000000L) {
+            $ownerPage = $movKey
+            $addOtherKey = Read-Arm64Instruction -Bytes $Bytes -Offset ($addOffset + 8)
+            $movKey = Read-Arm64Instruction -Bytes $Bytes -Offset ($addOffset + 12)
+            $movDefault = Read-Arm64Instruction -Bytes $Bytes -Offset ($addOffset + 16)
+            $movResolver = Read-Arm64Instruction -Bytes $Bytes -Offset ($addOffset + 20)
+            $movOwner = Read-Arm64Instruction -Bytes $Bytes -Offset ($addOffset + 24)
+            $patchOffset = $addOffset + 28
+            $ownerReload = Read-Arm64Instruction -Bytes $Bytes -Offset ($addOffset + 32)
+            $resultOffset = $addOffset + 36
+            if ((($addOtherKey -shr 5) -band 31) -ne ($ownerPage -band 31) -or
+                ($ownerReload -band [uint32]0xFFC0001FL) -ne
+                    ([uint32]0xF9400000L -bor (($movOwner -shr 16) -band 31))) { continue }
+        }
+        else {
+            $movOwner = Read-Arm64Instruction -Bytes $Bytes -Offset ($addOffset + 8)
+            $movDefault = Read-Arm64Instruction -Bytes $Bytes -Offset ($addOffset + 12)
+            $movResolver = Read-Arm64Instruction -Bytes $Bytes -Offset ($addOffset + 16)
+            $addOtherKey = Read-Arm64Instruction -Bytes $Bytes -Offset ($addOffset + 20)
+            $patchOffset = $addOffset + 24
+            $resultOffset = $addOffset + 28
+        }
         $patchInstruction = Read-Arm64Instruction -Bytes $Bytes -Offset $patchOffset
-        $storeResult = Read-Arm64Instruction -Bytes $Bytes -Offset ($addOffset + 28)
+        $storeResult = Read-Arm64Instruction -Bytes $Bytes -Offset $resultOffset
 
         if ($movKey -ne [uint32]0xAA0003E2L -or
             ($movOwner -band [uint32]0xFFE0FFFFL) -ne [uint32]0xAA0003E0L -or
@@ -4766,7 +4791,8 @@ function Find-Arm64CrossfadeEnabledBinaryPatchLocation {
         }
 
         $patchRva = Get-PERvaFromOffset -Sections $PeInfo.Sections -Offset $patchOffset
-        if ($null -eq $patchRva -or $patchRva -lt $function.StartRva -or $patchRva -ge $function.EndRva) { continue }
+        if ($null -eq $patchRva -or $patchRva -lt $function.StartRva -or
+            ($patchRva + $resultOffset - $patchOffset + 4) -gt $function.EndRva) { continue }
         if (($patchInstruction -band [uint32]0xFC000000L) -eq [uint32]0x94000000L) {
             $targetRva = Get-Arm64BranchTargetRva -Instruction $patchInstruction -InstructionRva $patchRva -Kind BL
             $textRvaEnd = [int64]$context.Text.VirtualAddress + [Math]::Max([int64]$context.Text.VirtualSize, [int64]$context.Text.RawSize)
@@ -4981,6 +5007,7 @@ function Find-Arm64ListPlayerBinaryPatchLocations {
             $next = Read-Arm64Instruction -Bytes $Bytes -Offset ($patchOffset + 4)
             $afterNext = Read-Arm64Instruction -Bytes $Bytes -Offset ($patchOffset + 8)
             $usesBool = ($next -band [uint32]0xFFFFFFE0L) -eq [uint32]0x2A0003E0L -or
+                ($next -band [uint32]0xFFFFFFE0L) -eq [uint32]0x53001C00L -or
                 ($next -band [uint32]0xFFF8001FL) -eq [uint32]0x36000000L -or
                 (($next -band [uint32]0xFFC0001FL) -eq [uint32]0xF9400008L -and
                     ($afterNext -band [uint32]0xFFFFFFE0L) -eq [uint32]0x53001C00L)

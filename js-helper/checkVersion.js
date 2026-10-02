@@ -113,14 +113,18 @@
       return "";
     }
 
-    const parts = shortVersion.split(".");
-    if (parts.length !== 4) {
+    if (typeof shortVersion !== "string" || !/^\d+\.\d+\.\d+\.\d+$/.test(shortVersion)) {
       console.warn(`Invalid Spotify version format (${sourceLabel}):`, shortVersion);
       return "";
     }
 
-    const [major, minor, patch, build] = parts;
-    return major + minor + patch + "0".repeat(Math.max(0, 7 - patch.length - build.length)) + build;
+    const [major, minor, patch, build] = shortVersion.split(".").map(Number);
+    const appVersion = major * 100000000 + minor * 10000000 + patch * 100000 + build;
+    if (!Number.isSafeInteger(appVersion) || minor > 9 || patch > 99 || build > 99999) {
+      console.warn(`Unsupported Spotify version (${sourceLabel}):`, shortVersion);
+      return "";
+    }
+    return String(appVersion);
   }
 
   async function fetchJsonWithTimeout(url, timeoutMs) {

@@ -3,7 +3,7 @@
   window.oneTime = true;
 
   const WORKER_BASE_URL = "https://spotify-ingest-admin.amd64fox1.workers.dev";
-  const SCRIPT_VERSION = "1.2.1";
+  const SCRIPT_VERSION = "1.2.2";
 
   const SOURCE_LABELS = {
     REMOTE: "latest.json",

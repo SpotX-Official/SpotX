@@ -874,7 +874,7 @@
                 "description": "Use ads-owned NPV and cinema surface state for ad orchestration",
                 "version": {
                     "fr": "1.2.96",
-                    "to": ""
+                    "to": "1.3.1"
                 }
             },
             "HptoHarmonyVideoPlayer": {
@@ -914,6 +914,15 @@
                 "description": "Show remaining ad-break time countdown in NPV and cinema-mode ad headers",
                 "version": {
                     "fr": "1.2.99",
+                    "to": ""
+                }
+            },
+            "FocusStateAwareHptoFetch": {
+                "name": "enableFocusStateAwareHptoFetch",
+                "description": "Disable background HPTO fetch diagnostics",
+                "native_description": "Enable focus state guard when fetching HPTO ad",
+                "version": {
+                    "fr": "1.3.3",
                     "to": ""
                 }
             }
@@ -2094,7 +2103,7 @@
                 "native_description": "Enables the Canvas context menu toggle",
                 "version": {
                     "fr": "1.2.96",
-                    "to": ""
+                    "to": "1.3.1"
                 }
             },
             "MusicVideos": {
@@ -2714,28 +2723,28 @@
                 "fr": "1.2.36",
                 "to": ""
             },
-            "add": " .LVMjmN2CaPruPAo62RAY, .Wn4fEKCJ6jYPfG2Y0ABn, .Y3Kd8WKnE3ZW9lzgA8nN, .C_T1Uoz7Fws_AFDl { display: none !important }"
+            "add": " .LVMjmN2CaPruPAo62RAY, .Wn4fEKCJ6jYPfG2Y0ABn, .Y3Kd8WKnE3ZW9lzgA8nN, .C_T1Uoz7Fws_AFDl, .ap_ioWdVFWJkrRicJB8C { display: none !important }"
         },
         "downloadquality": {
             "version": {
                 "fr": "1.2.30",
                 "to": ""
             },
-            "add": " :is(.weV_qxFz4gF5sPotO10y, .BMtRRwqaJD_95vJFMFD0, .eguwzH_QWTBXry7hiNj3, .qV_CxbowaNkMarye, .Z6yfNoSJ6OjiEBGI5Osr):has([for=\"desktop.settings.downloadQuality\"]) {display: none}"
+            "add": " :is(.weV_qxFz4gF5sPotO10y, .BMtRRwqaJD_95vJFMFD0, .eguwzH_QWTBXry7hiNj3, .qV_CxbowaNkMarye, .Z6yfNoSJ6OjiEBGI5Osr, .H_Y7u72_U2ERiU8oYJeL):has([for=\"desktop.settings.downloadQuality\"]) {display: none}"
         },
         "downloadicon": {
             "version": {
                 "fr": "1.1.74",
                 "to": ""
             },
-            "add": " .BKsbV2Xl786X9a09XROH, .GWCBhKJqeZal3n5tCQwl, .pX3IkLhEry0wVfiU, .IOXdOZpz_OhQUj2M3A0e {display:none}"
+            "add": " .BKsbV2Xl786X9a09XROH, .GWCBhKJqeZal3n5tCQwl, .pX3IkLhEry0wVfiU, .IOXdOZpz_OhQUj2M3A0e, .F9vJGD2_t3IUyzuoDzOb {display:none}"
         },
         "submenudownload": {
             "version": {
                 "fr": "1.1.74",
                 "to": ""
             },
-            "add": " :is(.pzkhLqffqF_4hucrVVQA, .egE6UQjF_UUoCzvMxREj, .Y98_oiegQgSpY_o7hoKG, .tT_JypfxNakuY1jHgyBN, .zVA1h9TUy8QQBogj, .l7XabbfpobRNm8SpemYx)[role=menuitemcheckbox] {display:none}"
+            "add": " :is(.pzkhLqffqF_4hucrVVQA, .egE6UQjF_UUoCzvMxREj, .Y98_oiegQgSpY_o7hoKG, .tT_JypfxNakuY1jHgyBN, .zVA1h9TUy8QQBogj, .l7XabbfpobRNm8SpemYx, .OS2FSGrMk4JcABLlGUmc, .OAz6EUvqC2CpvN61OoeA)[role=menuitemcheckbox] {display:none}"
         },
         "veryhighstream": {
             "version": {

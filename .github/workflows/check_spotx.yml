@@ -34,7 +34,7 @@ jobs:
           }
 
           $spotifyVersion = [string]$latestEntry.Value.fullversion
-          if ([string]::IsNullOrWhiteSpace($spotifyVersion) -or $spotifyVersion -notmatch '^\d+\.\d+\.\d+\.\d+\.g[0-9a-f]{8}$') {
+          if ([string]::IsNullOrWhiteSpace($spotifyVersion) -or $spotifyVersion -notmatch '^\d+\.\d+\.\d+\.\d+\.g[0-9a-f]+$') {
             throw "Invalid Spotify fullversion for $($latestEntry.Name)"
           }
         }
@@ -93,7 +93,7 @@ jobs:
         if (-not $installer.url -or $installer.size -le 0) {
           throw "No ARM64 installer found for Spotify $checkVersion"
         }
-        if ($entry.Value.fullversion -notmatch '^\d+\.\d+\.\d+\.\d+\.g[0-9a-f]{8}$') {
+        if ($entry.Value.fullversion -notmatch '^\d+\.\d+\.\d+\.\d+\.g[0-9a-f]+$') {
           throw "Invalid Spotify fullversion for $checkVersion"
         }
 

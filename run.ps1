@@ -489,7 +489,7 @@ function Get-SpotifyVersionNumber {
         [string]$SpotifyVersion
     )
 
-    return [Version]($SpotifyVersion -replace '\.g[0-9a-f]{8}$', '')
+    return [Version]($SpotifyVersion -replace '\.g[0-9a-f]+$', '')
 }
 
 function Get-SpotifyInstallerArchitecture {
@@ -579,7 +579,7 @@ function Resolve-SpotifyInstallerVersionFromManifest {
 
     $entry = $selectedVersion.Value
     $fullVersion = [string]$entry.fullversion
-    if ($fullVersion -notmatch '^\d+\.\d+\.\d+\.\d+\.g[0-9a-f]{8}$') {
+    if ($fullVersion -notmatch '^\d+\.\d+\.\d+\.\d+\.g[0-9a-f]+$') {
         throw "Spotify version $($selectedVersion.Name) has invalid fullversion in versions manifest"
     }
 
@@ -621,7 +621,7 @@ $spotifyTemporaryDownloadVersion = "1.2.86.502.g8cd7fb22"
 $spotifyVersionsManifestUrl = Get-Link -e "/table/versions.json" -Owner "LoaderSpot" -Repository "table"
 $systemArchitecture = Get-SystemArchitecture
 
-$match_v = "^(?<version>\d+\.\d+\.\d+(?:\.\d+(?:\.g[0-9a-f]{8})?)?)(?:-\d+)?$"
+$match_v = "^(?<version>\d+\.\d+\.\d+(?:\.\d+(?:\.g[0-9a-f]+)?)?)(?:-\d+)?$"
 $versionIsSupported = $false
 if ($version) {
     if ($version -match $match_v) {

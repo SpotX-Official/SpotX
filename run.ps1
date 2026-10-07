@@ -1777,7 +1777,7 @@ function Kill-Spotify {
 }
 
 
-# Defer removal until the replacement is ready
+# Defer Store removal until the replacement installer is downloaded
 if ($win10 -or $win11 -or $win8_1 -or $win8 -or $win12) {
 
     if (Get-AppxPackage -Name SpotifyAB.SpotifyMusic) {
@@ -5333,7 +5333,6 @@ function Test-SpotifyInstall {
 function Expand-SpotifyInstaller {
     param([string]$DownloadFolder, [version]$ExpectedVersion, [string]$ExpectedArchitecture)
 
-    downloadSp -DownloadFolder $DownloadFolder
     $setupExe = Join-Path $DownloadFolder 'SpotifySetup.exe'
     $destination = Join-Path $DownloadFolder 'client'
     $process = $null
@@ -5388,13 +5387,12 @@ try {
         Write-Host ($lang).DownSpoti2`n
         $architecture = Get-SpotifyInstallerArchitecture -SystemArchitecture $systemArchitecture `
             -SpotifyVersion ([version]$online) -LastX86SupportedVersion $last_x86
-        $preparedClient = Expand-SpotifyInstaller -DownloadFolder $tempDirectory `
-            -ExpectedVersion ([version]$online) -ExpectedArchitecture $architecture
-        Write-Host
+        downloadSp -DownloadFolder $tempDirectory
     }
 
-    Kill-Spotify
+    # Store detection runs before /extract in the Spotify installer
     if ($uninstallStoreSpotify) {
+        Kill-Spotify
         $previousProgressPreference = $ProgressPreference
         try {
             $ProgressPreference = 'SilentlyContinue'
@@ -5404,6 +5402,14 @@ try {
         }
         finally { $ProgressPreference = $previousProgressPreference }
     }
+
+    if ($installSpotify) {
+        $preparedClient = Expand-SpotifyInstaller -DownloadFolder $tempDirectory `
+            -ExpectedVersion ([version]$online) -ExpectedArchitecture $architecture
+        Write-Host
+    }
+
+    if (!$uninstallStoreSpotify) { Kill-Spotify }
 
     if ($installSpotify) {
         $null = Unlock-Folder

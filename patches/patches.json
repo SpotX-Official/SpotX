@@ -2121,6 +2121,14 @@
                     "fr": "1.2.96",
                     "to": ""
                 }
+            },
+            "PiPMiniPlayerPositionRestore": {
+                "name": "enablePiPMiniPlayerPositionRestore",
+                "native_description": "Enable restoring saved position and size when opening the PiP miniplayer",
+                "version": {
+                    "fr": "1.3.2",
+                    "to": ""
+                }
             }
         },
         "CustomExp": {

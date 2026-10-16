@@ -27,7 +27,7 @@
         "playlistsponsor": {
             "version": {
                 "fr": "1.1.59",
-                "to": ""
+                "to": "1.2.77"
             },
             "match": "allSponsorships",
             "replace": ""

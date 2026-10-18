@@ -2,7 +2,7 @@
 param
 (
     [Parameter(HelpMessage = 'Latest recommended Spotify version for Windows 10+.')]
-    [string]$latest_full = "1.3.4",
+    [string]$latest_full = "1.3.6",
 
     [Parameter(HelpMessage = 'Latest supported Spotify version for Windows 7-8.1')]
     [string]$last_win7_full = "1.2.5.1006.g22820f93",
@@ -2113,7 +2113,7 @@ function Helper($paramname, [switch]$CheckOnly) {
         }
         "Fixjs" {
             $n = $name
-            $contents = "searchFixes"
+            $contents = if ($n -eq 'xpui-pip-mini-player.js') { 'pipMiniPlayerRestore' } else { 'searchFixes' }
             $name = "patches.json.others."
             $json = $webjson.others
         }
@@ -5738,6 +5738,7 @@ if ($test_spa) {
 
     }
     extract -counts 'one' -method 'zip' -name 'home-v2.js' -helper 'HomeV2-js'
+    extract -counts 'one' -method 'zip' -name 'xpui-pip-mini-player.js' -helper 'Fixjs'
     extract -counts 'one' -method 'zip' -name 'xpui.js' -helper 'VariousofXpui-js'
 
     if ([version]$offline -ge [version]"1.1.85.884" -and [version]$offline -le [version]"1.2.57.463") {

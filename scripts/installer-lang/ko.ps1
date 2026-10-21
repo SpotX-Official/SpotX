@@ -12,7 +12,6 @@
     Download2       = "5초 후 다시 시도합니다..."
     Download3       = "오류 발생"
     Download4       = "네트워크 설정을 확인하시고 다시 실행해주세요"
-    Download5       = "Spotify 다운로드 중"
     StopScript      = "스크립트가 중단되었습니다"
     MsSpoti         = "Microsoft Store 버전의 Spotify가 감지되었으며 이는 지원되지 않습니다"
     MsSpoti2        = "Spotify Microsoft Store 버전을 제거할까요? [Y/N]"
@@ -41,9 +40,5 @@
     Spicetify       = "Spicetify detected, it must be installed after SpotX, open recommended actions in FAQ ? [Y/N]"
     NoRestore       = "SpotX가 이미 설치되었지만, xpui.bak 파일을 찾을 수 없습니다. `nSpotify를 제거하고 Install.bat을 다시 실행해주세요"
     InstallComplete = "설치가 완료되었습니다"
-    HostInfo        = "hosts 파일에서 불필요한 URL이 감지되었습니다"
-    HostBak         = "hosts.bak 백업 파일을 생성하는 중..."
-    HostDel         = "원본 hosts 파일에서 불필요한 URL 제거를 시도하는 중..."
-    HostError       = "파일을 수정하는 데 오류가 발생했습니다, 직접 수정하거나 이 스크립트를 관리자 권한으로 실행해주세요"
     PressAnyKey     = "종료하려면 아무 키나 누르십시오..."
 }

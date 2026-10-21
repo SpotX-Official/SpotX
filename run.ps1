@@ -161,7 +161,7 @@ function Format-LanguageCode {
     )
 
     $supportLanguages = @(
-        'be', 'bn', 'cs', 'de', 'el', 'en', 'es', 'fa', 'fi', 'fil', 'fr', 'hi', 'hu',
+        'be', 'bn', 'cs', 'de', 'el', 'en', 'es', 'fa', 'fi', 'fil', 'fr', 'hi', 'hr', 'hu',
         'id', 'it', 'ja', 'ka', 'ko', 'lv', 'pl', 'pt', 'ro', 'ru', 'sk', 'sr', 'sr-Latn',
         'sv', 'ta', 'tr', 'uk', 'vi', 'zh', 'zh-TW'
     )
@@ -214,6 +214,10 @@ function Format-LanguageCode {
         }
         '^hi' {
             $returnCode = 'hi'
+            break
+        }
+        '^hr' {
+            $returnCode = 'hr'
             break
         }
         '^hu' {

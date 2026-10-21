@@ -9,7 +9,6 @@
     Download2       = "Повторный запрос через 5 секунд..."
     Download3       = "Опять ошибка"
     Download4       = "Проверьте настройки вашей сети и снова запустите установку"
-    Download5       = "Загрузка Spotify"
     StopScript      = "Cкрипт остановлен"
     MsSpoti         = "Обнаружена версия Spotify из Microsoft Store, которая не поддерживается"
     MsSpoti2        = "Удалить Spotify Microsoft Store ? [Y/N]"
@@ -41,9 +40,5 @@
     DefenderFailed  = "Исключения не добавлены в Microsoft Defender"
     NoRestore       = "SpotX уже был установлен, но файл для восстановления xpui.bak не найден. `nУдалите клиент Spotify и снова запустите Install.bat"
     InstallComplete = "Установка завершена"
-    HostInfo        = "В файле hosts найдены нежелательные Url-адреса"
-    HostBak         = "Создаю резервную копию hosts.bak..."
-    HostDel         = "Попытка удалить нежелательные Url-адреса из оригинального файла hosts..."
-    HostError       = "Что-то пошло не так при редактировании файла hosts, отредактируйте его вручную или запустите скрипт от администратора"
     PressAnyKey     = "Нажмите любую клавишу для выхода..."
 }

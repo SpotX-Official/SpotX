@@ -12,7 +12,6 @@
     Download2       = "将在五秒后重试"
     Download3       = "再次出错"
     Download4       = "请检查您的网络设置后再次尝试安装"
-    Download5       = "下载 Spotify"
     StopScript      = "脚本已停止"
     MsSpoti         = "检测到 Spotify 为微软商店版本，此脚本不支持该版本"
     MsSpoti2        = "是否卸载微软商店的 Spotify [Y/N]"
@@ -41,9 +40,5 @@
     Spicetify       = "检测到 Spicetify，它必须在安装 SpotX 后进行安装。是否启用 FAQ 中的建议操作？ [Y/N]"
     NoRestore       = "SpotX 已经安装，但是找不到文件 xpui.bak . `n请重新安装 Spotify 客户端后再次运行 install.bat"
     InstallComplete = "安装完成"
-    HostInfo        = "在 hosts 文件中发现了不需要的 URL"
-    HostBak         = "备份原始 hosts 文件为 hosts.bak..."
-    HostDel         = "正在试图从原始 hosts 文件中删除不需要的 URL..."
-    HostError       = "在编辑 hosts 文件时发生了错误,请手动编辑或以管理员身份重新运行该脚本。"
     PressAnyKey     = "按任意键退出..."
 }

@@ -12,7 +12,6 @@
     Download2       = "Atkārtosim lejuplādi pēc 5 sekundēm..."
     Download3       = "Atkal kļūda"
     Download4       = "Pārbaudi savus tīkla iestatījumus un mēģini instalēt vēlreiz"
-    Download5       = "Lejuplādejam Spotify"
     StopScript      = "Skripts ir apstājies"
     MsSpoti         = "Microsoft veikala Spotify versija tika konstatēta, un nav atbalstīta."
     MsSpoti2        = "Izdzēst Spotify Microsoft Store versiju [Y/N]"
@@ -41,9 +40,5 @@
     Spicetify       = "Spicetify ir konstatēts, to ir jāinstalē pēc SpotX, atvērt piemērotākos darbībus BUJ lapā? [Y/N]"
     NoRestore       = "SpotX ir jau instalēts, bet xpui.bak nebija atrasts. `nLūdzu izdzēs Spotify klientu un palaid Install.bat vēlreiz"
     InstallComplete = "Instalācija pabeigta"
-    HostInfo        = "hosts failā atrasti nevēlami URL"
-    HostBak         = "Dublē hosts.bak ..."
-    HostDel         = "Mēģina noņemt nevēlamus URL no sākotnējā hosts faila..."
-    HostError       = "Kaut kas greizi aizgāja rediģējot hosts failu, rediģējiet to manuāli vai palaidiet skriptu ar administratora privilēģijām"
     PressAnyKey     = "Nospiediet jebkuru taustiņu, lai izietu..."
 }

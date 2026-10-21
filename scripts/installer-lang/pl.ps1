@@ -12,7 +12,6 @@
     Download2       = "Ponowna próba za 5 sekund..."
     Download3       = "Pobieranie się nie powiodło"
     Download4       = "Sprawdź ustawienia sieci i uruchom instalację ponownie"
-    Download5       = "Pobieranie Spotify"
     StopScript      = "Skrypt jest zatrzymany"
     MsSpoti         = "Wykryto wersję Spotify ze Sklepu Microsoft, która nie jest wspierana"
     MsSpoti2        = "Czy chcesz odinstalować wersję Spotify ze Sklepu Microsoft? [Y/N]"
@@ -41,9 +40,5 @@
     Spicetify       = "Wykryto Spicetify. Należy zainstalować je po SpotX. Czy otworzyć zalecane działania w FAQ? [Y/N]"
     NoRestore       = "SpotX został już pobrany, lecz xpui.bak nie został znaleziony. `nProszę odinstalować klienta Spotify i uruchomić Install.bat ponownie"
     InstallComplete = "instalacja zakończona"
-    HostInfo        = "Niepożądane adresy URL znalezione w plikach hosts"
-    HostBak         = "Tworzenie kopii zapasowej pliku hosts.bak..."
-    HostDel         = "Próba usunięcia niechcianych adresów URL z oryginalnego pliku hosts..."
-    HostError       = "Coś poszło nie tak podczas edycji pliku hosts, edytuj go ręcznie lub uruchom skrypt jako administrator"
     PressAnyKey     = "Naciśnij dowolny klawisz, aby wyjść..."
 }

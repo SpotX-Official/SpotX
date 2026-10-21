@@ -12,7 +12,6 @@
     Download2       = "Újrapróbálás 5 másodpercen belül..."
     Download3       = "Ismét hiba"
     Download4       = "Ellenőrizze a hálózati beállításokat, és futtassa újra a telepítést"
-    Download5       = "Spotify letöltése"
     StopScript      = "A script leállt"
     MsSpoti         = "A Spotify Microsoft Store verziója van telepítve, amely nem támogatott"
     MsSpoti2        = "A Spotify Microsoft Store kiadásának eltávolítása [Y/N]"
@@ -41,9 +40,5 @@
     Spicetify       = "Spicetify detected, it must be installed after SpotX, open recommended actions in FAQ ? [Y/N]"
     NoRestore       = "A SpotX már telepítve van, az xpui.bak nem található. `nTávolítsa el a Spotify klienst, és futtassa újra az Install.bat fájlt."
     InstallComplete = "Telepítés befejeződött"
-    HostInfo        = "Nemkívánatos URL-címek a hosts fájlban"
-    HostBak         = "A hosts.bak mentése..."
-    HostDel         = "A nem kívánt URL-ek eltávolítása az eredeti hosts fájlból..."
-    HostError       = "Valami hiba történt a hosts fájl szerkesztése közben, szerkeszd meg manuálisan, vagy futtasd a szkriptet rendszergazdaként."
     PressAnyKey     = "Nyomjon meg egy gombot a kilépéshez..."
 }

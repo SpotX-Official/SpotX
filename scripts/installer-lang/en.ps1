@@ -9,7 +9,6 @@
     Download2       = "Will re-request in 5 seconds..."
     Download3       = "Error again"
     Download4       = "Check your network settings and run the installation again"
-    Download5       = "Downloading Spotify"
     StopScript      = "Script is stopped"
     MsSpoti         = "The Microsoft Store version of Spotify has been detected which is not supported"
     MsSpoti2        = "Uninstall Spotify Microsoft Store edition ? [Y/N]"
@@ -41,9 +40,5 @@
     DefenderFailed  = "Microsoft Defender exclusions were not added"
     NoRestore       = "SpotX has already been installed, xpui.bak not found. `nPlease uninstall Spotify client and run Install.bat again"
     InstallComplete = "installation completed"
-    HostInfo        = "Unwanted URLs found in hosts file"
-    HostBak         = "Backing up hosts.bak..."
-    HostDel         = "Trying to remove unwanted URLs from the original hosts file..."
-    HostError       = "Something went wrong while editing the hosts file, edit it manually or run the script as administrator"
     PressAnyKey     = "Press any key to exit..."
 }

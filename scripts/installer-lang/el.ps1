@@ -12,7 +12,6 @@
     Download2       = "Θα γίνει εκ νέου αίτημα σε 5 δευτερόλεπτα..."
     Download3       = "Σφάλμα Ξανά"
     Download4       = "Ελέγξτε τις ρυθμίσεις του δικτύου σας και εκτελέστε ξανά την εγκατάσταση"
-    Download5       = "Λήψη Spotify"
     StopScript      = "Το Script έχει σταματήσει"
     MsSpoti         = "Εντοπίστηκε η έκδοση του Spotify του Microsoft Store η οποία δεν υποστηρίζεται"
     MsSpoti2        = "Απεγκατάσταση Spotify έκδοσης Microsoft Store [Y/N]"
@@ -41,9 +40,5 @@
     Spicetify       = "Spicetify detected, it must be installed after SpotX, open recommended actions in FAQ ? [Y/N]"
     NoRestore       = "Το SpotX έχει ήδη εγκατασταθεί, το xpui.bak δεν βρέθηκε. `nΠαρακαλώ απεγκαταστήστε το πρόγραμμα Spotify και εκτελέστε ξανά το Install.bat"
     InstallComplete = "Η εγκατάσταση ολοκληρώθηκε"
-    HostInfo        = "Ανεπιθύμητες διευθύνσεις URL βρέθηκαν στο αρχείο hosts"
-    HostBak         = "Δημιουργείται αντίγραφο ασφαλείας hosts.bak..."
-    HostDel         = "Προσπάθεια κατάργησης ανεπιθύμητων διευθύνσεων URL από το αρχικό αρχείο hosts..."
-    HostError       = "Παρουσιάστηκε κάποιο πρόβλημα κατά την επεξεργασία του αρχείου hosts, επεξεργαστείτε το χειροκίνητα ή εκτελέστε το script ως διαχειριστής"
     PressAnyKey     = "Πατήστε οποιοδήποτε πλήκτρο για έξοδο..."
 }

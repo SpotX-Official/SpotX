@@ -12,7 +12,6 @@
     Download2       = "Magre-request muli sa loob ng 5 segundo..."
     Download3       = "Muling nagka-error"
     Download4       = "Suriin ang iyong mga setting sa network at patakbuhin muli ang pag-install"
-    Download5       = "Nagdo-download ng Spotify"
     StopScript      = "Itinigil ang script"
     MsSpoti         = "Nadiskubre ang bersyon ng Spotify ay mula sa Microsoft Store na hindi suportado"
     MsSpoti2        = "I-uninstall ang edisyon ng Spotify mula sa Microsoft Store [Y/N]"
@@ -41,9 +40,5 @@
     Spicetify       = "Nakadetect ang Spicetify, ito ay dapat na mai-install pagkatapos ng SpotX, buksan ang rekomendadong mga hakbang sa FAQ? [Y/N]"
     NoRestore       = "Nakainstall na ang SpotX, hindi nakita ang xpui.bak. `nMangyaring mag-uninstall ng Spotify client at patakbuhin muli ang Install.bat"
     InstallComplete = "Ang pag-install ay tapos na"
-    HostInfo        = "May mga hindi kinakailangang mga URL ay natagpuan sa hosts file"
-    HostBak         = "Nagbabackup ng hosts.bak..."
-    HostDel         = "Sinusubukang alisin ang mga hindi kanais-nais na URL mula sa orihinal na hosts file..."
-    HostError       = "May naging problema sa pag-eedit ng hosts file, i-edit ito ng manu-mano o patakbuhin ang script bilang administrator"
     PressAnyKey     = "Pindutin ang anumang key upang lumabas..."
 }

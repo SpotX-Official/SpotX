@@ -12,7 +12,6 @@
     Download2       = "5秒後に再試行します..."
     Download3       = "再びエラー"
     Download4       = "ネットワークの設定を確認し再度インストールを実行してくささい"
-    Download5       = "Spotify のダウンロード中"
     StopScript      = "スクリプトが停止しました"
     MsSpoti         = "Microsoft Store 版の Spotify には対応していません"
     MsSpoti2        = "Microsoft Store 版の Spotifyをアンインストールしますか ? [Y/N]"
@@ -41,9 +40,5 @@
     Spicetify       = "Spicetify が検出されましたが、SpotX の後にインストールする必要があります。推奨方法の解説ページを開きますか? [Y/N]"
     NoRestore       = "SpotXはインストール済みですが xpui.bak が見つかりません。`nSpotify クライアントをアンインストールし、再度 Install.bat を実行してください"
     InstallComplete = "インストール完了"
-    HostInfo        = "hosts ファイル内に望まない URL があります"
-    HostBak         = "hosts.bak にバックアップ中..."
-    HostDel         = "元の hosts から望まない URL を削除中..."
-    HostError       = "hosts ファイルの編集中に不明の問題が発生、手動で編集するか、管理者としてスクリプトを実行してください"
     PressAnyKey     = "終了するには何かキーを押してください..."
 }

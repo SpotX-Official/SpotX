@@ -12,7 +12,6 @@
     Download2       = "5 வினாடிகளில் மீண்டும் வேண்டுகோள் விடுக்கப்படும்..."
     Download3       = "மீண்டும் பிழை"
     Download4       = "உங்கள் பிணைய அமைப்புகளைச் சரிபார்த்து, நிறுவலை மீண்டும் இயக்கவும்"
-    Download5       = "Spotifyயைப் பதிவிறக்குகிறது"
     StopScript      = "Script நிறுத்தப்பட்டது"
     MsSpoti         = "Spotifyயின் Microsoft Store பதிப்பு கண்டறியப்பட்டது, அதை ஆதரிக்கவில்லை"
     MsSpoti2        = "Microsoft Store Spotify பதிப்பை நிறுவல் நீக்கவும் [Y/N]"
@@ -41,9 +40,5 @@
     Spicetify       = "Spicetify கண்டறியப்பட்டது, இது SpotX க்குப் பிறகு நிறுவப்பட வேண்டும், FAQ இல் பரிந்துரைக்கப்பட்ட செயல்களைத் திறக்க விரும்புகிறீர்களா? [Y/N]"
     NoRestore       = "SpotX ஏற்கனவே நிறுவப்பட்டது, xpui.bak காணப்படவில்லை. 'nதயவுசெய்து Spotify clientயை நிறுவல் நீக்கி Install.batயை மீண்டும் இயக்கவும்"
     InstallComplete = "நிறுவல் முடிந்தது"
-    HostInfo        = "Host filesல் தேவையற்ற URL கள் கண்டறியப்படுகின்றன"
-    HostBak         = "hosts.bak காப்புப்பிரதி..."
-    HostDel         = "Original host filesலிருந்து தேவையற்ற URL களை அகற்ற முயற்சிக்கிறது ..."
-    HostError       = "Hosts Filesயைத் திருத்தும் போது ஏதோ தவறு ஏற்பட்டது, அதை manualலாக திருத்தவும் அல்லது Scriptயை administratorராக இயக்கவும்"
     PressAnyKey     = "Press any key to exit..."
 }

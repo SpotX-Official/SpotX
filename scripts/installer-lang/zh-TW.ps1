@@ -12,7 +12,6 @@
     Download2       = "將在五秒後重試"
     Download3       = "再次出錯"
     Download4       = "檢查您的網路設定後再次嘗試安裝"
-    Download5       = "下載 Spotify"
     StopScript      = "腳本已停止"
     MsSpoti         = "偵測到不支援的 Spotify 微軟商店版本"
     MsSpoti2        = "解除安裝微軟商店的 Spotify [Y/N]"
@@ -41,9 +40,5 @@
     Spicetify       = "偵測到 Spicetify，它必須在安裝 SpotX 後進行安裝。是否啟用 FAQ 中的建議操作？[Y/N]"
     NoRestore       = "SpotX 已經安裝，但是找不到 xpui.bak `n請重新安裝 Spotify 客戶端後再運行 Install.bat"
     InstallComplete = "安裝完成"
-    HostInfo        = "在 hosts 檔案中發現不需要的網址"
-    HostBak         = "正在備份 hosts.bak..."
-    HostDel         = "正在嘗試從原始 hosts 檔案中刪除不需要的網址..."
-    HostError       = "在編輯 hosts 檔案時發生了錯誤，請手動編輯或以系統管理員身分執行腳本"
     PressAnyKey     = "按任意鍵退出..."
 }

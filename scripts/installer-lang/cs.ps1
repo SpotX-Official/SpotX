@@ -12,7 +12,6 @@
     Download2       = "Zkusím znovu za 5 sekund..."
     Download3       = "Chyba znovu"
     Download4       = "Podívejte se na nastavení sítě a spusťte instalaci znovu"
-    Download5       = "Stahuji Spotify"
     StopScript      = "Skript je zastaven"
     MsSpoti         = "Byla detekována verze Spotify z Microsoft Store, tato verze není podporována"
     MsSpoti2        = "Odinštalujte verzi Spotify z Microsoft Store [Y/N]"
@@ -41,9 +40,5 @@
     Spicetify       = "Spicetify nalezeno, musí být nainstalováno po SpotX, otevřít doporučené akce ve FAQ? [Y/N]"
     NoRestore       = "SpotX byl již nainstalován, xpui.bak se nenašlo. `nProsím odinstalujte klienta Spotify a spusťte Install.bat znovu"
     InstallComplete = "Instalace dokončena"
-    HostInfo        = "Nechtěné URL adresy nalezeny v souboru hosts"
-    HostBak         = "Zálohuji soubor hosts.bak..."
-    HostDel         = "Pokouším se odebrat nechtěné URL adresy z originálního souboru hosts..."
-    HostError       = "Něco se nepovedlo s úpravou souboru hosts, upravte ho manuálně nebo spusťte skript jako"
     PressAnyKey     = "Stiskněte libovolnou klávesu pro ukončení..."
 }

@@ -12,7 +12,6 @@
     Download2       = "5 saniye içinde tekrar talep edilecek..."
     Download3       = "Yine hata oluştu"
     Download4       = "Ağ ayarlarınızı kontrol edin ve kurulumu tekrar çalıştırın"
-    Download5       = "Spotify indiriliyor"
     StopScript      = "Komut dosyası durduruldu"
     MsSpoti         = "Spotify'ın desteklenmeyen Microsoft Store sürümü tespit edildi"
     MsSpoti2        = "Spotify'ın Microsoft Store sürümünü kaldır [Y/N]"
@@ -41,9 +40,5 @@
     Spicetify       = "Spicetify detected, it must be installed after SpotX, open recommended actions in FAQ ? [Y/N]"
     NoRestore       = "SpotX zaten kurulmuş, xpui.bak dosyası bulunamadı. `nLütfen Spotify istemcisini kaldırın ve Install.bat dosyasını tekrar çalıştırın"
     InstallComplete = "kurulum tamamlandı"
-    HostInfo        = "Hosts dosyasında istenmeyen URL'ler bulundu"
-    HostBak         = "hosts.bak dosyası yedekleniyor...."
-    HostDel         = "Orijinal hosts dosyasından istenmeyen URL'ler kaldırılmaya çalışılıyor..."
-    HostError       = "Hosts dosyasını düzenlerken bir şeyler ters gitti, elle düzenleyin veya kodu yönetici olarak çalıştırın"
     PressAnyKey     = "Çıkmak için herhangi bir tuşa basın..."
 }

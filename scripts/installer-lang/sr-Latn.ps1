@@ -12,7 +12,6 @@
     Download2       = "Ponovan zahtev za 5 sekundi..."
     Download3       = "Ponovo greška"
     Download4       = "Proverite svoje postavke mreže i pokrenite instalaciju još jednom"
-    Download5       = "Preuzimanje Spotify-ja"
     StopScript      = "Skripta zaustavljena"
     MsSpoti         = "Detektovana je verzija Spotify-ja iz Microsoft Store-a, što nije podržano"
     MsSpoti2        = "Deinstalirati verziju Spotify-ja iz Microsoft Store-a? [Y/N]"
@@ -41,9 +40,5 @@
     Spicetify       = "Detektovan je Spicetify koji mora biti instaliran nakon SpotX-a, otvori preporučene akcije u FAQ-u? [Y/N]"
     NoRestore       = "SpotX je već bio instaliran, xpui.bak nije pronađen. `nMolimo deinstalirajte Spotify klijent i pokrenite Install.bat ponovo"
     InstallComplete = "instalacija završena"
-    HostInfo        = "Neželjeni URL-ovi pronađeni u hosts fajlu"
-    HostBak         = "Pravljenje rezervne kopije hosts.bak..."
-    HostDel         = "Pokušavamo da uklonimo neželjene URL-ove iz originalnog hosts fajla..."
-    HostError       = "Nešto je pošlo naopako tokom uređivanja hosts fajla, uredite ga ručno ili pokrenite skriptu kao administrator"
     PressAnyKey     = "Pritisnite bilo koji taster da izađete..."
 }

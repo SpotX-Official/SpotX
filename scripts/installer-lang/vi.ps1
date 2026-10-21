@@ -12,7 +12,6 @@
     Download2       = "Tải lại sau 5 giây..."
     Download3       = "Lại bị lỗi"
     Download4       = "Hãy kiểm tra cài đặt mạng và chạy lại chương trình"
-    Download5       = "Đang tải Spotify"
     StopScript      = "Đã dừng bản vá"
     MsSpoti         = "Phát hiện phiên bản Spotify của Microsoft Store, bản này không được hỗ trợ"
     MsSpoti2        = "Gỡ Spotify của Microsoft Store [Y/N]"
@@ -41,9 +40,5 @@
     Spicetify       = "Đã phát hiện Spicetify, nó cần phải được cài đặt sau SpotX, bạn có muốn mở những hành động khuyến khích trong mục FAQ ? [Y/N]"
     NoRestore       = "Đã cài SpotX nhưng không tìm thấy tập tin xpui.bak. `nGỡ Spotify và chạy lại Install.bat"
     InstallComplete = "cài đặt hoàn tất"
-    HostInfo        = "Tìm thấy các URL không cần thiết trong tệp hosts"
-    HostBak         = "Đang sao lưu hosts.bak..."
-    HostDel         = "Đang xóa các URL không cần thiết khỏi tệp hosts..."
-    HostError       = "Xảy ra lỗi khi đang chỉnh sửa tệp hosts. Hãy tự sửa hoặc chạy tệp này với tư cách quản trị viên"
     PressAnyKey     = "Nhấn phím bất kỳ để thoát..."
 }

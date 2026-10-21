@@ -12,7 +12,6 @@
     Download2       = "5 सेकंड में फिर से कोशिश की जाएगी..."
     Download3       = "फिर से गड़बड़ी"
     Download4       = "अपनी नेटवर्क सेटिंग्स जाँचें और इंस्टॉलेशन फिर से चलाएँ"
-    Download5       = "Spotify डाउनलोड हो रहा है"
     StopScript      = "स्क्रिप्ट रोक दी गई है"
     MsSpoti         = "Spotify का Microsoft Store वर्जन मिला है, जो सपोर्टेड नहीं है"
     MsSpoti2        = "Spotify का Microsoft Store वर्जन अनइंस्टॉल करें? [Y/N]"
@@ -41,9 +40,5 @@
     Spicetify       = "Spicetify मिला है। इसे SpotX के बाद इंस्टॉल किया जाना चाहिए। क्या आप FAQ में सुझाए गए एक्शन देखना चाहते हैं? [Y/N]"
     NoRestore       = "SpotX पहले से इंस्टॉल है, लेकिन xpui.bak नहीं मिला। `nकृपया Spotify क्लाइंट को अनइंस्टॉल करें और Install.bat को फिर से चलाएँ"
     InstallComplete = "इंस्टॉलेशन पूरा हुआ"
-    HostInfo        = "hosts फ़ाइल में कुछ गैर-जरूरी URLs मिले हैं"
-    HostBak         = "hosts.bak का बैकअप बनाया जा रहा है..."
-    HostDel         = "ओरिजिनल hosts फ़ाइल से गैर-जरूरी URLs को हटाने की कोशिश की जा रही है..."
-    HostError       = "hosts फ़ाइल को एडिट करते समय कोई समस्या हुई है। कृपया इसे मैनुअली एडिट करें या स्क्रिप्ट को एडमिनिस्ट्रेटर के रूप में चलाएँ"
     PressAnyKey     = "Press any key to exit..."
 }

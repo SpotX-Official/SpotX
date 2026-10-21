@@ -12,7 +12,6 @@
     Download2       = "Pyydetään latausta uudelleen 5 sekunnin kuluttua..."
     Download3       = "Taas virhe"
     Download4       = "Tarkista verkkoasetuksesi ja suorita asennus uudelleen"
-    Download5       = "Ladataan Spotify:tä"
     StopScript      = "Skripti on pysäytetty"
     MsSpoti         = "Spotifyn Microsoft Store -versio on havaittu, jota ei tueta"
     MsSpoti2        = "Poista Spotifyn Windows Store -versio [Y/N]"
@@ -41,9 +40,5 @@
     Spicetify       = "Spicetify detected, it must be installed after SpotX, open recommended actions in FAQ ? [Y/N]"
     NoRestore       = "SpotX on jo asennettu, xpui.bak tiedostoa ei löynyt. `nAsenna spotify uudelleen ja suorita Install.bat tiedosto uudelleen"
     InstallComplete = "asennus suoritettu"
-    HostInfo        = "Hosts-tiedostosta löytyi ei-toivottuja URL-osoitteita"
-    HostBak         = "Varmuuskopioidaan hosts.bak..."
-    HostDel         = "Yritetään poistaa ei toivottuja URL-osoitteita alkuperäisestä hosts-tiedostosta..."
-    HostError       = "Jotain meni pieleen, hosts-tiedostoton muokkaamisessa, muokkaa sitä manuaalisesti tai suorita komentosarja järjestelmänvalvojana"
     PressAnyKey     = "Paina mitä tahansa näppäintä poistuaksesi..."
 }

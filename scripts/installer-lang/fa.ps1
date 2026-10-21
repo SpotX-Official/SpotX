@@ -12,7 +12,6 @@
     Download2       = "در عرض 5 ثانیه مجدد درخواست می شود..."
     Download3       = "دوباره خطا"
     Download4       = "تنظیمات شبکه خود را بررسی کنید و دوباره نصب را اجرا کنید"
-    Download5       = "در حال دانلود اسپاتیفای"
     StopScript      = "اسکریپت متوقف شده است"
     MsSpoti         = "نسخه اسپاتیفای ویندوز استور شناسایی شده است که پشتیبانی نمی شود"
     MsSpoti2        = "نسخه اسپاتیفای ویندوز استور حذف شود [Y/N]"
@@ -41,9 +40,5 @@
     Spicetify       = "Spicetify detected, it must be installed after SpotX, open recommended actions in FAQ ? [Y/N]"
     NoRestore       = "SpotX قبلاً نصب شده است، xpui.bak یافت نشد. `nلطفاً کلاینت Spotify را حذف نصب کنید و Install.bat را دوباره اجرا کنید"
     InstallComplete = "نصب تکمیل شد"
-    HostInfo        = "URL های ناخواسته در فایل هاست یافت می شود"
-    HostBak         = "پشتیبان گیری از hosts.bak"
-    HostDel         = "تلاش برای حذف URL های ناخواسته از فایل میزبان اصلی"
-    HostError       = "هنگام ویرایش فایل میزبان مشکلی پیش آمد، آن را به صورت دستی ویرایش کنید یا اسکریپت را صورت ادمینستریتور اجرا کنید"
     PressAnyKey     = "برای خروج هر کلیدی را فشار دهید..."
 }

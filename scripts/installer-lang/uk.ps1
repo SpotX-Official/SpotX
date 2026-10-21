@@ -12,7 +12,6 @@
     Download2       = "Повторний запит через 5 секунд..."
     Download3       = "Помилка знову"
     Download4       = "Перевірте налаштування вашого з'єднання та запустіть інсталятор знову"
-    Download5       = "Завантаження Spotify"
     StopScript      = "Скрипт зупинено"
     MsSpoti         = "Знайдено версію Spotify з Microsoft Store, яка не підтримується"
     MsSpoti2        = "Видалити версію Spotify з Microsoft Store [Y/N]"
@@ -41,9 +40,5 @@
     Spicetify       = "Spicetify detected, it must be installed after SpotX, open recommended actions in FAQ ? [Y/N]"
     NoRestore       = "SpotX вже встановлено, але файл xpui.bak не знайдено. `nБудь-ласка, видаліть клієнт Spotify та запустіть скрипт ще раз."
     InstallComplete = "встановлення завершене"
-    HostInfo        = "Небажані посилання знайдені у файлі hosts"
-    HostBak         = "Бекап hosts.bak..."
-    HostDel         = "Спроба прибрати небажані посилання з оригінального файлу hosts..."
-    HostError       = "Щось пішло не так під час редагування файлу hosts, змініть його вручну, або спробуйте запустити скрипт від імені адміністратора"
     PressAnyKey     = "Натисніть будь-яку клавішу, щоб вийти..."
 }

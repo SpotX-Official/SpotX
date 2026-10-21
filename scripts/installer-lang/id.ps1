@@ -12,7 +12,6 @@
     Download2       = "Akan meminta ulang dalam 5 detik..."
     Download3       = "Error lagi"
     Download4       = "Periksa pengaturan jaringan Anda dan jalankan instalasi lagi"
-    Download5       = "Mengunduh Spotify"
     StopScript      = "Skrip dihentikan"
     MsSpoti         = "Versi Microsoft Store dari Spotify terdeteksi, versi ini tidak didukung"
     MsSpoti2        = "Uninstall edisi Spotify Microsoft Store [Y/N]"
@@ -41,9 +40,5 @@
     Spicetify       = "Spicetify terdeteksi, harus diinstal setelah SpotX, buka tindakan yang direkomendasikan di FAQ? [Y/N]"
     NoRestore       = "SpotX sudah diinstal, xpui.bak tidak ditemukan. `nSilakan uninstall aplikasi Spotify dan jalankan Install.bat lagi"
     InstallComplete = "instalasi selesai"
-    HostInfo        = "URL yang tidak diinginkan ditemukan dalam file host"
-    HostBak         = "Membuat cadangan hosts.bak..."
-    HostDel         = "Mencoba menghapus URL yang tidak diinginkan dari file hosts asli..."
-    HostError       = "Ada yang salah saat mengedit file hosts, edit manual atau jalankan skrip sebagai administrator"
     PressAnyKey     = "Tekan sembarang tombol untuk keluar..."
 }

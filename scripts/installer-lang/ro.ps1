@@ -12,7 +12,6 @@
     Download2       = "Va solicita din nou în 5 secunde..."
     Download3       = "Eroare din nou"
     Download4       = "Verificați setările de rețea și rulați din nou instalarea"
-    Download5       = "Se descarca Spotify"
     StopScript      = "Scriptul a fost oprit"
     MsSpoti         = "A fost detectată versiunea Microsoft Store a Spotify, care nu este suportată"
     MsSpoti2        = "Dezinstalati versiunea Microsoft Store a Spotify [Y/N]"
@@ -41,9 +40,5 @@
     Spicetify       = "Spicetify detected, it must be installed after SpotX, open recommended actions in FAQ ? [Y/N]"
     NoRestore       = "SpotX a fost deja instalat, xpui.bak nu a fost găsit. `nVă rugăm să dezinstalați clientul Spotify și să rulați din nou Install.bat"
     InstallComplete = "Instalare completă!"
-    HostInfo        = "URL-uri nedorite au fost găsite in fișierul hosts"
-    HostBak         = "Se efectuează o copie de siguranță a fișierului hosts.bak..."
-    HostDel         = "Se încearcă eliminarea URL-urilor nedorite din fișierul original hosts..."
-    HostError       = "Ceva nu a mers bine in timpul editării fișierului hosts, editează-l manual sau rulează scriptul ca Administrator."
     PressAnyKey     = "Apăsați orice tastă pentru a ieși..."
 }

@@ -12,7 +12,6 @@
     Download2       = "Se volverá a realizar la solicitud en 5 segundos..."
     Download3       = "Error de nuevo"
     Download4       = "Compruebe su configuración de red y ejecute la instalación de nuevo"
-    Download5       = "Descargando Spotify"
     StopScript      = "El script se ha detenido"
     MsSpoti         = "La versión de Spotify de Microsoft Store se ha detectado y no es compatible"
     MsSpoti2        = "Desinstalar Spotify edición Microsoft Store [Y/N]"
@@ -41,9 +40,5 @@
     Spicetify       = "Spicetify detectado, debe ser instalado después de SpotX, abrir acciones recomendadas en las preguntas frecuentes? [Y/N]"
     NoRestore       = "SpotX ya ha sido instalado, xpui.bak no se encuentra. `nDesinstale el cliente de Spotify y ejecute Install.bat de nuevo"
     InstallComplete = "Instalación completada"
-    HostInfo        = "Se han encontrado URL no deseados en el archivo de hosts"
-    HostBak         = "Haciendo una copia de seguridad de hosts.bak..."
-    HostDel         = "Intentando eliminar los URL no deseados del archivo hosts original..."
-    HostError       = "Algo salió mal al editar el archivo hosts; edítelo manualmente o ejecute el script como administrador"
     PressAnyKey     = "Presione cualquier tecla para salir..."
 }

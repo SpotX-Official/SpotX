@@ -2,7 +2,7 @@
 param
 (
     [Parameter(HelpMessage = 'Latest recommended Spotify version for Windows 10+.')]
-    [string]$latest_full = "1.3.7",
+    [string]$latest_full = "1.3.8",
 
     [Parameter(HelpMessage = 'Latest supported Spotify version for Windows 7-8.1')]
     [string]$last_win7_full = "1.2.5.1006.g22820f93",
@@ -2221,6 +2221,10 @@ function Helper($paramname, [switch]$CheckOnly) {
             Remove-Json -j $Enable -p 'RightSidebarLyrics'
             if ($Custom.PSObject.Properties.Name -contains 'LyricsVariationsInNPV') {
                 $Custom.LyricsVariationsInNPV.value = "CONTROL"
+            }
+
+            if ([version]$offline -ge [version]'1.3.1' -and $Custom.PSObject.Properties.Name -contains 'SkipNextTooltip') {
+                $Custom.SkipNextTooltip.value = "compact"
             }
 
             if ([version]$offline -eq [version]'1.2.30.1135') { Move-Json -n 'QueueOnRightPanel' -t $Enable -f $Disable }

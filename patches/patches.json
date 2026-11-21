@@ -665,7 +665,7 @@
                 "native_description": "Enables the new suite of interfaces for Sponsored Playlists V2",
                 "version": {
                     "fr": "1.2.66",
-                    "to": ""
+                    "to": "1.3.10"
                 }
             },
             "SponsoredPlaylistV2ScrollCard": {
@@ -674,7 +674,7 @@
                 "native_description": "Enables the music NPV scroll card rendering during a sponsored playlist playback",
                 "version": {
                     "fr": "1.2.66",
-                    "to": ""
+                    "to": "1.3.10"
                 }
             },
             "EmbeddedAdsCarousel": {
@@ -1940,7 +1940,7 @@
                 "native_description": "Enable tiltable 3D parallax effect on artwork (Cinema Mode and Cover Art Modal)",
                 "version": {
                     "fr": "1.2.76",
-                    "to": ""
+                    "to": "1.3.10"
                 }
             },
             "ExclusiveModeSetting": {
@@ -2355,7 +2355,7 @@
                 "value": "REDUCED_VISIBILITY",
                 "version": {
                     "fr": "1.2.66",
-                    "to": ""
+                    "to": "1.3.10"
                 }
             },
             "SkipNextTooltip": {

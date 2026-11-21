@@ -22,6 +22,7 @@
 .main-view-container .FGdK_c0adS4IdZFuZd8Y,
 .main-view-container .ziTcGrAoj_x7lsHvFa0v,
 .main-view-container .Z1Nsmxs0jR3mZ6I3YZeo,
+.wYWhVPZoG93lR7ogMIug .Z1Nsmxs0jR3mZ6I3YZeo,
 .Zfb6QZfRV28Kz1RQ,
 .b8IhQswrT49QTc5CuFif,
 .ouhPVdbD_F1VRt25FxWL,
@@ -53,7 +54,8 @@ body .KDhLFoEqoClhH12bsfrS,
 .upDNlpL8xEkxmKWWw9IF,
 .main-view-container .LeoJGcLe14Es7fth7HG7,
 .main-view-container .YziSGOezYJ9GbFAtoqiQ,
-.main-view-container .LY7FQL7fwsfvvsefVIik {
+.main-view-container .LY7FQL7fwsfvvsefVIik,
+.wYWhVPZoG93lR7ogMIug .LY7FQL7fwsfvvsefVIik {
     color: var(--musixmatch) !important;
 }
 
@@ -66,7 +68,8 @@ body .KDhLFoEqoClhH12bsfrS,
 .bDlqrHmbHstExWu6T7Ms,
 .main-view-container .lzSRPoTbAKaWG_T2CDlK,
 .main-view-container .e9xch0KKIbvJwq5BrbHD,
-.main-view-container .XJwa_tmi0vV5R8tuyhvS {
+.main-view-container .XJwa_tmi0vV5R8tuyhvS,
+.wYWhVPZoG93lR7ogMIug .XJwa_tmi0vV5R8tuyhvS {
     color: var(--musixmatch) !important;
 }
 
@@ -79,7 +82,7 @@ body .KDhLFoEqoClhH12bsfrS,
 .bqldaBkacR41KxR2Z0jY,
 .main-view-container .Pb9OM7BnosJTdj3KAIWE,
 .main-view-container .bTVPDNxj8i5NwSziiRvc,
-.main-view-container .wYWhVPZoG93lR7ogMIug {
+.wYWhVPZoG93lR7ogMIug {
     --lyrics-color-active: var(--current) !important;
     --lyrics-color-inactive: var(--next) !important;
     --lyrics-color-passed: var(--past) !important;
@@ -93,7 +96,8 @@ body .KDhLFoEqoClhH12bsfrS,
 .loNizikBbaCKyI9Gv8xg,
 .main-view-container .zYNpVrsABjnrvr7ZSJTd,
 .main-view-container .iZQcBRDl8sDadq8gg8AF,
-.main-view-container .l_p6nU70V4sJ7XaycCp3 {
+.main-view-container .l_p6nU70V4sJ7XaycCp3,
+.wYWhVPZoG93lR7ogMIug .l_p6nU70V4sJ7XaycCp3 {
     color: var(--past) !important;
     opacity: 1 !important;
 }
@@ -115,7 +119,11 @@ body .KDhLFoEqoClhH12bsfrS,
 .main-view-container ._bKBKWKkcxcPu19RosFg:hover,
 .main-view-container .iZQcBRDl8sDadq8gg8AF:hover,
 .main-view-container .y45YX8smwP4lW13IQulz:hover,
-.main-view-container .l_p6nU70V4sJ7XaycCp3:hover {
+.main-view-container .l_p6nU70V4sJ7XaycCp3:hover,
+[data-testid="lyrics-npv-section"] .y45YX8smwP4lW13IQulz:hover,
+[data-testid="lyrics-npv-section"] .l_p6nU70V4sJ7XaycCp3:hover,
+.wYWhVPZoG93lR7ogMIug .y45YX8smwP4lW13IQulz:hover,
+.wYWhVPZoG93lR7ogMIug .l_p6nU70V4sJ7XaycCp3:hover {
     color: var(--hover) !important;
     /* remove underline */
     text-decoration: none !important;
@@ -133,7 +141,8 @@ body .KDhLFoEqoClhH12bsfrS,
 .aO2StTvteoZW3ixq2Fz4,
 .main-view-container .jdk2I0q0Ac3yps7rqpMQ,
 .main-view-container .Q21f_WED5raJdRXpK3O_,
-.main-view-container .tTJvSBNfeQLp4kyD7ULO {
+.main-view-container .tTJvSBNfeQLp4kyD7ULO,
+.wYWhVPZoG93lR7ogMIug .tTJvSBNfeQLp4kyD7ULO {
     color: var(--next) !important;
 }
 

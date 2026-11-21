@@ -2405,7 +2405,7 @@
                     "fr": "1.1.59",
                     "to": ""
                 },
-                "add": "(?<=desktop-update\/.)7(\/update)",
+                "add": "desktop-update\/.7\/update",
                 "match": "(?<=desktop-update\/.)2(\/update)",
                 "replace": "7/update"
             },
@@ -2432,7 +2432,7 @@
                     "fr": "1.2.55",
                     "to": "1.2.93"
                 },
-                "add": "}(?=payload=)",
+                "add": "}payload=",
                 "match": "\\?(?=payload=)",
                 "replace": "}"
             },

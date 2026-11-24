@@ -5756,11 +5756,47 @@ function Expand-SpotifyInstaller {
             -Wait -PassThru -WindowStyle Hidden -ErrorAction Stop
         if ($process.ExitCode -ne 0) { throw "Spotify extraction failed with exit code $($process.ExitCode)" }
     }
+    catch {
+        $_.Exception.Data['InstallerPath'] = $setupExe
+        $_.Exception.Data['InstallerCommand'] = ('Extract Spotify {0} ({1}): "{2}" /extract "{3}"' -f
+            $ExpectedVersion, $ExpectedArchitecture, $setupExe, $destination)
+        throw
+    }
     finally {
         if ($null -ne $process) { $process.Dispose() }
     }
     Test-SpotifyInstall -Directory $destination -ExpectedVersion $ExpectedVersion -ExpectedArchitecture $ExpectedArchitecture
     return $destination
+}
+
+function Write-SpotifyInstallFailure {
+    param([System.Exception]$Exception, [string]$Step)
+
+    Write-Warning $Exception.Message
+    $cause = $Exception.GetBaseException()
+    if ($cause -is [ComponentModel.Win32Exception]) {
+        Write-Warning ("Win32 error: {0}" -f $cause.NativeErrorCode)
+    }
+
+    $installerPath = $Exception.Data['InstallerPath']
+    if (!$installerPath) {
+        Write-Warning ("Step: {0}" -f $Step)
+        return
+    }
+
+    Write-Warning $Exception.Data['InstallerCommand']
+    $stream = $null
+    try {
+        $stream = [IO.File]::OpenRead($installerPath)
+        $hash = Get-FileHash -InputStream $stream -Algorithm SHA256 -ErrorAction Stop
+        Write-Warning ("Installer: {0} bytes, SHA-256: {1}" -f $stream.Length, $hash.Hash)
+    }
+    catch {
+        Write-Warning ("Could not read installer for SHA-256: {0}" -f $_.Exception.GetBaseException().Message)
+    }
+    finally {
+        if ($null -ne $stream) { $stream.Dispose() }
+    }
 }
 
 function Register-SpotifyInstall {
@@ -5789,15 +5825,18 @@ function Register-SpotifyInstall {
 }
 
 $stageStatus = $null
+$installStep = 'Create temporary directory'
 try {
     $tempDirectory = Join-Path ([IO.Path]::GetTempPath()) ('SpotX_Temp-' + [Guid]::NewGuid().ToString('N'))
     $null = New-Item -ItemType Directory -Path $tempDirectory -ErrorAction Stop
+    $installStep = 'Load SpotX resources'
     $resources = Get-SpotXResources -TargetVersion ([version]$offline) -DownloadFolder $tempDirectory
     $webjson = $resources.Patches
     $webjsonru = $resources.Translation
     $ru = $null -ne $webjsonru
 
     if ($installSpotify) {
+        $installStep = $lang.DownSpoti
         $stageStatus = Start-ConsoleStage -Message $lang.DownSpoti -Version $online
         $architecture = Get-SpotifyInstallerArchitecture -SystemArchitecture $systemArchitecture `
             -SpotifyVersion ([version]$online) -LastX86SupportedVersion $last_x86
@@ -5808,6 +5847,7 @@ try {
 
     # Store detection runs before /extract in the Spotify installer
     if ($uninstallStoreSpotify) {
+        $installStep = 'Uninstall Microsoft Store Spotify'
         Kill-Spotify
         $previousProgressPreference = $ProgressPreference
         $uninstallMessage = if ($confirm_uninstall_ms_spoti) { $lang.MsSpoti3 } else { $lang.MsSpoti4 }
@@ -5824,17 +5864,23 @@ try {
     }
 
     if ($installSpotify) {
+        $installStep = 'Extract and verify Spotify files'
         $stageStatus = Start-ConsoleStage -Message $lang.InstallSpoti
         $preparedClient = Expand-SpotifyInstaller -DownloadFolder $tempDirectory `
             -ExpectedVersion ([version]$online) -ExpectedArchitecture $architecture
         Write-Host
     }
 
-    if (!$uninstallStoreSpotify) { Kill-Spotify }
+    if (!$uninstallStoreSpotify) {
+        $installStep = 'Stop Spotify'
+        Kill-Spotify
+    }
 
     if ($installSpotify) {
+        $installStep = 'Unlock Spotify update folder'
         $null = Unlock-Folder
         if ($uninstallSpotify) {
+            $installStep = $lang.DelSpotify
             if ($stageStatus) { $stageStatus.Pause() }
             $installStatus = $stageStatus
             $stageStatus = $null
@@ -5849,6 +5895,7 @@ try {
             }
             if ($stageStatus) { $stageStatus.Resume() }
         }
+        $installStep = "Replace Spotify files in $spotifyDirectory"
         $destination = [IO.Path]::GetFullPath($spotifyDirectory)
         $destinationPrefix = $destination.TrimEnd('\') + '\'
         if (Test-Path -LiteralPath $destination) {
@@ -5871,11 +5918,13 @@ try {
             Move-Item -LiteralPath $item.FullName -Destination $destination -Force -ErrorAction Stop
         }
         $offline = (Get-Item -LiteralPath $spotifyExecutable -ErrorAction Stop).VersionInfo.FileVersion
+        $installStep = 'Register Spotify installation'
         Register-SpotifyInstall -Directory $destination -InstalledVersion ([version]$offline)
         Stop-ConsoleStage
     }
 
     if ($installSpotify -and $not_block_update -and (Test-Path -LiteralPath $exe_bak)) {
+        $installStep = "Restore Spotify executable from $exe_bak"
         $offline_bak = (Get-Item -LiteralPath $exe_bak -ErrorAction Stop).VersionInfo.FileVersion
         if ($offline -eq $offline_bak) {
             Remove-Item -LiteralPath $spotifyExecutable -Force -ErrorAction Stop
@@ -5885,7 +5934,7 @@ try {
 }
 catch {
     Stop-ConsoleStage
-    Write-Warning $_.Exception.Message
+    Write-SpotifyInstallFailure -Exception $_.Exception -Step $installStep
     Stop-Script
 }
 finally {

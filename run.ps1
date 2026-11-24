@@ -5847,13 +5847,12 @@ try {
 
     # Store detection runs before /extract in the Spotify installer
     if ($uninstallStoreSpotify) {
-        $installStep = 'Uninstall Microsoft Store Spotify'
+        $installStep = if ($confirm_uninstall_ms_spoti) { $lang.MsSpoti3 } else { $lang.MsSpoti4 }
         Kill-Spotify
         $previousProgressPreference = $ProgressPreference
-        $uninstallMessage = if ($confirm_uninstall_ms_spoti) { $lang.MsSpoti3 } else { $lang.MsSpoti4 }
         try {
             $ProgressPreference = 'SilentlyContinue'
-            $stageStatus = Start-ConsoleStage -Message ([string]$uninstallMessage).TrimEnd('.', [char]0x2026)
+            $stageStatus = Start-ConsoleStage -Message ([string]$installStep).TrimEnd('.', [char]0x2026)
             Write-Host
             Get-AppxPackage -Name SpotifyAB.SpotifyMusic | Remove-AppxPackage -ErrorAction Stop
         }

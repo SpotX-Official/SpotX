@@ -866,7 +866,7 @@
                 "description": "Enables horizontal video layout for sponsored playlist headers on desktop",
                 "version": {
                     "fr": "1.2.95",
-                    "to": ""
+                    "to": "1.3.11"
                 }
             },
             "AdsSurfaceStateForAdOrchestration": {
@@ -2183,6 +2183,14 @@
                 "native_description": "Move Spotify-made playlist controls into the playlist toolbar",
                 "version": {
                     "fr": "1.3.10",
+                    "to": ""
+                }
+            },
+            "VideoSearch": {
+                "name": "enableVideoSearch",
+                "native_description": "Whether the Video category is available in search. Also requires music videos to be enabled for the user",
+                "version": {
+                    "fr": "1.3.12",
                     "to": ""
                 }
             }

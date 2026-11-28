@@ -2,7 +2,7 @@
 param
 (
     [Parameter(HelpMessage = 'Latest recommended Spotify version for Windows 10+.')]
-    [string]$latest_full = "1.3.11",
+    [string]$latest_full = "1.3.12",
 
     [Parameter(HelpMessage = 'Latest supported Spotify version for Windows 7-8.1')]
     [string]$last_win7_full = "1.2.5.1006.g22820f93",
@@ -4784,7 +4784,7 @@ function Set-BlockSlotsBinaryPatch {
 }
 
 function Get-SettingKeyReferences {
-    param([byte[]]$Bytes, $PeInfo, $Context, [string]$Key)
+    param([byte[]]$Bytes, $PeInfo, $Context, [string]$Key, [switch]$IncludeReusedPages)
 
     $anchor = Get-UniqueBinaryAnchor -Bytes $Bytes -PeInfo $PeInfo -Text $Key -NullTerminated
     $text = $Context.Text
@@ -4792,7 +4792,29 @@ function Get-SettingKeyReferences {
         return [BinaryScannerV5]::FindRipLeaRefs($Bytes, $text.RawPtr, $text.RawSize, $anchor.Rva,
             $Context.RawPtrs, $Context.RawSizes, $Context.VirtualAddresses)
     }
-    return [BinaryScannerV5]::FindXrefArm64($Bytes, $anchor.Rva, $text.VirtualAddress, $text.RawPtr, $text.RawSize)
+    $direct = [BinaryScannerV5]::FindXrefArm64($Bytes, $anchor.Rva, $text.VirtualAddress, $text.RawPtr, $text.RawSize)
+    $direct
+    if (-not $IncludeReusedPages) { return }
+
+    # A later call can reuse the string page in a nonvolatile register
+    $bias = $text.VirtualAddress - $text.RawPtr
+    foreach ($ref in $direct) {
+        $add = Read-Arm64Instruction $Bytes ($ref + 4)
+        $register = ($add -shr 5) -band 31
+        if (($add -band 31) -ne 0 -or $register -lt 19 -or $register -gt 28) { continue }
+        $range = Get-BinaryPatchFunctionRange $Bytes $PeInfo $Context ($ref + $bias)
+        if ($range.Length -ne 2) { throw "Missing function range for $Key" }
+        $end = $range[1] - $bias
+        $pattern = [BitConverter]::GetBytes($add)
+        $start = $ref + 8
+        while (($next = [BinaryScannerV5]::FindBytes($Bytes, $pattern, $start, ($end - $start))) -ge 0) {
+            $start = $next + 1
+            if (($next -band 3) -or $direct.Contains($next - 4)) { continue }
+            $page = [BinaryScannerV5]::FindArm64ListPlayerOwnerPage($Bytes, $ref, $next)
+            if ($page -lt 0) { throw "Unresolved ARM64 $Key page at offset $('{0:X}' -f $next)" }
+            if ($page -eq $ref) { $next }
+        }
+    }
 }
 
 function Find-X64CrossfadeEnabledBinaryPatchLocation {
@@ -5108,7 +5130,7 @@ function Find-Arm64ListPlayerBinaryPatchLocations {
     param([byte[]]$Bytes, [object]$PeInfo)
 
     $context = Get-BinaryPatchContext -PeInfo $PeInfo
-    $anchorRefs = @(Get-SettingKeyReferences $Bytes $PeInfo $context 'enable_list_player')
+    $anchorRefs = @(Get-SettingKeyReferences $Bytes $PeInfo $context 'enable_list_player' -IncludeReusedPages)
     $ownerBytes = [Text.Encoding]::ASCII.GetBytes("core-list-player`0")
     $patchedBytes = Convert-HexStringToBytes '00 00 80 52'
     $coveredRefs = @{}
@@ -5118,15 +5140,17 @@ function Find-Arm64ListPlayerBinaryPatchLocations {
         $refRva = Get-PERvaFromOffset -Sections $PeInfo.Sections -Offset $reference
         $range = Get-BinaryPatchFunctionRange -Bytes $Bytes -PeInfo $PeInfo -Context $context -Rva $refRva
         if ($range.Length -ne 2 -or $refRva + 0x44 -gt $range[1]) { continue }
-        $keyAdd = Read-Arm64Instruction -Bytes $Bytes -Offset ($reference + 4)
+        $reusedKeyPage = ((Read-Arm64Instruction $Bytes $reference) -band [uint32]0xFFC0001FL) -eq [uint32]0x91000000L
+        $keyAddOffset = if ($reusedKeyPage) { $reference } else { $reference + 4 }
+        $keyAdd = Read-Arm64Instruction $Bytes $keyAddOffset
         if (($keyAdd -band 31) -ne 0) { continue }
 
-        foreach ($distance in @(0x10, 0x14, 0x18)) {
-            $ownerRef = $reference + $distance
+        foreach ($distance in 0x0C, 0x10, 0x14) {
+            $ownerRef = $keyAddOffset + $distance
             $pageOffset = $ownerRef
             $ownerAddOffset = $ownerRef + 4
             $reusedOwnerPage = $anchorRefs -contains ($ownerRef + 8)
-            if ($reusedOwnerPage) {
+            if ($reusedOwnerPage -or $reusedKeyPage) {
                 $pageOffset = [BinaryScannerV5]::FindArm64ListPlayerOwnerPage($Bytes, ($reference - ($refRva - $range[0])), $ownerRef)
                 if ($pageOffset -lt 0) { continue }
                 $ownerAddOffset = $ownerRef
@@ -5141,7 +5165,7 @@ function Find-Arm64ListPlayerBinaryPatchLocations {
             $lengthRegister = $saveLength -band 31
             if (($saveLength -band [uint32]0xFFFFFFE0L) -ne [uint32]0xAA0003E0L -or
                 $lengthRegister -lt 19 -or $lengthRegister -gt 28) { continue }
-            $keyLengthTarget = Get-InlineSettingCallTarget $Bytes ($ownerRef - 8) ($refRva + $distance - 8) ARM64
+            $keyLengthTarget = Get-InlineSettingCallTarget $Bytes ($ownerRef - 8) ($refRva + $ownerRef - $reference - 8) ARM64
             $ownerLengthTarget = Get-InlineSettingCallTarget $Bytes ($ownerAddOffset + 4) ($refRva + $ownerAddOffset + 4 - $reference) ARM64
             if ($null -eq $keyLengthTarget -or $keyLengthTarget -ne $ownerLengthTarget) { continue }
 
@@ -5164,9 +5188,10 @@ function Find-Arm64ListPlayerBinaryPatchLocations {
                 $default, $keyLength, $ownerArg = $setup[4..6]
                 $patchOffset = $setupOffset + 28
             }
-            elseif ($setup[0] -eq [uint32]0xAA0003E2L) {
+            elseif ($reusedKeyPage -or $setup[0] -eq [uint32]0xAA0003E2L) {
                 if ((($keyAdd -shr 5) -band 31) -notin (19..28)) { continue }
                 $ownerLength, $resolver, $default, $keyLength, $keyArg, $ownerArg = $setup[0..5]
+                if ($reusedKeyPage -and $setup[0] -eq 0x52800005) { $default, $ownerLength, $resolver = $setup[0..2] }
                 $patchOffset = $setupOffset + 24
             }
             else {
@@ -5191,7 +5216,7 @@ function Find-Arm64ListPlayerBinaryPatchLocations {
                 ($next -band [uint32]0xFFF8001FL) -eq [uint32]0x36000000L -or
                 (($next -band [uint32]0xFFC0001FL) -eq [uint32]0xF9400008L -and
                     ($afterNext -band [uint32]0xFFFFFFE0L) -eq [uint32]0x53001C00L)
-            if ($reusedOwnerPage) {
+            if ($reusedOwnerPage -or $reusedKeyPage) {
                 # The batched reader stores W0 in the settings snapshot
                 $storeResult = [uint32]0x39004BA0L
                 $usesBool = $next -eq $storeResult -or ($afterNext -eq $storeResult -and
@@ -5260,11 +5285,12 @@ function Get-InlineSettingPatterns {
 
     if ($Architecture -eq 'ARM64') {
         $default = if ($Crossfade) { '25008052' } else { '05008052' }
-        $lengths = '(?<KeyLen>.{6}9[4-7]) .{8} (?<Owner>.{16}) (?<OwnerLen>.{6}9[4-7]) E20300AA'
+        $keyLoad = '(?:.{6}[9BDF]0)? (?<KeyAdd>[02468ACE]0.{4}91)'
+        $lengths = '(?<KeyLen>.{6}9[4-7]) .{8} (?:(?<Owner>.{6}[9BDF]0))? (?<OwnerAdd>[02468ACE]0.{4}91) (?<OwnerLen>.{6}9[4-7]) E20300AA'
         $registerArgs = '(?<KeyArg>.{8}) .{8}'
-        "^.{16} (?:.{16})? $lengths .{8} $default .{8} $registerArgs"
-        "^.{16} $lengths $default .{8} $registerArgs .{8}"
-        "^.{16} $lengths $default .{8} (?<Reload>.{16}) (?<ReloadOwner>.{16}) .{8}"
+        "^$keyLoad (?:.{16})? $lengths .{8} $default .{8} $registerArgs"
+        "^$keyLoad $lengths $default .{8} $registerArgs .{8}"
+        "^$keyLoad $lengths $default .{8} (?<Reload>.{16}) (?<ReloadOwner>.{16}) .{8}"
         return
     }
 
@@ -5273,10 +5299,11 @@ function Get-InlineSettingPatterns {
     $keyLen = '(?<KeyLen>E8 .{8})'
     $ownerLen = '(?<OwnerLen>E8 .{8})'
     $rcx = '488D0D .{8}'
-    # Stack slots hold a pointer followed by its length
+    # Decode MOV RCX independently of the frame used for the string views
+    $resolver = '4[89]8B (?: C[8-F] | 0[89ABEF] | 0C24 | (?:4[89ABDEF]|4C24).. | (?:8[89ABDEF]|8C24).{8} )'
     foreach ($frame in 'rbp', 'rsp') {
-        if ($frame -eq 'rbp') { $ax, $cx, $dx, $bx, $resolver = '45', '4D', '55', '5D', '.{6}' }
-        else { $ax, $cx, $dx, $bx, $resolver = '4424', '4C24', '5424', '5C24', '.{8}' }
+        if ($frame -eq 'rbp') { $ax, $cx, $dx, $bx = '45', '4D', '55', '5D' }
+        else { $ax, $cx, $dx, $bx = '4424', '4C24', '5424', '5C24' }
         "^$rcx $keyLen 488BD8 (?<Owner>$rcx) $ownerLen (?<Reload>$rcx) " +
             "4889$cx (?<KeySlot>..) 4889$bx (?<KeySize>..) (?<ReloadOwner>$rcx) " +
             "4889$cx (?<OwnerSlot>..) 4889$ax (?<OwnerSize>..) $default " +
@@ -5287,16 +5314,16 @@ function Get-InlineSettingPatterns {
     $keySize = '48895C24 (?<KeySize>..)'
     $ownerSize = '48894424 (?<OwnerSize>..)'
     "^$key (?:.{6} 498BCE|498BCE .{12}) $keyLen (?<Owner>488D2D .{8}) 488BD8 488BCD $ownerLen " +
-        "$default $keyStore 4C8D4424 \k<KeySlot> $keySize 488D5424 (?<OwnerSlot>..) 48896C24 \k<OwnerSlot> 488BCF $ownerSize"
+        "$default $keyStore 4C8D4424 \k<KeySlot> $keySize 488D5424 (?<OwnerSlot>..) 48896C24 \k<OwnerSlot> $resolver $ownerSize"
     "^$key 498BCE $keyLen 488BD8 (?<Owner>488D35 .{8}) 488BCE $ownerLen $keyStore $keySize " +
-        "48897424 (?<OwnerSlot>..) $ownerSize $default 4C8D4424 \k<KeySlot> 488D5424 \k<OwnerSlot> 498B0C24"
+        "48897424 (?<OwnerSlot>..) $ownerSize $default 4C8D4424 \k<KeySlot> 488D5424 \k<OwnerSlot> $resolver"
 }
 
 function Find-InlineSettingCalls {
     param([byte[]]$Bytes, $PeInfo, $Context, [string]$Key, [string]$Owner, [int64]$WithinFunction = -1)
 
     $arch = $PeInfo.Architecture
-    $refs = @(Get-SettingKeyReferences $Bytes $PeInfo $Context $Key)
+    $refs = @(Get-SettingKeyReferences $Bytes $PeInfo $Context $Key -IncludeReusedPages:($Key -eq 'enable_list_player'))
     $ownerBytes = [Text.Encoding]::ASCII.GetBytes("$Owner`0")
     $enabled = $Key -eq 'crossfade_enabled'
     $patterns = @(Get-InlineSettingPatterns $arch $enabled | ForEach-Object { [regex]::new($_, 'IgnorePatternWhitespace') })
@@ -5310,7 +5337,7 @@ function Find-InlineSettingCalls {
         if ($range.Length -ne 2) { throw "Missing function range for $Key" }
         if ($WithinFunction -ge 0 -and $WithinFunction -ne $range[0]) { continue }
         $bias = $rva - $ref
-        $length = [Math]::Min(0x50, $range[1] - $rva)
+        $length = [Math]::Min(0x60, $range[1] - $rva)
         $hex = [BitConverter]::ToString($Bytes, $ref, $length).Replace('-', '')
         foreach ($pattern in $patterns) {
             $match = $pattern.Match($hex)
@@ -5318,11 +5345,16 @@ function Find-InlineSettingCalls {
             # Two hex digits represent one byte in the function window
             $at = @{}
             foreach ($name in $pattern.GetGroupNames()) {
-                $at[$name] = [int]($ref + $match.Groups[$name].Index / 2)
+                if ($match.Groups[$name].Success) { $at[$name] = [int]($ref + $match.Groups[$name].Index / 2) }
             }
             $call = [int]($ref + $match.Length / 2)
-            if ($call + $bias + $patchedBytes.Length + 4 -gt $range[1]) { continue }
-            $ownerRva = Get-InlineSettingStringRva $Bytes $at.Owner ($bias + $at.Owner) $arch
+            if ($call + $bias + $patchedBytes.Length -gt $range[1]) { continue }
+            $ownerPage = $at.Owner
+            if ($null -eq $ownerPage) {
+                $ownerPage = [BinaryScannerV5]::FindArm64ListPlayerOwnerPage($Bytes, ($range[0] - $bias), $at.OwnerAdd)
+                if ($ownerPage -lt 0) { continue }
+            }
+            $ownerRva = Get-InlineSettingStringRva $Bytes $ownerPage ($bias + $ownerPage) $arch
             if ($null -eq $ownerRva) { continue }
             $ownerOffset = Get-PEOffsetFromRva $PeInfo.Sections $ownerRva
             if ($null -eq $ownerOffset -or -not [BinaryScannerV5]::MatchBytes($Bytes, $ownerOffset, $ownerBytes)) { continue }
@@ -5332,8 +5364,8 @@ function Find-InlineSettingCalls {
             }
             if ($at.KeySlot -and ($Bytes[$at.KeySize] -ne ((8 + $Bytes[$at.KeySlot]) -band 255) -or
                 $Bytes[$at.OwnerSize] -ne ((8 + $Bytes[$at.OwnerSlot]) -band 255))) { continue }
-            if ($at.KeyArg -and ((Read-Arm64Instruction $Bytes $at.KeyArg) -ne ((Read-Arm64Instruction $Bytes ($ref + 4)) -bor 3) -or
-                (Read-Arm64Instruction $Bytes ($at.KeyArg + 4)) -ne ((Read-Arm64Instruction $Bytes ($at.Owner + 4)) -bor 1))) { continue }
+            if ($at.KeyArg -and ((Read-Arm64Instruction $Bytes $at.KeyArg) -ne ((Read-Arm64Instruction $Bytes $at.KeyAdd) -bor 3) -or
+                (Read-Arm64Instruction $Bytes ($at.KeyArg + 4)) -ne ((Read-Arm64Instruction $Bytes $at.OwnerAdd) -bor 1))) { continue }
             $strlen = Get-InlineSettingCallTarget $Bytes $at.KeyLen ($bias + $at.KeyLen) $arch
             if ($null -eq $strlen -or $strlen -lt $Context.Text.VirtualAddress -or $strlen -ge $Context.Text.VirtualAddress + $Context.Text.RawSize -or
                 $strlen -ne (Get-InlineSettingCallTarget $Bytes $at.OwnerLen ($bias + $at.OwnerLen) $arch)) { continue }
@@ -5344,8 +5376,6 @@ function Find-InlineSettingCalls {
             [PSCustomObject]@{
                 Architecture = $arch
                 FunctionRva = $range[0]
-                FunctionEndOffset = $ref + ($range[1] - $rva)
-                ReferenceOffset = $ref
                 AnchorRefCount = $refs.Count
                 TargetRva = $target
                 PatchOffset = $call
@@ -5385,31 +5415,6 @@ function Test-InlineSettingAccessor {
     return $true
 }
 
-function Test-InlineSettingResult {
-    param([byte[]]$Bytes, $Site)
-
-    $offset = $Site.PatchOffset + $Site.PatchedBytes.Length
-    if ($Site.Architecture -eq 'x64') {
-        return [BitConverter]::ToString($Bytes, $offset, 3) -cmatch '^(8A-D0|0F-B6-C8|84-C0|40-8A-F8|88-44-24|88-45)'
-    }
-    $next = Read-Arm64Instruction $Bytes $offset
-    if (($next -band [uint32]0xFFFFFFE0L) -eq 0x2A0003E0 -or
-        ($next -band [uint32]0xFFFFFFE0L) -eq 0x53001C00 -or
-        ($next -band [uint32]0xFFF8001FL) -eq 0x36000000) { return $true }
-
-    # Two ListPlayer readers load both alternatives before testing W0
-    if ($offset + 24 -gt $Site.FunctionEndOffset) { return $false }
-    $pageMask = [uint32]0x9F00001FL
-    $addMask = [uint32]0xFFC003FFL
-    if (($next -band $pageMask) -ne [uint32]0x90000009L -or
-        ((Read-Arm64Instruction $Bytes ($offset + 4)) -band $addMask) -ne [uint32]0x9100012AL -or
-        ((Read-Arm64Instruction $Bytes ($offset + 8)) -band $pageMask) -ne [uint32]0x90000009L -or
-        ((Read-Arm64Instruction $Bytes ($offset + 12)) -band $addMask) -ne [uint32]0x91000129L) { return $false }
-    $use = Read-Arm64Instruction $Bytes ($offset + 16)
-    return $use -eq 0x72001C1F -or
-        ($use -eq 0x53001C08 -and (Read-Arm64Instruction $Bytes ($offset + 20)) -eq 0x72001C1F)
-}
-
 function Find-InlineCrossfadePatchLocations {
     param([byte[]]$Bytes, $PeInfo)
 
@@ -5417,29 +5422,25 @@ function Find-InlineCrossfadePatchLocations {
     $context = Get-BinaryPatchContext $PeInfo
     $owner = 'core-playback-setup'
     $eq = @(Find-InlineSettingCalls $Bytes $PeInfo $context 'use_playback_settings_equalizer' $owner)
-    if ($eq.Count -ne 1 -or $eq[0].State -ne 'Original' -or -not (Test-InlineSettingResult $Bytes $eq[0]) -or
+    if ($eq.Count -ne 1 -or $eq[0].State -ne 'Original' -or
         -not (Test-InlineSettingAccessor $Bytes $PeInfo $context $eq[0].TargetRva)) { throw 'Unrecognized equalizer setting reader' }
 
-    # The playback setup reads crossfade immediately before the equalizer setting
+    # Only the playback setup reads both settings through the same boolean accessor
+    $readerRva = $eq[0].TargetRva
     $fade = @(Find-InlineSettingCalls $Bytes $PeInfo $context 'crossfade_enabled' $owner $eq[0].FunctionRva)
-    $distance = if ($PeInfo.Architecture -eq 'x64') { 8 } else { 12 }
-    if ($fade.Count -ne 1 -or $fade[0].PatchOffset + $distance -ne $eq[0].ReferenceOffset -or
-        -not (Test-InlineSettingResult $Bytes $fade[0]) -or
-        ($fade[0].State -eq 'Original' -and $fade[0].TargetRva -ne $eq[0].TargetRva)) { throw 'Unrecognized playback crossfade reader' }
+    if ($fade.Count -ne 1 -or ($fade[0].State -ne 'Patched' -and $fade[0].TargetRva -ne $readerRva)) {
+        throw 'Unrecognized playback crossfade reader'
+    }
 
     $readers = @()
     $registrations = 0
     foreach ($site in (Find-InlineSettingCalls $Bytes $PeInfo $context 'enable_list_player' 'core-list-player')) {
-        if (Test-InlineSettingResult $Bytes $site) {
-            if ($site.State -ne 'Patched' -and $site.TargetRva -ne $eq[0].TargetRva) { throw 'Unexpected ListPlayer reader target' }
-            $readers += $site
-        }
-        elseif ($site.State -eq 'Original' -and (Test-InlineSettingAccessor $Bytes $PeInfo $context $site.TargetRva -Registration)) { $registrations++ }
+        if ($site.State -eq 'Patched' -or $site.TargetRva -eq $readerRva) { $readers += $site }
+        elseif (Test-InlineSettingAccessor $Bytes $PeInfo $context $site.TargetRva -Registration) { $registrations++ }
         else { throw 'Unrecognized ListPlayer accessor' }
     }
-    $expected = if ($PeInfo.Architecture -eq 'x64') { 6 } else { 5 }
-    if ($readers.Count -ne $expected -or $registrations -ne 1) {
-        throw "Expected $expected ListPlayer readers and one registration, found $($readers.Count) and $registrations"
+    if ($readers.Count -eq 0 -or $registrations -ne 1) {
+        throw "Expected ListPlayer readers and one registration, found $($readers.Count) and $registrations"
     }
     $fade[0]
     $readers
